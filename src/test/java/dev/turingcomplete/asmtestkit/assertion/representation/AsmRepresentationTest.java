@@ -1,22 +1,35 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
-import dev.turingcomplete.asmtestkit.assertion.__helper.DummyAttribute;
 import org.junit.jupiter.api.Test;
+
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class AttributeRepresentationTest {
+class AsmRepresentationTest {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Test
-  void testStringRepresentation() {
-    assertThat(AttributeRepresentation.instance().toStringOf(new DummyAttribute("Name", "Content")))
-            .isEqualTo("NameContent");
+  void testNullArgument() {
+    assertThat(new DummyAsmRepresentation().toStringOf(null))
+            .isEqualTo(null);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
+
+  private static class DummyAsmRepresentation extends AsmRepresentation<Object> {
+
+    protected DummyAsmRepresentation() {
+      super(Object.class);
+    }
+
+    @Override
+    protected String toStringRepresentation(Object object) {
+      return Objects.toString(object);
+    }
+  }
 }

@@ -3,8 +3,6 @@ package dev.turingcomplete.asmtestkit.assertion.comperator;
 import dev.turingcomplete.asmtestkit.assertion.representation.AttributeRepresentation;
 import org.objectweb.asm.Attribute;
 
-import java.util.Comparator;
-
 /**
  * A comparison function to order {@link Attribute}s.
  *
@@ -12,7 +10,7 @@ import java.util.Comparator;
  * {@link AttributeRepresentation} are equal. Otherwise, they will be ordered
  * based on the lexicographical order of their {@code AttributeRepresentation}.
  */
-public final class AttributeComparator implements Comparator<Attribute> {
+public final class AttributeComparator extends AsmComparator<Attribute> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   private static final AttributeComparator INSTANCE = new AttributeComparator();
@@ -26,19 +24,9 @@ public final class AttributeComparator implements Comparator<Attribute> {
   }
 
   @Override
-  public int compare(Attribute first, Attribute second) {
-    // Instance null check
-    if (first != null && second == null) {
-      return 1;
-    }
-    else if (first == null && second != null) {
-      return -1;
-    }
-    else if (first == null) { // Both null
-      return 0;
-    }
-
-    return AttributeRepresentation.instance().toStringOf(first).compareTo(AttributeRepresentation.instance().toStringOf(second));
+  public int doCompare(Attribute first, Attribute second) {
+    return AttributeRepresentation.instance().toStringOf(first)
+                                  .compareTo(AttributeRepresentation.instance().toStringOf(second));
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

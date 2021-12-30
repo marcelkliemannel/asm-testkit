@@ -1,10 +1,12 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.assertion.__helper.DummyAttribute;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class AttributeAssertTest {
+import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+class AttributeAssertTest {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
@@ -12,13 +14,13 @@ public class AttributeAssertTest {
 
   @Test
   void testIsEqualTo() {
-    AsmAssertions.assertThat(new DummyAttribute("A"))
-                 .isEqualTo(new DummyAttribute("A"));
+    assertThat(new DummyAttribute("A"))
+            .isEqualTo(new DummyAttribute("A"));
 
-    AsmAssertions.assertThat(new DummyAttribute("A", "1"))
-                 .isEqualTo(new DummyAttribute("A", "1"));
+    assertThat(new DummyAttribute("A", "1"))
+            .isEqualTo(new DummyAttribute("A", "1"));
 
-    Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(new DummyAttribute("A", "1")).isEqualTo(new DummyAttribute("B", "2")))
+    assertThatThrownBy(() -> assertThat(new DummyAttribute("A", "1")).isEqualTo(new DummyAttribute("B", "2")))
             .isInstanceOf(AssertionError.class)
             .hasMessage("[Attribute: A] \n" +
                         "expected: B2\n" +
