@@ -1,41 +1,50 @@
 package dev.turingcomplete.asmtestkit.assertion.comperator;
 
-import dev.turingcomplete.asmtestkit.assertion.__helper.DummyAttribute;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.tree.AnnotationNode;
 
-import static dev.turingcomplete.asmtestkit.assertion.comperator.AttributeComparator.instance;
+import java.util.Arrays;
+
+import static dev.turingcomplete.asmtestkit.assertion.comperator.AnnotationNodeComparator.instance;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class AttributeComparatorTest {
+class AnnotationNodeComparatorTest {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Test
-  void testCompareName() {
-    assertThat(instance().compare(new DummyAttribute("A"), new DummyAttribute("A")))
+  void testCompareDescriptor() {
+    assertThat(instance().compare(new AnnotationNode("LA;"), new AnnotationNode("LA;")))
             .isEqualTo(0);
 
-    assertThat(instance().compare(new DummyAttribute("A"), new DummyAttribute("B")))
+    assertThat(instance().compare(new AnnotationNode("LA;"), new AnnotationNode("LB;")))
             .isLessThanOrEqualTo(-1);
 
-    assertThat(instance().compare(new DummyAttribute("B"), new DummyAttribute("A")))
+    assertThat(instance().compare(new AnnotationNode("LB;"), new AnnotationNode("LA;")))
             .isGreaterThanOrEqualTo(1);
   }
 
   @Test
-  void testCompareContent() {
-    assertThat(instance().compare(new DummyAttribute("A", "1"), new DummyAttribute("A", "1")))
+  void testCompareValues() {
+    assertThat(instance().compare(createAnnotationNode("foo", true, "bar", false), createAnnotationNode("foo", true, "bar", false)))
             .isEqualTo(0);
 
-    assertThat(instance().compare(new DummyAttribute("A", "1"), new DummyAttribute("A", "2")))
+    assertThat(instance().compare(createAnnotationNode("A", true), createAnnotationNode("B", true)))
             .isLessThanOrEqualTo(-1);
 
-    assertThat(instance().compare(new DummyAttribute("A", "3"), new DummyAttribute("A", "2")))
+    assertThat(instance().compare(createAnnotationNode("B", true), createAnnotationNode("A", true)))
             .isGreaterThanOrEqualTo(1);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
+
+  private AnnotationNode createAnnotationNode(Object ...values) {
+    var annotationNode = new AnnotationNode("LA;");
+    annotationNode.values = Arrays.asList(values);
+    return annotationNode;
+  }
+
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 }

@@ -23,6 +23,19 @@ class AsmComparatorTest {
             .isGreaterThanOrEqualTo(1);
   }
 
+
+  @Test
+  void testStringCompareNullArguments() {
+    assertThat(new DummyAsmComparator().testStringCompare(null, null))
+            .isEqualTo(0);
+
+    assertThat(new DummyAsmComparator().testStringCompare(null, "Right"))
+            .isLessThanOrEqualTo(-1);
+
+    assertThat(new DummyAsmComparator().testStringCompare("Left", null))
+            .isGreaterThanOrEqualTo(1);
+  }
+
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 
@@ -31,6 +44,10 @@ class AsmComparatorTest {
     @Override
     protected int doCompare(Object first, Object second) {
       return 0;
+    }
+
+    public int testStringCompare(String first, String second) {
+      return stringCompare(first, second);
     }
   }
 }

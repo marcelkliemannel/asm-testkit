@@ -15,12 +15,12 @@ public abstract class AsmRepresentation<T> extends StandardRepresentation {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
-  private final Class<T> nodeClass;
+  private final Class<T> objectClass;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  protected AsmRepresentation(Class<T> nodeClass) {
-    this.nodeClass = Objects.requireNonNull(nodeClass);
+  protected AsmRepresentation(Class<T> objectClass) {
+    this.objectClass = Objects.requireNonNull(objectClass);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
@@ -36,15 +36,15 @@ public abstract class AsmRepresentation<T> extends StandardRepresentation {
 
   @Override
   protected final String fallbackToStringOf(Object object) {
-    if (nodeClass.isInstance(object)) {
-      return toStringRepresentation(nodeClass.cast(object));
+    if (objectClass.isInstance(object)) {
+      return toStringRepresentation(objectClass.cast(object));
     }
 
     return super.fallbackToStringOf(object);
   }
 
-  final boolean isApplicable(Class<?> nodeClass) {
-    return this.nodeClass.equals(nodeClass);
+  protected boolean isApplicable(Class<?> objectClass) {
+    return this.objectClass.equals(objectClass) || this.objectClass.isAssignableFrom(objectClass);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

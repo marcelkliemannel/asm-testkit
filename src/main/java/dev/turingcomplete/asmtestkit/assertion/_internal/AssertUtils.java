@@ -1,5 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion._internal;
 
+import java.util.List;
 import java.util.function.Function;
 
 public final class AssertUtils {
@@ -34,6 +35,10 @@ public final class AssertUtils {
   }
 
   public static <S, T> Iterable<T> getIterableFromObjectElseNull(Object object, Class<S> objectType, Function<S, Iterable<T>> provide) {
+    return objectType.isInstance(object) ? provide.apply(objectType.cast(object)) : null;
+  }
+
+  public static <S, T> List<T> getListFromObjectElseNull(Object object, Class<S> objectType, Function<S, List<T>> provide) {
     return objectType.isInstance(object) ? provide.apply(objectType.cast(object)) : null;
   }
 
