@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
-import dev.turingcomplete.asmtestkit.AnnotationNodeUtils;
+import dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

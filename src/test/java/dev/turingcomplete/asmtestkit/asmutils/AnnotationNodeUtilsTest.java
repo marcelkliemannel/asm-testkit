@@ -1,4 +1,4 @@
-package dev.turingcomplete.asmtestkit;
+package dev.turingcomplete.asmtestkit.asmutils;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,16 +14,16 @@ class AnnotationNodeUtilsTest {
 
   @Test
   void testValuesToMap() {
-    Assertions.assertThat(AnnotationNodeUtils.annotationNodeValuesToMap(null))
+    Assertions.assertThat(AnnotationNodeUtils.convertAnnotationNodeValuesToMap(null))
               .containsExactlyInAnyOrderEntriesOf(Map.of());
 
-    Assertions.assertThat(AnnotationNodeUtils.annotationNodeValuesToMap(List.of()))
+    Assertions.assertThat(AnnotationNodeUtils.convertAnnotationNodeValuesToMap(List.of()))
               .containsExactlyInAnyOrderEntriesOf(Map.of());
 
-    Assertions.assertThat(AnnotationNodeUtils.annotationNodeValuesToMap(List.of("foo", true, "bar", 1)))
+    Assertions.assertThat(AnnotationNodeUtils.convertAnnotationNodeValuesToMap(List.of("foo", true, "bar", 1)))
               .containsExactlyInAnyOrderEntriesOf(Map.of("foo", true, "bar", 1));
 
-    Assertions.assertThatThrownBy(() -> AnnotationNodeUtils.annotationNodeValuesToMap(List.of("foo")))
+    Assertions.assertThatThrownBy(() -> AnnotationNodeUtils.convertAnnotationNodeValuesToMap(List.of("foo")))
               .isInstanceOf(IllegalArgumentException.class)
               .hasMessage("There must be an even number of values.");
   }

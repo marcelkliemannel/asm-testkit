@@ -21,6 +21,11 @@ public final class AnnotationNodeRepresentation extends AsmRepresentation<Annota
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
+  /**
+   * Gets a reusable {@link AnnotationNodeRepresentation} instance.
+   *
+   * @return a {@link AnnotationNodeRepresentation} instance; never null.
+   */
   public static AnnotationNodeRepresentation instance() {
     return INSTANCE;
   }

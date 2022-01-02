@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion.comperator;
 
-import dev.turingcomplete.asmtestkit.AnnotationNodeUtils;
+import dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils;
 import dev.turingcomplete.asmtestkit.assertion.representation.AnnotationNodeRepresentation;
 import org.objectweb.asm.tree.AnnotationNode;
 
@@ -33,8 +33,8 @@ public final class AnnotationNodeComparator extends AsmComparator<AnnotationNode
   protected int doCompare(AnnotationNode first, AnnotationNode second) {
     int descResult = stringCompare(first.desc, second.desc);
     if (descResult == 0) {
-      Map<Object, Object> firstValues = AnnotationNodeUtils.annotationNodeValuesToMap(first.values);
-      Map<Object, Object> secondValues = AnnotationNodeUtils.annotationNodeValuesToMap(second.values);
+      Map<Object, Object> firstValues = AnnotationNodeUtils.convertAnnotationNodeValuesToMap(first.values);
+      Map<Object, Object> secondValues = AnnotationNodeUtils.convertAnnotationNodeValuesToMap(second.values);
       if (Objects.deepEquals(firstValues, secondValues)) {
         return 0;
       }

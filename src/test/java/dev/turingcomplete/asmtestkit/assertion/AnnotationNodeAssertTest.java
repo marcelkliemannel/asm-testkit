@@ -3,7 +3,7 @@ package dev.turingcomplete.asmtestkit.assertion;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static dev.turingcomplete.asmtestkit.AnnotationNodeUtils.createAnnotationNode;
+import static dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils.createAnnotationNode;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThat;
 
 class AnnotationNodeAssertTest {

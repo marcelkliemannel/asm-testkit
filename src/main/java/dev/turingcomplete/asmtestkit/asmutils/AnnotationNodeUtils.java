@@ -1,4 +1,4 @@
-package dev.turingcomplete.asmtestkit;
+package dev.turingcomplete.asmtestkit.asmutils;
 
 import org.assertj.core.util.Arrays;
 import org.objectweb.asm.Type;
@@ -40,7 +40,7 @@ public final class AnnotationNodeUtils {
   }
 
   /**
-   * Migrates an ASM annotation values list (the first element is the key and
+   * Converts an ASM annotation values list (the first element is the key and
    * the second one is the value) to a {@link Map}.
    *
    * @param values a {@link List} of key-value pairs
@@ -49,7 +49,7 @@ public final class AnnotationNodeUtils {
    * @throws IllegalArgumentException if {@code values} has an odd number of
    *                                  elements.
    */
-  public static Map<Object, Object> annotationNodeValuesToMap(List<Object> values) {
+  public static Map<Object, Object> convertAnnotationNodeValuesToMap(List<Object> values) {
     if (values == null || values.size() == 0) {
       return Collections.emptyMap();
     }

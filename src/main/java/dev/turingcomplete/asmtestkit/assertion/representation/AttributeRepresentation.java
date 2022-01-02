@@ -15,6 +15,11 @@ public final class AttributeRepresentation extends AsmRepresentation<Attribute> 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
+  /**
+   * Gets a reusable {@link AttributeRepresentation} instance.
+   *
+   * @return a {@link AttributeRepresentation} instance; never null.
+   */
   public static AttributeRepresentation instance() {
     return INSTANCE;
   }

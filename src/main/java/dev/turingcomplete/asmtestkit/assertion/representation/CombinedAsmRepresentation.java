@@ -18,6 +18,8 @@ import java.util.Objects;
 public final class CombinedAsmRepresentation extends StandardRepresentation {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
+  private static final CombinedAsmRepresentation INSTANCE = new CombinedAsmRepresentation();
+
   private static final List<AsmRepresentation<?>> ASM_REPRESENTATIONS = new ArrayList<>();
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
@@ -29,6 +31,15 @@ public final class CombinedAsmRepresentation extends StandardRepresentation {
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  /**
+   * Gets a reusable {@link CombinedAsmRepresentation} instance.
+   *
+   * @return a {@link CombinedAsmRepresentation} instance; never null.
+   */
+  public static CombinedAsmRepresentation instance() {
+    return INSTANCE;
+  }
 
   /**
    * Adds a custom {@link AsmRepresentation} which will be considered in

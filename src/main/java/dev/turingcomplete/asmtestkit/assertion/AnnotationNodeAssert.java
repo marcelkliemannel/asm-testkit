@@ -7,7 +7,7 @@ import org.objectweb.asm.tree.AnnotationNode;
 
 import java.util.Optional;
 
-import static dev.turingcomplete.asmtestkit.AnnotationNodeUtils.annotationNodeValuesToMap;
+import static dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils.convertAnnotationNodeValuesToMap;
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getListFromObjectElseNull;
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getStringFromObjectElseNull;
 
@@ -30,9 +30,9 @@ public final class AnnotationNodeAssert extends AsmAssert<AnnotationNodeAssert, 
             .as(createDescription("Is equal descriptor"))
             .isEqualTo(getStringFromObjectElseNull(expected, AnnotationNode.class, annotationNode -> annotationNode.desc));
 
-    Assertions.assertThat(annotationNodeValuesToMap(actual.values))
+    Assertions.assertThat(convertAnnotationNodeValuesToMap(actual.values))
               .as(createDescription("Are equal values"))
-              .containsExactlyInAnyOrderEntriesOf(annotationNodeValuesToMap(getListFromObjectElseNull(expected, AnnotationNode.class, annotationNode -> annotationNode.values)));
+              .containsExactlyInAnyOrderEntriesOf(convertAnnotationNodeValuesToMap(getListFromObjectElseNull(expected, AnnotationNode.class, annotationNode -> annotationNode.values)));
 
     return this;
   }
