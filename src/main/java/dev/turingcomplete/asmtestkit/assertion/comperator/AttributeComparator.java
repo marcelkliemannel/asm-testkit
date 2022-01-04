@@ -19,6 +19,11 @@ public final class AttributeComparator extends AsmComparator<Attribute> {
   // -- Initialization ---------------------------------------------------------------------------------------------- //
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
+  /**
+   * Gets a reusable {@link AttributeComparator} instance.
+   *
+   * @return a {@link AttributeComparator} instance; never null.
+   */
   public static AttributeComparator instance() {
     return INSTANCE;
   }
