@@ -7,7 +7,7 @@ import org.objectweb.asm.util.TraceAnnotationVisitor;
 /**
  * Creates a {@link String} representation of an {@link AnnotationNode}.
  */
-public final class AnnotationNodeRepresentation extends AsmRepresentation<AnnotationNode> {
+public class AnnotationNodeRepresentation extends AsmRepresentation<AnnotationNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   private static final AnnotationNodeRepresentation INSTANCE = new AnnotationNodeRepresentation();
@@ -24,7 +24,7 @@ public final class AnnotationNodeRepresentation extends AsmRepresentation<Annota
   /**
    * Gets a reusable {@link AnnotationNodeRepresentation} instance.
    *
-   * @return a {@link AnnotationNodeRepresentation} instance; never null.
+   * @return an {@link AnnotationNodeRepresentation} instance; never null.
    */
   public static AnnotationNodeRepresentation instance() {
     return INSTANCE;

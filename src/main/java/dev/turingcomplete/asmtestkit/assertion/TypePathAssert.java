@@ -1,51 +1,50 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.assertion.comperator.AttributeComparator;
+import dev.turingcomplete.asmtestkit.assertion.comperator.TypePathComparator;
 import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
-import dev.turingcomplete.asmtestkit.assertion.representation.AttributeRepresentation;
+import dev.turingcomplete.asmtestkit.assertion.representation.TypePathRepresentation;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;
-import org.objectweb.asm.Attribute;
+import org.objectweb.asm.TypePath;
 
 import java.util.Comparator;
-import java.util.Objects;
 
 /**
- * An AssertJ {@link AbstractAssert} for an {@link Attribute} which will use the
- * {@link AttributeComparator} to determine the equality.
+ * An AssertJ {@link AbstractAssert} for a {@link TypePath} which will use the
+ * {@link TypePathComparator} to determine the equality.
  *
- * <p>To override the used {@link AttributeRepresentation} or
- * {@link AttributeComparator} call {@link #withRepresentation(Representation)}
+ * <p>To override the used {@link TypePathRepresentation} or
+ * {@link TypePathComparator} call {@link #withRepresentation(Representation)}
  * or {@link #usingComparator(Comparator)}.
  *
- * <p>An instance can be created via {@link AsmAssertions#assertThat(Attribute)}.
+ * <p>An instance can be created via {@link AsmAssertions#assertThat(TypePath)}.
  */
-public class AttributeAssert extends AsmAssert<AttributeAssert, Attribute> {
+public class TypePathAssert extends AsmAssert<TypePathAssert, TypePath> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   /**
-   * Initializes an {@link AttributeAssert}.
+   * Initializes a {@link TypePathAssert}.
    *
    * <p>There are no direct supported {@link AssertOption}s yet.
    *
-   * @param actual the actual {@link Attribute}; may be null.
+   * @param actual the actual {@link TypePath}; may be null.
    * @param assertOptions an array of {@link AssertOption}s; never null.
    */
-  public AttributeAssert(Attribute actual, AssertOption... assertOptions) {
-    super(actual, AttributeAssert.class, Attribute.class, createSelfDescription(actual), assertOptions);
+  public TypePathAssert(TypePath actual, AssertOption... assertOptions) {
+    super(actual, TypePathAssert.class, TypePath.class, createSelfDescription(actual), assertOptions);
 
-    info.useRepresentation(AttributeRepresentation.instance());
+    info.useRepresentation(TypePathRepresentation.instance());
     //noinspection ResultOfMethodCallIgnored
-    usingComparator(AttributeComparator.instance());
+    usingComparator(TypePathComparator.instance());
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
   // -- Private Methods --------------------------------------------------------------------------------------------- //
 
-  private static String createSelfDescription(Attribute actual) {
-    return "Attribute: " + Objects.requireNonNullElse(actual.type, "null");
+  private static String createSelfDescription(TypePath actual) {
+    return "Type path: " + actual;
   }
 
   // -- Inner Type -------------------------------------------------------------------------------------------------- //

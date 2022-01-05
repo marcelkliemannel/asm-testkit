@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
  *                        ^
  * }</pre>
  */
-public final class DiagnosticRepresentation extends StandardRepresentation {
+public class DiagnosticRepresentation extends StandardRepresentation {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   private static final Pattern LINE_BREAK_AT_END = Pattern.compile("(\\r\\n|\\r|\\n)$");

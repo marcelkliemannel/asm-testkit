@@ -1,38 +1,30 @@
-package dev.turingcomplete.asmtestkit.assertion.comperator;
+package dev.turingcomplete.asmtestkit.assertion;
 
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.TypePath;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class AsmComparatorTest {
+class TypePathAssertTest {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Test
-  void testNullArguments() {
-    var dummyAsmComparator = new DummyAsmComparator();
+  void testIsEqualTo() {
+    assertThat(TypePath.fromString("*"))
+            .isEqualTo(TypePath.fromString("*"));
 
-    //noinspection EqualsWithItself
-    assertThat(dummyAsmComparator.compare(null, null))
-            .isEqualTo(0);
-
-    assertThat(dummyAsmComparator.compare(null, "Right"))
-            .isLessThanOrEqualTo(-1);
-
-    assertThat(dummyAsmComparator.compare("Left", null))
-            .isGreaterThanOrEqualTo(1);
+    assertThatThrownBy(() -> assertThat(TypePath.fromString("*")).isEqualTo(TypePath.fromString("[1;")))
+            .isInstanceOf(AssertionError.class)
+            .hasMessage("[Type path: *] \n" +
+                        "expected: [1;\n" +
+                        " but was: *\n" +
+                        "when comparing values using TypePathComparator");
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
-
-  private static class DummyAsmComparator extends AsmComparator<Object> {
-
-    @Override
-    protected int doCompare(Object first, Object second) {
-      return 0;
-    }
-  }
 }

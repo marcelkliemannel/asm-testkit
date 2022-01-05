@@ -1,38 +1,23 @@
-package dev.turingcomplete.asmtestkit.assertion.comperator;
+package dev.turingcomplete.asmtestkit.assertion.representation;
 
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.TypePath;
 
+import static dev.turingcomplete.asmtestkit.assertion.representation.TypePathRepresentation.instance;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class AsmComparatorTest {
+class TypePathRepresentationTest {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Test
-  void testNullArguments() {
-    var dummyAsmComparator = new DummyAsmComparator();
-
-    //noinspection EqualsWithItself
-    assertThat(dummyAsmComparator.compare(null, null))
-            .isEqualTo(0);
-
-    assertThat(dummyAsmComparator.compare(null, "Right"))
-            .isLessThanOrEqualTo(-1);
-
-    assertThat(dummyAsmComparator.compare("Left", null))
-            .isGreaterThanOrEqualTo(1);
+  void testStringRepresentation() {
+    assertThat(instance().toStringOf(TypePath.fromString("*")))
+            .isEqualTo("*");
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
-
-  private static class DummyAsmComparator extends AsmComparator<Object> {
-
-    @Override
-    protected int doCompare(Object first, Object second) {
-      return 0;
-    }
-  }
 }

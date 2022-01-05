@@ -16,7 +16,7 @@ class CollectionComparatorTest {
 
   @Test
   void testNullArguments() {
-    var collectionComparator = new CollectionComparator<String>(Comparator.naturalOrder());
+    var collectionComparator = new IterableComparator<String>(Comparator.naturalOrder());
 
     //noinspection EqualsWithItself
     assertThat(collectionComparator.compare(null, null))
@@ -31,7 +31,7 @@ class CollectionComparatorTest {
 
   @Test
   void testDifferentSize() {
-    var stringCollectionComparator = new CollectionComparator<String>(Comparator.naturalOrder());
+    var stringCollectionComparator = new IterableComparator<String>(Comparator.naturalOrder());
 
     Assertions.assertThat(stringCollectionComparator.compare(List.of("A", "B"), List.of("A")))
               .isGreaterThan(0);
@@ -42,7 +42,7 @@ class CollectionComparatorTest {
 
   @Test
   void testElementsCompare() {
-    var stringCollectionComparator = new CollectionComparator<String>(Comparator.naturalOrder());
+    var stringCollectionComparator = new IterableComparator<String>(Comparator.naturalOrder());
 
     //noinspection EqualsWithItself
     Assertions.assertThat(stringCollectionComparator.compare(List.of("A", "B"), List.of("A", "B")))

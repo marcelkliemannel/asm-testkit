@@ -3,6 +3,7 @@ package dev.turingcomplete.asmtestkit.assertion;
 import dev.turingcomplete.asmtestkit.assertion.__helper.DummyAttribute;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.TypePath;
 import org.objectweb.asm.tree.AnnotationNode;
 
 import java.util.List;
@@ -53,6 +54,27 @@ class AsmAssertionsTest {
                           "and elements not expected:\n" +
                           "  [@A]\n" +
                           "when comparing values using AnnotationNodeComparator");
+  }
+
+  @Test
+  void testAssertThatTypePaths() {
+    // Test comparator
+    AsmAssertions.assertThatTypePaths(List.of(TypePath.fromString("*"), TypePath.fromString("*")))
+                 .containsExactlyInAnyOrderElementsOf(List.of(TypePath.fromString("*"), TypePath.fromString("*")));
+
+    // Test representation
+    Assertions.assertThatThrownBy(() -> AsmAssertions.assertThatTypePaths(List.of(TypePath.fromString("[1;"), TypePath.fromString("[2;")))
+                                                     .containsExactlyInAnyOrderElementsOf(List.of(TypePath.fromString("[2;"), TypePath.fromString("[3;"))))
+              .isInstanceOf(AssertionError.class)
+              .hasMessage("\nExpecting actual:\n" +
+                          "  [[1;, [2;]\n" +
+                          "to contain exactly in any order:\n" +
+                          "  [[2;, [3;]\n" +
+                          "elements not found:\n" +
+                          "  [[3;]\n" +
+                          "and elements not expected:\n" +
+                          "  [[1;]\n" +
+                          "when comparing values using TypePathComparator");
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

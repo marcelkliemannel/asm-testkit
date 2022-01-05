@@ -1,40 +1,36 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
-import org.objectweb.asm.Attribute;
+import org.objectweb.asm.TypePath;
 
 /**
- * Creates a {@link String} representation of an {@link Attribute}.
+ * Creates a {@link String} representation of a {@link TypePath}.
  */
-public class AttributeRepresentation extends AsmRepresentation<Attribute> {
+public class TypePathRepresentation extends AsmRepresentation<TypePath> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
-  private static final AttributeRepresentation INSTANCE = new AttributeRepresentation();
-
-  private static final String ASM_TEXTIFIER_PREFIX = "ATTRIBUTE ";
+  private static final TypePathRepresentation INSTANCE = new TypePathRepresentation();
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  public AttributeRepresentation() {
-    super(Attribute.class);
+  public TypePathRepresentation() {
+    super(TypePath.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   /**
-   * Gets a reusable {@link AttributeRepresentation} instance.
+   * Gets a reusable {@link TypePathRepresentation} instance.
    *
-   * @return an {@link AttributeRepresentation} instance; never null.
+   * @return a {@link TypePathRepresentation} instance; never null.
    */
-  public static AttributeRepresentation instance() {
+  public static TypePathRepresentation instance() {
     return INSTANCE;
   }
 
   @Override
-  protected String toStringRepresentation(Attribute attribute) {
-    return getAsmTextifierRepresentation(textifier -> textifier.visitAttribute(attribute))
-            .substring(ASM_TEXTIFIER_PREFIX.length()) // Remove prefix
-            .trim();
+  protected String toStringRepresentation(TypePath typePath) {
+    return typePath.toString();
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

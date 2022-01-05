@@ -2,7 +2,9 @@ package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.representation.AnnotationNodeRepresentation;
+import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.tree.AnnotationNode;
 
 import java.util.Optional;
@@ -11,7 +13,15 @@ import static dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils.convert
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getListFromObjectElseNull;
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getStringFromObjectElseNull;
 
-public final class AnnotationNodeAssert extends AsmAssert<AnnotationNodeAssert, AnnotationNode> {
+/**
+ * An AssertJ {@link AbstractAssert} for an {@link AnnotationNode}.
+ *
+ * <p>To override the used {@link AnnotationNodeRepresentation} call
+ * {@link #withRepresentation(Representation)}.
+ *
+ * <p>An instance can be created via {@link AsmAssertions#assertThat(AnnotationNode)}.
+ */
+public class AnnotationNodeAssert extends AsmAssert<AnnotationNodeAssert, AnnotationNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
