@@ -24,7 +24,7 @@ class AnnotationNodeAssertTest {
     Assertions.assertThatThrownBy(() -> assertThat(createAnnotationNode(Deprecated.class))
                       .isEqualTo(createAnnotationNode(SuppressWarnings.class)))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Annotation: Ljava/lang/Deprecated; > Is equal descriptor] \n" +
+              .hasMessage("[Annotation: @java.lang.Deprecated > Is equal descriptor] \n" +
                           "expected: \"Ljava/lang/SuppressWarnings;\"\n" +
                           " but was: \"Ljava/lang/Deprecated;\"");
 
@@ -32,7 +32,7 @@ class AnnotationNodeAssertTest {
     Assertions.assertThatThrownBy(() -> assertThat(createAnnotationNode(Deprecated.class, "foo", false, "bar", 1))
                       .isEqualTo(createAnnotationNode(Deprecated.class, "foo", false, "bar", 2)))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Annotation: Ljava/lang/Deprecated; > Are equal values] \n" +
+              .hasMessage("[Annotation: @java.lang.Deprecated(foo=false, bar=1) > Are equal values] \n" +
                           "Expecting map:\n" +
                           "  {\"bar\"=1, \"foo\"=false}\n" +
                           "to contain only:\n" +
