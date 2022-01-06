@@ -8,7 +8,6 @@ import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Attribute;
 
 import java.util.Comparator;
-import java.util.Objects;
 
 /**
  * An AssertJ {@link AbstractAssert} for an {@link Attribute} which will use the
@@ -45,7 +44,7 @@ public class AttributeAssert extends AsmAssert<AttributeAssert, Attribute> {
   // -- Private Methods --------------------------------------------------------------------------------------------- //
 
   private static String createSelfDescription(Attribute actual) {
-    return "Attribute: " + Objects.requireNonNullElse(actual.type, "null");
+    return "Attribute: " + AttributeRepresentation.instance().toStringOf(actual);
   }
 
   // -- Inner Type -------------------------------------------------------------------------------------------------- //

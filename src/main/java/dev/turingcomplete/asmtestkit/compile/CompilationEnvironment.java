@@ -35,7 +35,7 @@ public final class CompilationEnvironment {
   private final DiagnosticCollector<JavaFileObject> diagnosticsCollector     = new DiagnosticCollector<>();
   private       DiagnosticRepresentation            diagnosticRepresentation = DiagnosticRepresentation.defaultInstance();
   private       StandardJavaFileManagerProvider     fileManagerProvider      = null;
-  private       PrintWriter                         compilerOutput           = new PrintWriter(System.out);
+  private       PrintWriter                         compilerOutput           = new PrintWriter(System.out, true);
   private       boolean                             ignoreCompilationErrors  = false;
 
 
@@ -286,7 +286,7 @@ public final class CompilationEnvironment {
                                                 .map(diagnostic -> diagnosticRepresentation.toStringOf(diagnostic))
                                                 .collect(Collectors.toList());
       Assertions.assertThat(errors)
-                .overridingErrorMessage("Expected no compilation errors.")
+                .overridingErrorMessage("Expected no compilation errors. See output for errors.")
                 .isEmpty();
 
       // If the compiler because of non-code related problems (e.g, invalid

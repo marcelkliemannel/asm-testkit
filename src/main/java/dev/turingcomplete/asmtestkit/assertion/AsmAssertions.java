@@ -2,14 +2,17 @@ package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.assertion.comperator.AnnotationNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comperator.AttributeComparator;
+import dev.turingcomplete.asmtestkit.assertion.comperator.TypeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comperator.TypePathComparator;
 import dev.turingcomplete.asmtestkit.assertion.representation.AnnotationNodeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.AttributeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypePathRepresentation;
+import dev.turingcomplete.asmtestkit.assertion.representation.TypeRepresentation;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.IterableAssert;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Attribute;
+import org.objectweb.asm.Type;
 import org.objectweb.asm.TypePath;
 import org.objectweb.asm.tree.AnnotationNode;
 
@@ -56,6 +59,16 @@ public final class AsmAssertions {
    */
   public static TypePathAssert assertThat(TypePath typePath) {
     return new TypePathAssert(typePath);
+  }
+
+  /**
+   * Creates a {@link TypeAssert}.
+   *
+   * @param type a {@link Type}; may be null.
+   * @return a new {@link TypeAssert}; never null.
+   */
+  public static TypeAssert assertThat(Type type) {
+    return new TypeAssert(type);
   }
 
   // ---- Iterable ---------------------------------------------------------- //
@@ -119,6 +132,26 @@ public final class AsmAssertions {
                      .withRepresentation(TypePathRepresentation.instance())
                      .usingElementComparator(TypePathComparator.instance())
                      .usingComparator(TypePathComparator.iterableInstance());
+  }
+
+  /**
+   * Creates an {@link IterableAssert} for {@link Type}s which uses
+   * {@link TypeRepresentation#instance()} for the representation and for
+   * equality {@link TypeComparator#instance()} and
+   * {@link TypeComparator#iterableInstance()}.
+   *
+   * <p>To override the representation or comparator call
+   * {@link IterableAssert#usingComparator(Comparator)} or
+   * {@link IterableAssert#withRepresentation(Representation)}.
+   *
+   * @param types an {@link Iterable} of {@link Type}s; may be null.
+   * @return a new {@link IterableAssert}; never null.
+   */
+  public static IterableAssert<Type> assertThatTypes(Iterable<Type> types) {
+    return Assertions.assertThat(types)
+                     .withRepresentation(TypeRepresentation.instance())
+                     .usingElementComparator(TypeComparator.instance())
+                     .usingComparator(TypeComparator.iterableInstance());
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

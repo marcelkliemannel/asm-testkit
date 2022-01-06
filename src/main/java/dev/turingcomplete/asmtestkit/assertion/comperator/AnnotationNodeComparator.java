@@ -16,12 +16,12 @@ import static dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils.convert
  * <p>Two {@code AnnotationNode}s will be considered as equal if their
  * descriptors and values are equal, although the order of the values is not
  * taken into account. Otherwise, they will be ordered based on the
- * lexicographical order of their {@link AnnotationNodeRepresentation}.
+ * lexicographical order of their {@link AnnotationNodeRepresentation}s.
  */
-public class AnnotationNodeComparator extends AsmComparator<AnnotationNode> {
+public class AnnotationNodeComparator<T extends AnnotationNode> extends AsmComparator<T> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
-  private static final AnnotationNodeComparator                       INSTANCE          = new AnnotationNodeComparator();
+  private static final AnnotationNodeComparator<AnnotationNode>       INSTANCE          = new AnnotationNodeComparator<>();
   private static final Comparator<Iterable<? extends AnnotationNode>> ITERABLE_INSTANCE = new IterableComparator<>(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
@@ -36,7 +36,7 @@ public class AnnotationNodeComparator extends AsmComparator<AnnotationNode> {
    *
    * @return an {@link AnnotationNodeComparator} instance; never null.
    */
-  public static AnnotationNodeComparator instance() {
+  public static AnnotationNodeComparator<AnnotationNode> instance() {
     return INSTANCE;
   }
 
@@ -44,7 +44,7 @@ public class AnnotationNodeComparator extends AsmComparator<AnnotationNode> {
    * Gets a reusable {@link Comparator} instance for an {@link Iterable} of
    * {@link AnnotationNode}s.
    *
-   * @return a {@link IterableComparator} instance; never null.
+   * @return a {@link Comparator} instance; never null.
    */
   public static Comparator<Iterable<? extends AnnotationNode>> iterableInstance() {
     return ITERABLE_INSTANCE;
@@ -56,13 +56,16 @@ public class AnnotationNodeComparator extends AsmComparator<AnnotationNode> {
    * <p>The default value is {@link AnnotationNodeRepresentation#instance()}.
    *
    * @param annotationNodeRepresentation a {@link AnnotationNodeRepresentation}; never null.
+   * @return {@code this} {@link AnnotationNodeComparator}; never null.
    */
-  public void setAnnotationNodeRepresentation(AnnotationNodeRepresentation annotationNodeRepresentation) {
+  public AnnotationNodeComparator useAnnotationNodeRepresentation(AnnotationNodeRepresentation annotationNodeRepresentation) {
     this.annotationNodeRepresentation = Objects.requireNonNull(annotationNodeRepresentation);
+
+    return this;
   }
 
   @Override
-  protected int doCompare(AnnotationNode first, AnnotationNode second) {
+  protected int doCompare(T first, T second) {
     int descResult = Comparator.comparing((AnnotationNode annotationNode) -> annotationNode.desc)
                                .compare(first, second);
 

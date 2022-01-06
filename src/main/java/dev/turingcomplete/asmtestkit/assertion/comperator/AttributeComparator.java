@@ -11,7 +11,7 @@ import java.util.Objects;
  * A comparison function to order {@link Attribute}s.
  *
  * <p>Two {@code Attribute}s will be considered as equal if their
- * {@link AttributeRepresentation} are equal. Otherwise, they will be ordered
+ * {@link AttributeRepresentation}s are equal. Otherwise, they will be ordered
  * based on the lexicographical order of their {@code AttributeRepresentation}.
  */
 public class AttributeComparator extends AsmComparator<Attribute> {
@@ -40,7 +40,7 @@ public class AttributeComparator extends AsmComparator<Attribute> {
    * Gets a reusable {@link Comparator} instance for an {@link Iterable} of
    * {@link Attribute}s.
    *
-   * @return a {@link IterableComparator} instance; never null.
+   * @return a {@link Comparator} instance; never null.
    */
   public static Comparator<Iterable<? extends Attribute>> iterableInstance() {
     return ITERABLE_INSTANCE;
@@ -52,9 +52,12 @@ public class AttributeComparator extends AsmComparator<Attribute> {
    * <p>The default value is {@link AttributeRepresentation#instance()}.
    *
    * @param attributeRepresentation a {@link AttributeRepresentation}; never null.
+   * @return {@code this} {@link AttributeComparator}; never null.
    */
-  public void setAttributeRepresentation(AttributeRepresentation attributeRepresentation) {
+  public AttributeComparator useAttributeRepresentation(AttributeRepresentation attributeRepresentation) {
     this.attributeRepresentation = Objects.requireNonNull(attributeRepresentation);
+
+    return this;
   }
 
   @Override

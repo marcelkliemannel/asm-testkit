@@ -11,7 +11,7 @@ import java.util.Objects;
  * A comparison function to order {@link TypePath}s.
  *
  * <p>Two {@code TypePath}s will be considered as equal if their
- * {@link TypePathRepresentation} are equal. Otherwise, they will be ordered
+ * {@link TypePathRepresentation}s are equal. Otherwise, they will be ordered
  * based on the lexicographical order of their {@code TypePathRepresentation}.
  */
 public class TypePathComparator extends AsmComparator<TypePath> {
@@ -40,7 +40,7 @@ public class TypePathComparator extends AsmComparator<TypePath> {
    * Gets a reusable {@link Comparator} instance for an {@link Iterable} of
    * {@link TypePath}s.
    *
-   * @return a {@link IterableComparator} instance; never null.
+   * @return a {@link Comparator} instance; never null.
    */
   public static Comparator<Iterable<? extends TypePath>> iterableInstance() {
     return ITERABLE_INSTANCE;
@@ -52,9 +52,12 @@ public class TypePathComparator extends AsmComparator<TypePath> {
    * <p>The default value is {@link TypePathRepresentation#instance()}.
    *
    * @param typePathRepresentation a {@link TypePathRepresentation}; never null.
+   * @return {@code this} {@link TypePathComparator}; never null.
    */
-  public void setTypePathRepresentation(TypePathRepresentation typePathRepresentation) {
+  public TypePathComparator useTypePathRepresentation(TypePathRepresentation typePathRepresentation) {
     this.typePathRepresentation = Objects.requireNonNull(typePathRepresentation);
+
+    return this;
   }
 
   @Override

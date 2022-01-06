@@ -7,8 +7,6 @@ import org.assertj.core.api.Assertions;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.tree.AnnotationNode;
 
-import java.util.Optional;
-
 import static dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils.convertAnnotationNodeValuesToMap;
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getListFromObjectElseNull;
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getStringFromObjectElseNull;
@@ -50,7 +48,7 @@ public class AnnotationNodeAssert extends AsmAssert<AnnotationNodeAssert, Annota
   // -- Private Methods --------------------------------------------------------------------------------------------- //
 
   private static String createSelfDescription(AnnotationNode actual) {
-    return "Annotation: " + Optional.ofNullable(actual).map(_actual -> _actual.desc).orElse(null);
+    return "Annotation: " + AnnotationNodeRepresentation.instance().toStringOf(actual);
   }
 
   // -- Inner Type -------------------------------------------------------------------------------------------------- //

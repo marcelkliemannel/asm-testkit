@@ -3,6 +3,7 @@ package dev.turingcomplete.asmtestkit.assertion;
 import dev.turingcomplete.asmtestkit.assertion.__helper.DummyAttribute;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.Type;
 import org.objectweb.asm.TypePath;
 import org.objectweb.asm.tree.AnnotationNode;
 
@@ -75,6 +76,27 @@ class AsmAssertionsTest {
                           "and elements not expected:\n" +
                           "  [[1;]\n" +
                           "when comparing values using TypePathComparator");
+  }
+
+  @Test
+  void testAssertThatTypes() {
+    // Test comparator
+    AsmAssertions.assertThatTypes(List.of(Type.BOOLEAN_TYPE, Type.CHAR_TYPE))
+                 .containsExactlyInAnyOrderElementsOf(List.of(Type.BOOLEAN_TYPE, Type.CHAR_TYPE));
+
+    // Test representation
+    Assertions.assertThatThrownBy(() -> AsmAssertions.assertThatTypes(List.of(Type.BOOLEAN_TYPE, Type.CHAR_TYPE))
+                                                     .containsExactlyInAnyOrderElementsOf(List.of(Type.CHAR_TYPE, Type.SHORT_TYPE)))
+              .isInstanceOf(AssertionError.class)
+              .hasMessage("\nExpecting actual:\n" +
+                          "  [boolean, char]\n" +
+                          "to contain exactly in any order:\n" +
+                          "  [char, short]\n" +
+                          "elements not found:\n" +
+                          "  [short]\n" +
+                          "and elements not expected:\n" +
+                          "  [boolean]\n" +
+                          "when comparing values using TypeComparator");
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
