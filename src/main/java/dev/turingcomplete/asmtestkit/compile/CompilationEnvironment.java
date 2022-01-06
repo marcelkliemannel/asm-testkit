@@ -33,7 +33,7 @@ public final class CompilationEnvironment {
   private final List<String>                        compilerOptions          = new ArrayList<>();
   private final List<JavaFileObject>                inputSources             = new ArrayList<>();
   private final DiagnosticCollector<JavaFileObject> diagnosticsCollector     = new DiagnosticCollector<>();
-  private       DiagnosticRepresentation            diagnosticRepresentation = DiagnosticRepresentation.defaultInstance();
+  private       DiagnosticRepresentation            diagnosticRepresentation = DiagnosticRepresentation.INSTANCE;
   private       StandardJavaFileManagerProvider     fileManagerProvider      = null;
   private       PrintWriter                         compilerOutput           = new PrintWriter(System.out, true);
   private       boolean                             ignoreCompilationErrors  = false;
@@ -170,7 +170,7 @@ public final class CompilationEnvironment {
   /**
    * Sets the given {@link DiagnosticRepresentation}.
    *
-   * <p>The default value is {@link DiagnosticRepresentation#defaultInstance()}.
+   * <p>The default value is {@link DiagnosticRepresentation#INSTANCE}.
    *
    * @param diagnosticRepresentation a {@link DiagnosticRepresentation}; never
    *                                 null.

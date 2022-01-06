@@ -8,7 +8,10 @@ import org.objectweb.asm.Type;
 public class TypeRepresentation extends AsmRepresentation<Type> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
-  private static final TypeRepresentation INSTANCE = new TypeRepresentation();
+  /**
+   * A reusable {@link TypeRepresentation} instance.
+   */
+  public static final TypeRepresentation INSTANCE = new TypeRepresentation();
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
@@ -21,15 +24,6 @@ public class TypeRepresentation extends AsmRepresentation<Type> {
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
-
-  /**
-   * Gets a reusable {@link TypeRepresentation} instance.
-   *
-   * @return a {@link TypeRepresentation} instance; never null.
-   */
-  public static TypeRepresentation instance() {
-    return INSTANCE;
-  }
 
   /**
    * Use the fully qualified class name representation, e.g.,

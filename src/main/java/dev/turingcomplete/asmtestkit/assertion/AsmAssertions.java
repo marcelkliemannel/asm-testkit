@@ -75,9 +75,9 @@ public final class AsmAssertions {
 
   /**
    * Creates an {@link IterableAssert} for {@link Attribute}s which uses
-   * {@link AttributeRepresentation#instance()} for the representation and
-   * for equality {@link AttributeComparator#instance()} and
-   * {@link AttributeComparator#iterableInstance()}.
+   * {@link AttributeRepresentation#INSTANCE} for the representation and
+   * for equality {@link AttributeComparator#INSTANCE} and
+   * {@link AttributeComparator#ITERABLE_INSTANCE}.
    *
    * <p>To override the representation or comparator call
    * {@link IterableAssert#usingComparator(Comparator)} or
@@ -88,16 +88,16 @@ public final class AsmAssertions {
    */
   public static IterableAssert<Attribute> assertThatAttributes(Iterable<Attribute> attributes) {
     return Assertions.assertThat(attributes)
-                     .withRepresentation(AttributeRepresentation.instance())
-                     .usingElementComparator(AttributeComparator.instance())
-                     .usingComparator(AttributeComparator.iterableInstance());
+                     .withRepresentation(AttributeRepresentation.INSTANCE)
+                     .usingElementComparator(AttributeComparator.INSTANCE)
+                     .usingComparator(AttributeComparator.ITERABLE_INSTANCE);
   }
 
   /**
    * Creates an {@link IterableAssert} for {@link AnnotationNode}s which uses
-   * {@link AnnotationNodeRepresentation#instance()} for the representation and
-   * for equality {@link AnnotationNodeComparator#instance()} and
-   * {@link AnnotationNodeComparator#iterableInstance()}.
+   * {@link AnnotationNodeRepresentation#INSTANCE} for the representation and
+   * for equality {@link AnnotationNodeComparator#INSTANCE} and
+   * {@link AnnotationNodeComparator#ITERABLE_INSTANCE}.
    *
    * <p>To override the representation or comparator call
    * {@link IterableAssert#usingComparator(Comparator)} or
@@ -109,16 +109,16 @@ public final class AsmAssertions {
    */
   public static IterableAssert<AnnotationNode> assertThatAnnotationNodes(Iterable<AnnotationNode> annotationNodes) {
     return Assertions.assertThat(annotationNodes)
-                     .withRepresentation(AnnotationNodeRepresentation.instance())
-                     .usingElementComparator(AnnotationNodeComparator.instance())
-                     .usingComparator(AnnotationNodeComparator.iterableInstance());
+                     .withRepresentation(AnnotationNodeRepresentation.INSTANCE)
+                     .usingElementComparator(AnnotationNodeComparator.INSTANCE)
+                     .usingComparator(AnnotationNodeComparator.ITERABLE_INSTANCE);
   }
 
   /**
    * Creates an {@link IterableAssert} for {@link TypePath}s which uses
-   * {@link TypePathRepresentation#instance()} for the representation and for
-   * equality {@link TypePathComparator#instance()} and
-   * {@link TypePathComparator#iterableInstance()}.
+   * {@link TypePathRepresentation#INSTANCE} for the representation and for
+   * equality {@link TypePathComparator#INSTANCE} and
+   * {@link TypePathComparator#ITERABLE_INSTANCE}.
    *
    * <p>To override the representation or comparator call
    * {@link IterableAssert#usingComparator(Comparator)} or
@@ -129,16 +129,16 @@ public final class AsmAssertions {
    */
   public static IterableAssert<TypePath> assertThatTypePaths(Iterable<TypePath> typePaths) {
     return Assertions.assertThat(typePaths)
-                     .withRepresentation(TypePathRepresentation.instance())
-                     .usingElementComparator(TypePathComparator.instance())
-                     .usingComparator(TypePathComparator.iterableInstance());
+                     .withRepresentation(TypePathRepresentation.INSTANCE)
+                     .usingElementComparator(TypePathComparator.INSTANCE)
+                     .usingComparator(TypePathComparator.ITERABLE_INSTANCE);
   }
 
   /**
    * Creates an {@link IterableAssert} for {@link Type}s which uses
-   * {@link TypeRepresentation#instance()} for the representation and for
-   * equality {@link TypeComparator#instance()} and
-   * {@link TypeComparator#iterableInstance()}.
+   * {@link TypeRepresentation#INSTANCE} for the representation and for
+   * equality {@link TypeComparator#INSTANCE} and
+   * {@link TypeComparator#ITERABLE_INSTANCE}.
    *
    * <p>To override the representation or comparator call
    * {@link IterableAssert#usingComparator(Comparator)} or
@@ -149,9 +149,9 @@ public final class AsmAssertions {
    */
   public static IterableAssert<Type> assertThatTypes(Iterable<Type> types) {
     return Assertions.assertThat(types)
-                     .withRepresentation(TypeRepresentation.instance())
-                     .usingElementComparator(TypeComparator.instance())
-                     .usingComparator(TypeComparator.iterableInstance());
+                     .withRepresentation(TypeRepresentation.INSTANCE)
+                     .usingElementComparator(TypeComparator.INSTANCE)
+                     .usingComparator(TypeComparator.ITERABLE_INSTANCE);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

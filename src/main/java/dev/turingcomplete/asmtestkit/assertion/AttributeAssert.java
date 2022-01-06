@@ -35,16 +35,16 @@ public class AttributeAssert extends AsmAssert<AttributeAssert, Attribute> {
   public AttributeAssert(Attribute actual, AssertOption... assertOptions) {
     super(actual, AttributeAssert.class, Attribute.class, createSelfDescription(actual), assertOptions);
 
-    info.useRepresentation(AttributeRepresentation.instance());
+    info.useRepresentation(AttributeRepresentation.INSTANCE);
     //noinspection ResultOfMethodCallIgnored
-    usingComparator(AttributeComparator.instance());
+    usingComparator(AttributeComparator.INSTANCE);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
   // -- Private Methods --------------------------------------------------------------------------------------------- //
 
   private static String createSelfDescription(Attribute actual) {
-    return "Attribute: " + AttributeRepresentation.instance().toStringOf(actual);
+    return "Attribute: " + AttributeRepresentation.INSTANCE.toStringOf(actual);
   }
 
   // -- Inner Type -------------------------------------------------------------------------------------------------- //

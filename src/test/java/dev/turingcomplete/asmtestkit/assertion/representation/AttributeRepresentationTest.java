@@ -13,7 +13,7 @@ class AttributeRepresentationTest {
 
   @Test
   void testStringRepresentation() {
-    assertThat(AttributeRepresentation.instance().toStringOf(new DummyAttribute("Name", "Content")))
+    assertThat(AttributeRepresentation.INSTANCE.toStringOf(new DummyAttribute("Name", "Content")))
             .isEqualTo("NameContent");
   }
 

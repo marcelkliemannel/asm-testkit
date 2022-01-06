@@ -8,7 +8,10 @@ import org.objectweb.asm.TypePath;
 public class TypePathRepresentation extends AsmRepresentation<TypePath> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
-  private static final TypePathRepresentation INSTANCE = new TypePathRepresentation();
+  /**
+   * A reusable {@link TypePathRepresentation} instance.
+   */
+  public static final TypePathRepresentation INSTANCE = new TypePathRepresentation();
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
@@ -18,15 +21,6 @@ public class TypePathRepresentation extends AsmRepresentation<TypePath> {
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
-
-  /**
-   * Gets a reusable {@link TypePathRepresentation} instance.
-   *
-   * @return a {@link TypePathRepresentation} instance; never null.
-   */
-  public static TypePathRepresentation instance() {
-    return INSTANCE;
-  }
 
   @Override
   protected String toStringRepresentation(TypePath typePath) {

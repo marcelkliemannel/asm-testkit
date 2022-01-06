@@ -17,39 +17,27 @@ import java.util.Objects;
 public class TypeComparator extends AsmComparator<Type> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
-  private static final TypeComparator                       INSTANCE          = new TypeComparator();
-  private static final Comparator<Iterable<? extends Type>> ITERABLE_INSTANCE = new IterableComparator<>(INSTANCE);
+  /**
+   * A reusable {@link TypeComparator} instance.
+   */
+  public static final TypeComparator                       INSTANCE          = new TypeComparator();
+  /**
+   * A reusable {@link Comparator} instance for an {@link Iterable} of
+   * {@link Type}s.
+   */
+  public static final Comparator<Iterable<? extends Type>> ITERABLE_INSTANCE = new IterableComparator<>(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
-  private TypeRepresentation typeRepresentation = TypeRepresentation.instance();
+  private TypeRepresentation typeRepresentation = TypeRepresentation.INSTANCE;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   /**
-   * Gets a reusable {@link TypeComparator} instance.
-   *
-   * @return a {@link TypeComparator} instance; never null.
-   */
-  public static TypeComparator instance() {
-    return INSTANCE;
-  }
-
-  /**
-   * Gets a reusable {@link Comparator} instance for an {@link Iterable} of
-   * {@link Type}s.
-   *
-   * @return a {@link Comparator} instance; never null.
-   */
-  public static Comparator<Iterable<? extends Type>> iterableInstance() {
-    return ITERABLE_INSTANCE;
-  }
-
-  /**
    * Sets the used {@link TypeRepresentation}.
    *
-   * <p>The default value is {@link TypeRepresentation#instance()}.
+   * <p>The default value is {@link TypeRepresentation#INSTANCE}.
    *
    * @param typeRepresentation a {@link TypeRepresentation}; never null.
    * @return {@code this} {@link TypeComparator}; never null.

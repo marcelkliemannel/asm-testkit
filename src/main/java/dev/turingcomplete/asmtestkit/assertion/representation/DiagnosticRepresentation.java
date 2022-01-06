@@ -23,32 +23,34 @@ import java.util.regex.Pattern;
 public class DiagnosticRepresentation extends StandardRepresentation {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
-  private static final Pattern LINE_BREAK_AT_END = Pattern.compile("(\\r\\n|\\r|\\n)$");
+  /**
+   * A reusable {@link DiagnosticRepresentation} instance.
+   */
+  public static final DiagnosticRepresentation INSTANCE = new DiagnosticRepresentation();
 
-  private static final DiagnosticRepresentation DEFAULT_INSTANCE = new DiagnosticRepresentation(Locale.getDefault());
+  private static final Pattern LINE_BREAK_AT_END = Pattern.compile("(\\r\\n|\\r|\\n)$");
 
   private static final int SNIPPET_RADIUS = 20;
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
-  private final Locale locale;
+  private Locale locale = Locale.getDefault();
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
-
-  public DiagnosticRepresentation(Locale locale) {
-    this.locale = locale;
-  }
-
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   /**
-   * Gets a reusable {@link DiagnosticRepresentation} instance which uses the
-   * system default locale.
+   * Sets the used {@link Locale}.
    *
-   * @return a {@link DiagnosticRepresentation} instance; never null.
+   * <p>The default value is {@link Locale#getDefault()}.
+   *
+   * @param locale a {@link Locale}; never null.
+   * @return {@code this} {@link DiagnosticRepresentation}; never null.
    */
-  public static DiagnosticRepresentation defaultInstance() {
-    return DEFAULT_INSTANCE;
+  public DiagnosticRepresentation useLocale(Locale locale) {
+    this.locale = locale;
+
+    return this;
   }
 
   public String toStringOf(Diagnostic<? extends JavaFileObject> diagnostic) {

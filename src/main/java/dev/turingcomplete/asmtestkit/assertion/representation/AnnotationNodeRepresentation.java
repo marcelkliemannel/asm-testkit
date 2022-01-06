@@ -12,11 +12,14 @@ import java.util.Objects;
 public class AnnotationNodeRepresentation extends AsmRepresentation<AnnotationNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
-  private static final AnnotationNodeRepresentation INSTANCE = new AnnotationNodeRepresentation();
+  /**
+   * A reusable {@link AnnotationNodeRepresentation} instance.
+   */
+  public static final AnnotationNodeRepresentation INSTANCE = new AnnotationNodeRepresentation();
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
-  private TypeRepresentation typeRepresentation = TypeRepresentation.instance();
+  private TypeRepresentation typeRepresentation = TypeRepresentation.INSTANCE;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
@@ -27,18 +30,9 @@ public class AnnotationNodeRepresentation extends AsmRepresentation<AnnotationNo
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   /**
-   * Gets a reusable {@link AnnotationNodeRepresentation} instance.
-   *
-   * @return an {@link AnnotationNodeRepresentation} instance; never null.
-   */
-  public static AnnotationNodeRepresentation instance() {
-    return INSTANCE;
-  }
-
-  /**
    * Sets the used {@link TypeRepresentation}.
    *
-   * <p>The default value is {@link TypeRepresentation#instance()}.
+   * <p>The default value is {@link TypeRepresentation#INSTANCE}.
    *
    * @param typeRepresentation a {@link TypeRepresentation}; never null.
    * @return {@code this} {@link AnnotationNodeRepresentation}; never null.

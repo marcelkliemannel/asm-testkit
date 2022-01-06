@@ -22,7 +22,7 @@ class CompilationEnvironmentTest {
 
   @Test
   void testCustomDiagnosticRepresentation() throws IOException {
-    DiagnosticRepresentation diagnosticRepresentation = DiagnosticRepresentation.defaultInstance();
+    DiagnosticRepresentation diagnosticRepresentation = DiagnosticRepresentation.INSTANCE;
     CompilationResult result = create()
             .useDiagnosticRepresentation(diagnosticRepresentation)
             .compile();

@@ -5,8 +5,8 @@ import java.util.Comparator;
 public abstract class AsmComparator<T> implements Comparator<T> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
-  private static final Comparator<String>  NULL_STRING_COMPARATOR_INSTANCE  = Comparator.nullsFirst(Comparator.naturalOrder());
-  private static final Comparator<Integer> NULL_INTEGER_COMPARATOR_INSTANCE = Comparator.nullsFirst(Comparator.naturalOrder());
+  private static final Comparator<String>  STRING_COMPARATOR_INSTANCE  = Comparator.nullsFirst(Comparator.naturalOrder());
+  private static final Comparator<Integer> INTEGER_COMPARATOR_INSTANCE = Comparator.nullsFirst(Comparator.naturalOrder());
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
@@ -40,12 +40,24 @@ public abstract class AsmComparator<T> implements Comparator<T> {
    */
   protected abstract int doCompare(T first, T second);
 
-  protected final Comparator<String> nullStringComparator() {
-    return NULL_STRING_COMPARATOR_INSTANCE;
+  /**
+   * Gets a {@link Comparator} for {@link String}s which can handle null
+   * values by using {@link Comparator#nullsFirst(Comparator)}.
+   *
+   * @return a {@link Comparator} for {@link String}s; never null.
+   */
+  protected final Comparator<String> stringComparator() {
+    return STRING_COMPARATOR_INSTANCE;
   }
 
-  protected final Comparator<Integer> nullIntStringComparator() {
-    return NULL_INTEGER_COMPARATOR_INSTANCE;
+  /**
+   * Gets a {@link Comparator} for {@link Integer}s which can handle null
+   * values by using {@link Comparator#nullsFirst(Comparator)}.
+   *
+   * @return a {@link Comparator} for {@link Integer}s; never null.
+   */
+  protected final Comparator<Integer> integerComparator() {
+    return INTEGER_COMPARATOR_INSTANCE;
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

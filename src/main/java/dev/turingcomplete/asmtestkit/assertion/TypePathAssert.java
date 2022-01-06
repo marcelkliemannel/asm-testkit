@@ -35,16 +35,16 @@ public class TypePathAssert extends AsmAssert<TypePathAssert, TypePath> {
   public TypePathAssert(TypePath actual, AssertOption... assertOptions) {
     super(actual, TypePathAssert.class, TypePath.class, createSelfDescription(actual), assertOptions);
 
-    info.useRepresentation(TypePathRepresentation.instance());
+    info.useRepresentation(TypePathRepresentation.INSTANCE);
     //noinspection ResultOfMethodCallIgnored
-    usingComparator(TypePathComparator.instance());
+    usingComparator(TypePathComparator.INSTANCE);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
   // -- Private Methods --------------------------------------------------------------------------------------------- //
 
   private static String createSelfDescription(TypePath actual) {
-    return "Type path: " + TypePathRepresentation.instance().toStringOf(actual);
+    return "Type path: " + TypePathRepresentation.INSTANCE.toStringOf(actual);
   }
 
   // -- Inner Type -------------------------------------------------------------------------------------------------- //

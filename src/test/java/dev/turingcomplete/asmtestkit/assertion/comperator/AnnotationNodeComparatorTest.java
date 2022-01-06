@@ -5,7 +5,7 @@ import org.objectweb.asm.tree.AnnotationNode;
 
 import java.util.Arrays;
 
-import static dev.turingcomplete.asmtestkit.assertion.comperator.AnnotationNodeComparator.instance;
+import static dev.turingcomplete.asmtestkit.assertion.comperator.AnnotationNodeComparator.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AnnotationNodeComparatorTest {
@@ -16,25 +16,25 @@ class AnnotationNodeComparatorTest {
 
   @Test
   void testCompareDescriptor() {
-    assertThat(instance().compare(new AnnotationNode("LA;"), new AnnotationNode("LA;")))
+    assertThat(INSTANCE.compare(new AnnotationNode("LA;"), new AnnotationNode("LA;")))
             .isEqualTo(0);
 
-    assertThat(instance().compare(new AnnotationNode("LA;"), new AnnotationNode("LB;")))
+    assertThat(INSTANCE.compare(new AnnotationNode("LA;"), new AnnotationNode("LB;")))
             .isLessThanOrEqualTo(-1);
 
-    assertThat(instance().compare(new AnnotationNode("LB;"), new AnnotationNode("LA;")))
+    assertThat(INSTANCE.compare(new AnnotationNode("LB;"), new AnnotationNode("LA;")))
             .isGreaterThanOrEqualTo(1);
   }
 
   @Test
   void testCompareValues() {
-    assertThat(instance().compare(createAnnotationNode("foo", true, "bar", false), createAnnotationNode("foo", true, "bar", false)))
+    assertThat(INSTANCE.compare(createAnnotationNode("foo", true, "bar", false), createAnnotationNode("foo", true, "bar", false)))
             .isEqualTo(0);
 
-    assertThat(instance().compare(createAnnotationNode("A", true), createAnnotationNode("B", true)))
+    assertThat(INSTANCE.compare(createAnnotationNode("A", true), createAnnotationNode("B", true)))
             .isLessThanOrEqualTo(-1);
 
-    assertThat(instance().compare(createAnnotationNode("B", true), createAnnotationNode("A", true)))
+    assertThat(INSTANCE.compare(createAnnotationNode("B", true), createAnnotationNode("A", true)))
             .isGreaterThanOrEqualTo(1);
   }
 

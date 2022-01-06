@@ -17,39 +17,27 @@ import java.util.Objects;
 public class TypePathComparator extends AsmComparator<TypePath> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
-  private static final TypePathComparator                       INSTANCE          = new TypePathComparator();
-  private static final Comparator<Iterable<? extends TypePath>> ITERABLE_INSTANCE = new IterableComparator<>(INSTANCE);
+  /**
+   * A reusable {@link TypePathComparator} instance.
+   */
+  public static final TypePathComparator                       INSTANCE          = new TypePathComparator();
+  /**
+   * A reusable {@link Comparator} instance for an {@link Iterable} of
+   * {@link TypePath}s.
+   */
+  public static final Comparator<Iterable<? extends TypePath>> ITERABLE_INSTANCE = new IterableComparator<>(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
-  private TypePathRepresentation typePathRepresentation = TypePathRepresentation.instance();
+  private TypePathRepresentation typePathRepresentation = TypePathRepresentation.INSTANCE;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   /**
-   * Gets a reusable {@link TypePathComparator} instance.
-   *
-   * @return a {@link TypePathComparator} instance; never null.
-   */
-  public static TypePathComparator instance() {
-    return INSTANCE;
-  }
-
-  /**
-   * Gets a reusable {@link Comparator} instance for an {@link Iterable} of
-   * {@link TypePath}s.
-   *
-   * @return a {@link Comparator} instance; never null.
-   */
-  public static Comparator<Iterable<? extends TypePath>> iterableInstance() {
-    return ITERABLE_INSTANCE;
-  }
-
-  /**
    * Sets the used {@link TypePathRepresentation}.
    *
-   * <p>The default value is {@link TypePathRepresentation#instance()}.
+   * <p>The default value is {@link TypePathRepresentation#INSTANCE}.
    *
    * @param typePathRepresentation a {@link TypePathRepresentation}; never null.
    * @return {@code this} {@link TypePathComparator}; never null.

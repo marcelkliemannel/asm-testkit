@@ -15,7 +15,7 @@ class DiagnosticRepresentationTest {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
-  private final DiagnosticRepresentation diagnosticRepresentation = DiagnosticRepresentation.defaultInstance();
+  private final DiagnosticRepresentation diagnosticRepresentation = DiagnosticRepresentation.INSTANCE;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //

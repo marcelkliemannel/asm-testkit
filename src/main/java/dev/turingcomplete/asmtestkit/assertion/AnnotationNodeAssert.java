@@ -27,7 +27,7 @@ public class AnnotationNodeAssert extends AsmAssert<AnnotationNodeAssert, Annota
   public AnnotationNodeAssert(AnnotationNode actual, AssertOption... assertOptions) {
     super(actual, AnnotationNodeAssert.class, AnnotationNode.class, createSelfDescription(actual), assertOptions);
 
-    info.useRepresentation(AnnotationNodeRepresentation.instance());
+    info.useRepresentation(AnnotationNodeRepresentation.INSTANCE);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
@@ -48,7 +48,7 @@ public class AnnotationNodeAssert extends AsmAssert<AnnotationNodeAssert, Annota
   // -- Private Methods --------------------------------------------------------------------------------------------- //
 
   private static String createSelfDescription(AnnotationNode actual) {
-    return "Annotation: " + AnnotationNodeRepresentation.instance().toStringOf(actual);
+    return "Annotation: " + AnnotationNodeRepresentation.INSTANCE.toStringOf(actual);
   }
 
   // -- Inner Type -------------------------------------------------------------------------------------------------- //

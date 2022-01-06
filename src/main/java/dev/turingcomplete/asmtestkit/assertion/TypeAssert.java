@@ -36,16 +36,16 @@ public class TypeAssert extends AsmAssert<TypeAssert, Type> {
   public TypeAssert(Type actual, AssertOption... assertOptions) {
     super(actual, TypeAssert.class, Type.class, createSelfDescription(actual), assertOptions);
 
-    info.useRepresentation(TypeRepresentation.instance());
+    info.useRepresentation(TypeRepresentation.INSTANCE);
     //noinspection ResultOfMethodCallIgnored
-    usingComparator(TypeComparator.instance());
+    usingComparator(TypeComparator.INSTANCE);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
   // -- Private Methods --------------------------------------------------------------------------------------------- //
 
   private static String createSelfDescription(Type actual) {
-    return "Type: " + TypeRepresentation.instance().toStringOf(actual);
+    return "Type: " + TypeRepresentation.INSTANCE.toStringOf(actual);
   }
 
   // -- Inner Type -------------------------------------------------------------------------------------------------- //

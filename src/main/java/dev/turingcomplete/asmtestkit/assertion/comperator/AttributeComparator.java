@@ -17,39 +17,27 @@ import java.util.Objects;
 public class AttributeComparator extends AsmComparator<Attribute> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
-  private static final AttributeComparator                       INSTANCE          = new AttributeComparator();
-  private static final Comparator<Iterable<? extends Attribute>> ITERABLE_INSTANCE = new IterableComparator<>(INSTANCE);
+  /**
+   * A reusable {@link AttributeComparator} instance.
+   */
+  public static final AttributeComparator                       INSTANCE          = new AttributeComparator();
+  /**
+   * A reusable {@link Comparator} instance for an {@link Iterable} of
+   * {@link Attribute}s.
+   */
+  public static final Comparator<Iterable<? extends Attribute>> ITERABLE_INSTANCE = new IterableComparator<>(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
-  private AttributeRepresentation attributeRepresentation = AttributeRepresentation.instance();
+  private AttributeRepresentation attributeRepresentation = AttributeRepresentation.INSTANCE;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   /**
-   * Gets a reusable {@link AttributeComparator} instance.
-   *
-   * @return an {@link AttributeComparator} instance; never null.
-   */
-  public static AttributeComparator instance() {
-    return INSTANCE;
-  }
-
-  /**
-   * Gets a reusable {@link Comparator} instance for an {@link Iterable} of
-   * {@link Attribute}s.
-   *
-   * @return a {@link Comparator} instance; never null.
-   */
-  public static Comparator<Iterable<? extends Attribute>> iterableInstance() {
-    return ITERABLE_INSTANCE;
-  }
-
-  /**
    * Sets the used {@link AttributeRepresentation}.
    *
-   * <p>The default value is {@link AttributeRepresentation#instance()}.
+   * <p>The default value is {@link AttributeRepresentation#INSTANCE}.
    *
    * @param attributeRepresentation a {@link AttributeRepresentation}; never null.
    * @return {@code this} {@link AttributeComparator}; never null.

@@ -13,10 +13,10 @@ class AnnotationNodeRepresentationTest {
 
   @Test
   void testStringRepresentation() {
-    assertThat(AnnotationNodeRepresentation.instance().toStringOf(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "1.2", "forRemoval", true)))
+    assertThat(AnnotationNodeRepresentation.INSTANCE.toStringOf(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "1.2", "forRemoval", true)))
             .isEqualTo("@java.lang.Deprecated(since=\"1.2\", forRemoval=true)");
 
-    assertThat(AnnotationNodeRepresentation.instance().toStringOf(AnnotationNodeUtils.createAnnotationNode(Deprecated.class)))
+    assertThat(AnnotationNodeRepresentation.INSTANCE.toStringOf(AnnotationNodeUtils.createAnnotationNode(Deprecated.class)))
             .isEqualTo("@java.lang.Deprecated");
   }
 

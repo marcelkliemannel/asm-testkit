@@ -21,44 +21,32 @@ import static dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils.convert
 public class AnnotationNodeComparator<T extends AnnotationNode> extends AsmComparator<T> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
-  private static final AnnotationNodeComparator<AnnotationNode>       INSTANCE          = new AnnotationNodeComparator<>();
-  private static final Comparator<Iterable<? extends AnnotationNode>> ITERABLE_INSTANCE = new IterableComparator<>(INSTANCE);
+  /**
+   * A reusable {@link AnnotationNodeComparator} instance.
+   */
+  public static final AnnotationNodeComparator<AnnotationNode>       INSTANCE          = new AnnotationNodeComparator<>();
+  /**
+   * A reusable {@link Comparator} instance for an {@link Iterable} of
+   * {@link AnnotationNode}s.
+   */
+  public static final Comparator<Iterable<? extends AnnotationNode>> ITERABLE_INSTANCE = new IterableComparator<>(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
-  private AnnotationNodeRepresentation annotationNodeRepresentation = AnnotationNodeRepresentation.instance();
+  private AnnotationNodeRepresentation annotationNodeRepresentation = AnnotationNodeRepresentation.INSTANCE;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   /**
-   * Gets a reusable {@link AnnotationNodeComparator} instance.
-   *
-   * @return an {@link AnnotationNodeComparator} instance; never null.
-   */
-  public static AnnotationNodeComparator<AnnotationNode> instance() {
-    return INSTANCE;
-  }
-
-  /**
-   * Gets a reusable {@link Comparator} instance for an {@link Iterable} of
-   * {@link AnnotationNode}s.
-   *
-   * @return a {@link Comparator} instance; never null.
-   */
-  public static Comparator<Iterable<? extends AnnotationNode>> iterableInstance() {
-    return ITERABLE_INSTANCE;
-  }
-
-  /**
    * Sets the used {@link AnnotationNodeRepresentation}.
    *
-   * <p>The default value is {@link AnnotationNodeRepresentation#instance()}.
+   * <p>The default value is {@link AnnotationNodeRepresentation#INSTANCE}.
    *
    * @param annotationNodeRepresentation a {@link AnnotationNodeRepresentation}; never null.
    * @return {@code this} {@link AnnotationNodeComparator}; never null.
    */
-  public AnnotationNodeComparator useAnnotationNodeRepresentation(AnnotationNodeRepresentation annotationNodeRepresentation) {
+  public AnnotationNodeComparator<T> useAnnotationNodeRepresentation(AnnotationNodeRepresentation annotationNodeRepresentation) {
     this.annotationNodeRepresentation = Objects.requireNonNull(annotationNodeRepresentation);
 
     return this;

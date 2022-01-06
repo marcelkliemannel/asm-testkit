@@ -8,7 +8,10 @@ import org.objectweb.asm.Attribute;
 public class AttributeRepresentation extends AsmRepresentation<Attribute> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
-  private static final AttributeRepresentation INSTANCE = new AttributeRepresentation();
+  /**
+   * A reusable {@link AttributeRepresentation} instance.
+   */
+  public static final AttributeRepresentation INSTANCE = new AttributeRepresentation();
 
   private static final String ASM_TEXTIFIER_PREFIX = "ATTRIBUTE ";
 
@@ -20,15 +23,6 @@ public class AttributeRepresentation extends AsmRepresentation<Attribute> {
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
-
-  /**
-   * Gets a reusable {@link AttributeRepresentation} instance.
-   *
-   * @return an {@link AttributeRepresentation} instance; never null.
-   */
-  public static AttributeRepresentation instance() {
-    return INSTANCE;
-  }
 
   @Override
   protected String toStringRepresentation(Attribute attribute) {
