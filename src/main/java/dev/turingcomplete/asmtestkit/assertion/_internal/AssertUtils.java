@@ -19,16 +19,26 @@ public final class AssertUtils {
   }
 
   public static <T> String getStringFromObjectElseNull(Object object, Class<T> objectType, Function<T, String> provide) {
-    return objectType.isInstance(object) ? provide.apply(objectType.cast(object)) : null;
+    return getFromObjectElseNull(object, objectType, provide);
   }
+
+  // ----------
 
   public static <T> Integer getIntegerFromObjectElseNull(T object, Function<T, Integer> provide) {
     return object != null ? provide.apply(object) : null;
   }
 
   public static <T> Integer getIntegerFromObjectElseNull(Object object, Class<T> objectType, Function<T, Integer> provide) {
+    return getFromObjectElseNull(object, objectType, provide);
+  }
+
+  // ----------
+
+  public static <T, U> U getFromObjectElseNull(Object object, Class<T> objectType, Function<T, U> provide) {
     return objectType.isInstance(object) ? provide.apply(objectType.cast(object)) : null;
   }
+
+  // ----------
 
   public static <S, T> Iterable<T> getIterableFromObjectElseNull(S object, Function<S, Iterable<T>> provide) {
     return object != null ? provide.apply(object) : null;

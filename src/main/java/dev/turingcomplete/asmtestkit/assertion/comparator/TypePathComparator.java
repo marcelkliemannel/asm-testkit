@@ -1,6 +1,6 @@
-package dev.turingcomplete.asmtestkit.assertion.comperator;
+package dev.turingcomplete.asmtestkit.assertion.comparator;
 
-import dev.turingcomplete.asmtestkit.assertion.comperator._internal.IterableComparator;
+import dev.turingcomplete.asmtestkit.assertion.comparator._internal.IterableComparator;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypePathRepresentation;
 import org.objectweb.asm.TypePath;
 
@@ -20,7 +20,8 @@ public class TypePathComparator extends AsmComparator<TypePath> {
   /**
    * A reusable {@link TypePathComparator} instance.
    */
-  public static final TypePathComparator                       INSTANCE          = new TypePathComparator();
+  public static final TypePathComparator INSTANCE = new TypePathComparator();
+
   /**
    * A reusable {@link Comparator} instance for an {@link Iterable} of
    * {@link TypePath}s.

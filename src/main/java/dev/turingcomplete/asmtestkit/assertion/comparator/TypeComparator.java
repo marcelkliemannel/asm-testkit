@@ -1,6 +1,6 @@
-package dev.turingcomplete.asmtestkit.assertion.comperator;
+package dev.turingcomplete.asmtestkit.assertion.comparator;
 
-import dev.turingcomplete.asmtestkit.assertion.comperator._internal.IterableComparator;
+import dev.turingcomplete.asmtestkit.assertion.comparator._internal.IterableComparator;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypeRepresentation;
 import org.objectweb.asm.Type;
 
@@ -20,7 +20,8 @@ public class TypeComparator extends AsmComparator<Type> {
   /**
    * A reusable {@link TypeComparator} instance.
    */
-  public static final TypeComparator                       INSTANCE          = new TypeComparator();
+  public static final TypeComparator INSTANCE = new TypeComparator();
+
   /**
    * A reusable {@link Comparator} instance for an {@link Iterable} of
    * {@link Type}s.

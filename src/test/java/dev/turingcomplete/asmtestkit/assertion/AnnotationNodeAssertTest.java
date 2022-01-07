@@ -14,6 +14,7 @@ class AnnotationNodeAssertTest {
 
   @Test
   void testIsEqualTo() {
+    // Equal
     assertThat(createAnnotationNode(Deprecated.class, "foo", false, "bar", 2))
             .isEqualTo(createAnnotationNode(Deprecated.class, "foo", false, "bar", 2));
 

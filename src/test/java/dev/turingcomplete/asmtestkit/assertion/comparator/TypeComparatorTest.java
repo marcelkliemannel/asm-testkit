@@ -1,12 +1,12 @@
-package dev.turingcomplete.asmtestkit.assertion.comperator;
+package dev.turingcomplete.asmtestkit.assertion.comparator;
 
 import org.junit.jupiter.api.Test;
-import org.objectweb.asm.TypePath;
+import org.objectweb.asm.Type;
 
-import static dev.turingcomplete.asmtestkit.assertion.comperator.TypePathComparator.INSTANCE;
+import static dev.turingcomplete.asmtestkit.assertion.comparator.TypeComparator.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class TypePathComparatorTest {
+class TypeComparatorTest {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
@@ -14,13 +14,14 @@ class TypePathComparatorTest {
 
   @Test
   void testCompare() {
-    assertThat(INSTANCE.compare(TypePath.fromString("*"), TypePath.fromString("*")))
+    //noinspection EqualsWithItself
+    assertThat(INSTANCE.compare(Type.BOOLEAN_TYPE, Type.BOOLEAN_TYPE))
             .isEqualTo(0);
 
-    assertThat(INSTANCE.compare(TypePath.fromString("*"), TypePath.fromString("[1;")))
+    assertThat(INSTANCE.compare(Type.BOOLEAN_TYPE, Type.CHAR_TYPE))
             .isLessThanOrEqualTo(-1);
 
-    assertThat(INSTANCE.compare(TypePath.fromString("[1;"), TypePath.fromString("*")))
+    assertThat(INSTANCE.compare(Type.CHAR_TYPE, Type.BOOLEAN_TYPE))
             .isGreaterThanOrEqualTo(1);
   }
 

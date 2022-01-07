@@ -1,5 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
+import dev.turingcomplete.asmtestkit.asmutils._internal.TextifierUtils;
 import org.objectweb.asm.Attribute;
 
 /**
@@ -26,7 +27,7 @@ public class AttributeRepresentation extends AsmRepresentation<Attribute> {
 
   @Override
   protected String toStringRepresentation(Attribute attribute) {
-    return getAsmTextifierRepresentation(textifier -> textifier.visitAttribute(attribute))
+    return TextifierUtils.textify(textifier -> textifier.visitAttribute(attribute))
             .substring(ASM_TEXTIFIER_PREFIX.length()) // Remove prefix
             .trim();
   }

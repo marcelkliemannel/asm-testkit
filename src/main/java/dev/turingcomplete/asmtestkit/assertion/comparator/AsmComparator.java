@@ -1,4 +1,4 @@
-package dev.turingcomplete.asmtestkit.assertion.comperator;
+package dev.turingcomplete.asmtestkit.assertion.comparator;
 
 import java.util.Comparator;
 

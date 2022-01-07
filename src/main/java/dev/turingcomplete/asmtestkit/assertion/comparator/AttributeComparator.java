@@ -1,6 +1,6 @@
-package dev.turingcomplete.asmtestkit.assertion.comperator;
+package dev.turingcomplete.asmtestkit.assertion.comparator;
 
-import dev.turingcomplete.asmtestkit.assertion.comperator._internal.IterableComparator;
+import dev.turingcomplete.asmtestkit.assertion.comparator._internal.IterableComparator;
 import dev.turingcomplete.asmtestkit.assertion.representation.AttributeRepresentation;
 import org.objectweb.asm.Attribute;
 
@@ -20,7 +20,8 @@ public class AttributeComparator extends AsmComparator<Attribute> {
   /**
    * A reusable {@link AttributeComparator} instance.
    */
-  public static final AttributeComparator                       INSTANCE          = new AttributeComparator();
+  public static final AttributeComparator INSTANCE = new AttributeComparator();
+
   /**
    * A reusable {@link Comparator} instance for an {@link Iterable} of
    * {@link Attribute}s.

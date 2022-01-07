@@ -1,9 +1,9 @@
-package dev.turingcomplete.asmtestkit.assertion.comperator;
+package dev.turingcomplete.asmtestkit.assertion.comparator;
 
 import dev.turingcomplete.asmtestkit.assertion.__helper.DummyAttribute;
 import org.junit.jupiter.api.Test;
 
-import static dev.turingcomplete.asmtestkit.assertion.comperator.AttributeComparator.INSTANCE;
+import static dev.turingcomplete.asmtestkit.assertion.comparator.AttributeComparator.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AttributeComparatorTest {

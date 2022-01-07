@@ -1,4 +1,4 @@
-package dev.turingcomplete.asmtestkit.assertion.comperator._internal;
+package dev.turingcomplete.asmtestkit.assertion.comparator._internal;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;

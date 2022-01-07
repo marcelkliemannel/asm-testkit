@@ -1,12 +1,16 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.assertion.comperator.AnnotationNodeComparator;
-import dev.turingcomplete.asmtestkit.assertion.comperator.AttributeComparator;
-import dev.turingcomplete.asmtestkit.assertion.comperator.TypeComparator;
-import dev.turingcomplete.asmtestkit.assertion.comperator.TypePathComparator;
+import dev.turingcomplete.asmtestkit.assertion.comparator.AnnotationNodeComparator;
+import dev.turingcomplete.asmtestkit.assertion.comparator.AttributeComparator;
+import dev.turingcomplete.asmtestkit.assertion.comparator.TypeAnnotationNodeComparator;
+import dev.turingcomplete.asmtestkit.assertion.comparator.TypeComparator;
+import dev.turingcomplete.asmtestkit.assertion.comparator.TypePathComparator;
+import dev.turingcomplete.asmtestkit.assertion.comparator.TypeReferenceComparator;
 import dev.turingcomplete.asmtestkit.assertion.representation.AnnotationNodeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.AttributeRepresentation;
+import dev.turingcomplete.asmtestkit.assertion.representation.TypeAnnotationNodeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypePathRepresentation;
+import dev.turingcomplete.asmtestkit.assertion.representation.TypeReferenceRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypeRepresentation;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.IterableAssert;
@@ -14,7 +18,9 @@ import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.TypePath;
+import org.objectweb.asm.TypeReference;
 import org.objectweb.asm.tree.AnnotationNode;
+import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.util.Comparator;
 
@@ -42,13 +48,23 @@ public final class AsmAssertions {
   }
 
   /**
-   * Creates an {@link AnnotationNode}.
+   * Creates an {@link AnnotationNodeAssert}.
    *
    * @param annotationNode an {@link AnnotationNode}; may be null.
-   * @return a new {@link AttributeAssert}; never null.
+   * @return a new {@link AnnotationNodeAssert}; never null.
    */
   public static AnnotationNodeAssert assertThat(AnnotationNode annotationNode) {
     return new AnnotationNodeAssert(annotationNode);
+  }
+
+  /**
+   * Creates an {@link TypeAnnotationNodeAssert}.
+   *
+   * @param typeAnnotationNode an {@link TypeAnnotationNode}; may be null.
+   * @return a new {@link TypeAnnotationNodeAssert}; never null.
+   */
+  public static TypeAnnotationNodeAssert assertThat(TypeAnnotationNode typeAnnotationNode) {
+    return new TypeAnnotationNodeAssert(typeAnnotationNode);
   }
 
   /**
@@ -69,6 +85,16 @@ public final class AsmAssertions {
    */
   public static TypeAssert assertThat(Type type) {
     return new TypeAssert(type);
+  }
+
+  /**
+   * Creates a {@link TypeReferenceAssert}.
+   *
+   * @param typeReference a {@link TypeReference}; may be null.
+   * @return a new {@link TypeReferenceAssert}; never null.
+   */
+  public static TypeReferenceAssert assertThat(TypeReference typeReference) {
+    return new TypeReferenceAssert(typeReference);
   }
 
   // ---- Iterable ---------------------------------------------------------- //
@@ -115,6 +141,27 @@ public final class AsmAssertions {
   }
 
   /**
+   * Creates an {@link IterableAssert} for {@link TypeAnnotationNode}s which
+   * uses {@link TypeAnnotationNodeRepresentation#INSTANCE} for the representation
+   * and for equality {@link TypeAnnotationNodeComparator#INSTANCE} and
+   * {@link TypeAnnotationNodeComparator#ITERABLE_INSTANCE}.
+   *
+   * <p>To override the representation or comparator call
+   * {@link IterableAssert#usingComparator(Comparator)} or
+   * {@link IterableAssert#withRepresentation(Representation)}.
+   *
+   * @param typeAnnotationNodes an {@link Iterable} of {@link TypeAnnotationNode}s;
+   *                            may be null.
+   * @return a new {@link IterableAssert}; never null.
+   */
+  public static IterableAssert<TypeAnnotationNode> assertThatTypeAnnotationNodes(Iterable<TypeAnnotationNode> typeAnnotationNodes) {
+    return Assertions.assertThat(typeAnnotationNodes)
+                     .withRepresentation(TypeAnnotationNodeRepresentation.INSTANCE)
+                     .usingElementComparator(TypeAnnotationNodeComparator.INSTANCE)
+                     .usingComparator(TypeAnnotationNodeComparator.ITERABLE_INSTANCE);
+  }
+
+  /**
    * Creates an {@link IterableAssert} for {@link TypePath}s which uses
    * {@link TypePathRepresentation#INSTANCE} for the representation and for
    * equality {@link TypePathComparator#INSTANCE} and
@@ -152,6 +199,27 @@ public final class AsmAssertions {
                      .withRepresentation(TypeRepresentation.INSTANCE)
                      .usingElementComparator(TypeComparator.INSTANCE)
                      .usingComparator(TypeComparator.ITERABLE_INSTANCE);
+  }
+
+  /**
+   * Creates an {@link IterableAssert} for {@link TypeReference}s which uses
+   * {@link TypeReferenceRepresentation#INSTANCE} for the representation and for
+   * equality {@link TypeReferenceComparator#INSTANCE} and
+   * {@link TypeReferenceComparator#ITERABLE_INSTANCE}.
+   *
+   * <p>To override the representation or comparator call
+   * {@link IterableAssert#usingComparator(Comparator)} or
+   * {@link IterableAssert#withRepresentation(Representation)}.
+   *
+   * @param typeReferences an {@link Iterable} of {@link TypeReference}s;
+   *                       may be null.
+   * @return a new {@link IterableAssert}; never null.
+   */
+  public static IterableAssert<TypeReference> assertThatTypeReferences(Iterable<TypeReference> typeReferences) {
+    return Assertions.assertThat(typeReferences)
+                     .withRepresentation(TypeReferenceRepresentation.INSTANCE)
+                     .usingElementComparator(TypeReferenceComparator.INSTANCE)
+                     .usingComparator(TypeReferenceComparator.ITERABLE_INSTANCE);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

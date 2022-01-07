@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.assertion.comperator.AttributeComparator;
+import dev.turingcomplete.asmtestkit.assertion.comparator.AttributeComparator;
 import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.representation.AttributeRepresentation;
 import org.assertj.core.api.AbstractAssert;

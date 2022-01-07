@@ -1,30 +1,38 @@
-package dev.turingcomplete.asmtestkit.assertion.comperator;
+package dev.turingcomplete.asmtestkit.assertion.comparator;
 
 import org.junit.jupiter.api.Test;
-import org.objectweb.asm.Type;
 
-import static dev.turingcomplete.asmtestkit.assertion.comperator.TypeComparator.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class TypeComparatorTest {
+class AsmComparatorTest {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Test
-  void testCompare() {
+  void testNullArguments() {
+    var dummyAsmComparator = new DummyAsmComparator();
+
     //noinspection EqualsWithItself
-    assertThat(INSTANCE.compare(Type.BOOLEAN_TYPE, Type.BOOLEAN_TYPE))
+    assertThat(dummyAsmComparator.compare(null, null))
             .isEqualTo(0);
 
-    assertThat(INSTANCE.compare(Type.BOOLEAN_TYPE, Type.CHAR_TYPE))
+    assertThat(dummyAsmComparator.compare(null, "Right"))
             .isLessThanOrEqualTo(-1);
 
-    assertThat(INSTANCE.compare(Type.CHAR_TYPE, Type.BOOLEAN_TYPE))
+    assertThat(dummyAsmComparator.compare("Left", null))
             .isGreaterThanOrEqualTo(1);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
+
+  private static class DummyAsmComparator extends AsmComparator<Object> {
+
+    @Override
+    protected int doCompare(Object first, Object second) {
+      return 0;
+    }
+  }
 }

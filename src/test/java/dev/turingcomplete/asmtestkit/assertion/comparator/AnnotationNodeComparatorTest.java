@@ -1,11 +1,11 @@
-package dev.turingcomplete.asmtestkit.assertion.comperator;
+package dev.turingcomplete.asmtestkit.assertion.comparator;
 
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.tree.AnnotationNode;
 
 import java.util.Arrays;
 
-import static dev.turingcomplete.asmtestkit.assertion.comperator.AnnotationNodeComparator.INSTANCE;
+import static dev.turingcomplete.asmtestkit.assertion.comparator.AnnotationNodeComparator.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AnnotationNodeComparatorTest {
