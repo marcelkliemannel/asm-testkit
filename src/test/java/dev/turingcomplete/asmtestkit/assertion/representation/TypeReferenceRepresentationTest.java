@@ -20,7 +20,7 @@ class TypeReferenceRepresentationTest {
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Test
-  void testToRepresentation() {
+  void testCreateRepresentation() {
     List<String> sortFields = Arrays.stream(TypeReference.class.getFields())
                                     .filter(field -> field.getType().equals(int.class) && (field.getModifiers() & PUBLIC) != 0)
                                     .map(Field::getName)

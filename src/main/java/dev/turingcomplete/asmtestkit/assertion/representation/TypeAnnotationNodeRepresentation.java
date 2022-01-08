@@ -58,8 +58,8 @@ public class TypeAnnotationNodeRepresentation extends AbstractAnnotationNodeRepr
   }
 
   @Override
-  protected String toRepresentation(TypeAnnotationNode annotationNode) {
-    String annotationNodeRepresentation = super.toRepresentation(annotationNode);
+  protected String createRepresentation(TypeAnnotationNode annotationNode) {
+    String annotationNodeRepresentation = super.createRepresentation(annotationNode);
 
     return annotationNodeRepresentation +
            " {reference: " + typeReferenceRepresentation.toStringOf(new TypeReference(annotationNode.typeRef)) +

@@ -28,7 +28,7 @@ class AsmRepresentationTest {
     }
 
     @Override
-    protected String toRepresentation(Object object) {
+    protected String createRepresentation(Object object) {
       return Objects.toString(object);
     }
   }

@@ -60,10 +60,10 @@ public class TypeRepresentation extends AsmRepresentation<Type> {
   }
 
   @Override
-  protected String toRepresentation(Type type) {
+  protected String createRepresentation(Type type) {
     switch (type.getSort()) {
       case Type.ARRAY:
-        return toRepresentation(type.getElementType()) + "[]".repeat(type.getDimensions());
+        return createRepresentation(type.getElementType()) + "[]".repeat(type.getDimensions());
       case Type.OBJECT:
         // Fall through
       case 12: // INTERNAL

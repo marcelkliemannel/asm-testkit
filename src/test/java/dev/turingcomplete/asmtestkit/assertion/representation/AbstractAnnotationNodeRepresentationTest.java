@@ -13,14 +13,14 @@ class AbstractAnnotationNodeRepresentationTest {
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Test
-  void testHideValuesToRepresentation() {
+  void testHideValuesCreateRepresentation() {
     assertThat(new DummyAbstractAnnotationNodeRepresentation().hideValues().toStringOf(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "1.2", "forRemoval", true)))
             .isEqualTo("@java.lang.Deprecated");
   }
 
   @Test
-  void testToSimpleRepresentation() {
-    assertThat(new DummyAbstractAnnotationNodeRepresentation().toSimpleRepresentation(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "1.2", "forRemoval", true)))
+  void testToSimplifiedRepresentation() {
+    assertThat(new DummyAbstractAnnotationNodeRepresentation().toSimplifiedRepresentation(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "1.2", "forRemoval", true)))
             .isEqualTo("@java.lang.Deprecated");
   }
 

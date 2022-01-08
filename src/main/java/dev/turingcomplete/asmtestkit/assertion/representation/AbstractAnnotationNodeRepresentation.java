@@ -60,14 +60,15 @@ public abstract class AbstractAnnotationNodeRepresentation<S extends AbstractAnn
    * @param annotationNode an annotation of type {@link A}.
    * @return a simple representation of {@code annotationNode}.
    */
-  public String toSimpleRepresentation(A annotationNode) {
-    String className = annotationNode.desc != null ? typeRepresentation.toRepresentation(Type.getType(annotationNode.desc)) : null;
+  @Override
+  public String createSimplifiedRepresentation(A annotationNode) {
+    String className = annotationNode.desc != null ? typeRepresentation.createRepresentation(Type.getType(annotationNode.desc)) : null;
     return "@" + className;
   }
 
   @Override
-  protected String toRepresentation(A annotationNode) {
-    String representation = toSimpleRepresentation(annotationNode);
+  protected String createRepresentation(A annotationNode) {
+    String representation = toSimplifiedRepresentation(annotationNode);
 
     if (!hideValues) {
       String textifiedValues = TextifierUtils.textify(textifier -> annotationNode.accept(new TraceAnnotationVisitor(textifier))).trim();

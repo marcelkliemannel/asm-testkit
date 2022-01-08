@@ -48,7 +48,7 @@ class CombinedAsmRepresentationTest {
     }
 
     @Override
-    protected String toRepresentation(Integer object) {
+    protected String createRepresentation(Integer object) {
       return "Foo" + object;
     }
   }

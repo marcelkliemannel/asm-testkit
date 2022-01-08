@@ -17,7 +17,7 @@ class TypeAnnotationNodeRepresentationTest {
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Test
-  void testToRepresentation() throws IOException {
+  void testCreateRepresentation() throws IOException {
     @Language("Java")
     String typeParameterAnnotation = "import java.lang.annotation.*;" +
                                      "@Target({ElementType.TYPE_USE, ElementType.TYPE_PARAMETER})\n" +
