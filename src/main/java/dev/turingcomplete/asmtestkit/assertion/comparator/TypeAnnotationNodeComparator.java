@@ -8,6 +8,8 @@ import org.objectweb.asm.tree.TypeAnnotationNode;
 import java.util.Comparator;
 import java.util.Objects;
 
+import static dev.turingcomplete.asmtestkit.assertion.comparator._internal.ComparatorUtils.INTEGER_COMPARATOR;
+
 /**
  * A comparison function to order {@link TypeAnnotationNode}s.
  *
@@ -78,7 +80,7 @@ public class TypeAnnotationNodeComparator extends AbstractAnnotationNodeComparat
       return annotationNodeCompare;
     }
 
-    return Comparator.comparing((TypeAnnotationNode typeAnnotationNode) -> typeAnnotationNode.typeRef, integerComparator())
+    return Comparator.comparing((TypeAnnotationNode typeAnnotationNode) -> typeAnnotationNode.typeRef, INTEGER_COMPARATOR)
                      .thenComparing((TypeAnnotationNode typeAnnotationNode) -> typeAnnotationNode.typePath, typePathComparator)
                      .compare(first, second);
   }

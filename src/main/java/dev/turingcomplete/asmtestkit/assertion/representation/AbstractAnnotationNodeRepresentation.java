@@ -7,8 +7,8 @@ import org.objectweb.asm.util.TraceAnnotationVisitor;
 
 import java.util.Objects;
 
-public abstract class AbstractAnnotationNodeRepresentation<SELF extends AbstractAnnotationNodeRepresentation<SELF, ANNO>, ANNO extends AnnotationNode>
-        extends AsmRepresentation<ANNO> {
+public abstract class AbstractAnnotationNodeRepresentation<S extends AbstractAnnotationNodeRepresentation<S, A>, A extends AnnotationNode>
+        extends AsmRepresentation<A> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
@@ -17,7 +17,7 @@ public abstract class AbstractAnnotationNodeRepresentation<SELF extends Abstract
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  public AbstractAnnotationNodeRepresentation(Class<ANNO> annotationNodeClass) {
+  protected AbstractAnnotationNodeRepresentation(Class<A> annotationNodeClass) {
     super(annotationNodeClass);
   }
 
@@ -29,40 +29,54 @@ public abstract class AbstractAnnotationNodeRepresentation<SELF extends Abstract
    * <p>The default value is {@link TypeRepresentation#INSTANCE}.
    *
    * @param typeRepresentation a {@link TypeRepresentation}; never null.
-   * @return {@code this} {@link SELF}; never null.
+   * @return {@code this} {@link S}; never null.
    */
-  public SELF useTypePathRepresentation(TypeRepresentation typeRepresentation) {
+  public S useTypePathRepresentation(TypeRepresentation typeRepresentation) {
     this.typeRepresentation = Objects.requireNonNull(typeRepresentation);
 
     //noinspection unchecked
-    return (SELF) this;
+    return (S) this;
   }
 
   /**
    * Hides the values of the annotation in the representation.
    *
-   * @return {@code this} {@link SELF}; never null.
+   * @return {@code this} {@link S}; never null.
    */
-  public SELF hideValues() {
+  public S hideValues() {
     this.hideValues = true;
 
     //noinspection unchecked
-    return (SELF) this;
+    return (S) this;
+  }
+
+  /**
+   * Creates a simple representation of the given {@code annotationNode} with
+   * just the class name but without any additional information (e.g., no values).
+   *
+   * <p>For example, would generate for the annotation {@link Deprecated} the
+   * representation {@code @java.lang.Deprecated}.
+   *
+   * @param annotationNode an annotation of type {@link A}.
+   * @return a simple representation of {@code annotationNode}.
+   */
+  public String toSimpleRepresentation(A annotationNode) {
+    String className = annotationNode.desc != null ? typeRepresentation.toRepresentation(Type.getType(annotationNode.desc)) : null;
+    return "@" + className;
   }
 
   @Override
-  protected String toStringRepresentation(ANNO annotationNode) {
-    String className = annotationNode.desc != null ? typeRepresentation.toStringRepresentation(Type.getType(annotationNode.desc)) : null;
-    String result = "@" + className;
+  protected String toRepresentation(A annotationNode) {
+    String representation = toSimpleRepresentation(annotationNode);
 
     if (!hideValues) {
       String textifiedValues = TextifierUtils.textify(textifier -> annotationNode.accept(new TraceAnnotationVisitor(textifier))).trim();
       if (!textifiedValues.isBlank()) {
-        result += "(" + textifiedValues + ")";
+        representation += "(" + textifiedValues + ")";
       }
     }
 
-    return result;
+    return representation;
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

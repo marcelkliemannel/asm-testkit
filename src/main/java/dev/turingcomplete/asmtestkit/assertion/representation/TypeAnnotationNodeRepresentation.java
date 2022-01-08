@@ -6,7 +6,7 @@ import org.objectweb.asm.tree.TypeAnnotationNode;
 import java.util.Objects;
 
 /**
- * Creates a {@link String} representation of an {@link TypeAnnotationNode}.
+ * Creates a {@link String} representation of a {@link TypeAnnotationNode}.
  */
 public class TypeAnnotationNodeRepresentation extends AbstractAnnotationNodeRepresentation<TypeAnnotationNodeRepresentation, TypeAnnotationNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -58,8 +58,8 @@ public class TypeAnnotationNodeRepresentation extends AbstractAnnotationNodeRepr
   }
 
   @Override
-  protected String toStringRepresentation(TypeAnnotationNode annotationNode) {
-    String annotationNodeRepresentation = super.toStringRepresentation(annotationNode);
+  protected String toRepresentation(TypeAnnotationNode annotationNode) {
+    String annotationNodeRepresentation = super.toRepresentation(annotationNode);
 
     return annotationNodeRepresentation +
            " {reference: " + typeReferenceRepresentation.toStringOf(new TypeReference(annotationNode.typeRef)) +

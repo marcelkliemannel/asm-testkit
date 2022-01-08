@@ -12,7 +12,7 @@ class AttributeRepresentationTest {
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Test
-  void testStringRepresentation() {
+  void testToRepresentation() {
     assertThat(AttributeRepresentation.INSTANCE.toStringOf(new DummyAttribute("Name", "Content")))
             .isEqualTo("NameContent");
   }

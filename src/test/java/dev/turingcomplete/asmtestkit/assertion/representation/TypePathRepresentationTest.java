@@ -13,7 +13,7 @@ class TypePathRepresentationTest {
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Test
-  void testStringRepresentation() {
+  void testToRepresentation() {
     assertThat(INSTANCE.toStringOf(TypePath.fromString("*")))
             .isEqualTo("*");
   }

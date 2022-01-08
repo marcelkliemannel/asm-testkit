@@ -26,7 +26,7 @@ public class AttributeRepresentation extends AsmRepresentation<Attribute> {
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Override
-  protected String toStringRepresentation(Attribute attribute) {
+  protected String toRepresentation(Attribute attribute) {
     return TextifierUtils.textify(textifier -> textifier.visitAttribute(attribute))
             .substring(ASM_TEXTIFIER_PREFIX.length()) // Remove prefix
             .trim();

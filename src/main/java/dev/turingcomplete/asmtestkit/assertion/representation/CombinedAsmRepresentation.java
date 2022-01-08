@@ -35,6 +35,7 @@ public final class CombinedAsmRepresentation extends StandardRepresentation {
     ASM_REPRESENTATIONS.add(TypePathRepresentation.INSTANCE);
     ASM_REPRESENTATIONS.add(TypeRepresentation.INSTANCE);
     ASM_REPRESENTATIONS.add(TypeReferenceRepresentation.INSTANCE);
+    ASM_REPRESENTATIONS.add(FieldNodeRepresentation.INSTANCE);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //

@@ -25,12 +25,12 @@ public abstract class AsmRepresentation<T> extends StandardRepresentation {
    *               never null.
    * @return the {@link String} representation; never null.
    */
-  protected abstract String toStringRepresentation(T object);
+  protected abstract String toRepresentation(T object);
 
   @Override
   protected final String fallbackToStringOf(Object object) {
     if (objectClass.isInstance(object)) {
-      return toStringRepresentation(objectClass.cast(object));
+      return toRepresentation(objectClass.cast(object));
     }
 
     return super.fallbackToStringOf(object);

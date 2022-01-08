@@ -25,7 +25,7 @@ public class TypeReferenceRepresentation extends AsmRepresentation<TypeReference
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Override
-  protected String toStringRepresentation(TypeReference typeReference) {
+  protected String toRepresentation(TypeReference typeReference) {
     switch (typeReference.getSort()) {
       case CLASS_TYPE_PARAMETER:
         return "class_type_parameter=" + typeReference.getTypeParameterIndex();
