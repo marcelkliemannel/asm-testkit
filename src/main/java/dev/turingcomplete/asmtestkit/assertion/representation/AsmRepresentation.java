@@ -22,11 +22,11 @@ public abstract class AsmRepresentation<T> extends StandardRepresentation {
    * Creates a {@link String} representation of the given {@code object}.
    *
    * <p>In case the representation is undefined, the implementation should
-   * return the {@code String} {@code "null"}.
+   * return null.
    *
    * @param object the object of type {@link T} to create a representation of;
    *               never null.
-   * @return the {@link String} representation; never null.
+   * @return the {@link String} representation; may be null.
    */
   protected abstract String createRepresentation(T object);
 
@@ -43,15 +43,14 @@ public abstract class AsmRepresentation<T> extends StandardRepresentation {
    * without meta information.
    *
    * <p>In case the representation is undefined, the implementation should
-   * return the {@code String} {@code "null"}.
+   * return null.
    *
    * @param object the object of type {@link T} to create a simple representation
    *               of; may be null.
-   * @return the {@link String} representation; never null.
+   * @return the {@link String} representation; may be null.
    */
   public final String toSimplifiedRepresentation(T object) {
-    String simplifiedRepresentation = object != null ? createSimplifiedRepresentation(object) : null;
-    return simplifiedRepresentation != null ? simplifiedRepresentation : "null";
+    return object != null ? createSimplifiedRepresentation(object) : null;
   }
 
   /**
@@ -66,11 +65,11 @@ public abstract class AsmRepresentation<T> extends StandardRepresentation {
    * without meta information.
    *
    * <p>In case the representation is undefined, the implementation should
-   * return the {@code String} {@code "null"}.
+   * return null.
    *
    * @param object the object of type {@link T} to create a simple representation
    *               of; never null.
-   * @return the {@link String} representation; never null.
+   * @return the {@link String} representation; may be null.
    */
   protected String createSimplifiedRepresentation(T object) {
     return createRepresentation(object);
@@ -79,8 +78,7 @@ public abstract class AsmRepresentation<T> extends StandardRepresentation {
   @Override
   protected final String fallbackToStringOf(Object object) {
     if (objectClass.isInstance(object)) {
-      String representation = createRepresentation(objectClass.cast(object));
-      return representation != null ? representation : "null";
+      return createRepresentation(objectClass.cast(object));
     }
 
     return super.fallbackToStringOf(object);

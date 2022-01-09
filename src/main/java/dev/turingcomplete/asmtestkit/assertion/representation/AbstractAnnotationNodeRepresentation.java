@@ -68,7 +68,7 @@ public abstract class AbstractAnnotationNodeRepresentation<S extends AbstractAnn
 
   @Override
   protected String createRepresentation(A annotationNode) {
-    String representation = toSimplifiedRepresentation(annotationNode);
+    String representation = createSimplifiedRepresentation(annotationNode);
 
     if (!hideValues) {
       String textifiedValues = TextifierUtils.textify(textifier -> annotationNode.accept(new TraceAnnotationVisitor(textifier))).trim();

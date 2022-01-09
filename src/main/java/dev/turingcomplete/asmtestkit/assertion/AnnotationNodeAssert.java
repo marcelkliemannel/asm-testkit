@@ -19,6 +19,14 @@ public class AnnotationNodeAssert extends AbstractAnnotationNodeAssert<Annotatio
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
+  /**
+   * Initializes an {@link AnnotationNodeAssert}.
+   *
+   * <p>There are no direct supported {@link AssertOption}s yet.
+   *
+   * @param actual the actual {@link AnnotationNode}; may be null.
+   * @param assertOptions an array of {@link AssertOption}s; never null.
+   */
   public AnnotationNodeAssert(AnnotationNode actual, AssertOption... assertOptions) {
     super(actual, AnnotationNodeAssert.class, AnnotationNode.class, createSelfDescription(actual), assertOptions);
 

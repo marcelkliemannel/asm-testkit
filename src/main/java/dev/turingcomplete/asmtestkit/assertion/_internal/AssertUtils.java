@@ -38,6 +38,10 @@ public final class AssertUtils {
     return objectType.isInstance(object) ? provide.apply(objectType.cast(object)) : null;
   }
 
+  public static <T, U> U getFromObjectElse(Object object, Class<T> objectType, Function<T, U> provide, U defaultObject) {
+    return objectType.isInstance(object) ? provide.apply(objectType.cast(object)) : defaultObject;
+  }
+
   // ----------
 
   public static <S, T> Iterable<T> getIterableFromObjectElseNull(S object, Function<S, Iterable<T>> provide) {

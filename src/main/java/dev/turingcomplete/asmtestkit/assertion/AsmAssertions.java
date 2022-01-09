@@ -1,5 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
+import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
 import dev.turingcomplete.asmtestkit.assertion.comparator.AnnotationNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.AttributeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.TypeAnnotationNodeComparator;
@@ -35,7 +36,91 @@ public final class AsmAssertions {
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
-  // ---- Objects ----------------------------------------------------------- //
+  // --- Access
+
+  /**
+   * Creates an {@link AccessAssert} for class accesses.
+   *
+   * @param access an {@link Integer} of class access flags; may be null.
+   * @return a new {@link AccessAssert}; never null.
+   */
+  public static AccessAssert assertThatClassAccess(Integer access) {
+    return new AccessAssert(access, AccessKind.CLASS);
+  }
+
+  /**
+   * Creates an {@link AccessAssert} for field accesses.
+   *
+   * @param access an {@link Integer} of field access flags; may be null.
+   * @return a new {@link AccessAssert}; never null.
+   */
+  public static AccessAssert assertThatFieldAccess(Integer access) {
+    return new AccessAssert(access, AccessKind.FIELD);
+  }
+
+  /**
+   * Creates an {@link AccessAssert} for method accesses.
+   *
+   * @param access an {@link Integer} of method access flags; may be null.
+   * @return a new {@link AccessAssert}; never null.
+   */
+  public static AccessAssert assertThatMethodAccess(Integer access) {
+    return new AccessAssert(access, AccessKind.METHOD);
+  }
+
+  /**
+   * Creates an {@link AccessAssert} for parameter accesses.
+   *
+   * @param access an {@link Integer} of parameter access flags; may be null.
+   * @return a new {@link AccessAssert}; never null.
+   */
+  public static AccessAssert assertThatParameterAccess(Integer access) {
+    return new AccessAssert(access, AccessKind.PARAMETER);
+  }
+
+  /**
+   * Creates an {@link AccessAssert} for module accesses.
+   *
+   * @param access an {@link Integer} of module access flags; may be null.
+   * @return a new {@link AccessAssert}; never null.
+   */
+  public static AccessAssert assertThatModuleAccess(Integer access) {
+    return new AccessAssert(access, AccessKind.MODULE);
+  }
+
+  /**
+   * Creates an {@link AccessAssert} for module requires accesses.
+   *
+   * @param access an {@link Integer} of module requires access flags; may be
+   *               null.
+   * @return a new {@link AccessAssert}; never null.
+   */
+  public static AccessAssert assertThatModuleRequiresAccess(Integer access) {
+    return new AccessAssert(access, AccessKind.MODULE_REQUIRES);
+  }
+
+  /**
+   * Creates an {@link AccessAssert} for module exports accesses.
+   *
+   * @param access an {@link Integer} of module exports access flags; may be
+   *               null.
+   * @return a new {@link AccessAssert}; never null.
+   */
+  public static AccessAssert assertThatModuleExportsAccess(Integer access) {
+    return new AccessAssert(access, AccessKind.MODULE_EXPORTS);
+  }
+
+  /**
+   * Creates an {@link AccessAssert} for module opens accesses.
+   *
+   * @param access an {@link Integer} of module opens access flags; may be null.
+   * @return a new {@link AccessAssert}; never null.
+   */
+  public static AccessAssert assertThatModuleOpensAccess(Integer access) {
+    return new AccessAssert(access, AccessKind.MODULE_OPENS);
+  }
+
+  // ---- ASM Objects ------------------------------------------------------- //
 
   /**
    * Creates an {@link AttributeAssert}.
