@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.compile;
 
-import dev.turingcomplete.asmtestkit.compile._internal.JavaFileStringSource;
 import dev.turingcomplete.asmtestkit.assertion.representation.DiagnosticRepresentation;
+import dev.turingcomplete.asmtestkit.compile._internal.JavaFileStringSource;
 import org.assertj.core.api.Assertions;
 
 import javax.tools.Diagnostic;
@@ -12,13 +12,17 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -29,15 +33,16 @@ public final class CompilationEnvironment {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
-  private       JavaCompiler                        compiler                 = ToolProvider.getSystemJavaCompiler();
-  private final List<String>                        compilerOptions          = new ArrayList<>();
-  private final List<JavaFileObject>                inputSources             = new ArrayList<>();
-  private final DiagnosticCollector<JavaFileObject> diagnosticsCollector     = new DiagnosticCollector<>();
-  private       DiagnosticRepresentation            diagnosticRepresentation = DiagnosticRepresentation.INSTANCE;
-  private       StandardJavaFileManagerProvider     fileManagerProvider      = null;
-  private       PrintWriter                         compilerOutput           = new PrintWriter(System.out, true);
-  private       boolean                             ignoreCompilationErrors  = false;
-
+  private       JavaCompiler                        compiler                          = ToolProvider.getSystemJavaCompiler();
+  private final List<String>                        compilerOptions                   = new ArrayList<>();
+  private final List<JavaFileObject>                inputSources                      = new ArrayList<>();
+  private final DiagnosticCollector<JavaFileObject> diagnosticsCollector              = new DiagnosticCollector<>();
+  private       DiagnosticRepresentation            diagnosticRepresentation          = DiagnosticRepresentation.INSTANCE;
+  private       StandardJavaFileManagerProvider     fileManagerProvider               = null;
+  private       PrintWriter                         compilerOutput                    = new PrintWriter(System.out, true);
+  private       boolean                             ignoreCompilationErrors           = false;
+  private final List<Path>                          classpath                         = new ArrayList<>();
+  private       boolean                             ignoreNonExistingClasspathEntries = false;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
@@ -69,7 +74,7 @@ public final class CompilationEnvironment {
    * and the simple class name from the given source code.
    *
    * @param sourceCode the Java source code as a {@link String}; never null.
-   * @return the instance of this {@link CompilationEnvironment}; never null.
+   * @return {@code this} {@link CompilationEnvironment}; never null.
    */
   public CompilationEnvironment addJavaInputSource(String sourceCode) {
     inputSources.add(new JavaFileStringSource(Objects.requireNonNull(sourceCode)));
@@ -84,12 +89,65 @@ public final class CompilationEnvironment {
    * and the simple class name from the given source code.
    *
    * @param sourceCodes an {@link Iterable} of Java source codes; never null.
-   * @return the instance of this {@link CompilationEnvironment}; never null.
+   * @return {@code this} {@link CompilationEnvironment}; never null.
    */
   public CompilationEnvironment addJavaInputSources(Iterable<String> sourceCodes) {
     for (String sourceCode : Objects.requireNonNull(sourceCodes)) {
       inputSources.add(new JavaFileStringSource(sourceCode));
     }
+
+    return this;
+  }
+
+  /**
+   * Adds the given {@link Path} to the classpath.
+   *
+   * @param path a {@link Path}; never null.
+   * @return {@code this} {@link CompilationEnvironment}; never null.
+   */
+  public CompilationEnvironment addToClasspath(Path path) {
+    classpath.add(path);
+
+    return this;
+  }
+
+  /**
+   * Adds the directory in which the given {@link Class} is located to the
+   * classpath of the compiler. This means that all other classes/resources
+   * in the same package as the given class will also be in the classpath.
+   *
+   * @param aClass a {@link Class}; never null.
+   * @return {@code this} {@link CompilationEnvironment}; never null.
+   * @throws IllegalArgumentException if it is not possible to get the directory
+   *                                  of the given {@link Class}.
+   */
+  public CompilationEnvironment addToClasspath(Class<?> aClass) {
+    ProtectionDomain protectionDomain = Objects.requireNonNull(aClass).getProtectionDomain();
+    if (protectionDomain != null) {
+      CodeSource codeSource = protectionDomain.getCodeSource();
+      if (codeSource != null) {
+        URL location = codeSource.getLocation();
+        if (location != null) {
+          classpath.add(Path.of(location.getPath()));
+          return this;
+        }
+      }
+    }
+
+    throw new IllegalArgumentException("Failed to get file path of class: " + aClass.getName());
+  }
+
+  /**
+   * Will not fail {@link #compile()} if a {@link Path}s which was added to the
+   * classpath does not exist.
+   *
+   * <p>A non-existing {@code Path} is often the root cause of consequential
+   * errors, e.g., the compiler complains about a missing class.
+   *
+   * @return {@code this} {@link CompilationEnvironment}; never null.
+   */
+  public CompilationEnvironment ignoreNonExistingClasspathEntries() {
+    this.ignoreNonExistingClasspathEntries = true;
 
     return this;
   }
@@ -275,8 +333,15 @@ public final class CompilationEnvironment {
   }
 
   private void doCompile(StandardJavaFileManager fileManager) {
+    List<String> effectiveCompilerOptions = new ArrayList<>(compilerOptions);
+    if (!classpath.isEmpty()) {
+      validateClassPath();
+      effectiveCompilerOptions.add("-cp");
+      effectiveCompilerOptions.add(classpath.stream().map(Path::toString).collect(Collectors.joining(File.pathSeparator)));
+    }
+
     PrintWriter out = compilerOutput != null ? compilerOutput : new PrintWriter(OutputStream.nullOutputStream());
-    boolean noErrors = compiler.getTask(out, fileManager, diagnosticsCollector, compilerOptions, null, inputSources)
+    boolean noErrors = compiler.getTask(out, fileManager, diagnosticsCollector, effectiveCompilerOptions, null, inputSources)
                                .call();
 
     if (!ignoreCompilationErrors) {
@@ -295,6 +360,15 @@ public final class CompilationEnvironment {
                 .as("Expected no compilation errors. See output for errors.")
                 .isTrue();
     }
+  }
+
+  private void validateClassPath() {
+    if (ignoreNonExistingClasspathEntries) {
+      return;
+    }
+
+    Assertions.assertThat(classpath)
+              .allSatisfy(classpathEntry -> Assertions.assertThat(classpathEntry).exists());
   }
 
   // -- Inner Type -------------------------------------------------------------------------------------------------- //

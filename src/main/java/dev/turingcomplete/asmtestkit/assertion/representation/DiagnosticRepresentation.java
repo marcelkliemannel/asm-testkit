@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 /**
  * Creates a {@link String} representation of a {@link Diagnostic}.
  *
- * <p>The output is similar to the one of the OpenJDK compiler:
+ * <p>The output is similar to the one of the OpenJDK compiler. Example output:
  * <pre>{@code
  * MyClass.java:41: error: illegal start of expression
  *     FileObject source =. diagnostic.getSource();

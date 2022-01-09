@@ -45,3 +45,6 @@ gradle-app.setting
 out/
 .idea/
 *.iws
+
+# Mac
+.DS_Store
