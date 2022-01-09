@@ -1,6 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.assertion.__helper.DummyAttribute;
+import dev.turingcomplete.asmtestkit.assertion.__helper.TypeParameterAnnotation;
 import org.assertj.core.api.Assertions;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
@@ -66,15 +67,11 @@ class AsmAssertionsTest {
   @Test
   void testAssertThatTypeAnnotationNodes() throws IOException {
     @Language("Java")
-    String typeParameterAnnotation = "import java.lang.annotation.*;" +
-                                     "@Target({ElementType.TYPE_USE, ElementType.TYPE_PARAMETER})\n" +
-                                     "@Retention(RetentionPolicy.RUNTIME)\n" +
-                                     "@interface TypeParameterAnnotation { }";
-    @Language("Java")
-    String myClass = "class MyClass<@TypeParameterAnnotation S, @TypeParameterAnnotation T, @TypeParameterAnnotation U> { }";
+    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.TypeParameterAnnotation;" +
+                     "class MyClass<@TypeParameterAnnotation S, @TypeParameterAnnotation T, @TypeParameterAnnotation U> { }";
 
     List<TypeAnnotationNode> visibleTypeAnnotations = create()
-            .addJavaInputSource(typeParameterAnnotation)
+            .addToClasspath(TypeParameterAnnotation.class)
             .addJavaInputSource(myClass)
             .compile()
             .readClassNode("MyClass")
@@ -94,15 +91,15 @@ class AsmAssertionsTest {
                                                      .containsExactlyInAnyOrderElementsOf(List.of(secondTypeAnnotationNode, thirdTypeAnnotationNode)))
               .isInstanceOf(AssertionError.class)
               .hasMessage("\nExpecting actual:\n" +
-                          "  [@TypeParameterAnnotation {reference: class_type_parameter=0; path: null},\n" +
-                          "    @TypeParameterAnnotation {reference: class_type_parameter=1; path: null}]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.TypeParameterAnnotation {reference: class_type_parameter=0; path: null},\n" +
+                          "    @dev.turingcomplete.asmtestkit.assertion.__helper.TypeParameterAnnotation {reference: class_type_parameter=1; path: null}]\n" +
                           "to contain exactly in any order:\n" +
-                          "  [@TypeParameterAnnotation {reference: class_type_parameter=1; path: null},\n" +
-                          "    @TypeParameterAnnotation {reference: class_type_parameter=2; path: null}]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.TypeParameterAnnotation {reference: class_type_parameter=1; path: null},\n" +
+                          "    @dev.turingcomplete.asmtestkit.assertion.__helper.TypeParameterAnnotation {reference: class_type_parameter=2; path: null}]\n" +
                           "elements not found:\n" +
-                          "  [@TypeParameterAnnotation {reference: class_type_parameter=2; path: null}]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.TypeParameterAnnotation {reference: class_type_parameter=2; path: null}]\n" +
                           "and elements not expected:\n" +
-                          "  [@TypeParameterAnnotation {reference: class_type_parameter=0; path: null}]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.TypeParameterAnnotation {reference: class_type_parameter=0; path: null}]\n" +
                           "when comparing values using TypeAnnotationNodeComparator");
   }
 

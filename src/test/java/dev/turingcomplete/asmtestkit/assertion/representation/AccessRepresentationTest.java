@@ -27,7 +27,7 @@ class AccessRepresentationTest {
   @MethodSource("createTestToStringOfArguments")
   void testToStringOf(AccessRepresentation accessRepresentation, int access, String expectedToReadableRepresentation) {
     assertThat(accessRepresentation.toStringOf(access))
-            .isEqualTo(access + " [" + expectedToReadableRepresentation + "]");
+            .isEqualTo("(" + access + ")" + " " + expectedToReadableRepresentation);
 
     assertThat(accessRepresentation.toJavaSourceCodeRepresentation(access))
             .isEqualTo(expectedToReadableRepresentation);

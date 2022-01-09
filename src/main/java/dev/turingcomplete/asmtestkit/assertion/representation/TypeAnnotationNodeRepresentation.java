@@ -7,6 +7,8 @@ import java.util.Objects;
 
 /**
  * Creates a {@link String} representation of a {@link TypeAnnotationNode}.
+ *
+ * <p>Example output: {@code @TypeParameterAnnotation {reference: class_extends=-1; path: null}}.
  */
 public class TypeAnnotationNodeRepresentation extends AbstractAnnotationNodeRepresentation<TypeAnnotationNodeRepresentation, TypeAnnotationNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //

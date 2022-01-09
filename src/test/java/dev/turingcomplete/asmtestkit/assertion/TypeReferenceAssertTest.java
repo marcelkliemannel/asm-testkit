@@ -1,5 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
+import dev.turingcomplete.asmtestkit.assertion.__helper.TypeParameterAnnotation;
 import org.assertj.core.api.Assertions;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
@@ -19,17 +20,13 @@ class TypeReferenceAssertTest {
   @Test
   void testIsEqualTo() throws IOException {
     @Language("Java")
-    String typeParameterAnnotation = "import java.lang.annotation.*;" +
-                                     "@Target({ElementType.TYPE_USE, ElementType.TYPE_PARAMETER})\n" +
-                                     "@Retention(RetentionPolicy.RUNTIME)\n" +
-                                     "@interface TypeParameterAnnotation { }";
-    @Language("Java")
-    String myClass = "class MyClass<@TypeParameterAnnotation S> {" +
+    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.TypeParameterAnnotation;" +
+                     "class MyClass<@TypeParameterAnnotation S> {" +
                      "  @TypeParameterAnnotation String myField;" +
                      "}";
 
     ClassNode myClassNode = create()
-            .addJavaInputSource(typeParameterAnnotation)
+            .addToClasspath(TypeParameterAnnotation.class)
             .addJavaInputSource(myClass)
             .compile()
             .readClassNode("MyClass");

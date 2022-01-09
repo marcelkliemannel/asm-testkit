@@ -7,15 +7,13 @@ import org.assertj.core.presentation.StandardRepresentation;
 import java.util.Comparator;
 import java.util.Objects;
 
-import static dev.turingcomplete.asmtestkit.asmutils.AccessKind.CLASS;
-import static dev.turingcomplete.asmtestkit.asmutils.AccessKind.FIELD;
-import static dev.turingcomplete.asmtestkit.asmutils.AccessKind.METHOD;
-import static dev.turingcomplete.asmtestkit.asmutils.AccessKind.MODULE;
-import static dev.turingcomplete.asmtestkit.asmutils.AccessKind.MODULE_EXPORTS;
-import static dev.turingcomplete.asmtestkit.asmutils.AccessKind.MODULE_OPENS;
-import static dev.turingcomplete.asmtestkit.asmutils.AccessKind.MODULE_REQUIRES;
-import static dev.turingcomplete.asmtestkit.asmutils.AccessKind.PARAMETER;
+import static dev.turingcomplete.asmtestkit.asmutils.AccessKind.*;
 
+/**
+ * Creates a {@link String} representation of access flags.
+ *
+ * Example output: {@code (513) public interface}.
+ */
 public class AccessRepresentation extends StandardRepresentation {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
@@ -76,7 +74,7 @@ public class AccessRepresentation extends StandardRepresentation {
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   /**
-   * Gets a reusable {@link AccessRepresentation} for the given
+   * Gets a reusable {@link AccessRepresentation} instance for the given
    * {@link AccessKind}.
    *
    * @param accessKind an {@link AccessKind}; never null.
@@ -101,7 +99,7 @@ public class AccessRepresentation extends StandardRepresentation {
       case MODULE_OPENS:
         return MODULE_OPENS_INSTANCE;
       default:
-        throw new IllegalStateException("Unknonwn " + AccessKind.class.getSimpleName() + ": " + accessKind + ". Please report this as a bug.");
+        throw new IllegalStateException("Unknown " + AccessKind.class.getSimpleName() + ": " + accessKind + ". Please report this as a bug.");
     }
   }
 
@@ -109,9 +107,9 @@ public class AccessRepresentation extends StandardRepresentation {
   protected String toStringOf(Number number) {
     if (number instanceof Integer) {
       int access = number.intValue();
-      String textifiedAccess = String.valueOf(access);
+      String textifiedAccess = "(" + access + ")";
       if (access > 0) {
-        textifiedAccess += " [" + toJavaSourceCodeRepresentation(access) + "]";
+        textifiedAccess += " " + toJavaSourceCodeRepresentation(access);
       }
       return textifiedAccess;
     }
