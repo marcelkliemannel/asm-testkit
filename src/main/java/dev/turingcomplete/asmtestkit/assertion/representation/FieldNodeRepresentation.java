@@ -6,6 +6,7 @@ import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.FieldNode;
 
+import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
@@ -35,7 +36,20 @@ public class FieldNodeRepresentation extends AsmRepresentation<FieldNode> {
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
+  /**
+   * Sets the used {@link AccessRepresentation} for {@link AccessKind#FIELD}.
+   *
+   * <p>The default value is {@link AccessRepresentation#FIELD_INSTANCE}.
+   *
+   * @param accessRepresentation a {@link AccessRepresentation};
+   *                             never null.
+   * @return {@code this} {@link FieldNodeRepresentation}; never null.
+   * @throws IllegalArgumentException if the given {@code accessRepresentation}
+   *                                  is not for {@link AccessKind#FIELD}.
+   */
   public FieldNodeRepresentation useAccessRepresentation(AccessRepresentation accessRepresentation) {
+    Objects.requireNonNull(accessRepresentation);
+
     if (accessRepresentation.accessKind != AccessKind.FIELD) {
       throw new IllegalArgumentException("Must have " + AccessKind.class.getSimpleName() + ": " + AccessKind.FIELD);
     }
@@ -45,26 +59,62 @@ public class FieldNodeRepresentation extends AsmRepresentation<FieldNode> {
     return this;
   }
 
+  /**
+   * Sets the used {@link TypeRepresentation}.
+   *
+   * <p>The default value is {@link TypeRepresentation#INSTANCE}.
+   *
+   * @param typeRepresentation a {@link TypeRepresentation};
+   *                           never null.
+   * @return {@code this} {@link FieldNodeRepresentation}; never null.
+   */
   public FieldNodeRepresentation useTypeRepresentation(TypeRepresentation typeRepresentation) {
-    this.typeRepresentation = typeRepresentation;
+    this.typeRepresentation = Objects.requireNonNull(typeRepresentation);
 
     return this;
   }
 
+  /**
+   * Sets the used {@link AttributeRepresentation}.
+   *
+   * <p>The default value is {@link AttributeRepresentation#INSTANCE}.
+   *
+   * @param attributeRepresentation an {@link AttributeRepresentation};
+   *                                never null.
+   * @return {@code this} {@link FieldNodeRepresentation}; never null.
+   */
   public FieldNodeRepresentation useAttributeRepresentation(AttributeRepresentation attributeRepresentation) {
-    this.attributeRepresentation = attributeRepresentation;
+    this.attributeRepresentation = Objects.requireNonNull(attributeRepresentation);
 
     return this;
   }
 
+  /**
+   * Sets the used {@link AnnotationNodeRepresentation}.
+   *
+   * <p>The default value is {@link AnnotationNodeRepresentation#INSTANCE}.
+   *
+   * @param annotationNodeRepresentation an {@link AnnotationNodeRepresentation};
+   *                                     never null.
+   * @return {@code this} {@link FieldNodeRepresentation}; never null.
+   */
   public FieldNodeRepresentation useAnnotationNodeRepresentation(AnnotationNodeRepresentation annotationNodeRepresentation) {
-    this.annotationNodeRepresentation = annotationNodeRepresentation;
+    this.annotationNodeRepresentation = Objects.requireNonNull(annotationNodeRepresentation);
 
     return this;
   }
 
+  /**
+   * Sets the used {@link TypeAnnotationNodeRepresentation}.
+   *
+   * <p>The default value is {@link TypeAnnotationNodeRepresentation#INSTANCE}.
+   *
+   * @param typeAnnotationNodeRepresentation a {@link TypeAnnotationNodeRepresentation};
+   *                                         never null.
+   * @return {@code this} {@link FieldNodeRepresentation}; never null.
+   */
   public FieldNodeRepresentation useTypeAnnotationNodeRepresentation(TypeAnnotationNodeRepresentation typeAnnotationNodeRepresentation) {
-    this.typeAnnotationNodeRepresentation = typeAnnotationNodeRepresentation;
+    this.typeAnnotationNodeRepresentation = Objects.requireNonNull(typeAnnotationNodeRepresentation);
 
     return this;
   }
