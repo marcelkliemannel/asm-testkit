@@ -21,9 +21,11 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.TypePath;
 import org.objectweb.asm.TypeReference;
 import org.objectweb.asm.tree.AnnotationNode;
+import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 public final class AsmAssertions {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -120,6 +122,18 @@ public final class AsmAssertions {
     return new AccessAssert(access, AccessKind.MODULE_OPENS);
   }
 
+  /**
+   * Creates an {@link AccessAssert} for the given {@code accessKind}.
+   *
+   * @param access an {@link Integer} of class access flags; may be null.
+   * @param accessKind the {@link AccessKind} the {@code access} parameter;
+   *                  not null.
+   * @return a new {@link AccessAssert}; never null.
+   */
+  public static AccessAssert assertThatAccess(Integer access, AccessKind accessKind) {
+    return new AccessAssert(access, Objects.requireNonNull(accessKind));
+  }
+
   // ---- ASM Objects ------------------------------------------------------- //
 
   /**
@@ -170,6 +184,16 @@ public final class AsmAssertions {
    */
   public static TypeAssert assertThat(Type type) {
     return new TypeAssert(type);
+  }
+
+  /**
+   * Creates a {@link FieldNodeAssert}.
+   *
+   * @param fieldNode a {@link FieldNode}; may be null.
+   * @return a new {@link FieldNodeAssert}; never null.
+   */
+  public static FieldNodeAssert assertThat(FieldNode fieldNode) {
+    return new FieldNodeAssert(fieldNode);
   }
 
   /**

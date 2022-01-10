@@ -34,6 +34,10 @@ public final class AssertUtils {
 
   // ----------
 
+  public static <T, U> U getFromObjectElseNull(T object, Function<T, U> provide) {
+    return object != null ? provide.apply(object) : null;
+  }
+
   public static <T, U> U getFromObjectElseNull(Object object, Class<T> objectType, Function<T, U> provide) {
     return objectType.isInstance(object) ? provide.apply(objectType.cast(object)) : null;
   }
@@ -52,8 +56,34 @@ public final class AssertUtils {
     return objectType.isInstance(object) ? provide.apply(objectType.cast(object)) : null;
   }
 
+  public static <S, T> List<T> getListFromObjectElseNull(S object, Function<S, List<T>> provide) {
+    return object != null ? provide.apply(object) : null;
+  }
+
+  public static <S, T> List<T> getListFromObjectElse(S object, Function<S, List<T>> provide, List<T> defaultObject) {
+    if (object != null) {
+      List<T> value = provide.apply(object);
+      if (value != null) {
+        return value;
+      }
+    }
+
+    return  defaultObject;
+  }
+
   public static <S, T> List<T> getListFromObjectElseNull(Object object, Class<S> objectType, Function<S, List<T>> provide) {
     return objectType.isInstance(object) ? provide.apply(objectType.cast(object)) : null;
+  }
+
+  public static <S, T> List<T> getListFromObjectElse(Object object, Class<S> objectType, Function<S, List<T>> provide, List<T> defaultObject) {
+    if (objectType.isInstance(object)) {
+      List<T> value = provide.apply(objectType.cast(object));
+      if (value != null) {
+        return value;
+      }
+    }
+
+    return  defaultObject;
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

@@ -8,7 +8,7 @@ import java.util.Objects;
 /**
  * Creates a {@link String} representation of a {@link TypeAnnotationNode}.
  *
- * <p>Example output: {@code @TypeParameterAnnotation {reference: class_extends=-1; path: null}}.
+ * <p>Example output: {@code @TypeParameterAnnotation // reference: class_extends=-1; path: null}.
  */
 public class TypeAnnotationNodeRepresentation extends AbstractAnnotationNodeRepresentation<TypeAnnotationNodeRepresentation, TypeAnnotationNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -64,8 +64,8 @@ public class TypeAnnotationNodeRepresentation extends AbstractAnnotationNodeRepr
     String annotationNodeRepresentation = super.createRepresentation(annotationNode);
 
     return annotationNodeRepresentation +
-           " {reference: " + typeReferenceRepresentation.toStringOf(new TypeReference(annotationNode.typeRef)) +
-           "; path: " + typePathRepresentation.toStringOf(annotationNode.typePath) + "}";
+           " // reference: " + typeReferenceRepresentation.toStringOf(new TypeReference(annotationNode.typeRef)) +
+           "; path: " + typePathRepresentation.toStringOf(annotationNode.typePath);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

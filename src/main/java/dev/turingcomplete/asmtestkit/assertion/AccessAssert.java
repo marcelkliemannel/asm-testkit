@@ -32,7 +32,7 @@ public class AccessAssert extends AsmAssert<AccessAssert, Integer> {
    *
    * <p>There are no direct supported {@link AssertOption}s yet.
    *
-   * @param actual the actual {@link Integer} access flags; may be null.
+   * @param actual        the actual {@link Integer} access flags; may be null.
    * @param assertOptions an array of {@link AssertOption}s; never null.
    */
   public AccessAssert(Integer actual, AccessKind accessKind, AssertOption... assertOptions) {
@@ -52,6 +52,7 @@ public class AccessAssert extends AsmAssert<AccessAssert, Integer> {
     String[] expectedRepresentations = AssertUtils.getFromObjectElse(expected, Integer.class, getAccessRepresentation, new String[0]);
 
     Assertions.assertThat(actualRepresentations)
+              .as(createDescription("Is equal access values"))
               .containsExactlyInAnyOrder(expectedRepresentations);
 
     return this;

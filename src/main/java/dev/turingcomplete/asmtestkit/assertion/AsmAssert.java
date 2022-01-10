@@ -7,26 +7,27 @@ import org.assertj.core.description.TextDescription;
 import org.objectweb.asm.Opcodes;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public abstract class AsmAssert<SELF extends AbstractAssert<SELF, ACTUAL>, ACTUAL>
-        extends AbstractAssert<SELF, ACTUAL> {
+public abstract class AsmAssert<S extends AbstractAssert<S, A>, A>
+        extends AbstractAssert<S, A> {
 
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
   protected final String            selfDescription;
-  protected final Class<ACTUAL>     objectType;
+  protected final Class<A>          objectType;
   protected final Set<AssertOption> options = new HashSet<>();
   protected       int               asmApi  = Opcodes.ASM9;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  public AsmAssert(ACTUAL actual,
+  public AsmAssert(A actual,
                    Class<?> selfType,
-                   Class<ACTUAL> objectType,
+                   Class<A> objectType,
                    String selfDescription,
                    AssertOption... assertOptions) {
 
@@ -40,7 +41,7 @@ public abstract class AsmAssert<SELF extends AbstractAssert<SELF, ACTUAL>, ACTUA
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
-  public AsmAssert<SELF, ACTUAL> useAsmApi(int asmApi) {
+  public AsmAssert<S, A> useAsmApi(int asmApi) {
     this.asmApi = asmApi;
 
     return this;
@@ -50,10 +51,22 @@ public abstract class AsmAssert<SELF extends AbstractAssert<SELF, ACTUAL>, ACTUA
    * Adds the given {@link AssertOption}.
    *
    * @param option an {@link AssertOption} to add; never null.
-   * @return this instance of {@link AsmAssert}; never null.
+   * @return {@code this} {@link AsmAssert}; never null.
    */
-  public AsmAssert<SELF, ACTUAL> addOption(AssertOption option) {
+  public AsmAssert<S, A> addOption(AssertOption option) {
     this.options.add(Objects.requireNonNull(option));
+    return this;
+  }
+
+  /**
+   * Adds the given {@link AssertOption}s.
+   *
+   * @param options a {@link Collection} of {@link AssertOption}s to add;
+   *               never null.
+   * @return {@code this} {@link AsmAssert}; never null.
+   */
+  public AsmAssert<S, A> addOptions(Collection<AssertOption> options) {
+    this.options.addAll(Objects.requireNonNull(options));
     return this;
   }
 

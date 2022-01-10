@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
-import dev.turingcomplete.asmtestkit.assertion.__helper.TypeParameterAnnotation;
+import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;
 import org.assertj.core.api.Assertions;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
@@ -20,23 +20,22 @@ class TypeAnnotationNodeRepresentationTest {
   @Test
   void testCreateRepresentation() throws IOException {
     @Language("Java")
-    String myClass = "import java.util.Comparator;" +
-                     "import dev.turingcomplete.asmtestkit.assertion.__helper.TypeParameterAnnotation;" +
-                     "abstract class MyClass<T> extends @TypeParameterAnnotation Thread {" +
-                     "  T[]@TypeParameterAnnotation [] myField;" +
+    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;" +
+                     "abstract class MyClass<T> extends @VisibleTypeParameterAnnotationA Thread {" +
+                     "  T[]@VisibleTypeParameterAnnotationA [] myField;" +
                      "}";
 
     ClassNode myClassNode = create()
-            .addToClasspath(TypeParameterAnnotation.class)
+            .addToClasspath(VisibleTypeParameterAnnotationA.class)
             .addJavaInputSource(myClass)
             .compile()
             .readClassNode("MyClass");
 
     Assertions.assertThat(INSTANCE.toStringOf(myClassNode.visibleTypeAnnotations.get(0)))
-              .isEqualTo("@dev.turingcomplete.asmtestkit.assertion.__helper.TypeParameterAnnotation {reference: class_extends=-1; path: null}");
+              .isEqualTo("@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: class_extends=-1; path: null");
 
     Assertions.assertThat(INSTANCE.toStringOf(myClassNode.fields.get(0).visibleTypeAnnotations.get(0)))
-              .isEqualTo("@dev.turingcomplete.asmtestkit.assertion.__helper.TypeParameterAnnotation {reference: field; path: [}");
+              .isEqualTo("@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: field; path: [");
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

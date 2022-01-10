@@ -1,7 +1,8 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.assertion.__helper.DummyAttribute;
-import dev.turingcomplete.asmtestkit.assertion.__helper.TypeParameterAnnotation;
+import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;
+import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationB;
 import org.assertj.core.api.Assertions;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
@@ -67,11 +68,11 @@ class AsmAssertionsTest {
   @Test
   void testAssertThatTypeAnnotationNodes() throws IOException {
     @Language("Java")
-    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.TypeParameterAnnotation;" +
-                     "class MyClass<@TypeParameterAnnotation S, @TypeParameterAnnotation T, @TypeParameterAnnotation U> { }";
+    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;" +
+                     "class MyClass<@VisibleTypeParameterAnnotationA S, @VisibleTypeParameterAnnotationA T, @VisibleTypeParameterAnnotationA U> { }";
 
     List<TypeAnnotationNode> visibleTypeAnnotations = create()
-            .addToClasspath(TypeParameterAnnotation.class)
+            .addToClasspath(VisibleTypeParameterAnnotationA.class)
             .addJavaInputSource(myClass)
             .compile()
             .readClassNode("MyClass")
@@ -91,15 +92,15 @@ class AsmAssertionsTest {
                                                      .containsExactlyInAnyOrderElementsOf(List.of(secondTypeAnnotationNode, thirdTypeAnnotationNode)))
               .isInstanceOf(AssertionError.class)
               .hasMessage("\nExpecting actual:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.TypeParameterAnnotation {reference: class_type_parameter=0; path: null},\n" +
-                          "    @dev.turingcomplete.asmtestkit.assertion.__helper.TypeParameterAnnotation {reference: class_type_parameter=1; path: null}]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: null,\n" +
+                          "    @dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=1; path: null]\n" +
                           "to contain exactly in any order:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.TypeParameterAnnotation {reference: class_type_parameter=1; path: null},\n" +
-                          "    @dev.turingcomplete.asmtestkit.assertion.__helper.TypeParameterAnnotation {reference: class_type_parameter=2; path: null}]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=1; path: null,\n" +
+                          "    @dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=2; path: null]\n" +
                           "elements not found:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.TypeParameterAnnotation {reference: class_type_parameter=2; path: null}]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=2; path: null]\n" +
                           "and elements not expected:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.TypeParameterAnnotation {reference: class_type_parameter=0; path: null}]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: null]\n" +
                           "when comparing values using TypeAnnotationNodeComparator");
   }
 
@@ -148,21 +149,13 @@ class AsmAssertionsTest {
   @Test
   void testAssertThatTypeReferences() throws IOException {
     @Language("Java")
-    String typeParameterAnnotationA = "import java.lang.annotation.*;" +
-                                      "@Target({ElementType.TYPE_USE, ElementType.TYPE_PARAMETER})\n" +
-                                      "@Retention(RetentionPolicy.RUNTIME)\n" +
-                                      "@interface TypeParameterAnnotationA { }";
-    @Language("Java")
-    String typeParameterAnnotationB = "import java.lang.annotation.*;" +
-                                      "@Target({ElementType.TYPE_USE, ElementType.TYPE_PARAMETER})\n" +
-                                      "@Retention(RetentionPolicy.RUNTIME)\n" +
-                                      "@interface TypeParameterAnnotationB { }";
-    @Language("Java")
-    String myClass = "class MyClass<@TypeParameterAnnotationA @TypeParameterAnnotationB S, @TypeParameterAnnotationA T> { }";
+    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;" +
+                     "import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationB;" +
+                     "class MyClass<@VisibleTypeParameterAnnotationA @VisibleTypeParameterAnnotationB S, @VisibleTypeParameterAnnotationA T> { }";
 
     List<TypeAnnotationNode> visibleTypeAnnotations = create()
-            .addJavaInputSource(typeParameterAnnotationA)
-            .addJavaInputSource(typeParameterAnnotationB)
+            .addToClasspath(VisibleTypeParameterAnnotationA.class)
+            .addToClasspath(VisibleTypeParameterAnnotationB.class)
             .addJavaInputSource(myClass)
             .compile()
             .readClassNode("MyClass")

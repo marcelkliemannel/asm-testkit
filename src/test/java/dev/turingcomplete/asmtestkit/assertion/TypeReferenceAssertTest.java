@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.assertion.__helper.TypeParameterAnnotation;
+import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;
 import org.assertj.core.api.Assertions;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
@@ -20,13 +20,13 @@ class TypeReferenceAssertTest {
   @Test
   void testIsEqualTo() throws IOException {
     @Language("Java")
-    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.TypeParameterAnnotation;" +
-                     "class MyClass<@TypeParameterAnnotation S> {" +
-                     "  @TypeParameterAnnotation String myField;" +
+    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;" +
+                     "class MyClass<@VisibleTypeParameterAnnotationA S> {" +
+                     "  @VisibleTypeParameterAnnotationA String myField;" +
                      "}";
 
     ClassNode myClassNode = create()
-            .addToClasspath(TypeParameterAnnotation.class)
+            .addToClasspath(VisibleTypeParameterAnnotationA.class)
             .addJavaInputSource(myClass)
             .compile()
             .readClassNode("MyClass");

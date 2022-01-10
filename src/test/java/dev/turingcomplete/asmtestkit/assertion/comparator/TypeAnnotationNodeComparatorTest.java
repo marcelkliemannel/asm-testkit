@@ -1,5 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
+import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.tree.TypeAnnotationNode;
@@ -20,15 +21,11 @@ class TypeAnnotationNodeComparatorTest {
   @Test
   void testCompare() throws IOException {
     @Language("Java")
-    String typeParameterAnnotation = "import java.lang.annotation.*;" +
-                                     "@Target({ElementType.TYPE_USE, ElementType.TYPE_PARAMETER})\n" +
-                                     "@Retention(RetentionPolicy.RUNTIME)\n" +
-                                     "@interface TypeParameterAnnotation { }";
-    @Language("Java")
-    String myClass = "class MyClass<@TypeParameterAnnotation S, @TypeParameterAnnotation T> { }";
+    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;" +
+                     "class MyClass<@VisibleTypeParameterAnnotationA S, @VisibleTypeParameterAnnotationA T> { }";
 
     List<TypeAnnotationNode> visibleTypeAnnotations = create()
-            .addJavaInputSource(typeParameterAnnotation)
+            .addToClasspath(VisibleTypeParameterAnnotationA.class)
             .addJavaInputSource(myClass)
             .compile()
             .readClassNode("MyClass")

@@ -31,7 +31,7 @@ public class TypeAnnotationNodeAssert extends AbstractAnnotationNodeAssert<TypeA
    *
    * <p>There are no direct supported {@link AssertOption}s yet.
    *
-   * @param actual the actual {@link TypeAnnotationNode}; may be null.
+   * @param actual        the actual {@link TypeAnnotationNode}; may be null.
    * @param assertOptions an array of {@link AssertOption}s; never null.
    */
   public TypeAnnotationNodeAssert(TypeAnnotationNode actual, AssertOption... assertOptions) {
@@ -56,10 +56,12 @@ public class TypeAnnotationNodeAssert extends AbstractAnnotationNodeAssert<TypeA
    * Checks whether the {@link TypePath} of the given expected
    * {@link TypeAnnotationNode} is equal to the actual one.
    *
-   * @param expected the expected {@link Object}; may be null.
+   * @param expected an {@link Object} expected to be a
+   *                 {@link TypeAnnotationNode}; may be null.
    */
   protected void isEqualTypePath(Object expected) {
     AsmAssertions.assertThat(actual.typePath)
+                 .addOptions(options)
                  .as(createDescription("Is equal type path"))
                  .isEqualTo(getFromObjectElseNull(expected, TypeAnnotationNode.class, typeAnnotationNode -> typeAnnotationNode.typePath));
   }
@@ -68,10 +70,12 @@ public class TypeAnnotationNodeAssert extends AbstractAnnotationNodeAssert<TypeA
    * Checks whether the {@link TypeReference} of the given expected
    * {@link TypeAnnotationNode} is equal to the actual one.
    *
-   * @param expected the expected {@link Object}; may be null.
+   * @param expected an {@link Object} expected to be a
+   *                 {@link TypeAnnotationNode}; may be null.
    */
   protected void isEqualTypeReference(Object expected) {
     AsmAssertions.assertThat(new TypeReference(actual.typeRef))
+                 .addOptions(options)
                  .as(createDescription("Is equal type reference"))
                  .isEqualTo(getFromObjectElseNull(expected, TypeAnnotationNode.class, typeAnnotationNode -> new TypeReference(typeAnnotationNode.typeRef)));
 
