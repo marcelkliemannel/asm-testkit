@@ -28,8 +28,38 @@ class FieldNodeAssertTest {
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Test
-  void testIsEqual() {
+  void testIsEqual() throws IOException {
+    @Language("Java")
+    String firstMyClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;" +
+                          "class MyClass<T extends Number> {" +
+                          "  public final T[]@VisibleTypeParameterAnnotationA[] myField1 = null;" +
+                          "}";
 
+    FieldNode firstField = create()
+            .addToClasspath(VisibleTypeParameterAnnotationA.class)
+            .addJavaInputSource(firstMyClass)
+            .compile()
+            .readClassNode("MyClass")
+            .fields
+            .get(0);
+
+
+    @Language("Java")
+    String secondMyClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;" +
+                           "class MyClass<T extends Number> {" +
+                           "  public final T[]@VisibleTypeParameterAnnotationA[] myField1 = null;" +
+                           "}";
+
+    FieldNode secondField = create()
+            .addToClasspath(VisibleTypeParameterAnnotationA.class)
+            .addJavaInputSource(secondMyClass)
+            .compile()
+            .readClassNode("MyClass")
+            .fields
+            .get(0);
+
+    AsmAssertions.assertThat(firstField)
+                 .isEqualTo(secondField);
   }
 
   @Test
@@ -143,7 +173,7 @@ class FieldNodeAssertTest {
   void testIsEqualVisibleAnnotations() {
     var first1FieldNode = new FieldNode(0, "first", "Ljava.lang.String;", null, null);
     first1FieldNode.visibleAnnotations = List.of(AnnotationNodeUtils.createAnnotationNode(VisibleAnnotationA.class));
-    
+
     var first2FieldNode = new FieldNode(0, "first", "Ljava.lang.String;", null, null);
     first2FieldNode.visibleAnnotations = List.of(AnnotationNodeUtils.createAnnotationNode(VisibleAnnotationA.class),
                                                  AnnotationNodeUtils.createAnnotationNode(VisibleAnnotationB.class));
@@ -176,7 +206,7 @@ class FieldNodeAssertTest {
 
     var first2FieldNode = new FieldNode(0, "first", "Ljava.lang.String;", null, null);
     first2FieldNode.invisibleAnnotations = List.of(AnnotationNodeUtils.createAnnotationNode(InvisibleAnnotationA.class),
-                                                 AnnotationNodeUtils.createAnnotationNode(InvisibleAnnotationB.class));
+                                                   AnnotationNodeUtils.createAnnotationNode(InvisibleAnnotationB.class));
 
     AsmAssertions.assertThat(first1FieldNode)
                  .isEqualTo(first1FieldNode);
@@ -214,7 +244,7 @@ class FieldNodeAssertTest {
             .compile()
             .readClassNode("MyClass")
             .fields;
-    
+
     TypeAnnotationNode firstTypeAnnotation = fields.get(0).visibleTypeAnnotations.get(0);
     TypeAnnotationNode secondTypeAnnotation = fields.get(1).visibleTypeAnnotations.get(0);
 
@@ -250,7 +280,7 @@ class FieldNodeAssertTest {
   void testIsEqualInvisibleTypeAnnotations() throws IOException {
     @Language("Java")
     String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotation;" +
-                     "abstract class MyClass<T> extends @InvisibleTypeParameterAnnotation Thread {" +
+                     "class MyClass {" +
                      "  T[]@InvisibleTypeParameterAnnotation[] myField1;" +
                      "  T@InvisibleTypeParameterAnnotation[][] myField2;" +
                      "}";
@@ -319,7 +349,7 @@ class FieldNodeAssertTest {
                           "  [Barnull]\n" +
                           "when comparing values using AttributeComparator");
   }
-  
+
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 }
