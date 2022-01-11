@@ -342,6 +342,24 @@ public final class AsmAssertions {
                      .usingComparator(TypeReferenceComparator.ITERABLE_INSTANCE);
   }
 
+  /**
+   * Creates an {@link IterableAssert} for {@link TypeReference}s which uses
+   * {@link TypeReferenceRepresentation#INSTANCE} for the representation and for
+   * equality {@link TypeReferenceComparator#INSTANCE} and
+   * {@link TypeReferenceComparator#ITERABLE_INSTANCE}.
+   *
+   * <p>To override the representation or comparator call
+   * {@link IterableAssert#usingComparator(Comparator)} or
+   * {@link IterableAssert#withRepresentation(Representation)}.
+   *
+   * @param instructions an {@link Iterable} of {@link TypeReference}s;
+   *                       may be null.
+   * @return a new {@link IterableAssert}; never null.
+   */
+  public static IterableAssert<TypeReference> assertThatInstructions(Iterable<AbstractInsnNode> instructions) {
+    return null;
+  }
+
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 }

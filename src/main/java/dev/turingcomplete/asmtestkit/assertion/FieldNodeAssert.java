@@ -1,15 +1,19 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
+import dev.turingcomplete.asmtestkit.assertion.comparator.FieldNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.option.StandardAssertOption;
 import dev.turingcomplete.asmtestkit.assertion.representation.FieldNodeRepresentation;
+import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +21,15 @@ import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThat;
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getFromObjectElseNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * An AssertJ {@link AbstractAssert} for an {@link FieldNode}.
+ *
+ * <p>To override the used {@link FieldNodeRepresentation} or
+ * {@link FieldNodeComparator} call {@link #withRepresentation(Representation)}
+ * or {@link #usingComparator(Comparator)}.
+ *
+ * <p>An instance can be created via {@link AsmAssertions#assertThat(FieldNode)}.
+ */
 public class FieldNodeAssert extends ClassEntityAssert<FieldNodeAssert, FieldNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
@@ -46,6 +59,8 @@ public class FieldNodeAssert extends ClassEntityAssert<FieldNodeAssert, FieldNod
     super("field", actual, FieldNodeAssert.class, FieldNode.class, createSelfDescription(actual), assertOptions);
 
     info.useRepresentation(FieldNodeRepresentation.INSTANCE);
+    //noinspection ResultOfMethodCallIgnored
+    usingComparator(FieldNodeComparator.INSTANCE);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //

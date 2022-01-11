@@ -1,5 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
+import dev.turingcomplete.asmtestkit.assertion.comparator.TypeAnnotationNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.representation.AnnotationNodeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypeAnnotationNodeRepresentation;
@@ -10,13 +11,16 @@ import org.objectweb.asm.TypeReference;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
+import java.util.Comparator;
+
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getFromObjectElseNull;
 
 /**
- * An AssertJ {@link AbstractAssert} for an {@link TypeAnnotationNode}.
+ * An AssertJ {@link AbstractAssert} for a {@link TypeAnnotationNode}.
  *
- * <p>To override the used {@link TypeAnnotationNodeRepresentation} call
- * {@link #withRepresentation(Representation)}.
+ * <p>To override the used {@link TypeAnnotationNodeRepresentation} or
+ * {@link TypeAnnotationNodeComparator} call {@link #withRepresentation(Representation)}
+ * or {@link #usingComparator(Comparator)}.
  *
  * <p>An instance can be created via
  * {@link AsmAssertions#assertThat(TypeAnnotationNode)}.
@@ -38,6 +42,8 @@ public class TypeAnnotationNodeAssert extends AbstractAnnotationNodeAssert<TypeA
     super(actual, TypeAnnotationNodeAssert.class, TypeAnnotationNode.class, createSelfDescription(actual), assertOptions);
 
     info.useRepresentation(TypeAnnotationNodeRepresentation.INSTANCE);
+    //noinspection ResultOfMethodCallIgnored
+    usingComparator(TypeAnnotationNodeComparator.INSTANCE);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //

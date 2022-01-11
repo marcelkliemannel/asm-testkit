@@ -20,6 +20,7 @@ abstract class AbstractAnnotationNodeAssert<S extends AbstractAnnotationNodeAsse
                                       Class<A> objectType,
                                       String selfDescription,
                                       AssertOption... assertOptions) {
+
     super(actual, selfType, objectType, selfDescription, assertOptions);
   }
 
