@@ -16,7 +16,7 @@ import java.util.Objects;
  * assertions in order to get a proper representation of ASM classes.
  *
  * <p>Note that {@link AccessRepresentation} is not part of this representation
- * because it uses the generic {@link Integer} and not a specific ASM type.
+ * because it uses the generic {@link Integer} and not a dedicated ASM type.
  */
 public final class CombinedAsmRepresentation extends StandardRepresentation {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //

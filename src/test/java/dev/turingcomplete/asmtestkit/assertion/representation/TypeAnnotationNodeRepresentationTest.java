@@ -13,21 +13,22 @@ import static dev.turingcomplete.asmtestkit.compile.CompilationEnvironment.creat
 
 class TypeAnnotationNodeRepresentationTest {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
+
+  @Language("Java")
+  private static final String MY_CLASS = "import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;" +
+                                         "abstract class MyClass<T> extends @VisibleTypeParameterAnnotationA Thread {" +
+                                         "  T[]@VisibleTypeParameterAnnotationA [] myField;" +
+                                         "}";
+
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Test
   void testCreateRepresentation() throws IOException {
-    @Language("Java")
-    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;" +
-                     "abstract class MyClass<T> extends @VisibleTypeParameterAnnotationA Thread {" +
-                     "  T[]@VisibleTypeParameterAnnotationA [] myField;" +
-                     "}";
-
     ClassNode myClassNode = create()
             .addToClasspath(VisibleTypeParameterAnnotationA.class)
-            .addJavaInputSource(myClass)
+            .addJavaInputSource(MY_CLASS)
             .compile()
             .readClassNode("MyClass");
 
@@ -36,6 +37,21 @@ class TypeAnnotationNodeRepresentationTest {
 
     Assertions.assertThat(INSTANCE.toStringOf(myClassNode.fields.get(0).visibleTypeAnnotations.get(0)))
               .isEqualTo("@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: field; path: [");
+  }
+
+  @Test
+  void testCreateSimplifiedRepresentation() throws IOException {
+    ClassNode myClassNode = create()
+            .addToClasspath(VisibleTypeParameterAnnotationA.class)
+            .addJavaInputSource(MY_CLASS)
+            .compile()
+            .readClassNode("MyClass");
+
+    Assertions.assertThat(INSTANCE.createSimplifiedRepresentation(myClassNode.visibleTypeAnnotations.get(0)))
+              .isEqualTo("@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA");
+
+    Assertions.assertThat(INSTANCE.createSimplifiedRepresentation(myClassNode.fields.get(0).visibleTypeAnnotations.get(0)))
+              .isEqualTo("@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA");
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

@@ -1,27 +1,29 @@
-package dev.turingcomplete.asmtestkit.assertion.representation;
+package dev.turingcomplete.asmtestkit.assertion.comparator;
 
-import dev.turingcomplete.asmtestkit.assertion.__helper.DummyAttribute;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.IntInsnNode;
+import org.objectweb.asm.tree.LdcInsnNode;
 
-import static dev.turingcomplete.asmtestkit.assertion.representation.AttributeRepresentation.INSTANCE;
+import static dev.turingcomplete.asmtestkit.assertion.comparator.InstructionComparator.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class AttributeRepresentationTest {
+class InstructionComparatorTest {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Test
-  void testCreateRepresentation() {
-    assertThat(INSTANCE.toStringOf(new DummyAttribute("Name", "Content")))
-            .isEqualTo("NameContent");
-  }
+  void testCompare() {
+    assertThat(INSTANCE.compare(new IntInsnNode(Opcodes.BIPUSH, 5), new IntInsnNode(Opcodes.BIPUSH, 5)))
+            .isEqualTo(0);
 
-  @Test
-  void testCreateSimplifiedRepresentation() {
-    assertThat(INSTANCE.createSimplifiedRepresentation(new DummyAttribute("Name", "Content")))
-            .isEqualTo("Name");
+    assertThat(INSTANCE.compare(new IntInsnNode(Opcodes.BIPUSH, 5), new LdcInsnNode("foo")))
+            .isLessThanOrEqualTo(-1);
+
+    assertThat(INSTANCE.compare(new LdcInsnNode("foo"), new IntInsnNode(Opcodes.BIPUSH, 5)))
+            .isGreaterThanOrEqualTo(1);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

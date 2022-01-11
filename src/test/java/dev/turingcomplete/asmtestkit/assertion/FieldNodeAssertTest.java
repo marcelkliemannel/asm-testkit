@@ -280,7 +280,7 @@ class FieldNodeAssertTest {
   void testIsEqualInvisibleTypeAnnotations() throws IOException {
     @Language("Java")
     String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotation;" +
-                     "class MyClass {" +
+                     "class MyClass<T> {" +
                      "  T[]@InvisibleTypeParameterAnnotation[] myField1;" +
                      "  T@InvisibleTypeParameterAnnotation[][] myField2;" +
                      "}";

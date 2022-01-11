@@ -20,6 +20,7 @@ import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.TypePath;
 import org.objectweb.asm.TypeReference;
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
@@ -125,9 +126,9 @@ public final class AsmAssertions {
   /**
    * Creates an {@link AccessAssert} for the given {@code accessKind}.
    *
-   * @param access an {@link Integer} of class access flags; may be null.
+   * @param access     an {@link Integer} of class access flags; may be null.
    * @param accessKind the {@link AccessKind} the {@code access} parameter;
-   *                  not null.
+   *                   not null.
    * @return a new {@link AccessAssert}; never null.
    */
   public static AccessAssert assertThatAccess(Integer access, AccessKind accessKind) {
@@ -204,6 +205,16 @@ public final class AsmAssertions {
    */
   public static TypeReferenceAssert assertThat(TypeReference typeReference) {
     return new TypeReferenceAssert(typeReference);
+  }
+
+  /**
+   * Creates a {@link InstructionAssert}.
+   *
+   * @param abstractInsnNode a {@link AbstractInsnNode}; may be null.
+   * @return a new {@link InstructionAssert}; never null.
+   */
+  public static InstructionAssert assertThat(AbstractInsnNode abstractInsnNode) {
+    return new InstructionAssert(abstractInsnNode);
   }
 
   // ---- Iterable ---------------------------------------------------------- //
