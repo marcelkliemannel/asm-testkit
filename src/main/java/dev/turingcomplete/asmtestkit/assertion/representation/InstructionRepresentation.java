@@ -33,14 +33,28 @@ public class InstructionRepresentation extends AsmRepresentation<AbstractInsnNod
 
   @Override
   protected String createSimplifiedRepresentation(AbstractInsnNode abstractInsnNode) {
-    return TextifierUtils.textify(textifier -> abstractInsnNode.accept(new TraceMethodVisitor(textifier))).trim();
+    return TextifierUtils.textify(textifier -> {
+      textifier.setTab2(0);
+      textifier.setTab3(1);
+      abstractInsnNode.accept(new TraceMethodVisitor(textifier));
+    }).replaceAll("[\n\r]$", "");
   }
 
   @Override
   protected String createRepresentation(AbstractInsnNode abstractInsnNode) {
     String textifiedInstruction = createSimplifiedRepresentation(abstractInsnNode);
     if (abstractInsnNode.getOpcode() >= 0) {
-      textifiedInstruction += " (Opcode: " + abstractInsnNode.getOpcode() + ")";
+      String opcodeRepresentation = " (Opcode: " + abstractInsnNode.getOpcode() + ")";
+
+      int indexOfFirstNewLine = textifiedInstruction.indexOf("\n");
+      if (indexOfFirstNewLine >= 0) {
+        // In case the instruction has multiple line, the opcode will be
+        // appended to the first one.
+        textifiedInstruction = textifiedInstruction.replaceFirst("\n", opcodeRepresentation + "\n");
+      }
+      else {
+        textifiedInstruction += opcodeRepresentation;
+      }
     }
     return textifiedInstruction;
   }

@@ -42,10 +42,24 @@ public final class TextifierUtils {
     public ExtendedTextifier() {
       super(Opcodes.ASM9);
 
-      tab = "";
-      tab2 = "  ";
-      tab3 = "    ";
-      ltab = "";
+      tab = ""; // Fields methods
+      tab2 = "  "; // Instructions
+      tab3 = "    "; // Switch cases
+      ltab = ""; // Labels
+    }
+
+    public ExtendedTextifier setTab2(int tab2) {
+      Objects.checkIndex(tab2, Integer.MAX_VALUE);
+      this.tab2 = " ".repeat(tab2);
+
+      return this;
+    }
+
+    public ExtendedTextifier setTab3(int tab3) {
+      Objects.checkIndex(tab3, Integer.MAX_VALUE);
+      this.tab3 = " ".repeat(tab3);
+
+      return this;
     }
 
     public void addText(String text) {

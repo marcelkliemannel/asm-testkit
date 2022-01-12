@@ -3,6 +3,7 @@ package dev.turingcomplete.asmtestkit.assertion.representation;
 import org.assertj.core.api.Assertions;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.InsnList;
 
 import java.io.IOException;
@@ -44,6 +45,29 @@ class InstructionRepresentationTest {
 
     Assertions.assertThat(Arrays.stream(instructions.toArray()).map(InstructionRepresentation.INSTANCE::toStringOf))
               .containsExactlyElementsOf(expectedRepresentations);
+  }
+
+  @Test
+  void testSwitchIndentCreateRepresentation() throws IOException {
+    AbstractInsnNode lookupswitch = create()
+            .addJavaInputSource("class MyClass {" +
+                                "  void myMethod() {" +
+                                "    int foo = 5;" +
+                                "    switch(foo) {" +
+                                "      case 1: System.out.println(1); break;" +
+                                "      case 2: System.out.println(2); break;" +
+                                "    }" +
+                                "  }" +
+                                "}")
+            .compile()
+            .readClassNode("MyClass")
+            .methods.get(1).instructions.get(6);
+
+    Assertions.assertThat(InstructionRepresentation.INSTANCE.toStringOf(lookupswitch))
+              .isEqualTo("LOOKUPSWITCH (Opcode: 171)\n" +
+                         " 1: L0\n" +
+                         " 2: L1\n" +
+                         " default: L2");
   }
 
   @Test
