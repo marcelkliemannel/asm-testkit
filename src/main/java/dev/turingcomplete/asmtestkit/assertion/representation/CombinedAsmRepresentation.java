@@ -1,8 +1,10 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
+import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;
 import org.assertj.core.presentation.StandardRepresentation;
+import org.objectweb.asm.tree.InsnList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +18,7 @@ import java.util.Objects;
  * assertions in order to get a proper representation of ASM classes.
  *
  * <p>Note that {@link AccessRepresentation} is not part of this representation
- * because it uses the generic {@link Integer} and not a dedicated ASM type.
+ * because it is not clear which {@link AccessKind} to use.
  */
 public final class CombinedAsmRepresentation extends StandardRepresentation {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -39,6 +41,10 @@ public final class CombinedAsmRepresentation extends StandardRepresentation {
     ASM_REPRESENTATIONS.add(TypeRepresentation.INSTANCE);
     ASM_REPRESENTATIONS.add(TypeReferenceRepresentation.INSTANCE);
     ASM_REPRESENTATIONS.add(FieldNodeRepresentation.INSTANCE);
+    ASM_REPRESENTATIONS.add(InstructionRepresentation.INSTANCE);
+
+    // An 'InsnList' is an 'Iterable' and would be handled in the 'toStringOf'
+    registerFormatterForType(InsnList.class, InsnListRepresentation.INSTANCE::createRepresentation);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //

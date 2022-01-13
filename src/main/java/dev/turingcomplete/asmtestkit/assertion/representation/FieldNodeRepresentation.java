@@ -13,7 +13,8 @@ import java.util.StringJoiner;
  * Creates a {@link String} representation of a {@link FieldNode}.
  *
  * <p>Example output:
- * <pre>{@code @java.lang.Deprecated(forRemoval=true)
+ * <pre>{@code
+ * @java.lang.Deprecated(forRemoval=true)
  * (131073) public deprecated int myField = 5
  * }</pre>
  *

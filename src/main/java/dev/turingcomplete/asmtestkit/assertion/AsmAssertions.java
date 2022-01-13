@@ -1,14 +1,17 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
+import dev.turingcomplete.asmtestkit.asmutils.InsnListUtils;
 import dev.turingcomplete.asmtestkit.assertion.comparator.AnnotationNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.AttributeComparator;
+import dev.turingcomplete.asmtestkit.assertion.comparator.InsnListComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.TypeAnnotationNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.TypeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.TypePathComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.TypeReferenceComparator;
 import dev.turingcomplete.asmtestkit.assertion.representation.AnnotationNodeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.AttributeRepresentation;
+import dev.turingcomplete.asmtestkit.assertion.representation.InsnListRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypeAnnotationNodeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypePathRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypeReferenceRepresentation;
@@ -23,6 +26,8 @@ import org.objectweb.asm.TypeReference;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.util.Comparator;
@@ -140,81 +145,102 @@ public final class AsmAssertions {
   /**
    * Creates an {@link AttributeAssert}.
    *
-   * @param attribute an {@link Attribute}; may be null.
+   * @param actual an {@link Attribute}; may be null.
    * @return a new {@link AttributeAssert}; never null.
    */
-  public static AttributeAssert assertThat(Attribute attribute) {
-    return new AttributeAssert(attribute);
+  public static AttributeAssert assertThat(Attribute actual) {
+    return new AttributeAssert(actual);
   }
 
   /**
    * Creates an {@link AnnotationNodeAssert}.
    *
-   * @param annotationNode an {@link AnnotationNode}; may be null.
+   * @param actual an {@link AnnotationNode}; may be null.
    * @return a new {@link AnnotationNodeAssert}; never null.
    */
-  public static AnnotationNodeAssert assertThat(AnnotationNode annotationNode) {
-    return new AnnotationNodeAssert(annotationNode);
+  public static AnnotationNodeAssert assertThat(AnnotationNode actual) {
+    return new AnnotationNodeAssert(actual);
   }
 
   /**
    * Creates an {@link TypeAnnotationNodeAssert}.
    *
-   * @param typeAnnotationNode an {@link TypeAnnotationNode}; may be null.
+   * @param actual an {@link TypeAnnotationNode}; may be null.
    * @return a new {@link TypeAnnotationNodeAssert}; never null.
    */
-  public static TypeAnnotationNodeAssert assertThat(TypeAnnotationNode typeAnnotationNode) {
-    return new TypeAnnotationNodeAssert(typeAnnotationNode);
+  public static TypeAnnotationNodeAssert assertThat(TypeAnnotationNode actual) {
+    return new TypeAnnotationNodeAssert(actual);
   }
 
   /**
    * Creates a {@link TypePathAssert}.
    *
-   * @param typePath a {@link TypePath}; may be null.
+   * @param actual a {@link TypePath}; may be null.
    * @return a new {@link TypePathAssert}; never null.
    */
-  public static TypePathAssert assertThat(TypePath typePath) {
-    return new TypePathAssert(typePath);
+  public static TypePathAssert assertThat(TypePath actual) {
+    return new TypePathAssert(actual);
   }
 
   /**
    * Creates a {@link TypeAssert}.
    *
-   * @param type a {@link Type}; may be null.
+   * @param actual a {@link Type}; may be null.
    * @return a new {@link TypeAssert}; never null.
    */
-  public static TypeAssert assertThat(Type type) {
-    return new TypeAssert(type);
+  public static TypeAssert assertThat(Type actual) {
+    return new TypeAssert(actual);
   }
 
   /**
    * Creates a {@link FieldNodeAssert}.
    *
-   * @param fieldNode a {@link FieldNode}; may be null.
+   * @param actual a {@link FieldNode}; may be null.
    * @return a new {@link FieldNodeAssert}; never null.
    */
-  public static FieldNodeAssert assertThat(FieldNode fieldNode) {
-    return new FieldNodeAssert(fieldNode);
+  public static FieldNodeAssert assertThat(FieldNode actual) {
+    return new FieldNodeAssert(actual);
   }
 
   /**
    * Creates a {@link TypeReferenceAssert}.
    *
-   * @param typeReference a {@link TypeReference}; may be null.
+   * @param actual a {@link TypeReference}; may be null.
    * @return a new {@link TypeReferenceAssert}; never null.
    */
-  public static TypeReferenceAssert assertThat(TypeReference typeReference) {
-    return new TypeReferenceAssert(typeReference);
+  public static TypeReferenceAssert assertThat(TypeReference actual) {
+    return new TypeReferenceAssert(actual);
   }
 
   /**
    * Creates a {@link InstructionAssert}.
    *
-   * @param abstractInsnNode a {@link AbstractInsnNode}; may be null.
+   * @param actual a {@link AbstractInsnNode}; may be null.
    * @return a new {@link InstructionAssert}; never null.
    */
-  public static InstructionAssert assertThat(AbstractInsnNode abstractInsnNode) {
-    return new InstructionAssert(abstractInsnNode);
+  public static InstructionAssert assertThat(AbstractInsnNode actual) {
+    return new InstructionAssert(actual);
+  }
+
+  /**
+   * Creates an {@link IterableAssert} for {@link AbstractInsnNode}s which uses
+   * {@link InsnListRepresentation#INSTANCE} for the representation and for
+   * equality {@link InsnListComparator#INSTANCE}.
+   *
+   * <p>To exclude {@link LineNumberNode}s from the comparison use
+   * {@link #assertThatInstructionsIgnoreLineNumbers(Iterable)}.
+   *
+   * <p>To override the representation or comparator call
+   * {@link IterableAssert#usingComparator(Comparator)} or
+   * {@link IterableAssert#withRepresentation(Representation)}.
+   *
+   * @param actual an {@link InsnList}; may be null.
+   * @return a new {@link IterableAssert}; never null.
+   * @see #assertThatInstructions(Iterable)
+   * @see #assertThatInstructionsIgnoreLineNumbers(Iterable)
+   */
+  public static IterableAssert<AbstractInsnNode> assertThat(InsnList actual) {
+    return assertThatInstructions(actual);
   }
 
   // ---- Iterable ---------------------------------------------------------- //
@@ -229,11 +255,11 @@ public final class AsmAssertions {
    * {@link IterableAssert#usingComparator(Comparator)} or
    * {@link IterableAssert#withRepresentation(Representation)}.
    *
-   * @param attributes an {@link Iterable} of {@link Attribute}s; may be null.
+   * @param actual an {@link Iterable} of {@link Attribute}s; may be null.
    * @return a new {@link IterableAssert}; never null.
    */
-  public static IterableAssert<Attribute> assertThatAttributes(Iterable<Attribute> attributes) {
-    return Assertions.assertThat(attributes)
+  public static IterableAssert<Attribute> assertThatAttributes(Iterable<Attribute> actual) {
+    return Assertions.assertThat(actual)
                      .withRepresentation(AttributeRepresentation.INSTANCE)
                      .usingElementComparator(AttributeComparator.INSTANCE)
                      .usingComparator(AttributeComparator.ITERABLE_INSTANCE);
@@ -249,12 +275,12 @@ public final class AsmAssertions {
    * {@link IterableAssert#usingComparator(Comparator)} or
    * {@link IterableAssert#withRepresentation(Representation)}.
    *
-   * @param annotationNodes an {@link Iterable} of {@link AnnotationNode}s; may
-   *                        be null.
+   * @param actual an {@link Iterable} of {@link AnnotationNode}s; may
+   *               be null.
    * @return a new {@link IterableAssert}; never null.
    */
-  public static IterableAssert<AnnotationNode> assertThatAnnotationNodes(Iterable<AnnotationNode> annotationNodes) {
-    return Assertions.assertThat(annotationNodes)
+  public static IterableAssert<AnnotationNode> assertThatAnnotationNodes(Iterable<AnnotationNode> actual) {
+    return Assertions.assertThat(actual)
                      .withRepresentation(AnnotationNodeRepresentation.INSTANCE)
                      .usingElementComparator(AnnotationNodeComparator.INSTANCE)
                      .usingComparator(AnnotationNodeComparator.ITERABLE_INSTANCE);
@@ -270,12 +296,12 @@ public final class AsmAssertions {
    * {@link IterableAssert#usingComparator(Comparator)} or
    * {@link IterableAssert#withRepresentation(Representation)}.
    *
-   * @param typeAnnotationNodes an {@link Iterable} of {@link TypeAnnotationNode}s;
-   *                            may be null.
+   * @param actual an {@link Iterable} of {@link TypeAnnotationNode}s;
+   *               may be null.
    * @return a new {@link IterableAssert}; never null.
    */
-  public static IterableAssert<TypeAnnotationNode> assertThatTypeAnnotationNodes(Iterable<TypeAnnotationNode> typeAnnotationNodes) {
-    return Assertions.assertThat(typeAnnotationNodes)
+  public static IterableAssert<TypeAnnotationNode> assertThatTypeAnnotationNodes(Iterable<TypeAnnotationNode> actual) {
+    return Assertions.assertThat(actual)
                      .withRepresentation(TypeAnnotationNodeRepresentation.INSTANCE)
                      .usingElementComparator(TypeAnnotationNodeComparator.INSTANCE)
                      .usingComparator(TypeAnnotationNodeComparator.ITERABLE_INSTANCE);
@@ -291,11 +317,11 @@ public final class AsmAssertions {
    * {@link IterableAssert#usingComparator(Comparator)} or
    * {@link IterableAssert#withRepresentation(Representation)}.
    *
-   * @param typePaths an {@link Iterable} of {@link TypePath}s; may be null.
+   * @param actual an {@link Iterable} of {@link TypePath}s; may be null.
    * @return a new {@link IterableAssert}; never null.
    */
-  public static IterableAssert<TypePath> assertThatTypePaths(Iterable<TypePath> typePaths) {
-    return Assertions.assertThat(typePaths)
+  public static IterableAssert<TypePath> assertThatTypePaths(Iterable<TypePath> actual) {
+    return Assertions.assertThat(actual)
                      .withRepresentation(TypePathRepresentation.INSTANCE)
                      .usingElementComparator(TypePathComparator.INSTANCE)
                      .usingComparator(TypePathComparator.ITERABLE_INSTANCE);
@@ -311,11 +337,11 @@ public final class AsmAssertions {
    * {@link IterableAssert#usingComparator(Comparator)} or
    * {@link IterableAssert#withRepresentation(Representation)}.
    *
-   * @param types an {@link Iterable} of {@link Type}s; may be null.
+   * @param actual an {@link Iterable} of {@link Type}s; may be null.
    * @return a new {@link IterableAssert}; never null.
    */
-  public static IterableAssert<Type> assertThatTypes(Iterable<Type> types) {
-    return Assertions.assertThat(types)
+  public static IterableAssert<Type> assertThatTypes(Iterable<Type> actual) {
+    return Assertions.assertThat(actual)
                      .withRepresentation(TypeRepresentation.INSTANCE)
                      .usingElementComparator(TypeComparator.INSTANCE)
                      .usingComparator(TypeComparator.ITERABLE_INSTANCE);
@@ -331,33 +357,61 @@ public final class AsmAssertions {
    * {@link IterableAssert#usingComparator(Comparator)} or
    * {@link IterableAssert#withRepresentation(Representation)}.
    *
-   * @param typeReferences an {@link Iterable} of {@link TypeReference}s;
-   *                       may be null.
+   * @param actual an {@link Iterable} of {@link TypeReference}s;
+   *               may be null.
    * @return a new {@link IterableAssert}; never null.
    */
-  public static IterableAssert<TypeReference> assertThatTypeReferences(Iterable<TypeReference> typeReferences) {
-    return Assertions.assertThat(typeReferences)
+  public static IterableAssert<TypeReference> assertThatTypeReferences(Iterable<TypeReference> actual) {
+    return Assertions.assertThat(actual)
                      .withRepresentation(TypeReferenceRepresentation.INSTANCE)
                      .usingElementComparator(TypeReferenceComparator.INSTANCE)
                      .usingComparator(TypeReferenceComparator.ITERABLE_INSTANCE);
   }
 
   /**
-   * Creates an {@link IterableAssert} for {@link TypeReference}s which uses
-   * {@link TypeReferenceRepresentation#INSTANCE} for the representation and for
-   * equality {@link TypeReferenceComparator#INSTANCE} and
-   * {@link TypeReferenceComparator#ITERABLE_INSTANCE}.
+   * Creates an {@link IterableAssert} for {@link AbstractInsnNode}s which uses
+   * {@link InsnListRepresentation#INSTANCE} for the representation and for
+   * equality {@link InsnListComparator#INSTANCE}.
+   *
+   * <p>To exclude {@link LineNumberNode}s from the comparison use
+   * {@link #assertThatInstructionsIgnoreLineNumbers(Iterable)}.
    *
    * <p>To override the representation or comparator call
    * {@link IterableAssert#usingComparator(Comparator)} or
    * {@link IterableAssert#withRepresentation(Representation)}.
    *
-   * @param instructions an {@link Iterable} of {@link TypeReference}s;
-   *                       may be null.
+   * @param actual an {@link Iterable} of {@link AbstractInsnNode}s;
+   *               may be null.
+   * @return a new {@link IterableAssert}; never null.
+   * @see #assertThat(InsnList)
+   * @see #assertThatInstructionsIgnoreLineNumbers(Iterable)
+   */
+  public static IterableAssert<AbstractInsnNode> assertThatInstructions(Iterable<AbstractInsnNode> actual) {
+    return Assertions.assertThat(InsnListUtils.toInsnList(actual))
+                     .as("Instructions")
+                     .withRepresentation(InsnListRepresentation.INSTANCE)
+                     .usingComparator(InsnListComparator.INSTANCE);
+  }
+
+  /**
+   * Creates an {@link IterableAssert} for {@link AbstractInsnNode}s which uses
+   * {@link InsnListRepresentation#INSTANCE} for the representation and for
+   * equality {@link InsnListComparator#INSTANCE}. Any {@link LineNumberNode}s
+   * will be excluded form the comparison.
+   *
+   * <p>To override the representation or comparator call
+   * {@link IterableAssert#usingComparator(Comparator)} or
+   * {@link IterableAssert#withRepresentation(Representation)}.
+   *
+   * @param actual an {@link Iterable} of {@link AbstractInsnNode}s;
+   *               may be null.
    * @return a new {@link IterableAssert}; never null.
    */
-  public static IterableAssert<TypeReference> assertThatInstructions(Iterable<AbstractInsnNode> instructions) {
-    return null;
+  public static IterableAssert<AbstractInsnNode> assertThatInstructionsIgnoreLineNumbers(Iterable<AbstractInsnNode> actual) {
+    return Assertions.assertThat(InsnListUtils.toInsnList(actual))
+                     .as("Instructions - ignore line numbers")
+                     .withRepresentation(InsnListRepresentation.INSTANCE)
+                     .usingComparator(InsnListComparator.INSTANCE_IGNORE_LINE_NUMBERS);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

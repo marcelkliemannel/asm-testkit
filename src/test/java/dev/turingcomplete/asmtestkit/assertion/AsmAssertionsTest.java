@@ -3,6 +3,7 @@ package dev.turingcomplete.asmtestkit.assertion;
 import dev.turingcomplete.asmtestkit.assertion.__helper.DummyAttribute;
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationB;
+import dev.turingcomplete.asmtestkit.compile.CompilationResult;
 import org.assertj.core.api.Assertions;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
@@ -10,12 +11,14 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.TypePath;
 import org.objectweb.asm.TypeReference;
 import org.objectweb.asm.tree.AnnotationNode;
+import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.io.IOException;
 import java.util.List;
 
 import static dev.turingcomplete.asmtestkit.compile.CompilationEnvironment.create;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AsmAssertionsTest {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -167,7 +170,7 @@ class AsmAssertionsTest {
 
     // Test comparator
     AsmAssertions.assertThatTypeReferences(List.of(new TypeReference(firstTypeAnnotationNode.typeRef), new TypeReference(secondTypeAnnotationNode.typeRef)))
-            .containsExactlyInAnyOrderElementsOf(List.of(new TypeReference(firstTypeAnnotationNode.typeRef), new TypeReference(secondTypeAnnotationNode.typeRef)));
+                 .containsExactlyInAnyOrderElementsOf(List.of(new TypeReference(firstTypeAnnotationNode.typeRef), new TypeReference(secondTypeAnnotationNode.typeRef)));
 
     // Test representation
     Assertions.assertThatThrownBy(() -> AsmAssertions.assertThatTypeReferences(List.of(new TypeReference(firstTypeAnnotationNode.typeRef), new TypeReference(secondTypeAnnotationNode.typeRef)))
@@ -182,6 +185,114 @@ class AsmAssertionsTest {
                           "and elements not expected:\n" +
                           "  [class_type_parameter=0]\n" +
                           "when comparing values using TypeReferenceComparator");
+  }
+
+  @Test
+  void testAssertThatInstructions() throws IOException {
+    @Language("Java")
+    String firstMyClass = "class FirstMyClass {" +
+                          "  void myMethod() {" +
+                          "    System.out.println(1);" +
+                          "  }" +
+                          "}";
+    @Language("Java")
+    String secondMyClass = "class SecondMyClass {" +
+                           "  void myMethod() {" +
+                           "    System.out.println(1);" +
+                           "  }" +
+                           "}";
+    @Language("Java")
+    String thirdMyClass = "class ThirdMyClass {" +
+                          "  void myMethod() {" +
+                          "    throw new IllegalArgumentException();" +
+                          "  }" +
+                          "}";
+    CompilationResult result = create()
+            .addJavaInputSource(firstMyClass)
+            .addJavaInputSource(secondMyClass)
+            .addJavaInputSource(thirdMyClass)
+            .compile();
+
+    InsnList firstInstructions = result.readClassNode("FirstMyClass").methods.get(1).instructions;
+    InsnList secondInstructions = result.readClassNode("SecondMyClass").methods.get(1).instructions;
+    InsnList thirdInstructions = result.readClassNode("ThirdMyClass").methods.get(1).instructions;
+
+    AsmAssertions.assertThatInstructions(firstInstructions)
+                 .isEqualTo(secondInstructions);
+
+    assertThatThrownBy(() -> AsmAssertions.assertThatInstructions(firstInstructions)
+                                          .isEqualTo(thirdInstructions))
+            .isInstanceOf(AssertionError.class)
+            .hasMessage("[Instructions] \n" +
+                        "expected: L0\n" +
+                        "  LINENUMBER 1 L0\n" +
+                        "  NEW java/lang/IllegalArgumentException (Opcode: 187)\n" +
+                        "  DUP (Opcode: 89)\n" +
+                        "  INVOKESPECIAL java/lang/IllegalArgumentException.<init> ()V (Opcode: 183)\n" +
+                        "  ATHROW (Opcode: 191)\n" +
+                        "L1\n" +
+                        " but was: L0\n" +
+                        "  LINENUMBER 1 L0\n" +
+                        "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream; (Opcode: 178)\n" +
+                        "  ICONST_1 (Opcode: 4)\n" +
+                        "  INVOKEVIRTUAL java/io/PrintStream.println (I)V (Opcode: 182)\n" +
+                        "  RETURN (Opcode: 177)\n" +
+                        "L1\n" +
+                        "when comparing values using InsnListComparator");
+  }
+
+  @Test
+  void testAssertThatInstructionsIgnoreLineNumbers() throws IOException {
+    @Language("Java")
+    String firstMyClass = "class FirstMyClass {" +
+                          "  void myMethod() {" +
+                          "    System.out.println(1);\n" +
+                          "  }" +
+                          "}";
+    @Language("Java")
+    String secondMyClass = "class SecondMyClass {" +
+                           "  void myMethod() {" +
+                           "    System.out.println(1);" +
+                           "  }" +
+                           "}";
+    @Language("Java")
+    String thirdMyClass = "class ThirdMyClass {" +
+                          "  void myMethod() {" +
+                          "    System.out.println(2);" +
+                          "  }" +
+                          "}";
+    CompilationResult result = create()
+            .addJavaInputSource(firstMyClass)
+            .addJavaInputSource(secondMyClass)
+            .addJavaInputSource(thirdMyClass)
+            .compile();
+
+    InsnList firstInstructions = result.readClassNode("FirstMyClass").methods.get(1).instructions;
+    InsnList secondInstructions = result.readClassNode("SecondMyClass").methods.get(1).instructions;
+    InsnList thirdInstructions = result.readClassNode("ThirdMyClass").methods.get(1).instructions;
+
+    AsmAssertions.assertThatInstructionsIgnoreLineNumbers(firstInstructions)
+                 .isEqualTo(secondInstructions);
+
+    assertThatThrownBy(() -> AsmAssertions.assertThatInstructionsIgnoreLineNumbers(secondInstructions)
+                                          .isEqualTo(thirdInstructions))
+            .isInstanceOf(AssertionError.class)
+            .hasMessage("[Instructions - ignore line numbers] \n" +
+                        "expected: L0\n" +
+                        "  LINENUMBER 1 L0\n" +
+                        "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream; (Opcode: 178)\n" +
+                        "  ICONST_2 (Opcode: 5)\n" +
+                        "  INVOKEVIRTUAL java/io/PrintStream.println (I)V (Opcode: 182)\n" +
+                        "  RETURN (Opcode: 177)\n" +
+                        "L1\n" +
+                        " but was: L0\n" +
+                        "  LINENUMBER 1 L0\n" +
+                        "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream; (Opcode: 178)\n" +
+                        "  ICONST_1 (Opcode: 4)\n" +
+                        "  INVOKEVIRTUAL java/io/PrintStream.println (I)V (Opcode: 182)\n" +
+                        "  RETURN (Opcode: 177)\n" +
+                        "L1\n" +
+                        "when comparing values using InsnListComparator");
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

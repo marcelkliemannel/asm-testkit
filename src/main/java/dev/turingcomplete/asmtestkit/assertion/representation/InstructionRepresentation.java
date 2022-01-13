@@ -8,11 +8,13 @@ import org.objectweb.asm.util.TraceMethodVisitor;
  * Creates a {@link String} representation of a {@link AbstractInsnNode}.
  *
  * <p>Example output:
- * <pre>{@code @java.lang.Deprecated(forRemoval=true)
- * (131073) public deprecated int myField = 5
- * }</pre>
+ * <pre>{@code BIPUSH 42 (Opcode: 16)}</pre>
+ * <pre>{@code LOOKUPSWITCH (Opcode: 171)
+ *  1: L0
+ *  2: L1
+ *  default: L2}</pre>
  *
- * <p>Example simplified output: {@code (131073) public deprecated int myField}.
+ * <p>The simplified output will not have the appended opcode information.
  */
 public class InstructionRepresentation extends AsmRepresentation<AbstractInsnNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -33,7 +35,7 @@ public class InstructionRepresentation extends AsmRepresentation<AbstractInsnNod
 
   @Override
   protected String createSimplifiedRepresentation(AbstractInsnNode abstractInsnNode) {
-    return TextifierUtils.textify(textifier -> {
+    return TextifierUtils.toString(textifier -> {
       textifier.setTab2(0);
       textifier.setTab3(1);
       abstractInsnNode.accept(new TraceMethodVisitor(textifier));
@@ -43,20 +45,26 @@ public class InstructionRepresentation extends AsmRepresentation<AbstractInsnNod
   @Override
   protected String createRepresentation(AbstractInsnNode abstractInsnNode) {
     String textifiedInstruction = createSimplifiedRepresentation(abstractInsnNode);
-    if (abstractInsnNode.getOpcode() >= 0) {
-      String opcodeRepresentation = " (Opcode: " + abstractInsnNode.getOpcode() + ")";
+    return appendOpcode(abstractInsnNode.getOpcode(), textifiedInstruction);
+  }
 
-      int indexOfFirstNewLine = textifiedInstruction.indexOf("\n");
+  static String appendOpcode(int opcode, String textifiedInstruction) {
+    String result = textifiedInstruction;
+    if (opcode >= 0) {
+      String opcodeRepresentation = " (Opcode: " + opcode + ")";
+
+      int indexOfFirstNewLine = result.indexOf("\n");
       if (indexOfFirstNewLine >= 0) {
         // In case the instruction has multiple line, the opcode will be
         // appended to the first one.
-        textifiedInstruction = textifiedInstruction.replaceFirst("\n", opcodeRepresentation + "\n");
+        result = result.replaceFirst("\n", opcodeRepresentation + "\n");
       }
       else {
-        textifiedInstruction += opcodeRepresentation;
+        result += opcodeRepresentation;
       }
     }
-    return textifiedInstruction;
+
+    return result;
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

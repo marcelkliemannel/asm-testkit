@@ -32,7 +32,7 @@ public class AttributeRepresentation extends AsmRepresentation<Attribute> {
 
   @Override
   protected String createRepresentation(Attribute attribute) {
-    return TextifierUtils.textify(textifier -> textifier.visitAttribute(attribute))
+    return TextifierUtils.toString(textifier -> textifier.visitAttribute(attribute))
             .substring(ASM_TEXTIFIER_PREFIX.length()) // Remove prefix
             .trim();
   }

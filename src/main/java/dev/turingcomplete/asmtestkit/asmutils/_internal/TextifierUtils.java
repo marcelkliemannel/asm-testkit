@@ -1,12 +1,10 @@
 package dev.turingcomplete.asmtestkit.asmutils._internal;
 
-import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.util.Textifier;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -22,13 +20,20 @@ public final class TextifierUtils {
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
-  public static String textify(Consumer<ExtendedTextifier> textify) {
+  public static String toString(Consumer<ExtendedTextifier> textify) {
     Objects.requireNonNull(textify);
+
+    var textifier = new ExtendedTextifier();
+    textify.accept(textifier);
+
+    return toString(textifier);
+  }
+
+  public static String toString(Textifier textifier) {
+    Objects.requireNonNull(textifier);
 
     var stringWriter = new StringWriter();
     var printWriter = new PrintWriter(stringWriter);
-    var textifier = new ExtendedTextifier();
-    textify.accept(textifier);
     textifier.print(printWriter);
 
     return stringWriter.toString();
@@ -48,39 +53,19 @@ public final class TextifierUtils {
       ltab = ""; // Labels
     }
 
-    public ExtendedTextifier setTab2(int tab2) {
+    public void setTab2(int tab2) {
       Objects.checkIndex(tab2, Integer.MAX_VALUE);
       this.tab2 = " ".repeat(tab2);
-
-      return this;
     }
 
-    public ExtendedTextifier setTab3(int tab3) {
+    public void setTab3(int tab3) {
       Objects.checkIndex(tab3, Integer.MAX_VALUE);
       this.tab3 = " ".repeat(tab3);
-
-      return this;
-    }
-
-    public void addText(String text) {
-      this.text.add(text);
-    }
-
-    public String getCurrentStringBuilderValue() {
-      return stringBuilder.toString();
     }
 
     @Override
     protected Textifier createTextifier() {
       return new ExtendedTextifier();
-    }
-
-    public Map<Label, String> getLabelNames() {
-      return labelNames;
-    }
-
-    @Override
-    public void visitClassEnd() {
     }
   }
 }
