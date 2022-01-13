@@ -36,7 +36,8 @@ class AsmAssertionsTest {
     Assertions.assertThatThrownBy(() -> AsmAssertions.assertThatAttributes(List.of(new DummyAttribute("A"), new DummyAttribute("A")))
                                                      .containsExactlyInAnyOrderElementsOf(List.of(new DummyAttribute("C"), new DummyAttribute("D"))))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("\nExpecting actual:\n" +
+              .hasMessage("[Attributes] \n" +
+                          "Expecting actual:\n" +
                           "  [Anull, Anull]\n" +
                           "to contain exactly in any order:\n" +
                           "  [Cnull, Dnull]\n" +
@@ -57,7 +58,8 @@ class AsmAssertionsTest {
     Assertions.assertThatThrownBy(() -> AsmAssertions.assertThatAnnotationNodes(List.of(new AnnotationNode("LA;"), new AnnotationNode("LB;")))
                                                      .containsExactlyInAnyOrderElementsOf(List.of(new AnnotationNode("LB;"), new AnnotationNode("LC;"))))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("\nExpecting actual:\n" +
+              .hasMessage("[Annotations] \n" +
+                          "Expecting actual:\n" +
                           "  [@A, @B]\n" +
                           "to contain exactly in any order:\n" +
                           "  [@B, @C]\n" +
@@ -94,7 +96,8 @@ class AsmAssertionsTest {
     Assertions.assertThatThrownBy(() -> AsmAssertions.assertThatTypeAnnotationNodes(List.of(firstTypeAnnotationNode, secondTypeAnnotationNode))
                                                      .containsExactlyInAnyOrderElementsOf(List.of(secondTypeAnnotationNode, thirdTypeAnnotationNode)))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("\nExpecting actual:\n" +
+              .hasMessage("[Type Annotations] \n" +
+                          "Expecting actual:\n" +
                           "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: null,\n" +
                           "    @dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=1; path: null]\n" +
                           "to contain exactly in any order:\n" +
@@ -117,7 +120,8 @@ class AsmAssertionsTest {
     Assertions.assertThatThrownBy(() -> AsmAssertions.assertThatTypePaths(List.of(TypePath.fromString("[1;"), TypePath.fromString("[2;")))
                                                      .containsExactlyInAnyOrderElementsOf(List.of(TypePath.fromString("[2;"), TypePath.fromString("[3;"))))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("\nExpecting actual:\n" +
+              .hasMessage("[Type Paths] \n" +
+                          "Expecting actual:\n" +
                           "  [[1;, [2;]\n" +
                           "to contain exactly in any order:\n" +
                           "  [[2;, [3;]\n" +
@@ -138,7 +142,8 @@ class AsmAssertionsTest {
     Assertions.assertThatThrownBy(() -> AsmAssertions.assertThatTypes(List.of(Type.BOOLEAN_TYPE, Type.CHAR_TYPE))
                                                      .containsExactlyInAnyOrderElementsOf(List.of(Type.CHAR_TYPE, Type.SHORT_TYPE)))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("\nExpecting actual:\n" +
+              .hasMessage("[Types] \n" +
+                          "Expecting actual:\n" +
                           "  [boolean, char]\n" +
                           "to contain exactly in any order:\n" +
                           "  [char, short]\n" +
@@ -176,7 +181,8 @@ class AsmAssertionsTest {
     Assertions.assertThatThrownBy(() -> AsmAssertions.assertThatTypeReferences(List.of(new TypeReference(firstTypeAnnotationNode.typeRef), new TypeReference(secondTypeAnnotationNode.typeRef)))
                                                      .containsExactlyInAnyOrderElementsOf(List.of(new TypeReference(secondTypeAnnotationNode.typeRef), new TypeReference(thirdTypeAnnotationNode.typeRef))))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("\nExpecting actual:\n" +
+              .hasMessage("[Type References] \n" +
+                          "Expecting actual:\n" +
                           "  [class_type_parameter=0, class_type_parameter=0]\n" +
                           "to contain exactly in any order:\n" +
                           "  [class_type_parameter=0, class_type_parameter=1]\n" +

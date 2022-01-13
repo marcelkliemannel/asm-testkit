@@ -260,6 +260,7 @@ public final class AsmAssertions {
    */
   public static IterableAssert<Attribute> assertThatAttributes(Iterable<Attribute> actual) {
     return Assertions.assertThat(actual)
+                     .as("Attributes")
                      .withRepresentation(AttributeRepresentation.INSTANCE)
                      .usingElementComparator(AttributeComparator.INSTANCE)
                      .usingComparator(AttributeComparator.ITERABLE_INSTANCE);
@@ -281,6 +282,7 @@ public final class AsmAssertions {
    */
   public static IterableAssert<AnnotationNode> assertThatAnnotationNodes(Iterable<AnnotationNode> actual) {
     return Assertions.assertThat(actual)
+                     .as("Annotations")
                      .withRepresentation(AnnotationNodeRepresentation.INSTANCE)
                      .usingElementComparator(AnnotationNodeComparator.INSTANCE)
                      .usingComparator(AnnotationNodeComparator.ITERABLE_INSTANCE);
@@ -302,6 +304,7 @@ public final class AsmAssertions {
    */
   public static IterableAssert<TypeAnnotationNode> assertThatTypeAnnotationNodes(Iterable<TypeAnnotationNode> actual) {
     return Assertions.assertThat(actual)
+                     .as("Type Annotations")
                      .withRepresentation(TypeAnnotationNodeRepresentation.INSTANCE)
                      .usingElementComparator(TypeAnnotationNodeComparator.INSTANCE)
                      .usingComparator(TypeAnnotationNodeComparator.ITERABLE_INSTANCE);
@@ -322,6 +325,7 @@ public final class AsmAssertions {
    */
   public static IterableAssert<TypePath> assertThatTypePaths(Iterable<TypePath> actual) {
     return Assertions.assertThat(actual)
+                     .as("Type Paths")
                      .withRepresentation(TypePathRepresentation.INSTANCE)
                      .usingElementComparator(TypePathComparator.INSTANCE)
                      .usingComparator(TypePathComparator.ITERABLE_INSTANCE);
@@ -342,6 +346,7 @@ public final class AsmAssertions {
    */
   public static IterableAssert<Type> assertThatTypes(Iterable<Type> actual) {
     return Assertions.assertThat(actual)
+                     .as("Types")
                      .withRepresentation(TypeRepresentation.INSTANCE)
                      .usingElementComparator(TypeComparator.INSTANCE)
                      .usingComparator(TypeComparator.ITERABLE_INSTANCE);
@@ -363,6 +368,7 @@ public final class AsmAssertions {
    */
   public static IterableAssert<TypeReference> assertThatTypeReferences(Iterable<TypeReference> actual) {
     return Assertions.assertThat(actual)
+                     .as("Type References")
                      .withRepresentation(TypeReferenceRepresentation.INSTANCE)
                      .usingElementComparator(TypeReferenceComparator.INSTANCE)
                      .usingComparator(TypeReferenceComparator.ITERABLE_INSTANCE);
