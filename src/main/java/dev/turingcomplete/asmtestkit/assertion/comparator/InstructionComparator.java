@@ -13,6 +13,9 @@ import java.util.Objects;
  * {@link InstructionRepresentation}s are equal. Otherwise, they will be
  * ordered based on the lexicographical order of their
  * {@code InstructionRepresentation}.
+ *
+ * <p>For a {@link Comparator} for an {@link Iterable} of
+ * {@link AbstractInsnNode}s use {@link InsnListComparator}.
  */
 public class InstructionComparator implements Comparator<AbstractInsnNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
