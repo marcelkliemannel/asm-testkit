@@ -1,6 +1,9 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
+import dev.turingcomplete.asmtestkit.asmutils.ClassNameUtils;
 import org.objectweb.asm.Type;
+
+import java.util.Objects;
 
 /**
  * Creates a {@link String} representation of a {@link Type}.
@@ -26,8 +29,8 @@ public class TypeRepresentation extends AsmRepresentation<Type> {
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   /**
-   * Use the fully qualified class name representation, e.g.,
-   * {@code java.lang.String}.
+   * Use the fully qualified class name (for example {@code java.lang.String})
+   * for object names.
    *
    * @return {@code this} {@link TypeRepresentation}; never null.
    */
@@ -38,7 +41,8 @@ public class TypeRepresentation extends AsmRepresentation<Type> {
   }
 
   /**
-   * Use the internal name representation, e.g., {@code java/lang/String}.
+   * Use the internal name (for example {@code java/lang/String}) for object
+   * names.
    *
    * @return {@code this} {@link TypeRepresentation}; never null.
    */
@@ -49,7 +53,8 @@ public class TypeRepresentation extends AsmRepresentation<Type> {
   }
 
   /**
-   * Use the descriptor representation, e.g., {@code Ljava/lang/String;}.
+   * Use the descriptor (for example {@code Ljava/lang/String;}) for object
+   * names.
    *
    * @return {@code this} {@link TypeRepresentation}; never null.
    */
@@ -59,11 +64,33 @@ public class TypeRepresentation extends AsmRepresentation<Type> {
     return this;
   }
 
+  /**
+   * Transforms the given internal name to an object name with the current
+   * setting.
+   *
+   * @param internalName an internal name as {@link String}; never null.
+   * @return the transformed {@code internalName}; never null.
+   */
+  public String transformInternalName(String internalName) {
+    Objects.requireNonNull(internalName);
+
+    switch (objectNameMode) {
+      case DESCRIPTOR:
+        return "L" + internalName + ";";
+      case CLASS_NAME:
+        return ClassNameUtils.toClassName(internalName);
+      case INTERNAL_NAME:
+        return internalName;
+      default:
+        throw new IllegalStateException("Unknown " + objectNameMode.getClass() + ": " + objectNameMode + ". Please report this as a bug.");
+    }
+  }
+
   @Override
-  protected String createRepresentation(Type type) {
+  protected String doToStringOf(Type type) {
     switch (type.getSort()) {
       case Type.ARRAY:
-        return createRepresentation(type.getElementType()) + "[]".repeat(type.getDimensions());
+        return doToStringOf(type.getElementType()) + "[]".repeat(type.getDimensions());
       case Type.OBJECT:
         // Fall through
       case 12: // INTERNAL
@@ -85,7 +112,7 @@ public class TypeRepresentation extends AsmRepresentation<Type> {
       case INTERNAL_NAME:
         return className.replace('.', '/');
       default:
-        throw new IllegalStateException("Unknown " + objectNameMode.getClass() + ": " + objectNameMode);
+        throw new IllegalStateException("Unknown " + objectNameMode.getClass() + ": " + objectNameMode + ". Please report this as a bug.");
     }
   }
 

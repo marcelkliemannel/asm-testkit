@@ -1,21 +1,30 @@
-package dev.turingcomplete.asmtestkit.assertion.representation;
+package dev.turingcomplete.asmtestkit.assertion.comparator;
 
 import org.junit.jupiter.api.Test;
-import org.objectweb.asm.TypePath;
+import org.objectweb.asm.Label;
+import org.objectweb.asm.tree.LabelNode;
 
-import static dev.turingcomplete.asmtestkit.assertion.representation.TypePathRepresentation.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class TypePathRepresentationTest {
+class LabelNodeComparatorTest {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Test
-  void testToStringOf() {
-    assertThat(INSTANCE.toStringOf(TypePath.fromString("*")))
-            .isEqualTo("*");
+  void testCompare() {
+    var firstLabelNode = new LabelNode();
+
+    var label = new Label();
+    var secondLabelNode = new LabelNode(label);
+    var thirdLabelNode = new LabelNode(label);
+
+    assertThat(LabelNodeComparator.INSTANCE.compare(firstLabelNode, secondLabelNode))
+            .isNotEqualTo(0);
+
+    assertThat(LabelNodeComparator.INSTANCE.compare(secondLabelNode, thirdLabelNode))
+            .isEqualTo(0);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

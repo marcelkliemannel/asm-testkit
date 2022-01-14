@@ -30,7 +30,7 @@ class InstructionRepresentationTest {
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Test
-  void testCreateRepresentation() throws IOException {
+  void testToStringOf() throws IOException {
     InsnList instructions = create()
             .addJavaInputSource(MY_CLASS)
             .compile()
@@ -50,7 +50,7 @@ class InstructionRepresentationTest {
   }
 
   @Test
-  void testSwitchIndentCreateRepresentation() throws IOException {
+  void testSwitchIndentToStringOf() throws IOException {
     @Language("Java")
     String myClass = "class MyClass {" +
                         "  void myMethod(int foo) {" +
@@ -77,7 +77,7 @@ class InstructionRepresentationTest {
   }
 
   @Test
-  void testCreateSimplifiedRepresentation() throws IOException {
+  void testToSimplifiedStringOf() throws IOException {
     InsnList instructions = create()
             .addJavaInputSource(MY_CLASS)
             .compile()
@@ -92,7 +92,7 @@ class InstructionRepresentationTest {
                                                    "RETURN",
                                                    "L0");
 
-    Assertions.assertThat(Arrays.stream(instructions.toArray()).map(InstructionRepresentation.INSTANCE::createSimplifiedRepresentation))
+    Assertions.assertThat(Arrays.stream(instructions.toArray()).map(InstructionRepresentation.INSTANCE::doToSimplifiedStringOf))
               .containsExactlyElementsOf(expectedRepresentations);
   }
 

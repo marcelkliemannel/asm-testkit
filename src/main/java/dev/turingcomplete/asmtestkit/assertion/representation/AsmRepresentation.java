@@ -28,14 +28,14 @@ public abstract class AsmRepresentation<T> extends StandardRepresentation {
    *               never null.
    * @return the {@link String} representation; may be null.
    */
-  protected abstract String createRepresentation(T object);
+  protected abstract String doToStringOf(T object);
 
   /**
    * Creates a simplified {@link String} representation of the given
    * {@code object}.
    *
-   * <p>Subtypes should override {@link #createSimplifiedRepresentation(Object)}.
-   * Otherwise, the same value as {@link #createRepresentation(Object)} will be
+   * <p>Subtypes should override {@link #doToSimplifiedStringOf(Object)}.
+   * Otherwise, the same value as {@link #doToStringOf(Object)} will be
    * returned.
    *
    * <p>A simplified representation should have a limited length and should
@@ -49,8 +49,8 @@ public abstract class AsmRepresentation<T> extends StandardRepresentation {
    *               of; may be null.
    * @return the {@link String} representation; may be null.
    */
-  public final String toSimplifiedRepresentation(T object) {
-    return object != null ? createSimplifiedRepresentation(object) : null;
+  public final String toSimplifiedStringOf(T object) {
+    return object != null ? doToSimplifiedStringOf(object) : null;
   }
 
   /**
@@ -58,7 +58,7 @@ public abstract class AsmRepresentation<T> extends StandardRepresentation {
    * {@code object}.
    *
    * <p>The default implementation will return the same values as
-   * {@link #createRepresentation(Object)}.
+   * {@link #doToStringOf(Object)}.
    *
    * <p>A simplified representation should have a limited length and should
    * not contain line breaks. It should reflect the essence of an object,
@@ -71,14 +71,14 @@ public abstract class AsmRepresentation<T> extends StandardRepresentation {
    *               of; never null.
    * @return the {@link String} representation; may be null.
    */
-  protected String createSimplifiedRepresentation(T object) {
-    return createRepresentation(object);
+  protected String doToSimplifiedStringOf(T object) {
+    return doToStringOf(object);
   }
 
   @Override
   protected final String fallbackToStringOf(Object object) {
     if (objectClass.isInstance(object)) {
-      return createRepresentation(objectClass.cast(object));
+      return doToStringOf(objectClass.cast(object));
     }
 
     return super.fallbackToStringOf(object);

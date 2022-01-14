@@ -1,5 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
+import dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils;
 import dev.turingcomplete.asmtestkit.assertion.__helper.DummyAttribute;
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationB;
@@ -7,16 +8,21 @@ import dev.turingcomplete.asmtestkit.compile.CompilationResult;
 import org.assertj.core.api.Assertions;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.TypePath;
 import org.objectweb.asm.TypeReference;
 import org.objectweb.asm.tree.AnnotationNode;
+import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.io.IOException;
 import java.util.List;
 
+import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.asserThatFields;
+import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLabels;
 import static dev.turingcomplete.asmtestkit.compile.CompilationEnvironment.create;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -299,6 +305,66 @@ class AsmAssertionsTest {
                         "  RETURN (Opcode: 177)\n" +
                         "L1\n" +
                         "when comparing values using InsnListComparator");
+  }
+
+  @Test
+  void testAssertThatFields() {
+
+
+
+    var firstLabelNode = new LabelNode();
+
+    var label = new Label();
+    var secondLabelNode = new LabelNode(label);
+    var thirdLabelNode = new LabelNode(label);
+
+    var fourthLabelNode = new LabelNode();
+
+    assertThatLabels(List.of(secondLabelNode))
+            .containsExactlyInAnyOrderElementsOf(List.of(thirdLabelNode));
+
+    assertThatThrownBy(() ->  assertThatLabels(List.of(firstLabelNode, secondLabelNode)).containsExactlyInAnyOrderElementsOf(List.of(thirdLabelNode, fourthLabelNode)))
+            .isInstanceOf(AssertionError.class)
+            .hasMessage(String.format("[Labels] \n" +
+                                      "Expecting actual:\n" +
+                                      "  [L%1$s, L%2$s]\n" +
+                                      "to contain exactly in any order:\n" +
+                                      "  [L%2$s, L%3$s]\n" +
+                                      "elements not found:\n" +
+                                      "  [L%3$s]\n" +
+                                      "and elements not expected:\n" +
+                                      "  [L%1$s]\n" +
+                                      "when comparing values using LabelNodeComparator",
+                                      firstLabelNode.getLabel().hashCode(), label.hashCode(),
+                                      fourthLabelNode.getLabel().hashCode()));
+  }
+
+  @Test
+  void testAssertThatLabels() {
+    var first1FieldNode = new FieldNode(0, "first", "I", null, null);
+    var first2FieldNode = new FieldNode(0, "first", "I", null, null);
+    var secondFieldNode = new FieldNode(0, "second", "Ljava/lang/String;", null, "foo");
+    secondFieldNode.visibleAnnotations = List.of(AnnotationNodeUtils.createAnnotationNode(Deprecated.class));
+    var thirdFieldNode = new FieldNode(1, "third", "Ljava/lang/Integer;", null, null);
+
+    asserThatFields(List.of(first1FieldNode))
+            .containsExactlyInAnyOrderElementsOf(List.of(first2FieldNode));
+
+    assertThatThrownBy(() -> asserThatFields(List.of(first1FieldNode, secondFieldNode)).containsExactlyInAnyOrderElementsOf(List.of(secondFieldNode, thirdFieldNode)))
+            .isInstanceOf(AssertionError.class)
+            .hasMessage("[Labels] \n" +
+                        "Expecting actual:\n" +
+                        "  [(0) int first, @java.lang.Deprecated\n" +
+                        "(0) java.lang.String second = foo]\n" +
+                        "to contain exactly in any order:\n" +
+                        "  [@java.lang.Deprecated\n" +
+                        "(0) java.lang.String second = foo,\n" +
+                        "    (1) public java.lang.Integer third]\n" +
+                        "elements not found:\n" +
+                        "  [(1) public java.lang.Integer third]\n" +
+                        "and elements not expected:\n" +
+                        "  [(0) int first]\n" +
+                        "when comparing values using FieldNodeComparator");
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

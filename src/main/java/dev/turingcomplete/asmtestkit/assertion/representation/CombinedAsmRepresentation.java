@@ -42,9 +42,10 @@ public final class CombinedAsmRepresentation extends StandardRepresentation {
     ASM_REPRESENTATIONS.add(TypeReferenceRepresentation.INSTANCE);
     ASM_REPRESENTATIONS.add(FieldNodeRepresentation.INSTANCE);
     ASM_REPRESENTATIONS.add(InstructionRepresentation.INSTANCE);
+    ASM_REPRESENTATIONS.add(LabelNodeRepresentation.INSTANCE);
 
     // An 'InsnList' is an 'Iterable' and would be handled in the 'toStringOf'
-    registerFormatterForType(InsnList.class, InsnListRepresentation.INSTANCE::createRepresentation);
+    registerFormatterForType(InsnList.class, InsnListRepresentation.INSTANCE::doToStringOf);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //

@@ -11,11 +11,24 @@ public class AccessComparator extends AsmComparator<Integer> {
   /**
    * A reusable {@link AccessComparator} instance.
    */
-  public static final AccessComparator INSTANCE = new AccessComparator();
+  public static final AccessComparator INSTANCE = create();
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
+
+  protected AccessComparator() {
+  }
+
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  /**
+   * Creates a new {@link AccessComparator} instance.
+   *
+   * @return a new {@link AccessComparator}; never null;
+   */
+  public static AccessComparator create() {
+    return new AccessComparator();
+  }
 
   @Override
   protected int doCompare(Integer first, Integer second) {

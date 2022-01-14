@@ -6,6 +6,7 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.util.TraceMethodVisitor;
+
 /**
  * Creates a {@link String} representation of an {@link InsnList}.
  *
@@ -37,7 +38,7 @@ public class InsnListRepresentation extends AsmRepresentation<InsnList> {
 
   static {
     // An 'InsnList' is an 'Iterable' and would be handled in the 'toStringOf'
-    registerFormatterForType(InsnList.class, InsnListRepresentation.INSTANCE::createRepresentation);
+    registerFormatterForType(InsnList.class, InsnListRepresentation.INSTANCE::doToStringOf);
   }
 
   public InsnListRepresentation() {
@@ -58,12 +59,12 @@ public class InsnListRepresentation extends AsmRepresentation<InsnList> {
   }
 
   @Override
-  protected String createSimplifiedRepresentation(InsnList insnList) {
+  protected String doToSimplifiedStringOf(InsnList insnList) {
     return insnList.size() + " instruction" + (insnList.size() != 1 ? "s" : "");
   }
 
   @Override
-  protected String createRepresentation(InsnList insnList) {
+  protected String doToStringOf(InsnList insnList) {
     var textifier = !hideOpcode ? new OpcodeAppendingTextifier() : new TextifierUtils.ExtendedTextifier();
     insnList.accept(new TraceMethodVisitor(textifier));
     return TextifierUtils.toString(textifier).replaceAll("[\n\r]$", "");

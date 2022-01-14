@@ -20,7 +20,7 @@ public class AttributeComparator extends AsmComparator<Attribute> {
   /**
    * A reusable {@link AttributeComparator} instance.
    */
-  public static final AttributeComparator INSTANCE = new AttributeComparator();
+  public static final AttributeComparator INSTANCE = create();
 
   /**
    * A reusable {@link Comparator} instance for an {@link Iterable} of
@@ -33,7 +33,20 @@ public class AttributeComparator extends AsmComparator<Attribute> {
   private AttributeRepresentation attributeRepresentation = AttributeRepresentation.INSTANCE;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
+
+  protected AttributeComparator() {
+  }
+
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  /**
+   * Creates a new {@link AttributeComparator} instance.
+   *
+   * @return a new {@link AttributeComparator}; never null;
+   */
+  public static AttributeComparator create() {
+    return new AttributeComparator();
+  }
 
   /**
    * Sets the used {@link AttributeRepresentation}.

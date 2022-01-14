@@ -23,7 +23,7 @@ public class TypePathRepresentation extends AsmRepresentation<TypePath> {
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Override
-  protected String createRepresentation(TypePath typePath) {
+  protected String doToStringOf(TypePath typePath) {
     return typePath.toString();
   }
 

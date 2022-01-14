@@ -13,14 +13,14 @@ class AttributeRepresentationTest {
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Test
-  void testCreateRepresentation() {
+  void testToStringOf() {
     assertThat(INSTANCE.toStringOf(new DummyAttribute("Name", "Content")))
             .isEqualTo("NameContent");
   }
 
   @Test
-  void testCreateSimplifiedRepresentation() {
-    assertThat(INSTANCE.createSimplifiedRepresentation(new DummyAttribute("Name", "Content")))
+  void testToSimplifiedStringOf() {
+    assertThat(INSTANCE.doToSimplifiedStringOf(new DummyAttribute("Name", "Content")))
             .isEqualTo("Name");
   }
 

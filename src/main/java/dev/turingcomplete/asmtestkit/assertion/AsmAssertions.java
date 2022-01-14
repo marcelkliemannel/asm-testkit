@@ -4,14 +4,18 @@ import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
 import dev.turingcomplete.asmtestkit.asmutils.InsnListUtils;
 import dev.turingcomplete.asmtestkit.assertion.comparator.AnnotationNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.AttributeComparator;
+import dev.turingcomplete.asmtestkit.assertion.comparator.FieldNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.InsnListComparator;
+import dev.turingcomplete.asmtestkit.assertion.comparator.LabelNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.TypeAnnotationNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.TypeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.TypePathComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.TypeReferenceComparator;
 import dev.turingcomplete.asmtestkit.assertion.representation.AnnotationNodeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.AttributeRepresentation;
+import dev.turingcomplete.asmtestkit.assertion.representation.FieldNodeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.InsnListRepresentation;
+import dev.turingcomplete.asmtestkit.assertion.representation.LabelNodeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypeAnnotationNodeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypePathRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypeReferenceRepresentation;
@@ -27,6 +31,7 @@ import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
@@ -243,6 +248,16 @@ public final class AsmAssertions {
     return assertThatInstructions(actual);
   }
 
+  /**
+   * Creates a {@link LabelNodeAssert}.
+   *
+   * @param actual a {@link LabelNode}; may be null.
+   * @return a new {@link LabelNodeAssert}; never null.
+   */
+  public static LabelNodeAssert assertThat(LabelNode actual) {
+    return new LabelNodeAssert(actual);
+  }
+
   // ---- Iterable ---------------------------------------------------------- //
 
   /**
@@ -402,8 +417,8 @@ public final class AsmAssertions {
   /**
    * Creates an {@link IterableAssert} for {@link AbstractInsnNode}s which uses
    * {@link InsnListRepresentation#INSTANCE} for the representation and for
-   * equality {@link InsnListComparator#INSTANCE}. Any {@link LineNumberNode}s
-   * will be excluded form the comparison.
+   * equality {@link InsnListComparator#INSTANCE_IGNORE_LINE_NUMBERS}. Any
+   * {@link LineNumberNode}s will be excluded form the comparison.
    *
    * <p>To override the representation or comparator call
    * {@link IterableAssert#usingComparator(Comparator)} or
@@ -418,6 +433,48 @@ public final class AsmAssertions {
                      .as("Instructions - ignore line numbers")
                      .withRepresentation(InsnListRepresentation.INSTANCE)
                      .usingComparator(InsnListComparator.INSTANCE_IGNORE_LINE_NUMBERS);
+  }
+
+  /**
+   * Creates an {@link IterableAssert} for {@link FieldNode}s which
+   * uses {@link FieldNodeRepresentation#INSTANCE} for the representation
+   * and for equality {@link FieldNodeComparator#INSTANCE} and
+   * {@link FieldNodeComparator#ITERABLE_INSTANCE}.
+   *
+   * <p>To override the representation or comparator call
+   * {@link IterableAssert#usingComparator(Comparator)} or
+   * {@link IterableAssert#withRepresentation(Representation)}.
+   *
+   * @param actual an {@link Iterable} of {@link LabelNode}s; may be null.
+   * @return a new {@link IterableAssert}; never null.
+   */
+  public static IterableAssert<FieldNode> asserThatFields(Iterable<FieldNode> actual) {
+    return Assertions.assertThat(actual)
+                     .as("Labels")
+                     .withRepresentation(FieldNodeRepresentation.INSTANCE)
+                     .usingElementComparator(FieldNodeComparator.INSTANCE)
+                     .usingComparator(FieldNodeComparator.ITERABLE_INSTANCE);
+  }
+
+  /**
+   * Creates an {@link IterableAssert} for {@link LabelNode}s which
+   * uses {@link TypeAnnotationNodeRepresentation#INSTANCE} for the representation
+   * and for equality {@link LabelNodeComparator#INSTANCE} and
+   * {@link LabelNodeComparator#ITERABLE_INSTANCE}.
+   *
+   * <p>To override the representation or comparator call
+   * {@link IterableAssert#usingComparator(Comparator)} or
+   * {@link IterableAssert#withRepresentation(Representation)}.
+   *
+   * @param actual an {@link Iterable} of {@link LabelNode}s; may be null.
+   * @return a new {@link IterableAssert}; never null.
+   */
+  public static IterableAssert<LabelNode> assertThatLabels(Iterable<LabelNode> actual) {
+    return Assertions.assertThat(actual)
+                     .as("Labels")
+                     .withRepresentation(LabelNodeRepresentation.INSTANCE)
+                     .usingElementComparator(LabelNodeComparator.INSTANCE)
+                     .usingComparator(LabelNodeComparator.ITERABLE_INSTANCE);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

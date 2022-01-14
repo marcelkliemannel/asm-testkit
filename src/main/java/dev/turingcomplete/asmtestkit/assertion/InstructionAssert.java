@@ -45,7 +45,7 @@ public class InstructionAssert extends AsmAssert<InstructionAssert, AbstractInsn
   // -- Private Methods --------------------------------------------------------------------------------------------- //
 
   private static String createSelfDescription(AbstractInsnNode actual) {
-    return "Instruction: " + InstructionRepresentation.INSTANCE.toSimplifiedRepresentation(actual);
+    return "Instruction: " + InstructionRepresentation.INSTANCE.toSimplifiedStringOf(actual);
   }
 
   // -- Inner Type -------------------------------------------------------------------------------------------------- //

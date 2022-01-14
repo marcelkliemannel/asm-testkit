@@ -18,13 +18,15 @@ import static dev.turingcomplete.asmtestkit.assertion.comparator._internal.Compa
  * equal. If their values are not equal they will be ordered based on the
  * lexicographical order of their {@link TypeAnnotationNodeRepresentation}s.
  */
-public class TypeAnnotationNodeComparator extends AbstractAnnotationNodeComparator<TypeAnnotationNode> {
+public class TypeAnnotationNodeComparator<S extends TypeAnnotationNodeComparator<S, A>, A extends TypeAnnotationNode>
+        extends AnnotationNodeComparator<S, A> {
+
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
    * A reusable {@link TypeAnnotationNodeComparator} instance.
    */
-  public static final TypeAnnotationNodeComparator INSTANCE = new TypeAnnotationNodeComparator();
+  public static final TypeAnnotationNodeComparator<?, TypeAnnotationNode> INSTANCE = createForTypeAnnotationNode();
 
   /**
    * A reusable {@link Comparator} instance for an {@link Iterable} of
@@ -38,25 +40,18 @@ public class TypeAnnotationNodeComparator extends AbstractAnnotationNodeComparat
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  public TypeAnnotationNodeComparator() {
-    super(TypeAnnotationNodeRepresentation.INSTANCE);
+  protected TypeAnnotationNodeComparator() {
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   /**
-   * Sets the used {@link TypeAnnotationNodeRepresentation}.
+   * Creates a new {@link TypeAnnotationNodeComparator} instance.
    *
-   * <p>The default value is {@link TypeAnnotationNodeRepresentation#INSTANCE}.
-   *
-   * @param typeAnnotationNodeRepresentation a {@link TypeAnnotationNodeRepresentation};
-   *                                        never null.
-   * @return {@code this} {@link TypeAnnotationNodeComparator}; never null.
+   * @return a new {@link TypeAnnotationNodeComparator}; never null;
    */
-  public TypeAnnotationNodeComparator useAnnotationNodeRepresentation(TypeAnnotationNodeRepresentation typeAnnotationNodeRepresentation) {
-    useAbstractAnnotationNodeRepresentation(Objects.requireNonNull(typeAnnotationNodeRepresentation));
-
-    return this;
+  public static TypeAnnotationNodeComparator<?, TypeAnnotationNode> createForTypeAnnotationNode() {
+    return new TypeAnnotationNodeComparator<>();
   }
 
   /**
@@ -67,14 +62,15 @@ public class TypeAnnotationNodeComparator extends AbstractAnnotationNodeComparat
    * @param typePathComparator a {@link TypePathRepresentation}; never null.
    * @return {@code this} {@link TypeAnnotationNodeComparator}; never null.
    */
-  public TypeAnnotationNodeComparator useTypePathComparator(TypePathComparator typePathComparator) {
+  public S useTypePathComparator(TypePathComparator typePathComparator) {
     this.typePathComparator = Objects.requireNonNull(typePathComparator);
 
-    return this;
+    //noinspection unchecked
+    return (S) this;
   }
 
   @Override
-  protected int doCompare(TypeAnnotationNode first, TypeAnnotationNode second) {
+  protected int doCompare(A first, A second) {
     int annotationNodeCompare = super.doCompare(first, second);
     if (annotationNodeCompare != 0) {
       return annotationNodeCompare;

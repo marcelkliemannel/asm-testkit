@@ -19,7 +19,7 @@ class InsnListRepresentationTest {
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Test
-  void testCreateRepresentation() throws IOException {
+  void testToStringOf() throws IOException {
     @Language("Java")
     String myClass = "class MyClass {\n" +
                      "  void myMethod(int foo) {\n" +
@@ -36,7 +36,7 @@ class InsnListRepresentationTest {
             .readClassNode("MyClass")
             .methods.get(1).instructions;
 
-    assertThat(InsnListRepresentation.INSTANCE.createRepresentation(instructions))
+    assertThat(InsnListRepresentation.INSTANCE.doToStringOf(instructions))
             .isEqualTo("L0\n" +
                        "  LINENUMBER 3 L0\n" +
                        "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream; (Opcode: 178)\n" +
@@ -73,7 +73,7 @@ class InsnListRepresentationTest {
 
 
   @Test
-  void testHideOpcodeCreateRepresentation() throws IOException {
+  void testHideOpcodeToStringOf() throws IOException {
     @Language("Java")
     String myClass = "class MyClass {" +
                      "  void myMethod() {" +
@@ -86,7 +86,7 @@ class InsnListRepresentationTest {
             .readClassNode("MyClass")
             .methods.get(1).instructions;
 
-    assertThat(new InsnListRepresentation().hideOpcode().createRepresentation(instructions))
+    assertThat(new InsnListRepresentation().hideOpcode().doToStringOf(instructions))
             .isEqualTo("L0\n" +
                        "  LINENUMBER 1 L0\n" +
                        "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream;\n" +
@@ -97,20 +97,20 @@ class InsnListRepresentationTest {
   }
 
   @Test
-  void testCreateSimplifiedRepresentation() {
+  void testToSimplifiedStringOf() {
     var instructions = new InsnList();
 
-    assertThat(InsnListRepresentation.INSTANCE.createSimplifiedRepresentation(instructions))
+    assertThat(InsnListRepresentation.INSTANCE.doToSimplifiedStringOf(instructions))
             .isEqualTo("0 instructions");
 
     instructions.add(new InsnNode(Opcodes.RETURN));
-    assertThat(InsnListRepresentation.INSTANCE.createSimplifiedRepresentation(instructions))
+    assertThat(InsnListRepresentation.INSTANCE.doToSimplifiedStringOf(instructions))
             .isEqualTo("1 instruction");
 
     instructions.clear();
     instructions.add(new LdcInsnNode("foo"));
     instructions.add(new InsnNode(Opcodes.RETURN));
-    assertThat(InsnListRepresentation.INSTANCE.createSimplifiedRepresentation(instructions))
+    assertThat(InsnListRepresentation.INSTANCE.doToSimplifiedStringOf(instructions))
             .isEqualTo("2 instructions");
   }
 

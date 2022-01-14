@@ -1,12 +1,15 @@
 package dev.turingcomplete.asmtestkit.assertion.representation._internal;
 
 import dev.turingcomplete.asmtestkit.assertion.representation.AnnotationNodeRepresentation;
+import dev.turingcomplete.asmtestkit.assertion.representation.AttributeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypeAnnotationNodeRepresentation;
+import org.objectweb.asm.Attribute;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class RepresentationUtils {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -22,8 +25,16 @@ public final class RepresentationUtils {
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
-  public static List<String> createAnnotationNodesRepresentations(AnnotationNodeRepresentation annotationNodeRepresentation,
-                                                                  TypeAnnotationNodeRepresentation typeAnnotationNodeRepresentation,
+  public static List<String> createAttributesRepresentations(AttributeRepresentation attributeRepresentation, List<Attribute> attributes) {
+    if (attributes == null) {
+      return List.of();
+    }
+
+    return attributes.stream().map(attributeRepresentation::toStringOf).collect(Collectors.toList());
+  }
+
+  public static List<String> createAnnotationNodesRepresentations(AnnotationNodeRepresentation<?, AnnotationNode> annotationNodeRepresentation,
+                                                                  TypeAnnotationNodeRepresentation<?, TypeAnnotationNode> typeAnnotationNodeRepresentation,
                                                                   List<AnnotationNode> visibleAnnotations,
                                                                   List<AnnotationNode> invisibleAnnotations,
                                                                   List<TypeAnnotationNode> typeVisibleAnnotations,

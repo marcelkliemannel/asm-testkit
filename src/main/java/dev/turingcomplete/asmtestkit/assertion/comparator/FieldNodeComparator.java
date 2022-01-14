@@ -1,5 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
+import dev.turingcomplete.asmtestkit.assertion.comparator._internal.IterableComparator;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.FieldNode;
@@ -28,7 +29,13 @@ public class FieldNodeComparator extends AsmComparator<FieldNode> {
   /**
    * A reusable {@link FieldNodeComparator} instance.
    */
-  public static final FieldNodeComparator INSTANCE = new FieldNodeComparator();
+  public static final FieldNodeComparator INSTANCE = create();
+
+  /**
+   * A reusable {@link Comparator} instance for an {@link Iterable} of
+   * {@link FieldNode}s.
+   */
+  public static final Comparator<Iterable<? extends FieldNode>> ITERABLE_INSTANCE = new IterableComparator<>(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
@@ -38,7 +45,20 @@ public class FieldNodeComparator extends AsmComparator<FieldNode> {
   private Comparator<Iterable<? extends Attribute>>          attributesComparator         = AttributeComparator.ITERABLE_INSTANCE;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
+
+  protected FieldNodeComparator() {
+  }
+
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  /**
+   * Creates a new {@link FieldNodeComparator} instance.
+   *
+   * @return a new {@link FieldNodeComparator}; never null;
+   */
+  public static FieldNodeComparator create() {
+    return new FieldNodeComparator();
+  }
 
   /**
    * Sets the used {@link AccessComparator}.

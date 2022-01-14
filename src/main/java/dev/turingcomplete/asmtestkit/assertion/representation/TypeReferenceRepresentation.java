@@ -18,14 +18,14 @@ public class TypeReferenceRepresentation extends AsmRepresentation<TypeReference
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  private TypeReferenceRepresentation() {
+  protected TypeReferenceRepresentation() {
     super(TypeReference.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Override
-  protected String createRepresentation(TypeReference typeReference) {
+  protected String doToStringOf(TypeReference typeReference) {
     switch (typeReference.getSort()) {
       case CLASS_TYPE_PARAMETER:
         return "class_type_parameter=" + typeReference.getTypeParameterIndex();

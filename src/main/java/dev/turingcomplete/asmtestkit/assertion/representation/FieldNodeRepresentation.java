@@ -1,13 +1,16 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
 import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
-import dev.turingcomplete.asmtestkit.assertion.representation._internal.RepresentationUtils;
-import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.util.Objects;
 import java.util.StringJoiner;
+
+import static dev.turingcomplete.asmtestkit.assertion.representation._internal.RepresentationUtils.createAnnotationNodesRepresentations;
+import static dev.turingcomplete.asmtestkit.assertion.representation._internal.RepresentationUtils.createAttributesRepresentations;
 
 /**
  * Creates a {@link String} representation of a {@link FieldNode}.
@@ -30,11 +33,11 @@ public class FieldNodeRepresentation extends AsmRepresentation<FieldNode> {
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
-  private AccessRepresentation             accessRepresentation             = AccessRepresentation.FIELD_INSTANCE;
-  private TypeRepresentation               typeRepresentation               = TypeRepresentation.INSTANCE;
-  private AttributeRepresentation          attributeRepresentation          = AttributeRepresentation.INSTANCE;
-  private AnnotationNodeRepresentation     annotationNodeRepresentation     = AnnotationNodeRepresentation.INSTANCE;
-  private TypeAnnotationNodeRepresentation typeAnnotationNodeRepresentation = TypeAnnotationNodeRepresentation.INSTANCE;
+  private AccessRepresentation                                    accessRepresentation             = AccessRepresentation.FIELD_INSTANCE;
+  private TypeRepresentation                                      typeRepresentation               = TypeRepresentation.INSTANCE;
+  private AttributeRepresentation                                 attributeRepresentation          = AttributeRepresentation.INSTANCE;
+  private AnnotationNodeRepresentation<?, AnnotationNode>         annotationNodeRepresentation     = AnnotationNodeRepresentation.INSTANCE;
+  private TypeAnnotationNodeRepresentation<?, TypeAnnotationNode> typeAnnotationNodeRepresentation = TypeAnnotationNodeRepresentation.INSTANCE;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
@@ -106,7 +109,7 @@ public class FieldNodeRepresentation extends AsmRepresentation<FieldNode> {
    *                                     never null.
    * @return {@code this} {@link FieldNodeRepresentation}; never null.
    */
-  public FieldNodeRepresentation useAnnotationNodeRepresentation(AnnotationNodeRepresentation annotationNodeRepresentation) {
+  public FieldNodeRepresentation useAnnotationNodeRepresentation(AnnotationNodeRepresentation<?, AnnotationNode> annotationNodeRepresentation) {
     this.annotationNodeRepresentation = Objects.requireNonNull(annotationNodeRepresentation);
 
     return this;
@@ -121,14 +124,14 @@ public class FieldNodeRepresentation extends AsmRepresentation<FieldNode> {
    *                                         never null.
    * @return {@code this} {@link FieldNodeRepresentation}; never null.
    */
-  public FieldNodeRepresentation useTypeAnnotationNodeRepresentation(TypeAnnotationNodeRepresentation typeAnnotationNodeRepresentation) {
+  public FieldNodeRepresentation useTypeAnnotationNodeRepresentation(TypeAnnotationNodeRepresentation<?, TypeAnnotationNode> typeAnnotationNodeRepresentation) {
     this.typeAnnotationNodeRepresentation = Objects.requireNonNull(typeAnnotationNodeRepresentation);
 
     return this;
   }
 
   @Override
-  protected String createSimplifiedRepresentation(FieldNode fieldNode) {
+  protected String doToSimplifiedStringOf(FieldNode fieldNode) {
     var representation = new StringJoiner(" ");
 
     // Access
@@ -136,7 +139,7 @@ public class FieldNodeRepresentation extends AsmRepresentation<FieldNode> {
 
     // Type
     if (fieldNode.desc != null) {
-      representation.add(typeRepresentation.createRepresentation(Type.getType(fieldNode.desc)));
+      representation.add(typeRepresentation.doToStringOf(Type.getType(fieldNode.desc)));
     }
 
     // Name
@@ -146,31 +149,30 @@ public class FieldNodeRepresentation extends AsmRepresentation<FieldNode> {
   }
 
   @Override
-  protected String createRepresentation(FieldNode fieldNode) {
+  protected String doToStringOf(FieldNode fieldNode) {
     var representation = new StringBuilder();
 
     // Attributes
-    if (fieldNode.attrs != null) {
-      for (Attribute attribute : fieldNode.attrs) {
-        representation.append(attributeRepresentation.createRepresentation(attribute)).append(System.lineSeparator());
-      }
-    }
+    createAttributesRepresentations(attributeRepresentation, fieldNode.attrs)
+            .forEach(attributeRepresentation -> representation.append("// attribute: ")
+                                                              .append(attributeRepresentation)
+                                                              .append(System.lineSeparator()));
 
     // Annotations
-    RepresentationUtils.createAnnotationNodesRepresentations(annotationNodeRepresentation, typeAnnotationNodeRepresentation,
-                                                             fieldNode.visibleAnnotations, fieldNode.invisibleAnnotations,
-                                                             fieldNode.visibleTypeAnnotations, fieldNode.invisibleTypeAnnotations)
-                       .forEach(annotationNodeRepresentation -> representation.append(annotationNodeRepresentation).append(System.lineSeparator()));
+    createAnnotationNodesRepresentations(annotationNodeRepresentation, typeAnnotationNodeRepresentation,
+                                         fieldNode.visibleAnnotations, fieldNode.invisibleAnnotations,
+                                         fieldNode.visibleTypeAnnotations, fieldNode.invisibleTypeAnnotations)
+            .forEach(annotationNodeRepresentation -> representation.append(annotationNodeRepresentation).append(System.lineSeparator()));
 
     // Access, type and name
-    representation.append(createSimplifiedRepresentation(fieldNode));
+    representation.append(doToSimplifiedStringOf(fieldNode));
 
     // Value
     if (fieldNode.value != null) {
       representation.append(" = ").append(fieldNode.value);
     }
 
-    // Signature
+    // signature
     if (fieldNode.signature != null) {
       representation.append(" // signature: ").append(fieldNode.signature);
     }

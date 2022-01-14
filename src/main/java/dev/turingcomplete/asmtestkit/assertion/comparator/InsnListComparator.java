@@ -24,7 +24,7 @@ public class InsnListComparator extends AsmComparator<Iterable<? extends Abstrac
   /**
    * A reusable {@link InsnListComparator} instance.
    */
-  public static final InsnListComparator INSTANCE = new InsnListComparator();
+  public static final InsnListComparator INSTANCE = create();
 
   /**
    * A reusable {@link InsnListComparator} instance, which excludes line numbers
@@ -38,7 +38,20 @@ public class InsnListComparator extends AsmComparator<Iterable<? extends Abstrac
   private boolean               ignoreLineNumbers     = false;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
+
+  protected InsnListComparator() {
+  }
+
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  /**
+   * Creates a new {@link InsnListComparator} instance.
+   *
+   * @return a new {@link InsnListComparator}; never null;
+   */
+  public static InsnListComparator create() {
+    return new InsnListComparator();
+  }
 
   /**
    * Sets the used {@link InstructionComparator}.

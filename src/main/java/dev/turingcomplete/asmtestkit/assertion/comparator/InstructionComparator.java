@@ -23,14 +23,27 @@ public class InstructionComparator implements Comparator<AbstractInsnNode> {
   /**
    * A reusable {@link AccessComparator} instance.
    */
-  public static final InstructionComparator INSTANCE = new InstructionComparator();
+  public static final InstructionComparator INSTANCE = create();
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
   private InstructionRepresentation instructionRepresentation = InstructionRepresentation.INSTANCE;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
+
+  protected InstructionComparator() {
+  }
+
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  /**
+   * Creates a new {@link InstructionComparator} instance.
+   *
+   * @return a new {@link InstructionComparator}; never null;
+   */
+  public static InstructionComparator create() {
+    return new InstructionComparator();
+  }
 
   /**
    * Sets the used {@link InstructionRepresentation}.

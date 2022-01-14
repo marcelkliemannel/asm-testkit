@@ -20,7 +20,7 @@ class FieldNodeRepresentationTest {
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Test
-  void testCreateRepresentation() throws IOException {
+  void testToStringOf() throws IOException {
     @Language("Java")
     String myClass = "" +
                      "import dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleAnnotationA;" +
@@ -49,18 +49,18 @@ class FieldNodeRepresentationTest {
               .isEqualTo("@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleAnnotationA // invisible\n" +
                          "@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: field; path: [\n" +
                          "(2) private java.lang.Object[][] myField // signature: [[TT;");
-    Assertions.assertThat(INSTANCE.createSimplifiedRepresentation(field1))
+    Assertions.assertThat(INSTANCE.doToSimplifiedStringOf(field1))
               .isEqualTo("(2) private java.lang.Object[][] myField");
 
     Assertions.assertThat(INSTANCE.toStringOf(field2))
               .isEqualTo("@java.lang.Deprecated(forRemoval=true)\n" +
                          "(131097) public static final deprecated int myField2 = 5");
-    Assertions.assertThat(INSTANCE.createSimplifiedRepresentation(field2))
+    Assertions.assertThat(INSTANCE.doToSimplifiedStringOf(field2))
               .isEqualTo("(131097) public static final deprecated int myField2");
 
     Assertions.assertThat(INSTANCE.toStringOf(field3))
               .isEqualTo("(0) java.lang.String myField3");
-    Assertions.assertThat(INSTANCE.createSimplifiedRepresentation(field3))
+    Assertions.assertThat(INSTANCE.doToSimplifiedStringOf(field3))
               .isEqualTo("(0) java.lang.String myField3");
   }
 

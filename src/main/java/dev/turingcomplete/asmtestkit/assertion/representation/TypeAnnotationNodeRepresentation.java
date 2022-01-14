@@ -10,13 +10,15 @@ import java.util.Objects;
  *
  * <p>Example output: {@code @TypeParameterAnnotation // reference: class_extends=-1; path: null}.
  */
-public class TypeAnnotationNodeRepresentation extends AbstractAnnotationNodeRepresentation<TypeAnnotationNodeRepresentation, TypeAnnotationNode> {
+public class TypeAnnotationNodeRepresentation<S, A extends TypeAnnotationNode>
+        extends AnnotationNodeRepresentation<S, A> {
+
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
    * A reusable {@link TypeAnnotationNodeRepresentation} instance.
    */
-  public static final TypeAnnotationNodeRepresentation INSTANCE = new TypeAnnotationNodeRepresentation();
+  public static final TypeAnnotationNodeRepresentation<?, TypeAnnotationNode> INSTANCE = new TypeAnnotationNodeRepresentation<>(TypeAnnotationNode.class);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
@@ -25,8 +27,8 @@ public class TypeAnnotationNodeRepresentation extends AbstractAnnotationNodeRepr
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  public TypeAnnotationNodeRepresentation() {
-    super(TypeAnnotationNode.class);
+  public TypeAnnotationNodeRepresentation(Class<A> typeAnnotationClass) {
+    super(typeAnnotationClass);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
@@ -37,12 +39,13 @@ public class TypeAnnotationNodeRepresentation extends AbstractAnnotationNodeRepr
    * <p>The default value is {@link TypeReferenceRepresentation#INSTANCE}.
    *
    * @param typeReferenceRepresentation a {@link TypeReferenceRepresentation}; never null.
-   * @return {@code this} {@link TypeAnnotationNodeRepresentation}; never null.
+   * @return {@code this} {@link S}; never null.
    */
-  public TypeAnnotationNodeRepresentation useTypeReferenceRepresentation(TypeReferenceRepresentation typeReferenceRepresentation) {
+  public S useTypeReferenceRepresentation(TypeReferenceRepresentation typeReferenceRepresentation) {
     this.typeReferenceRepresentation = Objects.requireNonNull(typeReferenceRepresentation);
 
-    return this;
+    //noinspection unchecked
+    return (S) this;
   }
 
   /**
@@ -51,17 +54,18 @@ public class TypeAnnotationNodeRepresentation extends AbstractAnnotationNodeRepr
    * <p>The default value is {@link TypePathRepresentation#INSTANCE}.
    *
    * @param typePathRepresentation a {@link TypePathRepresentation}; never null.
-   * @return {@code this} {@link TypeAnnotationNodeRepresentation}; never null.
+   * @return {@code this} {@link S}; never null.
    */
-  public TypeAnnotationNodeRepresentation useTypePathRepresentation(TypePathRepresentation typePathRepresentation) {
+  public S useTypePathRepresentation(TypePathRepresentation typePathRepresentation) {
     this.typePathRepresentation = Objects.requireNonNull(typePathRepresentation);
 
-    return this;
+    //noinspection unchecked
+    return (S) this;
   }
 
   @Override
-  protected String createRepresentation(TypeAnnotationNode annotationNode) {
-    String annotationNodeRepresentation = super.createRepresentation(annotationNode);
+  protected String doToStringOf(A annotationNode) {
+    String annotationNodeRepresentation = super.doToStringOf(annotationNode);
 
     return annotationNodeRepresentation +
            " // reference: " + typeReferenceRepresentation.toStringOf(new TypeReference(annotationNode.typeRef)) +

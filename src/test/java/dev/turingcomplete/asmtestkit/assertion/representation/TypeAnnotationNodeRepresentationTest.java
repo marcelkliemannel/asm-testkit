@@ -25,7 +25,7 @@ class TypeAnnotationNodeRepresentationTest {
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Test
-  void testCreateRepresentation() throws IOException {
+  void testToStringOf() throws IOException {
     ClassNode myClassNode = create()
             .addToClasspath(VisibleTypeParameterAnnotationA.class)
             .addJavaInputSource(MY_CLASS)
@@ -40,17 +40,17 @@ class TypeAnnotationNodeRepresentationTest {
   }
 
   @Test
-  void testCreateSimplifiedRepresentation() throws IOException {
+  void testToSimplifiedStringOf() throws IOException {
     ClassNode myClassNode = create()
             .addToClasspath(VisibleTypeParameterAnnotationA.class)
             .addJavaInputSource(MY_CLASS)
             .compile()
             .readClassNode("MyClass");
 
-    Assertions.assertThat(INSTANCE.createSimplifiedRepresentation(myClassNode.visibleTypeAnnotations.get(0)))
+    Assertions.assertThat(INSTANCE.doToSimplifiedStringOf(myClassNode.visibleTypeAnnotations.get(0)))
               .isEqualTo("@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA");
 
-    Assertions.assertThat(INSTANCE.createSimplifiedRepresentation(myClassNode.fields.get(0).visibleTypeAnnotations.get(0)))
+    Assertions.assertThat(INSTANCE.doToSimplifiedStringOf(myClassNode.fields.get(0).visibleTypeAnnotations.get(0)))
               .isEqualTo("@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA");
   }
 

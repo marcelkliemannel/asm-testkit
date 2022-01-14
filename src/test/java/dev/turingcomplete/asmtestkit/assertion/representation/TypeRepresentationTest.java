@@ -69,6 +69,18 @@ class TypeRepresentationTest {
             .isEqualTo("Ljava/lang/String;[][]");
   }
 
+  @Test
+  void testTransformInternalName() {
+    assertThat(new TypeRepresentation().useDescriptor().transformInternalName("java/lang/String"))
+            .isEqualTo("Ljava/lang/String;");
+
+    assertThat(new TypeRepresentation().useInternalName().transformInternalName("java/lang/String"))
+            .isEqualTo("java/lang/String");
+
+    assertThat(new TypeRepresentation().useClassName().transformInternalName("java/lang/String"))
+            .isEqualTo("java.lang.String");
+  }
+
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 }

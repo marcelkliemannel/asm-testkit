@@ -34,7 +34,7 @@ public class InstructionRepresentation extends AsmRepresentation<AbstractInsnNod
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Override
-  protected String createSimplifiedRepresentation(AbstractInsnNode abstractInsnNode) {
+  protected String doToSimplifiedStringOf(AbstractInsnNode abstractInsnNode) {
     return TextifierUtils.toString(textifier -> {
       textifier.setTab2(0);
       textifier.setTab3(1);
@@ -43,8 +43,8 @@ public class InstructionRepresentation extends AsmRepresentation<AbstractInsnNod
   }
 
   @Override
-  protected String createRepresentation(AbstractInsnNode abstractInsnNode) {
-    String textifiedInstruction = createSimplifiedRepresentation(abstractInsnNode);
+  protected String doToStringOf(AbstractInsnNode abstractInsnNode) {
+    String textifiedInstruction = doToSimplifiedStringOf(abstractInsnNode);
     return appendOpcode(abstractInsnNode.getOpcode(), textifiedInstruction);
   }
 

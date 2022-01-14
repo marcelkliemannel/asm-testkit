@@ -1,35 +1,37 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.Label;
+import org.objectweb.asm.tree.LabelNode;
 
-import java.util.Objects;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class AsmRepresentationTest {
+class LabelNodeRepresentationTest {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Test
-  void testNullArgument() {
-    assertThat(new DummyAsmRepresentation().toStringOf(null))
-            .isEqualTo(null);
+  void testToStringOf() {
+    var label = new Label();
+    assertThat(LabelNodeRepresentation.INSTANCE.doToStringOf(new LabelNode(label)))
+            .isEqualTo("L" + label.hashCode());
+  }
+
+  @Test
+  void testToStringOfWithNames() {
+    var label = new Label();
+    assertThat(LabelNodeRepresentation.INSTANCE.toStringOf(new LabelNode(label), Map.of(label, "L1")))
+            .isEqualTo("L1");
+
+    var unknownLabel = new Label();
+    assertThat(LabelNodeRepresentation.INSTANCE.toStringOf(new LabelNode(unknownLabel), Map.of(label, "L1")))
+            .isEqualTo("L" + unknownLabel.hashCode());
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
-
-  private static class DummyAsmRepresentation extends AsmRepresentation<Object> {
-
-    protected DummyAsmRepresentation() {
-      super(Object.class);
-    }
-
-    @Override
-    protected String doToStringOf(Object object) {
-      return Objects.toString(object);
-    }
-  }
 }

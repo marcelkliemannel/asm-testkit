@@ -20,7 +20,7 @@ public class TypePathComparator extends AsmComparator<TypePath> {
   /**
    * A reusable {@link TypePathComparator} instance.
    */
-  public static final TypePathComparator INSTANCE = new TypePathComparator();
+  public static final TypePathComparator INSTANCE = create();
 
   /**
    * A reusable {@link Comparator} instance for an {@link Iterable} of
@@ -33,7 +33,20 @@ public class TypePathComparator extends AsmComparator<TypePath> {
   private TypePathRepresentation typePathRepresentation = TypePathRepresentation.INSTANCE;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
+
+  protected TypePathComparator() {
+  }
+
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  /**
+   * Creates a new {@link TypePathComparator} instance.
+   *
+   * @return a new {@link TypePathComparator}; never null;
+   */
+  public static TypePathComparator create() {
+    return new TypePathComparator();
+  }
 
   /**
    * Sets the used {@link TypePathRepresentation}.

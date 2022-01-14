@@ -20,7 +20,7 @@ public class TypeComparator extends AsmComparator<Type> {
   /**
    * A reusable {@link TypeComparator} instance.
    */
-  public static final TypeComparator INSTANCE = new TypeComparator();
+  public static final TypeComparator INSTANCE = create();
 
   /**
    * A reusable {@link Comparator} instance for an {@link Iterable} of
@@ -33,7 +33,20 @@ public class TypeComparator extends AsmComparator<Type> {
   private TypeRepresentation typeRepresentation = TypeRepresentation.INSTANCE;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
+
+  protected TypeComparator() {
+  }
+
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  /**
+   * Creates a new {@link TypeComparator} instance.
+   *
+   * @return a new {@link TypeComparator}; never null;
+   */
+  public static TypeComparator create() {
+    return new TypeComparator();
+  }
 
   /**
    * Sets the used {@link TypeRepresentation}.
