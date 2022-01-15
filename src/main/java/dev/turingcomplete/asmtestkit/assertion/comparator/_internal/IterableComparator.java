@@ -10,12 +10,12 @@ public final class IterableComparator<T> implements Comparator<Iterable<? extend
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
-  private final Comparator<T> elementComparator;
+  private final Comparator<T> elementsComparator;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  public IterableComparator(Comparator<T> elementComparator) {
-    this.elementComparator = elementComparator;
+  public IterableComparator(Comparator<T> elementsComparator) {
+    this.elementsComparator = elementsComparator;
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
@@ -33,8 +33,8 @@ public final class IterableComparator<T> implements Comparator<Iterable<? extend
       return 0;
     }
 
-    List<T> firstSorted = StreamSupport.stream(first.spliterator(), false).sorted(elementComparator).collect(Collectors.toList());
-    List<T> secondSorted = StreamSupport.stream(second.spliterator(), false).sorted(elementComparator).collect(Collectors.toList());
+    List<T> firstSorted = StreamSupport.stream(first.spliterator(), false).sorted(elementsComparator).collect(Collectors.toList());
+    List<T> secondSorted = StreamSupport.stream(second.spliterator(), false).sorted(elementsComparator).collect(Collectors.toList());
 
     if (firstSorted.size() != secondSorted.size()) {
       return firstSorted.size() - secondSorted.size();
@@ -43,7 +43,7 @@ public final class IterableComparator<T> implements Comparator<Iterable<? extend
     Iterator<T> secondSortedIterator = secondSorted.iterator();
     for (T firstElement : firstSorted) {
       T selectElement = secondSortedIterator.next();
-      int result = elementComparator.compare(firstElement, selectElement);
+      int result = elementsComparator.compare(firstElement, selectElement);
       if (result != 0) {
         return result;
       }

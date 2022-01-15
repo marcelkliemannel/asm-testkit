@@ -49,8 +49,10 @@ public abstract class AsmRepresentation<T> extends StandardRepresentation {
    *               of; may be null.
    * @return the {@link String} representation; may be null.
    */
-  public final String toSimplifiedStringOf(T object) {
-    return object != null ? doToSimplifiedStringOf(object) : null;
+  public final String toSimplifiedStringOf(Object object) {
+    return object != null && (objectClass.equals(object) || objectClass.isAssignableFrom(objectClass))
+            ? doToSimplifiedStringOf(objectClass.cast(object))
+            : null;
   }
 
   /**

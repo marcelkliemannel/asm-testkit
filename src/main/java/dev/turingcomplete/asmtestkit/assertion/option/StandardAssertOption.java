@@ -12,7 +12,8 @@ public enum StandardAssertOption implements AssertOption {
   IGNORE_INVISIBLE_ANNOTATIONS,
   IGNORE_VISIBLE_TYPE_ANNOTATIONS,
   IGNORE_INVISIBLE_TYPE_ANNOTATIONS,
-  IGNORE_ATTRIBUTES
+  IGNORE_ATTRIBUTES,
+  IGNORE_ANNOTATION_VALUES
 
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //

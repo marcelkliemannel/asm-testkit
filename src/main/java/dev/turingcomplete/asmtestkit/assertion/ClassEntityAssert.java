@@ -1,14 +1,17 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
-import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.option.StandardAssertOption;
 import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAccess;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAnnotationNodes;
@@ -23,20 +26,31 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
-  private final String entityName;
+  private final Class<A> objectType;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  protected ClassEntityAssert(String entityName,
+  /**
+   * Initializes a {@link ClassEntityAssert}.
+   *
+   * @param name                  a short, generic {@link String} name; never null.
+   * @param actual                the actual {@link A}; may be null.
+   * @param selfType              the {@link Class} of {@code this); never null.
+   * @param objectType            the {@link Class} of {@code actual); never null.
+   * @param defaultRepresentation the default {@link Representation}; may be null.
+   * @param defaultComparator     the default {@link Comparator} for {@link A};
+   *                              may be null.
+   */
+  protected ClassEntityAssert(String name,
                               A actual,
                               Class<?> selfType,
                               Class<A> objectType,
-                              String selfDescription,
-                              AssertOption... assertOptions) {
+                              Representation defaultRepresentation,
+                              Comparator<A> defaultComparator) {
 
-    super(actual, selfType, objectType, selfDescription, assertOptions);
+    super(name, actual, selfType, defaultRepresentation, defaultComparator);
 
-    this.entityName = entityName;
+    this.objectType = Objects.requireNonNull(objectType);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
@@ -68,7 +82,7 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
     }
 
     assertThat(getStringFromObjectElseNull(actual, this::getName))
-            .as(createDescription("Is equal " + entityName + " name"))
+            .as(createDescription("Is equal " + name.toLowerCase(Locale.ROOT) + " name"))
             .isEqualTo(getStringFromObjectElseNull(expected, objectType, this::getName));
   }
 
@@ -93,7 +107,7 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
 
     assertThatAccess(getIntegerFromObjectElseNull(actual, this::getAccess), getAccessKind())
             .addOptions(options)
-            .as(createDescription("Is equal " + entityName + " access"))
+            .as(createDescription("Is equal " + name.toLowerCase(Locale.ROOT) + " access"))
             .isEqualTo(getIntegerFromObjectElseNull(expected, objectType, this::getAccess));
   }
 
@@ -124,7 +138,7 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
     }
 
     assertThat(getStringFromObjectElseNull(actual, this::getSignature))
-            .as(createDescription("Is equal " + entityName + " signature"))
+            .as(createDescription("Is equal " + name.toLowerCase(Locale.ROOT) + " signature"))
             .isEqualTo(getStringFromObjectElseNull(expected, objectType, this::getSignature));
   }
 
@@ -148,7 +162,7 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
     }
 
     assertThatAnnotationNodes(getListFromObjectElse(actual, this::getVisibleAnnotations, List.of()))
-            .as(createDescription("Is equal " + entityName + " visible annotations"))
+            .as(createDescription("Is equal " + name.toLowerCase(Locale.ROOT) + " visible annotations"))
             .containsExactlyInAnyOrderElementsOf(getListFromObjectElse(expected, objectType, this::getVisibleAnnotations, List.of()));
   }
 
@@ -172,7 +186,7 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
     }
 
     assertThatAnnotationNodes(getListFromObjectElse(actual, this::getInvisibleAnnotations, List.of()))
-            .as(createDescription("Is equal " + entityName + " invisible annotations"))
+            .as(createDescription("Is equal " + name.toLowerCase(Locale.ROOT) + " invisible annotations"))
             .containsExactlyInAnyOrderElementsOf(getListFromObjectElse(expected, objectType, this::getInvisibleAnnotations, List.of()));
   }
 
@@ -196,7 +210,7 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
     }
 
     assertThatTypeAnnotationNodes(getListFromObjectElse(actual, this::getVisibleTypeAnnotations, List.of()))
-            .as(createDescription("Is equal " + entityName + " visible type annotations"))
+            .as(createDescription("Is equal " + name.toLowerCase(Locale.ROOT) + " visible type annotations"))
             .containsExactlyInAnyOrderElementsOf(getListFromObjectElse(expected, objectType, this::getVisibleTypeAnnotations, List.of()));
   }
 
@@ -220,7 +234,7 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
     }
 
     assertThatTypeAnnotationNodes(getListFromObjectElse(actual, this::getInvisibleTypeAnnotations, List.of()))
-            .as(createDescription("Is equal " + entityName + " invisible type annotations"))
+            .as(createDescription("Is equal " + name.toLowerCase(Locale.ROOT) + " invisible type annotations"))
             .containsExactlyInAnyOrderElementsOf(getListFromObjectElse(expected, objectType, this::getInvisibleTypeAnnotations, List.of()));
   }
 
@@ -244,7 +258,7 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
     }
 
     assertThatAttributes(getListFromObjectElse(actual, this::getAttributes, List.of()))
-            .as(createDescription("Is equal " + entityName + " attributes"))
+            .as(createDescription("Is equal " + name.toLowerCase(Locale.ROOT) + " attributes"))
             .containsExactlyInAnyOrderElementsOf(getListFromObjectElse(expected, objectType, this::getAttributes, List.of()));
   }
 

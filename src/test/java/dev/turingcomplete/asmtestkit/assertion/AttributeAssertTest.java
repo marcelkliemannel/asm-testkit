@@ -22,7 +22,7 @@ class AttributeAssertTest {
 
     assertThatThrownBy(() -> assertThat(new DummyAttribute("A", "1")).isEqualTo(new DummyAttribute("B", "2")))
             .isInstanceOf(AssertionError.class)
-            .hasMessage("[Attribute: A1] \n" +
+            .hasMessage("[Attribute: A] \n" +
                         "expected: B2\n" +
                         " but was: A1\n" +
                         "when comparing values using AttributeComparator");

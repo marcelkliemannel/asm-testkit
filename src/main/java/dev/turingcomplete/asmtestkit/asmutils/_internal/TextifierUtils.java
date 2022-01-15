@@ -1,10 +1,12 @@
 package dev.turingcomplete.asmtestkit.asmutils._internal;
 
+import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.util.Textifier;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -66,6 +68,10 @@ public final class TextifierUtils {
     @Override
     protected Textifier createTextifier() {
       return new ExtendedTextifier();
+    }
+
+    public Map<Label, String> getLabelNames() {
+      return labelNames != null ? labelNames : Map.of();
     }
   }
 }

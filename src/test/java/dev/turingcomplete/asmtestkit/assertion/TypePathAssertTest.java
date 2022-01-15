@@ -19,7 +19,7 @@ class TypePathAssertTest {
 
     assertThatThrownBy(() -> assertThat(TypePath.fromString("*")).isEqualTo(TypePath.fromString("[1;")))
             .isInstanceOf(AssertionError.class)
-            .hasMessage("[Type path: *] \n" +
+            .hasMessage("[Type Path: *] \n" +
                         "expected: [1;\n" +
                         " but was: *\n" +
                         "when comparing values using TypePathComparator");

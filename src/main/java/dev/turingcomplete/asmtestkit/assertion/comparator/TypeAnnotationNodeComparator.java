@@ -13,7 +13,7 @@ import static dev.turingcomplete.asmtestkit.assertion.comparator._internal.Compa
 /**
  * A comparison function to order {@link TypeAnnotationNode}s.
  *
- * <p>Two {@code AnnotationNode}s will be considered as equal if their
+ * <p>Two {@code TypeAnnotationNode}s will be considered as equal if their
  * descriptors, values (order is ignored), type references and type paths are
  * equal. If their values are not equal they will be ordered based on the
  * lexicographical order of their {@link TypeAnnotationNodeRepresentation}s.

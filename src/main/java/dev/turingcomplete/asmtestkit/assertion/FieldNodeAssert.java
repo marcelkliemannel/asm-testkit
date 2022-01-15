@@ -24,11 +24,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * An AssertJ {@link AbstractAssert} for an {@link FieldNode}.
  *
+ * <p>An instance can be created via {@link AsmAssertions#assertThat(FieldNode)}.
+ * Use {@link AsmAssertions#assertThatFields(Iterable)} for multiple
+ * {@code FieldNode}s.
+ *
+ * <p>The supported {@link AssertOption}s are:
+ * <ul>
+ *  <li>{@link StandardAssertOption#IGNORE_NAME}
+ *  <li>{@link StandardAssertOption#IGNORE_DESCRIPTOR}
+ *  <li>{@link StandardAssertOption#IGNORE_ACCESS}
+ *  <li>{@link StandardAssertOption#IGNORE_SIGNATURE}
+ *  <li>{@link StandardAssertOption#IGNORE_VALUE}
+ *  <li>{@link StandardAssertOption#IGNORE_VISIBLE_ANNOTATIONS}
+ *  <li>{@link StandardAssertOption#IGNORE_INVISIBLE_ANNOTATIONS}
+ *  <li>{@link StandardAssertOption#IGNORE_VISIBLE_TYPE_ANNOTATIONS}
+ *  <li>{@link StandardAssertOption#IGNORE_INVISIBLE_TYPE_ANNOTATIONS}
+ *  <li>{@link StandardAssertOption#IGNORE_ATTRIBUTES}
+ * </ul>
+ *
  * <p>To override the used {@link FieldNodeRepresentation} or
  * {@link FieldNodeComparator} call {@link #withRepresentation(Representation)}
  * or {@link #usingComparator(Comparator)}.
- *
- * <p>An instance can be created via {@link AsmAssertions#assertThat(FieldNode)}.
  */
 public class FieldNodeAssert extends ClassEntityAssert<FieldNodeAssert, FieldNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -38,29 +54,10 @@ public class FieldNodeAssert extends ClassEntityAssert<FieldNodeAssert, FieldNod
   /**
    * Initializes a {@link FieldNodeAssert}.
    *
-   * <p>The supported {@link AssertOption}s are:
-   * <ul>
-   *  <li>{@link StandardAssertOption#IGNORE_NAME}
-   *  <li>{@link StandardAssertOption#IGNORE_DESCRIPTOR}
-   *  <li>{@link StandardAssertOption#IGNORE_ACCESS}
-   *  <li>{@link StandardAssertOption#IGNORE_SIGNATURE}
-   *  <li>{@link StandardAssertOption#IGNORE_VALUE}
-   *  <li>{@link StandardAssertOption#IGNORE_VISIBLE_ANNOTATIONS}
-   *  <li>{@link StandardAssertOption#IGNORE_INVISIBLE_ANNOTATIONS}
-   *  <li>{@link StandardAssertOption#IGNORE_VISIBLE_TYPE_ANNOTATIONS}
-   *  <li>{@link StandardAssertOption#IGNORE_INVISIBLE_TYPE_ANNOTATIONS}
-   *  <li>{@link StandardAssertOption#IGNORE_ATTRIBUTES}
-   * </ul>
-   *
-   * @param actual        the actual {@link FieldNode}; may be null.
-   * @param assertOptions an array of {@link AssertOption}s; never null.
+   * @param actual the actual {@link FieldNode}; may be null.
    */
-  public FieldNodeAssert(FieldNode actual, AssertOption... assertOptions) {
-    super("field", actual, FieldNodeAssert.class, FieldNode.class, createSelfDescription(actual), assertOptions);
-
-    info.useRepresentation(FieldNodeRepresentation.INSTANCE);
-    //noinspection ResultOfMethodCallIgnored
-    usingComparator(FieldNodeComparator.INSTANCE);
+  protected FieldNodeAssert(FieldNode actual) {
+    super("Field", actual, FieldNodeAssert.class, FieldNode.class, FieldNodeRepresentation.INSTANCE, FieldNodeComparator.INSTANCE);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
@@ -69,8 +66,8 @@ public class FieldNodeAssert extends ClassEntityAssert<FieldNodeAssert, FieldNod
   public FieldNodeAssert isEqualTo(Object expected) {
     super.isEqualTo(expected);
 
-    isEqualDescriptor(expected);
-    isEqualValue(expected);
+    hasEqualDescriptor(expected);
+    hasEqualValue(expected);
 
     return this;
   }
@@ -82,14 +79,14 @@ public class FieldNodeAssert extends ClassEntityAssert<FieldNodeAssert, FieldNod
    * @param expected an {@link Object} expected to be a {@link FieldNode}; may
    *                 be null.
    */
-  protected void isEqualDescriptor(Object expected) {
+  protected void hasEqualDescriptor(Object expected) {
     if (hasOption(StandardAssertOption.IGNORE_DESCRIPTOR)) {
       return;
     }
 
     assertThat(getFromObjectElseNull(actual, (FieldNode fieldNode) -> Type.getType(fieldNode.desc)))
             .addOptions(options)
-            .as(createDescription("Is equal field descriptor"))
+            .as(createDescription("Has equal field descriptor"))
             .isEqualTo(getFromObjectElseNull(expected, FieldNode.class, fieldNode -> Type.getType(fieldNode.desc)));
   }
 
@@ -100,13 +97,13 @@ public class FieldNodeAssert extends ClassEntityAssert<FieldNodeAssert, FieldNod
    * @param expected an {@link Object} expected to be a {@link FieldNode}; may
    *                 be null.
    */
-  protected void isEqualValue(Object expected) {
+  protected void hasEqualValue(Object expected) {
     if (hasOption(StandardAssertOption.IGNORE_VALUE)) {
       return;
     }
 
     assertThat(getFromObjectElseNull(actual, (FieldNode fieldNode) -> fieldNode.value))
-            .as(createDescription("Is equal field value"))
+            .as(createDescription("Has equal field value"))
             .isEqualTo(getFromObjectElseNull(expected, FieldNode.class, fieldNode -> fieldNode.value));
   }
 
@@ -155,11 +152,11 @@ public class FieldNodeAssert extends ClassEntityAssert<FieldNodeAssert, FieldNod
     return fieldNode.attrs;
   }
 
-  // -- Private Methods --------------------------------------------------------------------------------------------- //
-
-  private static String createSelfDescription(FieldNode actual) {
+  @Override
+  protected String createSelfDescription(FieldNode actual) {
     return "Field: " + Optional.ofNullable(actual).map(fieldNode -> fieldNode.name).orElse(null);
   }
 
+  // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 }

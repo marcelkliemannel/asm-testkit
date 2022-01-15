@@ -15,10 +15,6 @@ import java.util.function.Function;
 /**
  * An AssertJ {@link AbstractAssert} for {@link Integer} access flags.
  *
- * <p>To override the used {@link AccessRepresentation} or
- * {@link AccessComparator} call {@link #withRepresentation(Representation)}
- * or {@link #usingComparator(Comparator)}.
- *
  * <p>An instance can be created via:
  * <ul>
  *   <li>{@link AsmAssertions#assertThatClassAccess(Integer)}
@@ -31,6 +27,11 @@ import java.util.function.Function;
  *   <li>{@link AsmAssertions#assertThatModuleOpensAccess(Integer)}
  *   <li>{@link AsmAssertions#assertThatAccess(Integer, AccessKind)}
  * </ul>
+ *
+ * <p>There are no direct supported {@link AssertOption}s yet.
+ *
+ * <p>To override the used {@link AccessRepresentation} or {@link AccessComparator}
+ * use {@link #withRepresentation(Representation)} or {@link #usingComparator(Comparator)}.
  */
 public class AccessAssert extends AsmAssert<AccessAssert, Integer> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -43,19 +44,14 @@ public class AccessAssert extends AsmAssert<AccessAssert, Integer> {
   /**
    * Initializes an {@link AccessAssert}.
    *
-   * <p>There are no direct supported {@link AssertOption}s yet.
-   *
-   * @param actual        the actual {@link Integer} access flags; may be null.
-   * @param assertOptions an array of {@link AssertOption}s; never null.
+   * @param actual the actual {@link Integer} access flags; may be null.
+   * @param accessKind the {@link AccessKind of the given access flags};
+   *                  never null.
    */
-  public AccessAssert(Integer actual, AccessKind accessKind, AssertOption... assertOptions) {
-    super(actual, AccessAssert.class, Integer.class, createSelfDescription(actual, accessKind), assertOptions);
+  protected AccessAssert(Integer actual, AccessKind accessKind) {
+    super("Access", actual, AccessAssert.class, AccessRepresentation.instance(accessKind), AccessComparator.INSTANCE);
 
     this.accessKind = accessKind;
-
-    info.useRepresentation(AccessRepresentation.instance(accessKind));
-    //noinspection ResultOfMethodCallIgnored
-    usingComparator(AccessComparator.INSTANCE);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
@@ -74,10 +70,5 @@ public class AccessAssert extends AsmAssert<AccessAssert, Integer> {
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
-
-  private static String createSelfDescription(Integer actual, AccessKind accessKind) {
-    return "Access: " + AccessRepresentation.instance(accessKind).toJavaSourceCodeRepresentation(actual);
-  }
-
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 }

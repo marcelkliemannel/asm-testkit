@@ -5,7 +5,6 @@ import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypeRepresentation;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;
-import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Type;
 
 import java.util.Comparator;
@@ -14,11 +13,14 @@ import java.util.Comparator;
  * An AssertJ {@link AbstractAssert} for a {@link Type} which will use the
  * {@link TypeComparator} to determine the equality.
  *
+ * <p>An instance can be created via {@link AsmAssertions#assertThat(Type)}.
+ * Use {@link AsmAssertions#assertThatTypes(Iterable)} for multiple {@code Type}s.
+ *
+ * <p>There are no direct supported {@link AssertOption}s yet.
+ *
  * <p>To override the used {@link TypeRepresentation} or
  * {@link TypeComparator} call {@link #withRepresentation(Representation)}
  * or {@link #usingComparator(Comparator)}.
- *
- * <p>An instance can be created via {@link AsmAssertions#assertThat(Attribute)}.
  */
 public class TypeAssert extends AsmAssert<TypeAssert, Type> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -28,25 +30,13 @@ public class TypeAssert extends AsmAssert<TypeAssert, Type> {
   /**
    * Initializes a {@link TypeAssert}.
    *
-   * <p>There are no direct supported {@link AssertOption}s yet.
-   *
    * @param actual the actual {@link Type}; may be null.
-   * @param assertOptions an array of {@link AssertOption}s; never null.
    */
-  public TypeAssert(Type actual, AssertOption... assertOptions) {
-    super(actual, TypeAssert.class, Type.class, createSelfDescription(actual), assertOptions);
-
-    info.useRepresentation(TypeRepresentation.INSTANCE);
-    //noinspection ResultOfMethodCallIgnored
-    usingComparator(TypeComparator.INSTANCE);
+  protected TypeAssert(Type actual) {
+    super("Type", actual, TypeAssert.class, TypeRepresentation.INSTANCE, TypeComparator.INSTANCE);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
   // -- Private Methods --------------------------------------------------------------------------------------------- //
-
-  private static String createSelfDescription(Type actual) {
-    return "Type: " + TypeRepresentation.INSTANCE.toStringOf(actual);
-  }
-
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 }

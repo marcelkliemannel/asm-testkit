@@ -7,18 +7,28 @@ import dev.turingcomplete.asmtestkit.assertion.representation.InstructionReprese
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.InsnList;
 
 import java.util.Comparator;
 
 /**
  * An AssertJ {@link AbstractAssert} for an {@link AbstractInsnNode} which will
- * use the {@link InstructionRepresentation} to determine the equality.
+ * use the {@link InstructionComparator} to determine the equality.
+ *
+ * <p>An instance can be created via {@link AsmAssertions#assertThat(AbstractInsnNode)}.
+ * Use
+ * <ul>
+ *   <li>{@link AsmAssertions#assertThat(InsnList)},
+ *   <li>{@link AsmAssertions#assertThatInstructions(Iterable)},
+ *   <li>or {@link AsmAssertions#assertThatInstructionsIgnoreLineNumbers(Iterable)}
+ * </ul>
+ * for multiple {@code AbstractInsnNode}s.
+ *
+ * <p>There are no direct supported {@link AssertOption}s yet.
  *
  * <p>To override the used {@link InstructionRepresentation} or
  * {@link AttributeComparator} call {@link #withRepresentation(Representation)}
  * or {@link #usingComparator(Comparator)}.
- *
- * <p>An instance can be created via {@link AsmAssertions#assertThat(AbstractInsnNode)}.
  */
 public class InstructionAssert extends AsmAssert<InstructionAssert, AbstractInsnNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -28,25 +38,13 @@ public class InstructionAssert extends AsmAssert<InstructionAssert, AbstractInsn
   /**
    * Initializes an {@link InstructionAssert}.
    *
-   * <p>There are no direct supported {@link AssertOption}s yet.
-   *
    * @param actual the actual {@link AbstractInsnNode}; may be null.
-   * @param assertOptions an array of {@link AssertOption}s; never null.
    */
-  public InstructionAssert(AbstractInsnNode actual, AssertOption... assertOptions) {
-    super(actual, InstructionAssert.class, AbstractInsnNode.class, createSelfDescription(actual), assertOptions);
-
-    info.useRepresentation(InstructionRepresentation.INSTANCE);
-    //noinspection ResultOfMethodCallIgnored
-    usingComparator(InstructionComparator.INSTANCE);
+  protected InstructionAssert(AbstractInsnNode actual) {
+    super("Instruction", actual, InstructionAssert.class, InstructionRepresentation.INSTANCE, InstructionComparator.INSTANCE);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
   // -- Private Methods --------------------------------------------------------------------------------------------- //
-
-  private static String createSelfDescription(AbstractInsnNode actual) {
-    return "Instruction: " + InstructionRepresentation.INSTANCE.toSimplifiedStringOf(actual);
-  }
-
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 }

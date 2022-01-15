@@ -26,7 +26,7 @@ class LabelNodeAssertTest {
 
     assertThatThrownBy(() -> assertThat(firstLabelNode).isEqualTo(secondLabelNode))
             .isInstanceOf(AssertionError.class)
-            .hasMessage("[Label] \n" +
+            .hasMessage("[Label: L" + firstLabelNode.getLabel().hashCode() + "] \n" +
                         "expected: L" + secondLabelNode.getLabel().hashCode() + "\n" +
                         " but was: L" + firstLabelNode.getLabel().hashCode() + "\n" +
                         "when comparing values using LabelNodeComparator");

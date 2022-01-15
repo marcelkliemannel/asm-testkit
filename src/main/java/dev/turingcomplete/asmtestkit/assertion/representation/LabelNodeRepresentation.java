@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Creates a {@link String} representation of a {@link LabelNode}.
  *
- * The {@link #toStringOf(String)} implementation will output an {@code L}
+ * The {@link #toStringOf(String)} implementation will output a {@code L}
  * followed by the hash code of the {@link LabelNode#getLabel()}. To map the
  * {@link Label} to a consistent name use
  * {@link #toStringOf(LabelNode, Map)}.

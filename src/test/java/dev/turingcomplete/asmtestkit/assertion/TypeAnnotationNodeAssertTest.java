@@ -48,7 +48,7 @@ class TypeAnnotationNodeAssertTest {
     Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(firstClassTypeAnnotationNode)
                                                      .isEqualTo(firstFieldTypeAnnotationNode))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Type Annotation: @TypeParameterAnnotation > Is equal type path] \n" +
+              .hasMessage("[Type Annotation: @TypeParameterAnnotation > Has equal type path] \n" +
                           "expected: [\n" +
                           " but was: null\n" +
                           "when comparing values using TypePathComparator");
@@ -57,7 +57,7 @@ class TypeAnnotationNodeAssertTest {
     Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(firstClassTypeAnnotationNode)
                                                      .isEqualTo(secondFieldTypeAnnotationNode))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Type Annotation: @TypeParameterAnnotation > Is equal type reference] \n" +
+              .hasMessage("[Type Annotation: @TypeParameterAnnotation > Has equal type reference] \n" +
                           "expected: field\n" +
                           " but was: class_type_parameter=0\n" +
                           "when comparing values using TypeReferenceComparator");

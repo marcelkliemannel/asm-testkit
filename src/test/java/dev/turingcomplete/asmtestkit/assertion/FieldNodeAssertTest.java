@@ -19,6 +19,7 @@ import org.objectweb.asm.tree.TypeAnnotationNode;
 import java.io.IOException;
 import java.util.List;
 
+import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThat;
 import static dev.turingcomplete.asmtestkit.compile.CompilationEnvironment.create;
 
 class FieldNodeAssertTest {
@@ -28,7 +29,7 @@ class FieldNodeAssertTest {
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Test
-  void testIsEqual() throws IOException {
+  void testIsEqualTo() throws IOException {
     @Language("Java")
     String firstMyClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;" +
                           "class MyClass<T extends Number> {" +
@@ -58,24 +59,24 @@ class FieldNodeAssertTest {
             .fields
             .get(0);
 
-    AsmAssertions.assertThat(firstField)
-                 .isEqualTo(secondField);
+    assertThat(firstField)
+            .isEqualTo(secondField);
   }
 
   @Test
-  void testIsEqualName() {
+  void testIsEqualToName() {
     FieldNode firstFieldNode = new FieldNode(0, "first", "I", null, null);
     var secondFieldNode = new FieldNode(0, "second", "I", null, null);
 
-    AsmAssertions.assertThat(firstFieldNode)
-                 .isEqualTo(firstFieldNode);
+    assertThat(firstFieldNode)
+            .isEqualTo(firstFieldNode);
 
-    AsmAssertions.assertThat(firstFieldNode)
-                 .addOption(StandardAssertOption.IGNORE_NAME)
-                 .isEqualTo(secondFieldNode);
+    assertThat(firstFieldNode)
+            .addOption(StandardAssertOption.IGNORE_NAME)
+            .isEqualTo(secondFieldNode);
 
-    Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(firstFieldNode)
-                                                     .isEqualTo(secondFieldNode))
+    Assertions.assertThatThrownBy(() -> assertThat(firstFieldNode)
+                      .isEqualTo(secondFieldNode))
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Field: first > Is equal field name] \n" +
                           "expected: \"second\"\n" +
@@ -83,40 +84,40 @@ class FieldNodeAssertTest {
   }
 
   @Test
-  void testIsEqualDescriptor() {
+  void testIsEqualToDescriptor() {
     var first1FieldNode = new FieldNode(0, "first", "I", null, null);
     var first2FieldNode = new FieldNode(0, "first", "C", null, null);
 
-    AsmAssertions.assertThat(first1FieldNode)
-                 .isEqualTo(first1FieldNode);
+    assertThat(first1FieldNode)
+            .isEqualTo(first1FieldNode);
 
-    AsmAssertions.assertThat(first1FieldNode)
-                 .addOption(StandardAssertOption.IGNORE_DESCRIPTOR)
-                 .isEqualTo(first2FieldNode);
+    assertThat(first1FieldNode)
+            .addOption(StandardAssertOption.IGNORE_DESCRIPTOR)
+            .isEqualTo(first2FieldNode);
 
-    Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(first1FieldNode)
-                                                     .isEqualTo(first2FieldNode))
+    Assertions.assertThatThrownBy(() -> assertThat(first1FieldNode)
+                      .isEqualTo(first2FieldNode))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Field: first > Is equal field descriptor] \n" +
+              .hasMessage("[Field: first > Has equal field descriptor] \n" +
                           "expected: char\n" +
                           " but was: int\n" +
                           "when comparing values using TypeComparator");
   }
 
   @Test
-  void testIsEqualAccess() {
+  void testIsEqualToAccess() {
     var first1FieldNode = new FieldNode(Opcodes.ACC_PROTECTED, "first", "I", null, null);
     FieldNode first2FieldNode = new FieldNode(Opcodes.ACC_PUBLIC + Opcodes.ACC_FINAL, "first", "I", null, null);
 
-    AsmAssertions.assertThat(first1FieldNode)
-                 .isEqualTo(first1FieldNode);
+    assertThat(first1FieldNode)
+            .isEqualTo(first1FieldNode);
 
-    AsmAssertions.assertThat(first2FieldNode)
-                 .addOption(StandardAssertOption.IGNORE_ACCESS)
-                 .isEqualTo(first2FieldNode);
+    assertThat(first2FieldNode)
+            .addOption(StandardAssertOption.IGNORE_ACCESS)
+            .isEqualTo(first2FieldNode);
 
-    Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(first1FieldNode)
-                                                     .isEqualTo(first2FieldNode))
+    Assertions.assertThatThrownBy(() -> assertThat(first1FieldNode)
+                      .isEqualTo(first2FieldNode))
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Field: first > Is equal field access > Field: first > Is equal field access > Is equal access values] \n" +
                           "Expecting actual:\n" +
@@ -130,19 +131,19 @@ class FieldNodeAssertTest {
   }
 
   @Test
-  void testIsEqualSignature() {
+  void testIsEqualToSignature() {
     var first1FieldNode = new FieldNode(0, "first", "Ljava.lang.Object;", "[[TT;", null);
     var first2FieldNode = new FieldNode(0, "first", "Ljava.lang.Object;", "[T;", null);
 
-    AsmAssertions.assertThat(first1FieldNode)
-                 .isEqualTo(first1FieldNode);
+    assertThat(first1FieldNode)
+            .isEqualTo(first1FieldNode);
 
-    AsmAssertions.assertThat(first1FieldNode)
-                 .addOption(StandardAssertOption.IGNORE_SIGNATURE)
-                 .isEqualTo(first2FieldNode);
+    assertThat(first1FieldNode)
+            .addOption(StandardAssertOption.IGNORE_SIGNATURE)
+            .isEqualTo(first2FieldNode);
 
-    Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(first1FieldNode)
-                                                     .isEqualTo(first2FieldNode))
+    Assertions.assertThatThrownBy(() -> assertThat(first1FieldNode)
+                      .isEqualTo(first2FieldNode))
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Field: first > Is equal field signature] \n" +
                           "expected: \"[T;\"\n" +
@@ -150,27 +151,27 @@ class FieldNodeAssertTest {
   }
 
   @Test
-  void testIsEqualValue() {
+  void testIsEqualToValue() {
     var first1FieldNode = new FieldNode(0, "first", "Ljava.lang.String;", null, "Foo");
     var first2FieldNode = new FieldNode(0, "first", "Ljava.lang.String;", null, "Bar");
 
-    AsmAssertions.assertThat(first1FieldNode)
-                 .isEqualTo(first1FieldNode);
+    assertThat(first1FieldNode)
+            .isEqualTo(first1FieldNode);
 
-    AsmAssertions.assertThat(first1FieldNode)
-                 .addOption(StandardAssertOption.IGNORE_VALUE)
-                 .isEqualTo(first2FieldNode);
+    assertThat(first1FieldNode)
+            .addOption(StandardAssertOption.IGNORE_VALUE)
+            .isEqualTo(first2FieldNode);
 
-    Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(first1FieldNode)
-                                                     .isEqualTo(first2FieldNode))
+    Assertions.assertThatThrownBy(() -> assertThat(first1FieldNode)
+                      .isEqualTo(first2FieldNode))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Field: first > Is equal field value] \n" +
+              .hasMessage("[Field: first > Has equal field value] \n" +
                           "expected: \"Bar\"\n" +
                           " but was: \"Foo\"");
   }
 
   @Test
-  void testIsEqualVisibleAnnotations() {
+  void testIsEqualToVisibleAnnotations() {
     var first1FieldNode = new FieldNode(0, "first", "Ljava.lang.String;", null, null);
     first1FieldNode.visibleAnnotations = List.of(AnnotationNodeUtils.createAnnotationNode(VisibleAnnotationA.class));
 
@@ -178,15 +179,15 @@ class FieldNodeAssertTest {
     first2FieldNode.visibleAnnotations = List.of(AnnotationNodeUtils.createAnnotationNode(VisibleAnnotationA.class),
                                                  AnnotationNodeUtils.createAnnotationNode(VisibleAnnotationB.class));
 
-    AsmAssertions.assertThat(first1FieldNode)
-                 .isEqualTo(first1FieldNode);
+    assertThat(first1FieldNode)
+            .isEqualTo(first1FieldNode);
 
-    AsmAssertions.assertThat(first1FieldNode)
-                 .addOption(StandardAssertOption.IGNORE_VISIBLE_ANNOTATIONS)
-                 .isEqualTo(first2FieldNode);
+    assertThat(first1FieldNode)
+            .addOption(StandardAssertOption.IGNORE_VISIBLE_ANNOTATIONS)
+            .isEqualTo(first2FieldNode);
 
-    Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(first1FieldNode)
-                                                     .isEqualTo(first2FieldNode))
+    Assertions.assertThatThrownBy(() -> assertThat(first1FieldNode)
+                      .isEqualTo(first2FieldNode))
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Field: first > Is equal field visible annotations] \n" +
                           "Expecting actual:\n" +
@@ -200,7 +201,7 @@ class FieldNodeAssertTest {
   }
 
   @Test
-  void testIsEqualInvisibleAnnotations() {
+  void testIsEqualToInvisibleAnnotations() {
     var first1FieldNode = new FieldNode(0, "first", "Ljava.lang.String;", null, null);
     first1FieldNode.invisibleAnnotations = List.of(AnnotationNodeUtils.createAnnotationNode(InvisibleAnnotationA.class));
 
@@ -208,15 +209,15 @@ class FieldNodeAssertTest {
     first2FieldNode.invisibleAnnotations = List.of(AnnotationNodeUtils.createAnnotationNode(InvisibleAnnotationA.class),
                                                    AnnotationNodeUtils.createAnnotationNode(InvisibleAnnotationB.class));
 
-    AsmAssertions.assertThat(first1FieldNode)
-                 .isEqualTo(first1FieldNode);
+    assertThat(first1FieldNode)
+            .isEqualTo(first1FieldNode);
 
-    AsmAssertions.assertThat(first1FieldNode)
-                 .addOption(StandardAssertOption.IGNORE_INVISIBLE_ANNOTATIONS)
-                 .isEqualTo(first2FieldNode);
+    assertThat(first1FieldNode)
+            .addOption(StandardAssertOption.IGNORE_INVISIBLE_ANNOTATIONS)
+            .isEqualTo(first2FieldNode);
 
-    Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(first1FieldNode)
-                                                     .isEqualTo(first2FieldNode))
+    Assertions.assertThatThrownBy(() -> assertThat(first1FieldNode)
+                      .isEqualTo(first2FieldNode))
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Field: first > Is equal field invisible annotations] \n" +
                           "Expecting actual:\n" +
@@ -230,7 +231,7 @@ class FieldNodeAssertTest {
   }
 
   @Test
-  void testIsEqualVisibleTypeAnnotations() throws IOException {
+  void testIsEqualToVisibleTypeAnnotations() throws IOException {
     @Language("Java")
     String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;" +
                      "abstract class MyClass<T> extends @VisibleTypeParameterAnnotationA Thread {" +
@@ -254,15 +255,15 @@ class FieldNodeAssertTest {
     FieldNode first2FieldNode = new FieldNode(0, "first", "Ljava.lang.String;", null, null);
     first1FieldNode.visibleTypeAnnotations = List.of(firstTypeAnnotation, secondTypeAnnotation);
 
-    AsmAssertions.assertThat(first1FieldNode)
-                 .isEqualTo(first1FieldNode);
+    assertThat(first1FieldNode)
+            .isEqualTo(first1FieldNode);
 
-    AsmAssertions.assertThat(first1FieldNode)
-                 .addOption(StandardAssertOption.IGNORE_VISIBLE_TYPE_ANNOTATIONS)
-                 .isEqualTo(first2FieldNode);
+    assertThat(first1FieldNode)
+            .addOption(StandardAssertOption.IGNORE_VISIBLE_TYPE_ANNOTATIONS)
+            .isEqualTo(first2FieldNode);
 
-    Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(first1FieldNode)
-                                                     .isEqualTo(first2FieldNode))
+    Assertions.assertThatThrownBy(() -> assertThat(first1FieldNode)
+                      .isEqualTo(first2FieldNode))
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Field: first > Is equal field visible type annotations] \n" +
                           "Expecting actual:\n" +
@@ -277,7 +278,7 @@ class FieldNodeAssertTest {
   }
 
   @Test
-  void testIsEqualInvisibleTypeAnnotations() throws IOException {
+  void testIsEqualToInvisibleTypeAnnotations() throws IOException {
     @Language("Java")
     String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotation;" +
                      "class MyClass<T> {" +
@@ -301,15 +302,15 @@ class FieldNodeAssertTest {
     FieldNode first2FieldNode = new FieldNode(0, "first", "Ljava.lang.String;", null, null);
     first1FieldNode.invisibleTypeAnnotations = List.of(firstTypeAnnotation, secondTypeAnnotation);
 
-    AsmAssertions.assertThat(first1FieldNode)
-                 .isEqualTo(first1FieldNode);
+    assertThat(first1FieldNode)
+            .isEqualTo(first1FieldNode);
 
-    AsmAssertions.assertThat(first1FieldNode)
-                 .addOption(StandardAssertOption.IGNORE_INVISIBLE_TYPE_ANNOTATIONS)
-                 .isEqualTo(first2FieldNode);
+    assertThat(first1FieldNode)
+            .addOption(StandardAssertOption.IGNORE_INVISIBLE_TYPE_ANNOTATIONS)
+            .isEqualTo(first2FieldNode);
 
-    Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(first1FieldNode)
-                                                     .isEqualTo(first2FieldNode))
+    Assertions.assertThatThrownBy(() -> assertThat(first1FieldNode)
+                      .isEqualTo(first2FieldNode))
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Field: first > Is equal field invisible type annotations] \n" +
                           "Expecting actual:\n" +
@@ -324,21 +325,21 @@ class FieldNodeAssertTest {
   }
 
   @Test
-  void testIsEqualAttributes() {
+  void testIsEqualToAttributes() {
     var first1FieldNode = new FieldNode(0, "first", "Ljava.lang.String;", null, null);
     first1FieldNode.attrs = List.of(new DummyAttribute("Foo"));
     var first2FieldNode = new FieldNode(0, "first", "Ljava.lang.String;", null, null);
     first2FieldNode.attrs = List.of(new DummyAttribute("Foo"), new DummyAttribute("Bar"));
 
-    AsmAssertions.assertThat(first1FieldNode)
-                 .isEqualTo(first1FieldNode);
+    assertThat(first1FieldNode)
+            .isEqualTo(first1FieldNode);
 
-    AsmAssertions.assertThat(first1FieldNode)
-                 .addOption(StandardAssertOption.IGNORE_ATTRIBUTES)
-                 .isEqualTo(first2FieldNode);
+    assertThat(first1FieldNode)
+            .addOption(StandardAssertOption.IGNORE_ATTRIBUTES)
+            .isEqualTo(first2FieldNode);
 
-    Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(first1FieldNode)
-                                                     .isEqualTo(first2FieldNode))
+    Assertions.assertThatThrownBy(() -> assertThat(first1FieldNode)
+                      .isEqualTo(first2FieldNode))
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Field: first > Is equal field attributes] \n" +
                           "Expecting actual:\n" +

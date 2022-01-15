@@ -13,11 +13,15 @@ import java.util.Comparator;
  * An AssertJ {@link AbstractAssert} for an {@link Attribute} which will use the
  * {@link AttributeComparator} to determine the equality.
  *
+ * <p>An instance can be created via {@link AsmAssertions#assertThat(Attribute)}.
+ * Use {@link AsmAssertions#assertThatAttributes(Iterable)} for multiple
+ * {@code Attribute}s.
+ *
+ * <p>There are no direct supported {@link AssertOption}s yet.
+ *
  * <p>To override the used {@link AttributeRepresentation} or
  * {@link AttributeComparator} call {@link #withRepresentation(Representation)}
  * or {@link #usingComparator(Comparator)}.
- *
- * <p>An instance can be created via {@link AsmAssertions#assertThat(Attribute)}.
  */
 public class AttributeAssert extends AsmAssert<AttributeAssert, Attribute> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -27,25 +31,13 @@ public class AttributeAssert extends AsmAssert<AttributeAssert, Attribute> {
   /**
    * Initializes an {@link AttributeAssert}.
    *
-   * <p>There are no direct supported {@link AssertOption}s yet.
-   *
    * @param actual the actual {@link Attribute}; may be null.
-   * @param assertOptions an array of {@link AssertOption}s; never null.
    */
-  public AttributeAssert(Attribute actual, AssertOption... assertOptions) {
-    super(actual, AttributeAssert.class, Attribute.class, createSelfDescription(actual), assertOptions);
-
-    info.useRepresentation(AttributeRepresentation.INSTANCE);
-    //noinspection ResultOfMethodCallIgnored
-    usingComparator(AttributeComparator.INSTANCE);
+  protected AttributeAssert(Attribute actual) {
+    super("Attribute", actual, AttributeAssert.class, AttributeRepresentation.INSTANCE, AttributeComparator.INSTANCE);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
   // -- Private Methods --------------------------------------------------------------------------------------------- //
-
-  private static String createSelfDescription(Attribute actual) {
-    return "Attribute: " + AttributeRepresentation.INSTANCE.toStringOf(actual);
-  }
-
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 }

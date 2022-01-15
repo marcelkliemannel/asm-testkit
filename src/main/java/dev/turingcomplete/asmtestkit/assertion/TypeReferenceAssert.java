@@ -7,7 +7,6 @@ import dev.turingcomplete.asmtestkit.assertion.representation.TypePathRepresenta
 import dev.turingcomplete.asmtestkit.assertion.representation.TypeReferenceRepresentation;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;
-import org.objectweb.asm.TypePath;
 import org.objectweb.asm.TypeReference;
 
 import java.util.Comparator;
@@ -16,11 +15,15 @@ import java.util.Comparator;
  * An AssertJ {@link AbstractAssert} for a {@link TypeReference} which will use
  * the {@link TypeReferenceComparator} to determine the equality.
  *
+ * <p>An instance can be created via {@link AsmAssertions#assertThat(TypeReference)}.
+ * Use {@link AsmAssertions#assertThatTypeReferences(Iterable)} for multiple
+ * {@code TypeReference}s.
+ *
+ * <p>There are no direct supported {@link AssertOption}s yet.
+ *
  * <p>To override the used {@link TypePathRepresentation} or
  * {@link TypePathComparator} call {@link #withRepresentation(Representation)}
  * or {@link #usingComparator(Comparator)}.
- *
- * <p>An instance can be created via {@link AsmAssertions#assertThat(TypePath)}.
  */
 public class TypeReferenceAssert extends AsmAssert<TypeReferenceAssert, TypeReference> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -30,25 +33,13 @@ public class TypeReferenceAssert extends AsmAssert<TypeReferenceAssert, TypeRefe
   /**
    * Initializes a {@link TypeReferenceAssert}.
    *
-   * <p>There are no direct supported {@link AssertOption}s yet.
-   *
    * @param actual the actual {@link TypeReference}; may be null.
-   * @param assertOptions an array of {@link AssertOption}s; never null.
    */
-  public TypeReferenceAssert(TypeReference actual, AssertOption... assertOptions) {
-    super(actual, TypeReferenceAssert.class, TypeReference.class, createSelfDescription(actual), assertOptions);
-
-    info.useRepresentation(TypeReferenceRepresentation.INSTANCE);
-    //noinspection ResultOfMethodCallIgnored
-    usingComparator(TypeReferenceComparator.INSTANCE);
+  protected TypeReferenceAssert(TypeReference actual, AssertOption... assertOptions) {
+    super("Type Reference", actual, TypeReferenceAssert.class, TypeReferenceRepresentation.INSTANCE, TypeReferenceComparator.INSTANCE);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
   // -- Private Methods --------------------------------------------------------------------------------------------- //
-
-  private static String createSelfDescription(TypeReference actual) {
-    return "Type reference: " + TypeReferenceRepresentation.INSTANCE.toStringOf(actual);
-  }
-
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 }

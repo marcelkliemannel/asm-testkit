@@ -43,7 +43,7 @@ class TypeReferenceAssertTest {
     Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(classTypeReference)
                                                      .isEqualTo(fieldTypeReference))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Type reference: class_type_parameter=0] \n" +
+              .hasMessage("[Type Reference: class_type_parameter=0] \n" +
                           "expected: field\n" +
                           " but was: class_type_parameter=0\n" +
                           "when comparing values using TypeReferenceComparator");

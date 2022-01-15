@@ -2,13 +2,13 @@ package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.assertion.comparator.TypeAnnotationNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
-import dev.turingcomplete.asmtestkit.assertion.representation.AnnotationNodeRepresentation;
+import dev.turingcomplete.asmtestkit.assertion.option.StandardAssertOption;
+import dev.turingcomplete.asmtestkit.assertion.representation.AsmRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypeAnnotationNodeRepresentation;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.TypePath;
 import org.objectweb.asm.TypeReference;
-import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.util.Comparator;
@@ -18,14 +18,22 @@ import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getF
 /**
  * An AssertJ {@link AbstractAssert} for a {@link TypeAnnotationNode}.
  *
+ * <p>An instance can be created via
+ * {@link AsmAssertions#assertThat(TypeAnnotationNode)} or
+ * {@link #createForTypeAnnotationNode(TypeAnnotationNode)}.
+ * Use {@link AsmAssertions#assertThatTypeAnnotationNodes(Iterable)} for multiple
+ * {@code TypeAnnotationNode}s.
+ *
+ * <p>The supported {@link AssertOption} is
+ * {@link StandardAssertOption#IGNORE_ANNOTATION_VALUES}.
+ *
  * <p>To override the used {@link TypeAnnotationNodeRepresentation} or
  * {@link TypeAnnotationNodeComparator} call {@link #withRepresentation(Representation)}
  * or {@link #usingComparator(Comparator)}.
- *
- * <p>An instance can be created via
- * {@link AsmAssertions#assertThat(TypeAnnotationNode)}.
  */
-public class TypeAnnotationNodeAssert extends AbstractAnnotationNodeAssert<TypeAnnotationNodeAssert, TypeAnnotationNode> {
+public class TypeAnnotationNodeAssert<S extends TypeAnnotationNodeAssert<S, A>, A extends TypeAnnotationNode>
+        extends AnnotationNodeAssert<S, A> {
+
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
@@ -33,29 +41,46 @@ public class TypeAnnotationNodeAssert extends AbstractAnnotationNodeAssert<TypeA
   /**
    * Initializes a {@link TypeAnnotationNodeAssert}.
    *
-   * <p>There are no direct supported {@link AssertOption}s yet.
-   *
-   * @param actual        the actual {@link TypeAnnotationNode}; may be null.
-   * @param assertOptions an array of {@link AssertOption}s; never null.
+   * @param name                  a short, generic {@link String} name; never null.
+   * @param actual                the actual {@link A}; may be null.
+   * @param selfType              the {@link Class} of {@code this); never null.
+   * @param defaultRepresentation the default {@link Representation}; may be null.
+   * @param defaultComparator     the default {@link Comparator}; may be null.
    */
-  public TypeAnnotationNodeAssert(TypeAnnotationNode actual, AssertOption... assertOptions) {
-    super(actual, TypeAnnotationNodeAssert.class, TypeAnnotationNode.class, createSelfDescription(actual), assertOptions);
+  protected TypeAnnotationNodeAssert(String name,
+                                     A actual,
+                                     Class<?> selfType,
+                                     AsmRepresentation<A> defaultRepresentation,
+                                     Comparator<A> defaultComparator) {
 
-    info.useRepresentation(TypeAnnotationNodeRepresentation.INSTANCE);
-    //noinspection ResultOfMethodCallIgnored
-    usingComparator(TypeAnnotationNodeComparator.INSTANCE);
+    super(name, actual, selfType, defaultRepresentation, defaultComparator);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
+  /**
+   * Creates a new {@link TypeAnnotationNodeAssert} for a {@link TypeAnnotationNode}.
+   *
+   * @param actual the actual {@link TypeAnnotationNode}; may be null.
+   * @return a new {@link TypeAnnotationNodeAssert}; never null.
+   */
+  public static TypeAnnotationNodeAssert<?, TypeAnnotationNode> createForTypeAnnotationNode(TypeAnnotationNode actual) {
+    return new TypeAnnotationNodeAssert<>("Type Annotation",
+                                          actual,
+                                          TypeAnnotationNodeAssert.class,
+                                          TypeAnnotationNodeRepresentation.INSTANCE,
+                                          TypeAnnotationNodeComparator.INSTANCE);
+  }
+
   @Override
-  public TypeAnnotationNodeAssert isEqualTo(Object expected) {
+  public S isEqualTo(Object expected) {
     super.isEqualTo(expected);
 
-    isEqualTypePath(expected);
-    isEqualTypeReference(expected);
+    hasEqualTypePath(expected);
+    hasEqualTypeReference(expected);
 
-    return this;
+    //noinspection unchecked
+    return (S) this;
   }
 
   /**
@@ -65,10 +90,10 @@ public class TypeAnnotationNodeAssert extends AbstractAnnotationNodeAssert<TypeA
    * @param expected an {@link Object} expected to be a
    *                 {@link TypeAnnotationNode}; may be null.
    */
-  protected void isEqualTypePath(Object expected) {
-    AsmAssertions.assertThat(actual.typePath)
+  protected void hasEqualTypePath(Object expected) {
+    AsmAssertions.assertThat(getFromObjectElseNull(actual, (TypeAnnotationNode typeAnnotationNode) -> typeAnnotationNode.typePath))
                  .addOptions(options)
-                 .as(createDescription("Is equal type path"))
+                 .as(createDescription("Has equal type path"))
                  .isEqualTo(getFromObjectElseNull(expected, TypeAnnotationNode.class, typeAnnotationNode -> typeAnnotationNode.typePath));
   }
 
@@ -79,19 +104,14 @@ public class TypeAnnotationNodeAssert extends AbstractAnnotationNodeAssert<TypeA
    * @param expected an {@link Object} expected to be a
    *                 {@link TypeAnnotationNode}; may be null.
    */
-  protected void isEqualTypeReference(Object expected) {
-    AsmAssertions.assertThat(new TypeReference(actual.typeRef))
+  protected void hasEqualTypeReference(Object expected) {
+    AsmAssertions.assertThat(getFromObjectElseNull(actual, (TypeAnnotationNode typeAnnotationNode) -> new TypeReference(actual.typeRef)))
                  .addOptions(options)
-                 .as(createDescription("Is equal type reference"))
+                 .as(createDescription("Has equal type reference"))
                  .isEqualTo(getFromObjectElseNull(expected, TypeAnnotationNode.class, typeAnnotationNode -> new TypeReference(typeAnnotationNode.typeRef)));
 
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
-
-  private static String createSelfDescription(AnnotationNode actual) {
-    return "Type Annotation: " + AnnotationNodeRepresentation.INSTANCE.toStringOf(actual);
-  }
-
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 }
