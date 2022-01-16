@@ -1,14 +1,18 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
+import org.assertj.core.presentation.Representation;
 import org.assertj.core.presentation.StandardRepresentation;
 
 import java.util.Objects;
 
+/**
+ * A base class for an AssertJ {@link Representation} for ASM objects.
+ */
 public abstract class AsmRepresentation<T> extends StandardRepresentation {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
-  private final Class<T> objectClass;
+  protected final Class<T> objectClass;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 

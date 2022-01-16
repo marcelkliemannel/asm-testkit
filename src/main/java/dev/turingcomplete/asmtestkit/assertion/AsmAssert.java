@@ -21,7 +21,7 @@ import java.util.Set;
  * ensures that the {@code AbstractAssert} methods that are not overridden work
  * correctly.
  *
- * @param <S> the 'self' type of {@code this) {@link AbstractAssert}}.
+ * @param <S> the 'self' type of {@code this} {@link AbstractAssert}}.
  * @param <A> the type of the actual object.
  */
 public abstract class AsmAssert<S extends AbstractAssert<S, A>, A>
@@ -40,7 +40,7 @@ public abstract class AsmAssert<S extends AbstractAssert<S, A>, A>
    *
    * @param name                  a short, generic {@link String} name; never null.
    * @param actual                the actual {@link A}; may be null.
-   * @param selfType              the {@link Class} of {@code this); never null.
+   * @param selfType              the {@link Class} of {@code this}; never null.
    * @param defaultRepresentation the default {@link Representation}; may be null.
    * @param defaultComparator     the default {@link Comparator}; may be null.
    */

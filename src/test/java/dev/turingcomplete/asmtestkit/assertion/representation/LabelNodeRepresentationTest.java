@@ -24,11 +24,11 @@ class LabelNodeRepresentationTest {
   @Test
   void testToStringOfWithNames() {
     var label = new Label();
-    assertThat(LabelNodeRepresentation.INSTANCE.toStringOf(new LabelNode(label), Map.of(label, "L1")))
+    assertThat(LabelNodeRepresentation.INSTANCE.doToStringOf(new LabelNode(label), Map.of(label, "L1")))
             .isEqualTo("L1");
 
     var unknownLabel = new Label();
-    assertThat(LabelNodeRepresentation.INSTANCE.toStringOf(new LabelNode(unknownLabel), Map.of(label, "L1")))
+    assertThat(LabelNodeRepresentation.INSTANCE.doToStringOf(new LabelNode(unknownLabel), Map.of(label, "L1")))
             .isEqualTo("L" + unknownLabel.hashCode());
   }
 

@@ -1,10 +1,9 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
 import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
+import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.util.Objects;
 import java.util.StringJoiner;
@@ -13,7 +12,7 @@ import static dev.turingcomplete.asmtestkit.assertion.representation._internal.R
 import static dev.turingcomplete.asmtestkit.assertion.representation._internal.RepresentationUtils.createAttributesRepresentations;
 
 /**
- * Creates a {@link String} representation of a {@link FieldNode}.
+ * An AssertJ {@link Representation} for a {@link FieldNode}.
  *
  * <p>Example output:
  * <pre>{@code
@@ -33,19 +32,28 @@ public class FieldNodeRepresentation extends AsmRepresentation<FieldNode> {
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
-  private AccessRepresentation                                    accessRepresentation             = AccessRepresentation.FIELD_INSTANCE;
-  private TypeRepresentation                                      typeRepresentation               = TypeRepresentation.INSTANCE;
-  private AttributeRepresentation                                 attributeRepresentation          = AttributeRepresentation.INSTANCE;
-  private AnnotationNodeRepresentation<?, AnnotationNode>         annotationNodeRepresentation     = AnnotationNodeRepresentation.INSTANCE;
-  private TypeAnnotationNodeRepresentation<?, TypeAnnotationNode> typeAnnotationNodeRepresentation = TypeAnnotationNodeRepresentation.INSTANCE;
+  private AccessRepresentation             accessRepresentation             = AccessRepresentation.FIELD_INSTANCE;
+  private TypeRepresentation               typeRepresentation               = TypeRepresentation.INSTANCE;
+  private AttributeRepresentation          attributeRepresentation          = AttributeRepresentation.INSTANCE;
+  private AnnotationNodeRepresentation     annotationNodeRepresentation     = AnnotationNodeRepresentation.INSTANCE;
+  private TypeAnnotationNodeRepresentation typeAnnotationNodeRepresentation = TypeAnnotationNodeRepresentation.INSTANCE;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  public FieldNodeRepresentation() {
+  protected FieldNodeRepresentation() {
     super(FieldNode.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  /**
+   * Creates a new {@link FieldNodeRepresentation} instance.
+   *
+   * @return a new {@link FieldNodeRepresentation}; never null;
+   */
+  public static FieldNodeRepresentation create() {
+    return new FieldNodeRepresentation();
+  }
 
   /**
    * Sets the used {@link AccessRepresentation} for {@link AccessKind#FIELD}.
@@ -109,7 +117,7 @@ public class FieldNodeRepresentation extends AsmRepresentation<FieldNode> {
    *                                     never null.
    * @return {@code this} {@link FieldNodeRepresentation}; never null.
    */
-  public FieldNodeRepresentation useAnnotationNodeRepresentation(AnnotationNodeRepresentation<?, AnnotationNode> annotationNodeRepresentation) {
+  public FieldNodeRepresentation useAnnotationNodeRepresentation(AnnotationNodeRepresentation annotationNodeRepresentation) {
     this.annotationNodeRepresentation = Objects.requireNonNull(annotationNodeRepresentation);
 
     return this;
@@ -124,7 +132,7 @@ public class FieldNodeRepresentation extends AsmRepresentation<FieldNode> {
    *                                         never null.
    * @return {@code this} {@link FieldNodeRepresentation}; never null.
    */
-  public FieldNodeRepresentation useTypeAnnotationNodeRepresentation(TypeAnnotationNodeRepresentation<?, TypeAnnotationNode> typeAnnotationNodeRepresentation) {
+  public FieldNodeRepresentation useTypeAnnotationNodeRepresentation(TypeAnnotationNodeRepresentation typeAnnotationNodeRepresentation) {
     this.typeAnnotationNodeRepresentation = Objects.requireNonNull(typeAnnotationNodeRepresentation);
 
     return this;

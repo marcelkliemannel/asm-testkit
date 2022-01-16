@@ -1,10 +1,13 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
 import dev.turingcomplete.asmtestkit.asmutils._internal.TextifierUtils;
+import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Attribute;
 
 /**
- * Creates a {@link String} representation of an {@link Attribute}.
+ * An AssertJ {@link Representation} for an {@link Attribute}.
+ *
+ * <p>Example output: {@code NameContent}.
  */
 public class AttributeRepresentation extends AsmRepresentation<Attribute> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -19,11 +22,20 @@ public class AttributeRepresentation extends AsmRepresentation<Attribute> {
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  public AttributeRepresentation() {
+  protected AttributeRepresentation() {
     super(Attribute.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  /**
+   * Creates a new {@link AttributeRepresentation} instance.
+   *
+   * @return a new {@link AttributeRepresentation}; never null;
+   */
+  public static AttributeRepresentation create() {
+    return new AttributeRepresentation();
+  }
 
   @Override
   protected String doToSimplifiedStringOf(Attribute attribute) {

@@ -8,7 +8,7 @@ import org.objectweb.asm.tree.LocalVariableAnnotationNode;
 import java.io.IOException;
 import java.util.List;
 
-import static dev.turingcomplete.asmtestkit.assertion.comparator.TypeAnnotationNodeComparator.INSTANCE;
+import static dev.turingcomplete.asmtestkit.assertion.comparator.LocalVariableAnnotationNodeComparator.INSTANCE;
 import static dev.turingcomplete.asmtestkit.compile.CompilationEnvironment.create;
 import static org.assertj.core.api.Assertions.assertThat;
 

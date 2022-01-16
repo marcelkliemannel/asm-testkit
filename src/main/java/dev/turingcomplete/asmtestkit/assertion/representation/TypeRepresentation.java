@@ -1,12 +1,13 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
 import dev.turingcomplete.asmtestkit.asmutils.ClassNameUtils;
+import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Type;
 
 import java.util.Objects;
 
 /**
- * Creates a {@link String} representation of a {@link Type}.
+ * An AssertJ {@link Representation} for a {@link Type}.
  */
 public class TypeRepresentation extends AsmRepresentation<Type> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -22,11 +23,20 @@ public class TypeRepresentation extends AsmRepresentation<Type> {
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  public TypeRepresentation() {
+  protected TypeRepresentation() {
     super(Type.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  /**
+   * Creates a new {@link TypeRepresentation} instance.
+   *
+   * @return a new {@link TypeRepresentation}; never null;
+   */
+  public static TypeRepresentation create() {
+    return new TypeRepresentation();
+  }
 
   /**
    * Use the fully qualified class name (for example {@code java.lang.String})

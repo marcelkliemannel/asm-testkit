@@ -1,10 +1,8 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.assertion.comparator.LocalVariableNodeComparator;
-import dev.turingcomplete.asmtestkit.assertion.comparator.TypeAnnotationNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.representation.LocalVariableNodeRepresentation;
-import dev.turingcomplete.asmtestkit.assertion.representation.TypeAnnotationNodeRepresentation;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.presentation.Representation;
@@ -27,8 +25,8 @@ import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getS
  *
  * <p>There are no direct supported {@link AssertOption}s yet.
  *
- * <p>To override the used {@link TypeAnnotationNodeRepresentation} or
- * {@link TypeAnnotationNodeComparator} call {@link #withRepresentation(Representation)}
+ * <p>To override the used {@link LocalVariableNodeRepresentation} or
+ * {@link LocalVariableNodeComparator} call {@link #withRepresentation(Representation)}
  * or {@link #usingComparator(Comparator)}.
  */
 public class LocalVariableNodeAssert extends AsmAssert<LocalVariableNodeAssert, LocalVariableNode> {
@@ -41,7 +39,7 @@ public class LocalVariableNodeAssert extends AsmAssert<LocalVariableNodeAssert, 
    *
    * @param actual the actual {@link LocalVariableNode}; may be null.
    */
-  public LocalVariableNodeAssert(LocalVariableNode actual) {
+  protected LocalVariableNodeAssert(LocalVariableNode actual) {
     super("Local Variable",
           actual,
           LocalVariableNodeAssert.class,

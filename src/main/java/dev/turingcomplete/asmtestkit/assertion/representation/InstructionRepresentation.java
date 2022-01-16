@@ -1,11 +1,12 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
 import dev.turingcomplete.asmtestkit.asmutils._internal.TextifierUtils;
+import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.util.TraceMethodVisitor;
 
 /**
- * Creates a {@link String} representation of a {@link AbstractInsnNode}.
+ * An AssertJ {@link Representation} for an {@link AbstractInsnNode}.
  *
  * <p>Example output:
  * <pre>{@code BIPUSH 42 (Opcode: 16)}</pre>
@@ -27,11 +28,20 @@ public class InstructionRepresentation extends AsmRepresentation<AbstractInsnNod
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  public InstructionRepresentation() {
+  protected InstructionRepresentation() {
     super(AbstractInsnNode.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  /**
+   * Creates a new {@link InstructionRepresentation} instance.
+   *
+   * @return a new {@link InstructionRepresentation}; never null;
+   */
+  public static InstructionRepresentation create() {
+    return new InstructionRepresentation();
+  }
 
   @Override
   protected String doToSimplifiedStringOf(AbstractInsnNode abstractInsnNode) {

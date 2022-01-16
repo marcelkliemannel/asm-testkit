@@ -2,6 +2,7 @@ package dev.turingcomplete.asmtestkit.assertion.representation;
 
 import dev.turingcomplete.asmtestkit.asmutils.Access;
 import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
+import org.assertj.core.presentation.Representation;
 import org.assertj.core.presentation.StandardRepresentation;
 
 import java.util.Comparator;
@@ -10,7 +11,7 @@ import java.util.Objects;
 import static dev.turingcomplete.asmtestkit.asmutils.AccessKind.*;
 
 /**
- * Creates a {@link String} representation of access flags.
+ * An AssertJ {@link Representation} for access flags.
  *
  * Example output: {@code (513) public interface}.
  */
@@ -67,11 +68,22 @@ public class AccessRepresentation extends StandardRepresentation {
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  public AccessRepresentation(AccessKind accessKind) {
+  protected AccessRepresentation(AccessKind accessKind) {
     this.accessKind = Objects.requireNonNull(accessKind);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  /**
+   * Creates a new {@link AnnotationNodeRepresentation} instance for the given
+   * {@link AccessKind}.
+   *
+   * @param accessKind an {@link AccessKind}; never null.
+   * @return a new {@link AnnotationNodeRepresentation}; never null;
+   */
+  public static AccessRepresentation create(AccessKind accessKind) {
+    return new AccessRepresentation(accessKind);
+  }
 
   /**
    * Gets a reusable {@link AccessRepresentation} instance for the given

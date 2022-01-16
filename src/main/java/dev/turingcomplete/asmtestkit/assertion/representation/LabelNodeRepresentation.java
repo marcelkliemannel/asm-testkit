@@ -1,19 +1,20 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
+import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.tree.LabelNode;
 
 import java.util.Map;
 
 /**
- * Creates a {@link String} representation of a {@link LabelNode}.
+ * An AssertJ {@link Representation} for a {@link LabelNode}.
  *
  * The {@link #toStringOf(String)} implementation will output a {@code L}
  * followed by the hash code of the {@link LabelNode#getLabel()}. To map the
  * {@link Label} to a consistent name use
- * {@link #toStringOf(LabelNode, Map)}.
+ * {@link #doToStringOf(LabelNode, Map)}.
  */
-public class LabelNodeRepresentation extends AsmRepresentation<LabelNode> {
+public class LabelNodeRepresentation extends WithLabelNamesRepresentation<LabelNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
@@ -25,18 +26,28 @@ public class LabelNodeRepresentation extends AsmRepresentation<LabelNode> {
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  public LabelNodeRepresentation() {
+  protected LabelNodeRepresentation() {
     super(LabelNode.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
-  @Override
-  protected String doToStringOf(LabelNode labelNode) {
-    return toStringOf(labelNode, Map.of());
+  /**
+   * Creates a new {@link LabelNodeRepresentation} instance.
+   *
+   * @return a new {@link LabelNodeRepresentation}; never null;
+   */
+  public static LabelNodeRepresentation create() {
+    return new LabelNodeRepresentation();
   }
 
-  public String toStringOf(LabelNode labelNode, Map<Label, String> labelNames) {
+  @Override
+  protected String doToStringOf(LabelNode labelNode) {
+    return doToStringOf(labelNode, Map.of());
+  }
+
+  @Override
+  public String doToStringOf(LabelNode labelNode, Map<Label, String> labelNames) {
     return labelNames.getOrDefault(labelNode.getLabel(), "L" + labelNode.getLabel().hashCode());
   }
 

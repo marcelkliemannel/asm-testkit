@@ -20,8 +20,8 @@ public final class ComparatorUtils {
   /**
    * A {@link Comparator} for {@link Object}s which can handle null values. In
    * the case that both values are not null, the comparator returns {@code 0} if
-   * {@link Object#equals(Object)} returns true, otherwise the returned value
-   * will have an undefined value other than {@code 0}.
+   * both objects are equal using {@link Object#equals(Object)}. Otherwise they
+   * will be ordered by their {@link Object#hashCode()}.
    */
   public static final Comparator<Object> OBJECT_COMPARATOR = new ObjectComparator();
 
@@ -51,7 +51,11 @@ public final class ComparatorUtils {
         return 0;
       }
 
-      return first.equals(second) ? 0 : -1;
+      if (first.equals(second)) {
+        return 0;
+      }
+
+      return Integer.compare(first.hashCode(), second.hashCode());
     }
   }
 }

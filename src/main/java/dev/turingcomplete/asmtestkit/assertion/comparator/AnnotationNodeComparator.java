@@ -5,10 +5,6 @@ import dev.turingcomplete.asmtestkit.assertion.representation.AnnotationNodeRepr
 import org.objectweb.asm.tree.AnnotationNode;
 
 import java.util.Comparator;
-import java.util.Map;
-import java.util.Objects;
-
-import static dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils.convertAnnotationNodeValuesToMap;
 
 /**
  * A comparison function to order {@link AnnotationNode}s.
@@ -18,15 +14,13 @@ import static dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils.convert
  * equal they will be ordered based on the lexicographical order of their
  * {@link AnnotationNodeRepresentation}s.
  */
-public class AnnotationNodeComparator<S extends AnnotationNodeComparator<S, A>, A extends AnnotationNode>
-        extends AsmComparator<A> {
-
+public class AnnotationNodeComparator extends AbstractAnnotationNodeComparator<AnnotationNodeComparator, AnnotationNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
    * A reusable {@link AnnotationNodeComparator} instance.
    */
-  public static final AnnotationNodeComparator<?, AnnotationNode> INSTANCE = createForAnnotationNode();
+  public static final AnnotationNodeComparator INSTANCE = new AnnotationNodeComparator();
 
   /**
    * A reusable {@link Comparator} instance for an {@link Iterable} of
@@ -35,9 +29,6 @@ public class AnnotationNodeComparator<S extends AnnotationNodeComparator<S, A>, 
   public static final Comparator<Iterable<? extends AnnotationNode>> ITERABLE_INSTANCE = new IterableComparator<>(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
-
-  private AnnotationNodeRepresentation<?, AnnotationNode> annotationNodeRepresentation = AnnotationNodeRepresentation.INSTANCE;
-
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected AnnotationNodeComparator() {
@@ -50,41 +41,8 @@ public class AnnotationNodeComparator<S extends AnnotationNodeComparator<S, A>, 
    *
    * @return a new {@link AnnotationNodeComparator}; never null;
    */
-  public static AnnotationNodeComparator<?, AnnotationNode> createForAnnotationNode() {
-    return new AnnotationNodeComparator<>();
-  }
-
-  /**
-   * Sets the used {@link AnnotationNodeRepresentation}.
-   *
-   * <p>The default value is {@link AnnotationNodeRepresentation#INSTANCE}.
-   *
-   * @param annotationNodeRepresentation an {@link AnnotationNodeRepresentation};
-   *                                     never null.
-   * @return {@code this} {@link S}; never null.
-   */
-  protected S useAnnotationNodeRepresentation(AnnotationNodeRepresentation<?, AnnotationNode> annotationNodeRepresentation) {
-    this.annotationNodeRepresentation = Objects.requireNonNull(annotationNodeRepresentation);
-
-    //noinspection unchecked
-    return (S) this;
-  }
-
-  @Override
-  protected int doCompare(A first, A second) {
-    int descResult = Comparator.comparing((AnnotationNode annotationNode) -> annotationNode.desc)
-                               .compare(first, second);
-
-    if (descResult == 0) {
-      Map<Object, Object> firstValues = first != null ? convertAnnotationNodeValuesToMap(first.values) : Map.of();
-      Map<Object, Object> secondValues = second != null ? convertAnnotationNodeValuesToMap(second.values) : Map.of();
-      if (Objects.deepEquals(firstValues, secondValues)) {
-        return 0;
-      }
-    }
-
-    return annotationNodeRepresentation.toStringOf(first)
-                                       .compareTo(annotationNodeRepresentation.toStringOf(second));
+  public static AnnotationNodeComparator create() {
+    return new AnnotationNodeComparator();
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

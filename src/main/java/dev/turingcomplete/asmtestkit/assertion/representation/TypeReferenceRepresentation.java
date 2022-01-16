@@ -1,11 +1,14 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
+import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.TypeReference;
 
 import static org.objectweb.asm.TypeReference.*;
 
 /**
- * A reusable {@link TypeReference} instance.
+ * An AssertJ {@link Representation} for a {@link TypeReference}.
+ *
+ * <p>Example output: {@code class_type_parameter=1}
  */
 public class TypeReferenceRepresentation extends AsmRepresentation<TypeReference> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -23,6 +26,15 @@ public class TypeReferenceRepresentation extends AsmRepresentation<TypeReference
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  /**
+   * Creates a new {@link TypeReferenceRepresentation} instance.
+   *
+   * @return a new {@link TypeReferenceRepresentation}; never null;
+   */
+  public static TypeReferenceRepresentation create() {
+    return new TypeReferenceRepresentation();
+  }
 
   @Override
   protected String doToStringOf(TypeReference typeReference) {

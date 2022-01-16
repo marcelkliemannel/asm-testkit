@@ -1,13 +1,16 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
+import dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils;
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationA;
 import org.assertj.core.api.Assertions;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.tree.LocalVariableAnnotationNode;
+import org.objectweb.asm.tree.MethodNode;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Map;
 
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThat;
 import static dev.turingcomplete.asmtestkit.compile.CompilationEnvironment.create;
@@ -30,35 +33,34 @@ class LocalVariableAnnotationNodeAssertTest {
                      "   }" +
                      " }";
 
-    List<LocalVariableAnnotationNode> localVariableAnnotationNodes = create()
+    MethodNode methodNode = create()
             .addToClasspath(VisibleAnnotationA.class)
             .addJavaInputSource(myClass)
             .compile()
             .readClassNode("MyClass")
-            .methods.get(1).visibleLocalVariableAnnotations;
+            .methods.get(1);
 
-    LocalVariableAnnotationNode firstLocalVariableAnnotationNode = localVariableAnnotationNodes.get(0);
-    LocalVariableAnnotationNode secondLocalVariableAnnotationNode = localVariableAnnotationNodes.get(1);
+    LocalVariableAnnotationNode firstLocalVariableAnnotationNode = methodNode.visibleLocalVariableAnnotations.get(0);
+    LocalVariableAnnotationNode secondLocalVariableAnnotationNode = methodNode.visibleLocalVariableAnnotations.get(1);
 
     AsmAssertions.assertThat(firstLocalVariableAnnotationNode)
                  .isEqualTo(firstLocalVariableAnnotationNode);
 
+    Map<Label, String> labelNames = MethodNodeUtils.extractLabelNames(methodNode);
+
     Assertions.assertThatThrownBy(() -> assertThat(firstLocalVariableAnnotationNode)
+                      .useLabelNames(labelNames)
                       .isEqualTo(secondLocalVariableAnnotationNode))
               .isInstanceOf(AssertionError.class)
-              .hasMessage(String.format("[Local Variable Annotation: @dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA > Has equal ranges] \n" +
-                                        "Expecting actual:\n" +
-                                        "  [\"L%1$s-L%2$s-2\"]\n" +
-                                        "to contain exactly (and in same order):\n" +
-                                        "  [\"L%3$s-L%4$s-3\"]\n" +
-                                        "but some elements were not found:\n" +
-                                        "  [\"L%3$s-L%4$s-3\"]\n" +
-                                        "and others were not expected:\n" +
-                                        "  [\"L%1$s-L%2$s-2\"]\n",
-                                        firstLocalVariableAnnotationNode.start.get(0).getLabel().hashCode(),
-                                        firstLocalVariableAnnotationNode.end.get(0).getLabel().hashCode(),
-                                        secondLocalVariableAnnotationNode.start.get(0).getLabel().hashCode(),
-                                        secondLocalVariableAnnotationNode.end.get(0).getLabel().hashCode()));
+              .hasMessage("[Local Variable Annotation: @dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA > Has equal ranges] \n" +
+                          "Expecting actual:\n" +
+                          "  [\"#2 L1-L3\"]\n" +
+                          "to contain exactly (and in same order):\n" +
+                          "  [\"#3 L2-L3\"]\n" +
+                          "but some elements were not found:\n" +
+                          "  [\"#3 L2-L3\"]\n" +
+                          "and others were not expected:\n" +
+                          "  [\"#2 L1-L3\"]\n");
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

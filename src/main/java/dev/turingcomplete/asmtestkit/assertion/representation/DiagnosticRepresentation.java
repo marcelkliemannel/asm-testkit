@@ -1,5 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
+import org.assertj.core.presentation.Representation;
 import org.assertj.core.presentation.StandardRepresentation;
 
 import javax.tools.Diagnostic;
@@ -11,7 +12,7 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 /**
- * Creates a {@link String} representation of a {@link Diagnostic}.
+ * An AssertJ {@link Representation} for a {@link Diagnostic}.
  *
  * <p>The output is similar to the one of the OpenJDK compiler. Example output:
  * <pre>{@code
@@ -37,7 +38,20 @@ public class DiagnosticRepresentation extends StandardRepresentation {
   private Locale locale = Locale.getDefault();
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
+
+  protected DiagnosticRepresentation() {
+  }
+
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  /**
+   * Creates a new {@link DiagnosticRepresentation} instance.
+   *
+   * @return a new {@link DiagnosticRepresentation}; never null;
+   */
+  public static DiagnosticRepresentation create() {
+    return new DiagnosticRepresentation();
+  }
 
   /**
    * Sets the used {@link Locale}.

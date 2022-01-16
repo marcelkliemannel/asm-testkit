@@ -1,5 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
+import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.tree.LocalVariableAnnotationNode;
 
@@ -10,13 +11,13 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * Creates a {@link String} representation of a {@link LocalVariableAnnotationNode}.
+ * An AssertJ {@link Representation} for a {@link LocalVariableAnnotationNode}.
  *
  * <p>Example output:
  * {@code @TypeParameterAnnotation // reference: local_variable=; path: null // range: L0-L1-1}.
  */
 public class LocalVariableAnnotationNodeRepresentation
-        extends TypeAnnotationNodeRepresentation<LocalVariableAnnotationNodeRepresentation, LocalVariableAnnotationNode> {
+        extends AbstractTypeAnnotationNodeRepresentation<LocalVariableAnnotationNodeRepresentation, LocalVariableAnnotationNode> {
 
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
@@ -31,11 +32,20 @@ public class LocalVariableAnnotationNodeRepresentation
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  public LocalVariableAnnotationNodeRepresentation() {
+  protected LocalVariableAnnotationNodeRepresentation() {
     super(LocalVariableAnnotationNode.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  /**
+   * Creates a new {@link LocalVariableAnnotationNodeRepresentation} instance.
+   *
+   * @return a new {@link LocalVariableAnnotationNodeRepresentation}; never null;
+   */
+  public static LocalVariableAnnotationNodeRepresentation create() {
+    return new LocalVariableAnnotationNodeRepresentation();
+  }
 
   /**
    * Sets the used {@link LabelNodeRepresentation}.
@@ -58,7 +68,8 @@ public class LocalVariableAnnotationNodeRepresentation
     return toStringOf(annotationNode, Map.of());
   }
 
-  public String toStringOf(LocalVariableAnnotationNode annotationNode, Map<Label, String> labelNames) {
+  @Override
+  public String doToStringOf(LocalVariableAnnotationNode annotationNode, Map<Label, String> labelNames) {
     String representation = super.doToStringOf(annotationNode);
 
     representation += toRangeStringOf(annotationNode, labelNames).stream().collect(Collectors.joining("; ", " // range: ", ""));
@@ -70,11 +81,10 @@ public class LocalVariableAnnotationNodeRepresentation
     List<String> ranges = new ArrayList<>();
 
     for (int i = 0; i < annotationNode.start.size(); i++) {
-      String range = labelNodeRepresentation.toStringOf(annotationNode.start.get(i), labelNames);
+      String range = "#" + annotationNode.index.get(i) + " ";
+      range += labelNodeRepresentation.doToStringOf(annotationNode.start.get(i), labelNames);
       range += "-";
-      range += labelNodeRepresentation.toStringOf(annotationNode.end.get(i), labelNames);
-      range += "-";
-      range += annotationNode.index.get(i);
+      range += labelNodeRepresentation.doToStringOf(annotationNode.end.get(i), labelNames);
       ranges.add(range);
     }
 

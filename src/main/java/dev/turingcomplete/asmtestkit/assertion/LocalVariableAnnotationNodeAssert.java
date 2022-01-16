@@ -34,7 +34,7 @@ import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getL
  * or {@link #usingComparator(Comparator)}.
  */
 public class LocalVariableAnnotationNodeAssert
-        extends TypeAnnotationNodeAssert<LocalVariableAnnotationNodeAssert, LocalVariableAnnotationNode> {
+        extends AbstractTypeAnnotationNodeAssert<LocalVariableAnnotationNodeAssert, LocalVariableAnnotationNode> {
 
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
@@ -83,12 +83,15 @@ public class LocalVariableAnnotationNodeAssert
   protected void areEqualRanges(Object expected) {
     var localVariableAnnotationNodeRepresentation = getLocalVariableAnnotationNodeRepresentation();
 
-    Function<LocalVariableAnnotationNode, List<String>> getRanges = localVariableAnnotationNode -> localVariableAnnotationNodeRepresentation.toRangeStringOf(localVariableAnnotationNode, labelNames);
+    Function<LocalVariableAnnotationNode, List<String>> getRanges = localVariableAnnotationNode -> {
+      //noinspection CodeBlock2Expr
+      return localVariableAnnotationNodeRepresentation.toRangeStringOf(localVariableAnnotationNode, labelNames);
+    };
     List<String> actualRanges = getListFromObjectElseNull(actual, getRanges);
     List<String> expectedRanges = getListFromObjectElseNull(expected, LocalVariableAnnotationNode.class, getRanges);
 
     Assertions.assertThat(actualRanges)
-              .as(createDescription("Are equal ranges"))
+              .as(createDescription("Has equal ranges"))
               .containsExactlyElementsOf(expectedRanges);
   }
 

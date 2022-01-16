@@ -1,6 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
 import dev.turingcomplete.asmtestkit.asmutils._internal.TextifierUtils;
+import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
@@ -8,7 +9,7 @@ import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.util.TraceMethodVisitor;
 
 /**
- * Creates a {@link String} representation of an {@link InsnList}.
+ * An AssertJ {@link Representation} for an {@link InsnList}.
  *
  * <p>Example output:
  * <pre>{@code
@@ -41,11 +42,20 @@ public class InsnListRepresentation extends AsmRepresentation<InsnList> {
     registerFormatterForType(InsnList.class, InsnListRepresentation.INSTANCE::doToStringOf);
   }
 
-  public InsnListRepresentation() {
+  protected InsnListRepresentation() {
     super(InsnList.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  /**
+   * Creates a new {@link InsnListRepresentation} instance.
+   *
+   * @return a new {@link InsnListRepresentation}; never null;
+   */
+  public static InsnListRepresentation create() {
+    return new InsnListRepresentation();
+  }
 
   /**
    * Hides the opcode information for each instruction.

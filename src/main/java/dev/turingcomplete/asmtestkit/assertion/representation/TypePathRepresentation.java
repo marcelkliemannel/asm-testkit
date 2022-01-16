@@ -1,9 +1,10 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
+import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.TypePath;
 
 /**
- * Creates a {@link String} representation of a {@link TypePath}.
+ * An AssertJ {@link Representation} for a {@link TypePath}.
  */
 public class TypePathRepresentation extends AsmRepresentation<TypePath> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -16,11 +17,20 @@ public class TypePathRepresentation extends AsmRepresentation<TypePath> {
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  public TypePathRepresentation() {
+  protected TypePathRepresentation() {
     super(TypePath.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  /**
+   * Creates a new {@link TypePathRepresentation} instance.
+   *
+   * @return a new {@link TypePathRepresentation}; never null;
+   */
+  public static TypePathRepresentation create() {
+    return new TypePathRepresentation();
+  }
 
   @Override
   protected String doToStringOf(TypePath typePath) {

@@ -33,8 +33,8 @@ public final class RepresentationUtils {
     return attributes.stream().map(attributeRepresentation::toStringOf).collect(Collectors.toList());
   }
 
-  public static List<String> createAnnotationNodesRepresentations(AnnotationNodeRepresentation<?, AnnotationNode> annotationNodeRepresentation,
-                                                                  TypeAnnotationNodeRepresentation<?, TypeAnnotationNode> typeAnnotationNodeRepresentation,
+  public static List<String> createAnnotationNodesRepresentations(AnnotationNodeRepresentation annotationNodeRepresentation,
+                                                                  TypeAnnotationNodeRepresentation typeAnnotationNodeRepresentation,
                                                                   List<AnnotationNode> visibleAnnotations,
                                                                   List<AnnotationNode> invisibleAnnotations,
                                                                   List<TypeAnnotationNode> typeVisibleAnnotations,

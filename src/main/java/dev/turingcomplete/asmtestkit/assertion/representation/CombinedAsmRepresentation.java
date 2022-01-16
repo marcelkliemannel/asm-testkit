@@ -52,6 +52,15 @@ public final class CombinedAsmRepresentation extends StandardRepresentation {
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   /**
+   * Creates a new {@link CombinedAsmRepresentation} instance.
+   *
+   * @return a new {@link CombinedAsmRepresentation}; never null;
+   */
+  public static CombinedAsmRepresentation create() {
+    return new CombinedAsmRepresentation();
+  }
+
+  /**
    * Adds a custom {@link AsmRepresentation} which will be considered in
    * {@link StandardRepresentation#fallbackToStringOf(Object)}.
    *

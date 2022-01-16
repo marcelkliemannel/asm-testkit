@@ -35,7 +35,7 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
    *
    * @param name                  a short, generic {@link String} name; never null.
    * @param actual                the actual {@link A}; may be null.
-   * @param selfType              the {@link Class} of {@code this); never null.
+   * @param selfType              the {@link Class} of {@code this}; never null.
    * @param objectType            the {@link Class} of {@code actual); never null.
    * @param defaultRepresentation the default {@link Representation}; may be null.
    * @param defaultComparator     the default {@link Comparator} for {@link A};

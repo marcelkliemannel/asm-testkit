@@ -8,6 +8,7 @@ import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnno
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationB;
 import dev.turingcomplete.asmtestkit.compile.CompilationResult;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.api.ThrowableAssert;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Label;
@@ -317,33 +318,37 @@ class AsmAssertionsTest {
 
   @Test
   void testAssertThatFields() {
+    var firstLabel = new Label();
+    var firstLabelNode = new LabelNode(firstLabel);
 
+    var secondLabel = new Label();
+    var secondLabelNode = new LabelNode(secondLabel);
+    var thirdLabelNode = new LabelNode(secondLabel);
 
-    var firstLabelNode = new LabelNode();
+    var thirdLabel = new Label();
+    var fourthLabelNode = new LabelNode(thirdLabel);
 
-    var label = new Label();
-    var secondLabelNode = new LabelNode(label);
-    var thirdLabelNode = new LabelNode(label);
-
-    var fourthLabelNode = new LabelNode();
-
+    // Positive
     assertThatLabels(List.of(secondLabelNode))
             .containsExactlyInAnyOrderElementsOf(List.of(thirdLabelNode));
 
-    assertThatThrownBy(() -> assertThatLabels(List.of(firstLabelNode, secondLabelNode)).containsExactlyInAnyOrderElementsOf(List.of(thirdLabelNode, fourthLabelNode)))
+    // Negative
+    ThrowableAssert.ThrowingCallable throwingCallable = () -> assertThatLabels(List.of(firstLabelNode, secondLabelNode))
+            .useLabelNames(Map.of(firstLabel, "L1", secondLabel, "L2", thirdLabel, "L3"))
+            .containsExactlyInAnyOrderElementsOf(List.of(thirdLabelNode, fourthLabelNode));
+    assertThatThrownBy(throwingCallable)
             .isInstanceOf(AssertionError.class)
             .hasMessage(String.format("[Labels] \n" +
                                       "Expecting actual:\n" +
-                                      "  [L%1$s, L%2$s]\n" +
+                                      "  [%1$s, %2$s]\n" +
                                       "to contain exactly in any order:\n" +
-                                      "  [L%2$s, L%3$s]\n" +
+                                      "  [%2$s, %3$s]\n" +
                                       "elements not found:\n" +
-                                      "  [L%3$s]\n" +
+                                      "  [%3$s]\n" +
                                       "and elements not expected:\n" +
-                                      "  [L%1$s]\n" +
+                                      "  [%1$s]\n" +
                                       "when comparing values using LabelNodeComparator",
-                                      firstLabelNode.getLabel().hashCode(), label.hashCode(),
-                                      fourthLabelNode.getLabel().hashCode()));
+                                      "L1", "L2", "L3"));
   }
 
   @Test
@@ -354,9 +359,11 @@ class AsmAssertionsTest {
     secondFieldNode.visibleAnnotations = List.of(AnnotationNodeUtils.createAnnotationNode(Deprecated.class));
     var thirdFieldNode = new FieldNode(1, "third", "Ljava/lang/Integer;", null, null);
 
+    // Positive
     assertThatFields(List.of(first1FieldNode))
             .containsExactlyInAnyOrderElementsOf(List.of(first2FieldNode));
 
+    // Negative
     assertThatThrownBy(() -> assertThatFields(List.of(first1FieldNode, secondFieldNode)).containsExactlyInAnyOrderElementsOf(List.of(secondFieldNode, thirdFieldNode)))
             .isInstanceOf(AssertionError.class)
             .hasMessage("[Labels] \n" +
@@ -387,38 +394,39 @@ class AsmAssertionsTest {
                      "   }" +
                      " }";
 
-    List<LocalVariableAnnotationNode> localVariableAnnotationNodes = create()
+    MethodNode methodNode = create()
             .addToClasspath(VisibleAnnotationA.class)
             .addJavaInputSource(myClass)
             .compile()
             .readClassNode("MyClass")
-            .methods.get(1).visibleLocalVariableAnnotations;
+            .methods.get(1);
 
-    LocalVariableAnnotationNode firstLocalVariableAnnotationNode = localVariableAnnotationNodes.get(0);
-    LocalVariableAnnotationNode secondLocalVariableAnnotationNode = localVariableAnnotationNodes.get(1);
-    LocalVariableAnnotationNode thirdLocalVariableAnnotationNode = localVariableAnnotationNodes.get(2);
+    LocalVariableAnnotationNode firstLocalVariableAnnotationNode = methodNode.visibleLocalVariableAnnotations.get(0);
+    LocalVariableAnnotationNode secondLocalVariableAnnotationNode = methodNode.visibleLocalVariableAnnotations.get(1);
+    LocalVariableAnnotationNode thirdLocalVariableAnnotationNode = methodNode.visibleLocalVariableAnnotations.get(2);
 
+    // Positive
     assertThatLocalVariableAnnotations(List.of(firstLocalVariableAnnotationNode, secondLocalVariableAnnotationNode, thirdLocalVariableAnnotationNode))
             .containsExactlyInAnyOrderElementsOf(List.of(firstLocalVariableAnnotationNode, secondLocalVariableAnnotationNode, thirdLocalVariableAnnotationNode));
 
-    assertThatThrownBy(() -> assertThatLocalVariableAnnotations(List.of(firstLocalVariableAnnotationNode, secondLocalVariableAnnotationNode))
-            .containsExactlyInAnyOrderElementsOf(List.of(secondLocalVariableAnnotationNode, thirdLocalVariableAnnotationNode)))
+    // Negative
+    ThrowableAssert.ThrowingCallable throwingCallable = () -> assertThatLocalVariableAnnotations(List.of(firstLocalVariableAnnotationNode, secondLocalVariableAnnotationNode))
+            .useLabelNames(MethodNodeUtils.extractLabelNames(methodNode))
+            .containsExactlyInAnyOrderElementsOf(List.of(secondLocalVariableAnnotationNode, thirdLocalVariableAnnotationNode));
+    assertThatThrownBy(throwingCallable)
             .isInstanceOf(AssertionError.class)
-            .hasMessage(String.format("[Local Variable Annotations] \n" +
-                                      "Expecting actual:\n" +
-                                      "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: %1$s-2,\n" +
-                                      "    @dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: %2$s-3]\n" +
-                                      "to contain exactly in any order:\n" +
-                                      "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: %2$s-3,\n" +
-                                      "    @dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationB // reference: local_variable; path: null // range: %3$s-4]\n" +
-                                      "elements not found:\n" +
-                                      "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationB // reference: local_variable; path: null // range: %3$s-4]\n" +
-                                      "and elements not expected:\n" +
-                                      "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: %1$s-2]\n" +
-                                      "when comparing values using LocalVariableAnnotationNodeComparator",
-                                      "L" + firstLocalVariableAnnotationNode.start.get(0).getLabel().hashCode() + "-L" + firstLocalVariableAnnotationNode.end.get(0).getLabel().hashCode(),
-                                      "L" + secondLocalVariableAnnotationNode.start.get(0).getLabel().hashCode() + "-L" + secondLocalVariableAnnotationNode.end.get(0).getLabel().hashCode(),
-                                      "L" + thirdLocalVariableAnnotationNode.start.get(0).getLabel().hashCode() + "-L" + thirdLocalVariableAnnotationNode.end.get(0).getLabel().hashCode()));
+            .hasMessage("[Local Variable Annotations] \n" +
+                        "Expecting actual:\n" +
+                        "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: #2 L1-L4,\n" +
+                        "    @dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: #3 L2-L4]\n" +
+                        "to contain exactly in any order:\n" +
+                        "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: #3 L2-L4,\n" +
+                        "    @dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationB // reference: local_variable; path: null // range: #4 L3-L4]\n" +
+                        "elements not found:\n" +
+                        "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationB // reference: local_variable; path: null // range: #4 L3-L4]\n" +
+                        "and elements not expected:\n" +
+                        "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: #2 L1-L4]\n" +
+                        "when comparing values using LocalVariableAnnotationNodeComparator");
   }
 
   @Test
@@ -442,15 +450,26 @@ class AsmAssertionsTest {
     LocalVariableNode secondVariable = methodNode.localVariables.get(2);
     LocalVariableNode thirdVariable = methodNode.localVariables.get(3);
 
+    // Positive
     assertThatLocalVariables(List.of(firstVariable, secondVariable))
             .containsExactlyInAnyOrderElementsOf(List.of(secondVariable, firstVariable));
 
-    Map<Label, String> labelNames = MethodNodeUtils.extractLabelNames(methodNode);
-
-    assertThatThrownBy(() -> assertThatLocalVariables(List.of(firstVariable, secondVariable))
-            .containsExactlyInAnyOrderElementsOf(List.of(secondVariable, thirdVariable)))
+    // Negative
+    ThrowableAssert.ThrowingCallable throwingCallable = () -> assertThatLocalVariables(List.of(firstVariable, secondVariable))
+            .useLabelNames(MethodNodeUtils.extractLabelNames(methodNode))
+            .containsExactlyInAnyOrderElementsOf(List.of(secondVariable, thirdVariable));
+    assertThatThrownBy(throwingCallable)
             .isInstanceOf(AssertionError.class)
-            .hasMessage("");
+            .hasMessage("[Local Variables] \n" +
+                        "Expecting actual:\n" +
+                        "  [#1 java.lang.String a (L1-L4), #2 int[] b (L2-L4)]\n" +
+                        "to contain exactly in any order:\n" +
+                        "  [#2 int[] b (L2-L4), #3 java.lang.Object c (L3-L4) // signature: TT;]\n" +
+                        "elements not found:\n" +
+                        "  [#3 java.lang.Object c (L3-L4) // signature: TT;]\n" +
+                        "and elements not expected:\n" +
+                        "  [#1 java.lang.String a (L1-L4)]\n" +
+                        "when comparing values using LocalVariableNodeComparator");
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

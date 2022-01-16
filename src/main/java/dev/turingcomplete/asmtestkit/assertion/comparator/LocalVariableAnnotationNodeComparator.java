@@ -2,7 +2,7 @@ package dev.turingcomplete.asmtestkit.assertion.comparator;
 
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.ComparatorUtils;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.IterableComparator;
-import dev.turingcomplete.asmtestkit.assertion.representation.TypeAnnotationNodeRepresentation;
+import dev.turingcomplete.asmtestkit.assertion.representation.AbstractTypeAnnotationNodeRepresentation;
 import org.objectweb.asm.tree.LocalVariableAnnotationNode;
 
 import java.util.Comparator;
@@ -14,17 +14,17 @@ import java.util.Comparator;
  * their descriptors, values (order is ignored), type references, type paths,
  * start labels, end labels and indices are equal. If their values are not equal
  * they will be ordered based on the lexicographical order of their
- * {@link TypeAnnotationNodeRepresentation}s.
+ * {@link AbstractTypeAnnotationNodeRepresentation}s.
  */
 public class LocalVariableAnnotationNodeComparator
-        extends TypeAnnotationNodeComparator<LocalVariableAnnotationNodeComparator, LocalVariableAnnotationNode> {
+        extends AbstractTypeAnnotationNodeComparator<LocalVariableAnnotationNodeComparator, LocalVariableAnnotationNode> {
 
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
    * A reusable {@link LocalVariableAnnotationNodeComparator} instance.
    */
-  public static final LocalVariableAnnotationNodeComparator INSTANCE = createForLocalVariableAnnotationNode();
+  public static final LocalVariableAnnotationNodeComparator INSTANCE = create();
 
   /**
    * A reusable {@link Comparator} instance for an {@link Iterable} of
@@ -45,7 +45,7 @@ public class LocalVariableAnnotationNodeComparator
    *
    * @return a new {@link LocalVariableAnnotationNodeComparator}; never null;
    */
-  public static LocalVariableAnnotationNodeComparator createForLocalVariableAnnotationNode() {
+  public static LocalVariableAnnotationNodeComparator create() {
     return new LocalVariableAnnotationNodeComparator();
   }
 

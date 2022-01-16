@@ -35,7 +35,7 @@ public class TypeReferenceAssert extends AsmAssert<TypeReferenceAssert, TypeRefe
    *
    * @param actual the actual {@link TypeReference}; may be null.
    */
-  protected TypeReferenceAssert(TypeReference actual, AssertOption... assertOptions) {
+  protected TypeReferenceAssert(TypeReference actual) {
     super("Type Reference", actual, TypeReferenceAssert.class, TypeReferenceRepresentation.INSTANCE, TypeReferenceComparator.INSTANCE);
   }
 

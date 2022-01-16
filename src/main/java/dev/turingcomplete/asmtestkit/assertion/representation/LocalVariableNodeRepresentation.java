@@ -3,19 +3,18 @@ package dev.turingcomplete.asmtestkit.assertion.representation;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.LocalVariableAnnotationNode;
 import org.objectweb.asm.tree.LocalVariableNode;
 
 import java.util.Map;
 import java.util.Objects;
 
 /**
- * Creates am AssertJ {@link Representation} a {@link LocalVariableAnnotationNode}.
+ * An AssertJ {@link Representation} for a {@link LocalVariableNode}.
  *
  * <p>Example output:
  * {@code @TypeParameterAnnotation // reference: local_variable=; path: null // range: L0-L1-1}.
  */
-public class LocalVariableNodeRepresentation extends AsmRepresentation<LocalVariableNode> {
+public class LocalVariableNodeRepresentation extends WithLabelNamesRepresentation<LocalVariableNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
@@ -35,6 +34,15 @@ public class LocalVariableNodeRepresentation extends AsmRepresentation<LocalVari
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  /**
+   * Creates a new {@link LocalVariableNodeRepresentation} instance.
+   *
+   * @return a new {@link LocalVariableNodeRepresentation}; never null;
+   */
+  public static LocalVariableNodeRepresentation create() {
+    return new LocalVariableNodeRepresentation();
+  }
 
   /**
    * Sets the used {@link TypeRepresentation}.
@@ -76,16 +84,17 @@ public class LocalVariableNodeRepresentation extends AsmRepresentation<LocalVari
     return toStringOf(localVariableNode, Map.of());
   }
 
-  public String toStringOf(LocalVariableNode localVariableNode, Map<Label, String> labelNames) {
+  @Override
+  public String doToStringOf(LocalVariableNode localVariableNode, Map<Label, String> labelNames) {
     var representation = new StringBuilder();
 
     representation.append("#").append(localVariableNode.index).append(" ")
                   .append(typeRepresentation.toStringOf(Type.getType(localVariableNode.desc)))
                   .append(" ")
                   .append(localVariableNode.name)
-                  .append(" (").append(labelNodeRepresentation.toStringOf(localVariableNode.start, labelNames))
+                  .append(" (").append(labelNodeRepresentation.doToStringOf(localVariableNode.start, labelNames))
                   .append("-")
-                  .append(labelNodeRepresentation.toStringOf(localVariableNode.end, labelNames)).append(")");
+                  .append(labelNodeRepresentation.doToStringOf(localVariableNode.end, labelNames)).append(")");
 
     if (localVariableNode.signature != null) {
       representation.append(" // signature: ").append(localVariableNode.signature);
