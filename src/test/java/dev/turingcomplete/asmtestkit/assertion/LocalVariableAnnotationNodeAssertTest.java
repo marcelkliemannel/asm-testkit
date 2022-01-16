@@ -46,7 +46,7 @@ class LocalVariableAnnotationNodeAssertTest {
     Assertions.assertThatThrownBy(() -> assertThat(firstLocalVariableAnnotationNode)
                       .isEqualTo(secondLocalVariableAnnotationNode))
               .isInstanceOf(AssertionError.class)
-              .hasMessage(String.format("[Local Variable Annotation: @dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA > Are equal ranges] \n" +
+              .hasMessage(String.format("[Local Variable Annotation: @dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA > Has equal ranges] \n" +
                                         "Expecting actual:\n" +
                                         "  [\"L%1$s-L%2$s-2\"]\n" +
                                         "to contain exactly (and in same order):\n" +

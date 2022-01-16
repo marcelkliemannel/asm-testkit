@@ -73,6 +73,13 @@ public class LocalVariableAnnotationNodeAssert
     return this;
   }
 
+  /**
+   * Checks whether the rages of the given expected {@link LocalVariableAnnotationNode}
+   * are equal to the actual one.
+   *
+   * @param expected an {@link Object} expected to be a {@link LocalVariableAnnotationNode};
+   *                 may be null.
+   */
   protected void areEqualRanges(Object expected) {
     var localVariableAnnotationNodeRepresentation = getLocalVariableAnnotationNodeRepresentation();
 
@@ -85,12 +92,13 @@ public class LocalVariableAnnotationNodeAssert
               .containsExactlyElementsOf(expectedRanges);
   }
 
-  protected LocalVariableAnnotationNodeRepresentation getLocalVariableAnnotationNodeRepresentation() {
+  // -- Private Methods --------------------------------------------------------------------------------------------- //
+
+  private LocalVariableAnnotationNodeRepresentation getLocalVariableAnnotationNodeRepresentation() {
     return info.representation() instanceof LocalVariableAnnotationNodeRepresentation
             ? (LocalVariableAnnotationNodeRepresentation) info.representation()
             : LocalVariableAnnotationNodeRepresentation.INSTANCE;
   }
 
-  // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 }

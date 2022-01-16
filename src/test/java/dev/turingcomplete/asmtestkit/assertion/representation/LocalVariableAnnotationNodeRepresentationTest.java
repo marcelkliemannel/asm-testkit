@@ -44,8 +44,8 @@ class LocalVariableAnnotationNodeRepresentationTest {
     LocalVariableAnnotationNode secondLocalVariableAnnotationNode = localVariableAnnotationNodes.get(1);
 
     Assertions.assertThat(LocalVariableAnnotationNodeRepresentation.INSTANCE.toStringOf(firstLocalVariableAnnotationNode))
-            .isEqualTo(String.format("@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: L%s-L%s-2",
-                                     firstLocalVariableAnnotationNode.start.get(0).getLabel().hashCode(), firstLocalVariableAnnotationNode.end.get(0).getLabel().hashCode()));
+              .isEqualTo(String.format("@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: L%s-L%s-2",
+                                       firstLocalVariableAnnotationNode.start.get(0).getLabel().hashCode(), firstLocalVariableAnnotationNode.end.get(0).getLabel().hashCode()));
 
     Assertions.assertThat(LocalVariableAnnotationNodeRepresentation.INSTANCE.toStringOf(secondLocalVariableAnnotationNode))
               .isEqualTo(String.format("@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationB // reference: local_variable; path: null // range: L%s-L%s-3",

@@ -6,6 +6,7 @@ import dev.turingcomplete.asmtestkit.assertion.representation.TypeAnnotationNode
 import org.objectweb.asm.tree.LocalVariableAnnotationNode;
 
 import java.util.Comparator;
+
 /**
  * A comparison function to order {@link LocalVariableAnnotationNode}s.
  *

@@ -8,6 +8,7 @@ import dev.turingcomplete.asmtestkit.assertion.comparator.FieldNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.InsnListComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.LabelNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.LocalVariableAnnotationNodeComparator;
+import dev.turingcomplete.asmtestkit.assertion.comparator.LocalVariableNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.TypeAnnotationNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.TypeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.TypePathComparator;
@@ -18,6 +19,7 @@ import dev.turingcomplete.asmtestkit.assertion.representation.FieldNodeRepresent
 import dev.turingcomplete.asmtestkit.assertion.representation.InsnListRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.LabelNodeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.LocalVariableAnnotationNodeRepresentation;
+import dev.turingcomplete.asmtestkit.assertion.representation.LocalVariableNodeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypeAnnotationNodeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypePathRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypeReferenceRepresentation;
@@ -36,6 +38,7 @@ import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.LocalVariableAnnotationNode;
+import org.objectweb.asm.tree.LocalVariableNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.util.Comparator;
@@ -271,6 +274,16 @@ public final class AsmAssertions {
     return new LabelNodeAssert(actual);
   }
 
+  /**
+   * Creates a {@link LocalVariableNodeAssert}.
+   *
+   * @param actual a {@link LocalVariableNode}; may be null.
+   * @return a new {@link LocalVariableNodeAssert}; never null.
+   */
+  public static LocalVariableNodeAssert assertThat(LocalVariableNode actual) {
+    return new LocalVariableNodeAssert(actual);
+  }
+
   // ---- Iterable ---------------------------------------------------------- //
 
   /**
@@ -308,7 +321,7 @@ public final class AsmAssertions {
    *               be null.
    * @return a new {@link IterableAssert}; never null.
    */
-  public static IterableAssert<AnnotationNode> assertThatAnnotationNodes(Iterable<AnnotationNode> actual) {
+  public static IterableAssert<AnnotationNode> assertThatAnnotations(Iterable<AnnotationNode> actual) {
     return Assertions.assertThat(actual)
                      .as("Annotations")
                      .withRepresentation(AnnotationNodeRepresentation.INSTANCE)
@@ -330,7 +343,7 @@ public final class AsmAssertions {
    *               may be null.
    * @return a new {@link IterableAssert}; never null.
    */
-  public static IterableAssert<TypeAnnotationNode> assertThatTypeAnnotationNodes(Iterable<TypeAnnotationNode> actual) {
+  public static IterableAssert<TypeAnnotationNode> assertThatTypeAnnotations(Iterable<TypeAnnotationNode> actual) {
     return Assertions.assertThat(actual)
                      .as("Type Annotations")
                      .withRepresentation(TypeAnnotationNodeRepresentation.INSTANCE)
@@ -513,25 +526,24 @@ public final class AsmAssertions {
   }
 
   /**
-   * Creates an {@link IterableAssert} for {@link LocalVariableAnnotationNode}s
-   * which uses {@link LocalVariableAnnotationNodeRepresentation#INSTANCE} for
-   * the representation and for equality {@link LocalVariableAnnotationNodeComparator#INSTANCE}
-   * and {@link LocalVariableAnnotationNodeComparator#ITERABLE_INSTANCE}.
+   * Creates an {@link IterableAssert} for {@link LabelNode}s which
+   * uses {@link TypeAnnotationNodeRepresentation#INSTANCE} for the representation
+   * and for equality {@link LabelNodeComparator#INSTANCE} and
+   * {@link LabelNodeComparator#ITERABLE_INSTANCE}.
    *
    * <p>To override the representation or comparator call
    * {@link IterableAssert#usingComparator(Comparator)} or
    * {@link IterableAssert#withRepresentation(Representation)}.
    *
-   * @param actual an {@link Iterable} of {@link LocalVariableAnnotationNode}s;
-   *               may be null.
+   * @param actual an {@link Iterable} of {@link LabelNode}s; may be null.
    * @return a new {@link IterableAssert}; never null.
    */
-  public static IterableAssert<LocalVariableAnnotationNode> assertLocalVariableAnnotations(Iterable<LocalVariableAnnotationNode> actual) {
+  public static IterableAssert<LocalVariableNode> assertThatLocalVariables(Iterable<LocalVariableNode> actual) {
     return Assertions.assertThat(actual)
-                     .as("Local Variable Annotations")
-                     .withRepresentation(LocalVariableAnnotationNodeRepresentation.INSTANCE)
-                     .usingElementComparator(LocalVariableAnnotationNodeComparator.INSTANCE)
-                     .usingComparator(LocalVariableAnnotationNodeComparator.ITERABLE_INSTANCE);
+                     .as("Local Variables")
+                     .withRepresentation(LocalVariableNodeRepresentation.INSTANCE)
+                     .usingElementComparator(LocalVariableNodeComparator.INSTANCE)
+                     .usingComparator(LocalVariableNodeComparator.ITERABLE_INSTANCE);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

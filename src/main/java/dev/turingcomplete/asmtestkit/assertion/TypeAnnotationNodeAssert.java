@@ -21,7 +21,7 @@ import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getF
  * <p>An instance can be created via
  * {@link AsmAssertions#assertThat(TypeAnnotationNode)} or
  * {@link #createForTypeAnnotationNode(TypeAnnotationNode)}.
- * Use {@link AsmAssertions#assertThatTypeAnnotationNodes(Iterable)} for multiple
+ * Use {@link AsmAssertions#assertThatTypeAnnotations(Iterable)} for multiple
  * {@code TypeAnnotationNode}s.
  *
  * <p>The supported {@link AssertOption} is

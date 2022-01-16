@@ -1,6 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils;
+import dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils;
 import dev.turingcomplete.asmtestkit.assertion.__helper.DummyAttribute;
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationA;
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;
@@ -18,14 +19,18 @@ import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LocalVariableAnnotationNode;
+import org.objectweb.asm.tree.LocalVariableNode;
+import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatFields;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLabels;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLocalVariableAnnotations;
+import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLocalVariables;
 import static dev.turingcomplete.asmtestkit.compile.CompilationEnvironment.create;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -60,11 +65,11 @@ class AsmAssertionsTest {
   @Test
   void testAssertThatAnnotationNodes() {
     // Test comparator
-    AsmAssertions.assertThatAnnotationNodes(List.of(new AnnotationNode("LA;"), new AnnotationNode("LA;")))
+    AsmAssertions.assertThatAnnotations(List.of(new AnnotationNode("LA;"), new AnnotationNode("LA;")))
                  .containsExactlyInAnyOrderElementsOf(List.of(new AnnotationNode("LA;"), new AnnotationNode("LA;")));
 
     // Test representation
-    Assertions.assertThatThrownBy(() -> AsmAssertions.assertThatAnnotationNodes(List.of(new AnnotationNode("LA;"), new AnnotationNode("LB;")))
+    Assertions.assertThatThrownBy(() -> AsmAssertions.assertThatAnnotations(List.of(new AnnotationNode("LA;"), new AnnotationNode("LB;")))
                                                      .containsExactlyInAnyOrderElementsOf(List.of(new AnnotationNode("LB;"), new AnnotationNode("LC;"))))
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Annotations] \n" +
@@ -98,11 +103,11 @@ class AsmAssertionsTest {
     TypeAnnotationNode thirdTypeAnnotationNode = visibleTypeAnnotations.get(2);
 
     // Test comparator
-    AsmAssertions.assertThatTypeAnnotationNodes(List.of(firstTypeAnnotationNode, copyOfFirstTypeAnnotationNode))
+    AsmAssertions.assertThatTypeAnnotations(List.of(firstTypeAnnotationNode, copyOfFirstTypeAnnotationNode))
                  .containsExactlyInAnyOrderElementsOf(List.of(firstTypeAnnotationNode, copyOfFirstTypeAnnotationNode));
 
     // Test representation
-    Assertions.assertThatThrownBy(() -> AsmAssertions.assertThatTypeAnnotationNodes(List.of(firstTypeAnnotationNode, secondTypeAnnotationNode))
+    Assertions.assertThatThrownBy(() -> AsmAssertions.assertThatTypeAnnotations(List.of(firstTypeAnnotationNode, secondTypeAnnotationNode))
                                                      .containsExactlyInAnyOrderElementsOf(List.of(secondTypeAnnotationNode, thirdTypeAnnotationNode)))
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Type Annotations] \n" +
@@ -314,7 +319,6 @@ class AsmAssertionsTest {
   void testAssertThatFields() {
 
 
-
     var firstLabelNode = new LabelNode();
 
     var label = new Label();
@@ -326,7 +330,7 @@ class AsmAssertionsTest {
     assertThatLabels(List.of(secondLabelNode))
             .containsExactlyInAnyOrderElementsOf(List.of(thirdLabelNode));
 
-    assertThatThrownBy(() ->  assertThatLabels(List.of(firstLabelNode, secondLabelNode)).containsExactlyInAnyOrderElementsOf(List.of(thirdLabelNode, fourthLabelNode)))
+    assertThatThrownBy(() -> assertThatLabels(List.of(firstLabelNode, secondLabelNode)).containsExactlyInAnyOrderElementsOf(List.of(thirdLabelNode, fourthLabelNode)))
             .isInstanceOf(AssertionError.class)
             .hasMessage(String.format("[Labels] \n" +
                                       "Expecting actual:\n" +
@@ -415,6 +419,38 @@ class AsmAssertionsTest {
                                       "L" + firstLocalVariableAnnotationNode.start.get(0).getLabel().hashCode() + "-L" + firstLocalVariableAnnotationNode.end.get(0).getLabel().hashCode(),
                                       "L" + secondLocalVariableAnnotationNode.start.get(0).getLabel().hashCode() + "-L" + secondLocalVariableAnnotationNode.end.get(0).getLabel().hashCode(),
                                       "L" + thirdLocalVariableAnnotationNode.start.get(0).getLabel().hashCode() + "-L" + thirdLocalVariableAnnotationNode.end.get(0).getLabel().hashCode()));
+  }
+
+  @Test
+  void testAssertThatLocalVariables() throws IOException {
+    @Language("Java")
+    String myClass = "class MyClass<T> {" +
+                     "   void myMethod() {" +
+                     "     String a = \"foo\";" +
+                     "     int[] b = new int[0];" +
+                     "     T c = null;" +
+                     "   }" +
+                     " }";
+
+    MethodNode methodNode = create()
+            .addJavaInputSource(myClass)
+            .compile()
+            .readClassNode("MyClass")
+            .methods.get(1);
+
+    LocalVariableNode firstVariable = methodNode.localVariables.get(1);
+    LocalVariableNode secondVariable = methodNode.localVariables.get(2);
+    LocalVariableNode thirdVariable = methodNode.localVariables.get(3);
+
+    assertThatLocalVariables(List.of(firstVariable, secondVariable))
+            .containsExactlyInAnyOrderElementsOf(List.of(secondVariable, firstVariable));
+
+    Map<Label, String> labelNames = MethodNodeUtils.extractLabelNames(methodNode);
+
+    assertThatThrownBy(() -> assertThatLocalVariables(List.of(firstVariable, secondVariable))
+            .containsExactlyInAnyOrderElementsOf(List.of(secondVariable, thirdVariable)))
+            .isInstanceOf(AssertionError.class)
+            .hasMessage("");
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

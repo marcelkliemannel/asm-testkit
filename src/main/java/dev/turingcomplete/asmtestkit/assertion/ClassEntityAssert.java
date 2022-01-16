@@ -14,9 +14,9 @@ import java.util.Locale;
 import java.util.Objects;
 
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAccess;
-import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAnnotationNodes;
+import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAnnotations;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAttributes;
-import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatTypeAnnotationNodes;
+import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatTypeAnnotations;
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getIntegerFromObjectElseNull;
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getListFromObjectElse;
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getStringFromObjectElseNull;
@@ -161,7 +161,7 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
       return;
     }
 
-    assertThatAnnotationNodes(getListFromObjectElse(actual, this::getVisibleAnnotations, List.of()))
+    assertThatAnnotations(getListFromObjectElse(actual, this::getVisibleAnnotations, List.of()))
             .as(createDescription("Is equal " + name.toLowerCase(Locale.ROOT) + " visible annotations"))
             .containsExactlyInAnyOrderElementsOf(getListFromObjectElse(expected, objectType, this::getVisibleAnnotations, List.of()));
   }
@@ -185,7 +185,7 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
       return;
     }
 
-    assertThatAnnotationNodes(getListFromObjectElse(actual, this::getInvisibleAnnotations, List.of()))
+    assertThatAnnotations(getListFromObjectElse(actual, this::getInvisibleAnnotations, List.of()))
             .as(createDescription("Is equal " + name.toLowerCase(Locale.ROOT) + " invisible annotations"))
             .containsExactlyInAnyOrderElementsOf(getListFromObjectElse(expected, objectType, this::getInvisibleAnnotations, List.of()));
   }
@@ -209,7 +209,7 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
       return;
     }
 
-    assertThatTypeAnnotationNodes(getListFromObjectElse(actual, this::getVisibleTypeAnnotations, List.of()))
+    assertThatTypeAnnotations(getListFromObjectElse(actual, this::getVisibleTypeAnnotations, List.of()))
             .as(createDescription("Is equal " + name.toLowerCase(Locale.ROOT) + " visible type annotations"))
             .containsExactlyInAnyOrderElementsOf(getListFromObjectElse(expected, objectType, this::getVisibleTypeAnnotations, List.of()));
   }
@@ -233,7 +233,7 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
       return;
     }
 
-    assertThatTypeAnnotationNodes(getListFromObjectElse(actual, this::getInvisibleTypeAnnotations, List.of()))
+    assertThatTypeAnnotations(getListFromObjectElse(actual, this::getInvisibleTypeAnnotations, List.of()))
             .as(createDescription("Is equal " + name.toLowerCase(Locale.ROOT) + " invisible type annotations"))
             .containsExactlyInAnyOrderElementsOf(getListFromObjectElse(expected, objectType, this::getInvisibleTypeAnnotations, List.of()));
   }
