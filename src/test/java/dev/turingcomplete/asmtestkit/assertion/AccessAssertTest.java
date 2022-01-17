@@ -27,7 +27,7 @@ class AccessAssertTest {
     Assertions.assertThatThrownBy(() -> assertThatClassAccess(Opcodes.ACC_PUBLIC + Opcodes.ACC_ABSTRACT)
                       .isEqualTo(Opcodes.ACC_ABSTRACT + Opcodes.ACC_FINAL))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Access: (1025) public abstract > Is equal access values] \n" +
+              .hasMessage("[Access: (1025) public abstract > Has equal access values] \n" +
                           "Expecting actual:\n" +
                           "  [\"public\", \"abstract\"]\n" +
                           "to contain exactly in any order:\n" +
@@ -46,7 +46,7 @@ class AccessAssertTest {
     Assertions.assertThatThrownBy(() -> assertThatFieldAccess(Opcodes.ACC_PUBLIC + Opcodes.ACC_STATIC)
                       .isEqualTo(Opcodes.ACC_STATIC + Opcodes.ACC_FINAL))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Access: (9) public static > Is equal access values] \n" +
+              .hasMessage("[Access: (9) public static > Has equal access values] \n" +
                           "Expecting actual:\n" +
                           "  [\"public\", \"static\"]\n" +
                           "to contain exactly in any order:\n" +
@@ -65,7 +65,7 @@ class AccessAssertTest {
     Assertions.assertThatThrownBy(() -> assertThatMethodAccess(Opcodes.ACC_PUBLIC + Opcodes.ACC_NATIVE)
                       .isEqualTo(Opcodes.ACC_NATIVE + Opcodes.ACC_FINAL))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Access: (257) public native > Is equal access values] \n" +
+              .hasMessage("[Access: (257) public native > Has equal access values] \n" +
                           "Expecting actual:\n" +
                           "  [\"public\", \"native\"]\n" +
                           "to contain exactly in any order:\n" +
@@ -84,7 +84,7 @@ class AccessAssertTest {
     Assertions.assertThatThrownBy(() -> assertThatParameterAccess(Opcodes.ACC_FINAL + Opcodes.ACC_SYNTHETIC)
                       .isEqualTo(Opcodes.ACC_SYNTHETIC + Opcodes.ACC_MANDATED))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Access: (4112) final synthetic > Is equal access values] \n" +
+              .hasMessage("[Access: (4112) final synthetic > Has equal access values] \n" +
                           "Expecting actual:\n" +
                           "  [\"final\", \"synthetic\"]\n" +
                           "to contain exactly in any order:\n" +
@@ -103,7 +103,7 @@ class AccessAssertTest {
     Assertions.assertThatThrownBy(() -> assertThatModuleAccess(Opcodes.ACC_OPEN + Opcodes.ACC_MANDATED)
                       .isEqualTo(Opcodes.ACC_MANDATED + Opcodes.ACC_SYNTHETIC))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Access: (32800) open mandated > Is equal access values] \n" +
+              .hasMessage("[Access: (32800) open mandated > Has equal access values] \n" +
                           "Expecting actual:\n" +
                           "  [\"open\", \"mandated\"]\n" +
                           "to contain exactly in any order:\n" +
@@ -122,7 +122,7 @@ class AccessAssertTest {
     Assertions.assertThatThrownBy(() -> assertThatModuleRequiresAccess(Opcodes.ACC_TRANSITIVE + Opcodes.ACC_STATIC_PHASE)
                       .isEqualTo(Opcodes.ACC_STATIC_PHASE + Opcodes.ACC_SYNTHETIC))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Access: (96) transitive static_phase > Is equal access values] \n" +
+              .hasMessage("[Access: (96) transitive static_phase > Has equal access values] \n" +
                           "Expecting actual:\n" +
                           "  [\"transitive\", \"static_phase\"]\n" +
                           "to contain exactly in any order:\n" +
@@ -141,7 +141,7 @@ class AccessAssertTest {
     Assertions.assertThatThrownBy(() -> assertThatModuleExportsAccess(Opcodes.ACC_SYNTHETIC)
                       .isEqualTo(Opcodes.ACC_MANDATED))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Access: (4096) synthetic > Is equal access values] \n" +
+              .hasMessage("[Access: (4096) synthetic > Has equal access values] \n" +
                           "Expecting actual:\n" +
                           "  [\"synthetic\"]\n" +
                           "to contain exactly in any order:\n" +
@@ -160,7 +160,7 @@ class AccessAssertTest {
     Assertions.assertThatThrownBy(() -> assertThatModuleOpensAccess(Opcodes.ACC_SYNTHETIC)
                       .isEqualTo(Opcodes.ACC_MANDATED))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Access: (4096) synthetic > Is equal access values] \n" +
+              .hasMessage("[Access: (4096) synthetic > Has equal access values] \n" +
                           "Expecting actual:\n" +
                           "  [\"synthetic\"]\n" +
                           "to contain exactly in any order:\n" +

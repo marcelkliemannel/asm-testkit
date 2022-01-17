@@ -9,6 +9,7 @@ import dev.turingcomplete.asmtestkit.assertion.comparator.InsnListComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.LabelNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.LocalVariableAnnotationNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.LocalVariableNodeComparator;
+import dev.turingcomplete.asmtestkit.assertion.comparator.TryCatchBlockNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.TypeAnnotationNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.TypeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.TypePathComparator;
@@ -20,11 +21,11 @@ import dev.turingcomplete.asmtestkit.assertion.representation.InsnListRepresenta
 import dev.turingcomplete.asmtestkit.assertion.representation.LabelNodeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.LocalVariableAnnotationNodeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.LocalVariableNodeRepresentation;
+import dev.turingcomplete.asmtestkit.assertion.representation.TryCatchBlockNodeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypeAnnotationNodeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypePathRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypeReferenceRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypeRepresentation;
-import org.assertj.core.api.IterableAssert;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Type;
@@ -38,6 +39,7 @@ import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.LocalVariableAnnotationNode;
 import org.objectweb.asm.tree.LocalVariableNode;
+import org.objectweb.asm.tree.TryCatchBlockNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.util.Comparator;
@@ -243,7 +245,7 @@ public final class AsmAssertions {
   }
 
   /**
-   * Creates an {@link IterableAssert} for {@link AbstractInsnNode}s which uses
+   * Creates an {@link AsmIterableAssert} for {@link AbstractInsnNode}s which uses
    * {@link InsnListRepresentation#INSTANCE} for the representation and for
    * equality {@link InsnListComparator#INSTANCE}.
    *
@@ -251,11 +253,11 @@ public final class AsmAssertions {
    * {@link #assertThatInstructionsIgnoreLineNumbers(Iterable)}.
    *
    * <p>To override the representation or comparator call
-   * {@link IterableAssert#usingComparator(Comparator)} or
-   * {@link IterableAssert#withRepresentation(Representation)}.
+   * {@link AsmIterableAssert#usingComparator(Comparator)} or
+   * {@link AsmIterableAssert#withRepresentation(Representation)}.
    *
    * @param actual an {@link InsnList}; may be null.
-   * @return a new {@link IterableAssert}; never null.
+   * @return a new {@link AsmIterableAssert}; never null.
    * @see #assertThatInstructions(Iterable)
    * @see #assertThatInstructionsIgnoreLineNumbers(Iterable)
    */
@@ -283,20 +285,30 @@ public final class AsmAssertions {
     return new LocalVariableNodeAssert(actual);
   }
 
+  /**
+   * Creates a {@link TryCatchBlockNodeAssert}.
+   *
+   * @param actual a {@link TryCatchBlockNode}; may be null.
+   * @return a new {@link TryCatchBlockNodeAssert}; never null.
+   */
+  public static TryCatchBlockNodeAssert assertThat(TryCatchBlockNode actual) {
+    return new TryCatchBlockNodeAssert(actual);
+  }
+
   // ---- Iterable ---------------------------------------------------------- //
 
   /**
-   * Creates an {@link IterableAssert} for {@link Attribute}s which uses
+   * Creates an {@link AsmIterableAssert} for {@link Attribute}s which uses
    * {@link AttributeRepresentation#INSTANCE} for the representation and
    * for equality {@link AttributeComparator#INSTANCE} and
    * {@link AttributeComparator#ITERABLE_INSTANCE}.
    *
    * <p>To override the representation or comparator call
-   * {@link IterableAssert#usingComparator(Comparator)} or
-   * {@link IterableAssert#withRepresentation(Representation)}.
+   * {@link AsmIterableAssert#usingComparator(Comparator)} or
+   * {@link AsmIterableAssert#withRepresentation(Representation)}.
    *
    * @param actual an {@link Iterable} of {@link Attribute}s; may be null.
-   * @return a new {@link IterableAssert}; never null.
+   * @return a new {@link AsmIterableAssert}; never null.
    */
   public static AsmIterableAssert<?, Attribute, AttributeAssert> assertThatAttributes(Iterable<Attribute> actual) {
     return new AsmIterableAssert<>(actual, AsmAssertions::assertThat)
@@ -307,21 +319,21 @@ public final class AsmAssertions {
   }
 
   /**
-   * Creates an {@link IterableAssert} for {@link AnnotationNode}s which uses
+   * Creates an {@link AsmIterableAssert} for {@link AnnotationNode}s which uses
    * {@link AnnotationNodeRepresentation#INSTANCE} for the representation and
    * for equality {@link AnnotationNodeComparator#INSTANCE} and
    * {@link AnnotationNodeComparator#ITERABLE_INSTANCE}.
    *
    * <p>To override the representation or comparator call
-   * {@link IterableAssert#usingComparator(Comparator)} or
-   * {@link IterableAssert#withRepresentation(Representation)}.
+   * {@link AsmIterableAssert#usingComparator(Comparator)} or
+   * {@link AsmIterableAssert#withRepresentation(Representation)}.
    *
    * @param actual an {@link Iterable} of {@link AnnotationNode}s; may
    *               be null.
-   * @return a new {@link IterableAssert}; never null.
+   * @return a new {@link AsmIterableAssert}; never null.
    */
-  public static WithLabelNamesIterableAssert<?, AnnotationNode, AnnotationNodeAssert> assertThatAnnotations(Iterable<AnnotationNode> actual) {
-    return new WithLabelNamesIterableAssert<>(actual, AsmAssertions::assertThat)
+  public static AsmIterableAssert<?, AnnotationNode, AnnotationNodeAssert> assertThatAnnotations(Iterable<AnnotationNode> actual) {
+    return new AsmIterableAssert<>(actual, AsmAssertions::assertThat)
             .as("Annotations")
             .withRepresentation(AnnotationNodeRepresentation.INSTANCE)
             .usingElementComparator(AnnotationNodeComparator.INSTANCE)
@@ -329,21 +341,21 @@ public final class AsmAssertions {
   }
 
   /**
-   * Creates an {@link IterableAssert} for {@link TypeAnnotationNode}s which
+   * Creates an {@link AsmIterableAssert} for {@link TypeAnnotationNode}s which
    * uses {@link TypeAnnotationNodeRepresentation#INSTANCE} for the representation
    * and for equality {@link TypeAnnotationNodeComparator#INSTANCE} and
    * {@link TypeAnnotationNodeComparator#ITERABLE_INSTANCE}.
    *
    * <p>To override the representation or comparator call
-   * {@link IterableAssert#usingComparator(Comparator)} or
-   * {@link IterableAssert#withRepresentation(Representation)}.
+   * {@link AsmIterableAssert#usingComparator(Comparator)} or
+   * {@link AsmIterableAssert#withRepresentation(Representation)}.
    *
    * @param actual an {@link Iterable} of {@link TypeAnnotationNode}s;
    *               may be null.
-   * @return a new {@link IterableAssert}; never null.
+   * @return a new {@link AsmIterableAssert}; never null.
    */
-  public static WithLabelNamesIterableAssert<?, TypeAnnotationNode, TypeAnnotationNodeAssert> assertThatTypeAnnotations(Iterable<TypeAnnotationNode> actual) {
-    return new WithLabelNamesIterableAssert<>(actual, AsmAssertions::assertThat)
+  public static AsmIterableAssert<?, TypeAnnotationNode, TypeAnnotationNodeAssert> assertThatTypeAnnotations(Iterable<TypeAnnotationNode> actual) {
+    return new AsmIterableAssert<>(actual, AsmAssertions::assertThat)
             .as("Type Annotations")
             .withRepresentation(TypeAnnotationNodeRepresentation.INSTANCE)
             .usingElementComparator(TypeAnnotationNodeComparator.INSTANCE)
@@ -351,21 +363,21 @@ public final class AsmAssertions {
   }
 
   /**
-   * Creates an {@link IterableAssert} for {@link LocalVariableAnnotationNode}s which
+   * Creates an {@link AsmIterableAssert} for {@link LocalVariableAnnotationNode}s which
    * uses {@link LocalVariableAnnotationNodeRepresentation#INSTANCE} for the
    * representation and for equality {@link LocalVariableAnnotationNodeComparator#INSTANCE}
    * and {@link LocalVariableAnnotationNodeComparator#ITERABLE_INSTANCE}.
    *
    * <p>To override the representation or comparator call
-   * {@link IterableAssert#usingComparator(Comparator)} or
-   * {@link IterableAssert#withRepresentation(Representation)}.
+   * {@link AsmIterableAssert#usingComparator(Comparator)} or
+   * {@link AsmIterableAssert#withRepresentation(Representation)}.
    *
    * @param actual an {@link Iterable} of {@link LocalVariableAnnotationNode}s;
    *               may be null.
-   * @return a new {@link IterableAssert}; never null.
+   * @return a new {@link AsmIterableAssert}; never null.
    */
-  public static WithLabelNamesIterableAssert<?, LocalVariableAnnotationNode, LocalVariableAnnotationNodeAssert> assertThatLocalVariableAnnotations(Iterable<LocalVariableAnnotationNode> actual) {
-    return new WithLabelNamesIterableAssert<>(actual, AsmAssertions::assertThat)
+  public static AsmIterableAssert<?, LocalVariableAnnotationNode, LocalVariableAnnotationNodeAssert> assertThatLocalVariableAnnotations(Iterable<LocalVariableAnnotationNode> actual) {
+    return new AsmIterableAssert<>(actual, AsmAssertions::assertThat)
             .as("Local Variable Annotations")
             .withRepresentation(LocalVariableAnnotationNodeRepresentation.INSTANCE)
             .usingElementComparator(LocalVariableAnnotationNodeComparator.INSTANCE)
@@ -373,17 +385,17 @@ public final class AsmAssertions {
   }
 
   /**
-   * Creates an {@link IterableAssert} for {@link TypePath}s which uses
+   * Creates an {@link AsmIterableAssert} for {@link TypePath}s which uses
    * {@link TypePathRepresentation#INSTANCE} for the representation and for
    * equality {@link TypePathComparator#INSTANCE} and
    * {@link TypePathComparator#ITERABLE_INSTANCE}.
    *
    * <p>To override the representation or comparator call
-   * {@link IterableAssert#usingComparator(Comparator)} or
-   * {@link IterableAssert#withRepresentation(Representation)}.
+   * {@link AsmIterableAssert#usingComparator(Comparator)} or
+   * {@link AsmIterableAssert#withRepresentation(Representation)}.
    *
    * @param actual an {@link Iterable} of {@link TypePath}s; may be null.
-   * @return a new {@link IterableAssert}; never null.
+   * @return a new {@link AsmIterableAssert}; never null.
    */
   public static AsmIterableAssert<?, TypePath, TypePathAssert> assertThatTypePaths(Iterable<TypePath> actual) {
     return new AsmIterableAssert<>(actual, AsmAssertions::assertThat)
@@ -394,17 +406,17 @@ public final class AsmAssertions {
   }
 
   /**
-   * Creates an {@link IterableAssert} for {@link Type}s which uses
+   * Creates an {@link AsmIterableAssert} for {@link Type}s which uses
    * {@link TypeRepresentation#INSTANCE} for the representation and for
    * equality {@link TypeComparator#INSTANCE} and
    * {@link TypeComparator#ITERABLE_INSTANCE}.
    *
    * <p>To override the representation or comparator call
-   * {@link IterableAssert#usingComparator(Comparator)} or
-   * {@link IterableAssert#withRepresentation(Representation)}.
+   * {@link AsmIterableAssert#usingComparator(Comparator)} or
+   * {@link AsmIterableAssert#withRepresentation(Representation)}.
    *
    * @param actual an {@link Iterable} of {@link Type}s; may be null.
-   * @return a new {@link IterableAssert}; never null.
+   * @return a new {@link AsmIterableAssert}; never null.
    */
   public static AsmIterableAssert<?, Type, TypeAssert> assertThatTypes(Iterable<Type> actual) {
     return new AsmIterableAssert<>(actual, AsmAssertions::assertThat)
@@ -415,18 +427,18 @@ public final class AsmAssertions {
   }
 
   /**
-   * Creates an {@link IterableAssert} for {@link TypeReference}s which uses
+   * Creates an {@link AsmIterableAssert} for {@link TypeReference}s which uses
    * {@link TypeReferenceRepresentation#INSTANCE} for the representation and for
    * equality {@link TypeReferenceComparator#INSTANCE} and
    * {@link TypeReferenceComparator#ITERABLE_INSTANCE}.
    *
    * <p>To override the representation or comparator call
-   * {@link IterableAssert#usingComparator(Comparator)} or
-   * {@link IterableAssert#withRepresentation(Representation)}.
+   * {@link AsmIterableAssert#usingComparator(Comparator)} or
+   * {@link AsmIterableAssert#withRepresentation(Representation)}.
    *
    * @param actual an {@link Iterable} of {@link TypeReference}s;
    *               may be null.
-   * @return a new {@link IterableAssert}; never null.
+   * @return a new {@link AsmIterableAssert}; never null.
    */
   public static AsmIterableAssert<?, TypeReference, TypeReferenceAssert> assertThatTypeReferences(Iterable<TypeReference> actual) {
     return new AsmIterableAssert<>(actual, AsmAssertions::assertThat)
@@ -437,7 +449,7 @@ public final class AsmAssertions {
   }
 
   /**
-   * Creates an {@link IterableAssert} for {@link AbstractInsnNode}s which uses
+   * Creates an {@link AsmIterableAssert} for {@link AbstractInsnNode}s which uses
    * {@link InsnListRepresentation#INSTANCE} for the representation and for
    * equality {@link InsnListComparator#INSTANCE}.
    *
@@ -445,12 +457,12 @@ public final class AsmAssertions {
    * {@link #assertThatInstructionsIgnoreLineNumbers(Iterable)}.
    *
    * <p>To override the representation or comparator call
-   * {@link IterableAssert#usingComparator(Comparator)} or
-   * {@link IterableAssert#withRepresentation(Representation)}.
+   * {@link AsmIterableAssert#usingComparator(Comparator)} or
+   * {@link AsmIterableAssert#withRepresentation(Representation)}.
    *
    * @param actual an {@link Iterable} of {@link AbstractInsnNode}s;
    *               may be null.
-   * @return a new {@link IterableAssert}; never null.
+   * @return a new {@link AsmIterableAssert}; never null.
    * @see #assertThat(InsnList)
    * @see #assertThatInstructionsIgnoreLineNumbers(Iterable)
    */
@@ -462,18 +474,18 @@ public final class AsmAssertions {
   }
 
   /**
-   * Creates an {@link IterableAssert} for {@link AbstractInsnNode}s which uses
+   * Creates an {@link AsmIterableAssert} for {@link AbstractInsnNode}s which uses
    * {@link InsnListRepresentation#INSTANCE} for the representation and for
    * equality {@link InsnListComparator#INSTANCE_IGNORE_LINE_NUMBERS}. Any
    * {@link LineNumberNode}s will be excluded form the comparison.
    *
    * <p>To override the representation or comparator call
-   * {@link IterableAssert#usingComparator(Comparator)} or
-   * {@link IterableAssert#withRepresentation(Representation)}.
+   * {@link AsmIterableAssert#usingComparator(Comparator)} or
+   * {@link AsmIterableAssert#withRepresentation(Representation)}.
    *
    * @param actual an {@link Iterable} of {@link AbstractInsnNode}s;
    *               may be null.
-   * @return a new {@link IterableAssert}; never null.
+   * @return a new {@link AsmIterableAssert}; never null.
    */
   public static AsmIterableAssert<?, AbstractInsnNode, InstructionAssert> assertThatInstructionsIgnoreLineNumbers(Iterable<AbstractInsnNode> actual) {
     return new AsmIterableAssert<>(InsnListUtils.toInsnList(actual), AsmAssertions::assertThat)
@@ -483,17 +495,17 @@ public final class AsmAssertions {
   }
 
   /**
-   * Creates an {@link IterableAssert} for {@link FieldNode}s which
+   * Creates an {@link AsmIterableAssert} for {@link FieldNode}s which
    * uses {@link FieldNodeRepresentation#INSTANCE} for the representation
    * and for equality {@link FieldNodeComparator#INSTANCE} and
    * {@link FieldNodeComparator#ITERABLE_INSTANCE}.
    *
    * <p>To override the representation or comparator call
-   * {@link IterableAssert#usingComparator(Comparator)} or
-   * {@link IterableAssert#withRepresentation(Representation)}.
+   * {@link AsmIterableAssert#usingComparator(Comparator)} or
+   * {@link AsmIterableAssert#withRepresentation(Representation)}.
    *
    * @param actual an {@link Iterable} of {@link LabelNode}s; may be null.
-   * @return a new {@link IterableAssert}; never null.
+   * @return a new {@link AsmIterableAssert}; never null.
    */
   public static AsmIterableAssert<?, FieldNode, FieldNodeAssert> assertThatFields(Iterable<FieldNode> actual) {
     return new AsmIterableAssert<>(actual, AsmAssertions::assertThat)
@@ -504,20 +516,20 @@ public final class AsmAssertions {
   }
 
   /**
-   * Creates an {@link IterableAssert} for {@link LabelNode}s which
+   * Creates an {@link AsmIterableAssert} for {@link LabelNode}s which
    * uses {@link TypeAnnotationNodeRepresentation#INSTANCE} for the representation
    * and for equality {@link LabelNodeComparator#INSTANCE} and
    * {@link LabelNodeComparator#ITERABLE_INSTANCE}.
    *
    * <p>To override the representation or comparator call
-   * {@link IterableAssert#usingComparator(Comparator)} or
-   * {@link IterableAssert#withRepresentation(Representation)}.
+   * {@link AsmIterableAssert#usingComparator(Comparator)} or
+   * {@link AsmIterableAssert#withRepresentation(Representation)}.
    *
    * @param actual an {@link Iterable} of {@link LabelNode}s; may be null.
-   * @return a new {@link IterableAssert}; never null.
+   * @return a new {@link AsmIterableAssert}; never null.
    */
-  public static WithLabelNamesIterableAssert<?, LabelNode, LabelNodeAssert> assertThatLabels(Iterable<LabelNode> actual) {
-    return new WithLabelNamesIterableAssert<>(actual, AsmAssertions::assertThat)
+  public static AsmIterableAssert<?, LabelNode, LabelNodeAssert> assertThatLabels(Iterable<LabelNode> actual) {
+    return new AsmIterableAssert<>(actual, AsmAssertions::assertThat)
             .as("Labels")
             .withRepresentation(LabelNodeRepresentation.INSTANCE)
             .usingElementComparator(LabelNodeComparator.INSTANCE)
@@ -525,24 +537,45 @@ public final class AsmAssertions {
   }
 
   /**
-   * Creates an {@link IterableAssert} for {@link LabelNode}s which
+   * Creates an {@link AsmIterableAssert} for {@link LabelNode}s which
    * uses {@link TypeAnnotationNodeRepresentation#INSTANCE} for the representation
    * and for equality {@link LabelNodeComparator#INSTANCE} and
    * {@link LabelNodeComparator#ITERABLE_INSTANCE}.
    *
    * <p>To override the representation or comparator call
-   * {@link IterableAssert#usingComparator(Comparator)} or
-   * {@link IterableAssert#withRepresentation(Representation)}.
+   * {@link AsmIterableAssert#usingComparator(Comparator)} or
+   * {@link AsmIterableAssert#withRepresentation(Representation)}.
    *
    * @param actual an {@link Iterable} of {@link LabelNode}s; may be null.
-   * @return a new {@link IterableAssert}; never null.
+   * @return a new {@link AsmIterableAssert}; never null.
    */
-  public static WithLabelNamesIterableAssert<?, LocalVariableNode, LocalVariableNodeAssert> assertThatLocalVariables(Iterable<LocalVariableNode> actual) {
-    return new WithLabelNamesIterableAssert<>(actual, AsmAssertions::assertThat)
+  public static AsmIterableAssert<?, LocalVariableNode, LocalVariableNodeAssert> assertThatLocalVariables(Iterable<LocalVariableNode> actual) {
+    return new AsmIterableAssert<>(actual, AsmAssertions::assertThat)
             .as("Local Variables")
             .withRepresentation(LocalVariableNodeRepresentation.INSTANCE)
             .usingElementComparator(LocalVariableNodeComparator.INSTANCE)
             .usingComparator(LocalVariableNodeComparator.ITERABLE_INSTANCE);
+  }
+
+  /**
+   * Creates an {@link AsmIterableAssert} for {@link TryCatchBlockNode}s which
+   * uses {@link TryCatchBlockNodeRepresentation#INSTANCE} for the representation
+   * and for equality {@link TryCatchBlockNodeComparator#INSTANCE} and
+   * {@link TryCatchBlockNodeComparator#ITERABLE_INSTANCE}.
+   *
+   * <p>To override the representation or comparator call
+   * {@link AsmIterableAssert#usingComparator(Comparator)} or
+   * {@link AsmIterableAssert#withRepresentation(Representation)}.
+   *
+   * @param actual an {@link Iterable} of {@link TryCatchBlockNode}s; may be null.
+   * @return a new {@link AsmIterableAssert}; never null.
+   */
+  public static AsmIterableAssert<?, TryCatchBlockNode, TryCatchBlockNodeAssert> assertThatTryCatchBlocks(Iterable<TryCatchBlockNode> actual) {
+    return new AsmIterableAssert<>(actual, AsmAssertions::assertThat)
+            .as("Try Catch Block")
+            .withRepresentation(TryCatchBlockNodeRepresentation.INSTANCE)
+            .usingElementComparator(TryCatchBlockNodeComparator.INSTANCE)
+            .usingComparator(TryCatchBlockNodeComparator.ITERABLE_INSTANCE);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

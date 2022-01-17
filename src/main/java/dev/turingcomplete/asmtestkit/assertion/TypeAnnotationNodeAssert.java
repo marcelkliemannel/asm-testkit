@@ -36,7 +36,7 @@ public class TypeAnnotationNodeAssert
    *
    * @param actual the actual {@link TypeAnnotationNode}; may be null.
    */
-  public TypeAnnotationNodeAssert(TypeAnnotationNode actual) {
+  protected TypeAnnotationNodeAssert(TypeAnnotationNode actual) {
     super("Type Annotation",
           actual,
           TypeAnnotationNodeAssert.class,

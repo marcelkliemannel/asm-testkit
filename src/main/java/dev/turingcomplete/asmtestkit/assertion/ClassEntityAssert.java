@@ -57,14 +57,14 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
 
   @Override
   public S isEqualTo(Object expected) {
-    isEqualName(expected);
-    isEqualAccess(expected);
-    isEqualSignature(expected);
-    isEqualVisibleAnnotations(expected);
-    isEqualInvisibleAnnotations(expected);
-    isEqualVisibleTypeAnnotations(expected);
-    isEqualInvisibleTypeAnnotationNodes(expected);
-    isEqualAttributes(expected);
+    hasEqualName(expected);
+    hasEqualAccess(expected);
+    hasEqualSignature(expected);
+    hasEqualVisibleAnnotations(expected);
+    hasEqualInvisibleAnnotations(expected);
+    hasEqualVisibleTypeAnnotations(expected);
+    hasEqualInvisibleTypeAnnotation(expected);
+    hasEqualAttributes(expected);
 
     //noinspection unchecked
     return (S) this;
@@ -76,13 +76,13 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
    *
    * @param expected an {@link Object} expected to be a {@link A}; may be null.
    */
-  protected void isEqualName(Object expected) {
+  protected void hasEqualName(Object expected) {
     if (hasOption(StandardAssertOption.IGNORE_NAME)) {
       return;
     }
 
     assertThat(getStringFromObjectElseNull(actual, this::getName))
-            .as(createDescription("Is equal " + name.toLowerCase(Locale.ROOT) + " name"))
+            .as(createCrumbDescription("Has equal " + name.toLowerCase(Locale.ROOT) + " name"))
             .isEqualTo(getStringFromObjectElseNull(expected, objectType, this::getName));
   }
 
@@ -100,14 +100,14 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
    *
    * @param expected an {@link Object} expected to be a {@link A}; may be null.
    */
-  protected void isEqualAccess(Object expected) {
+  protected void hasEqualAccess(Object expected) {
     if (hasOption(StandardAssertOption.IGNORE_ACCESS)) {
       return;
     }
 
     assertThatAccess(getIntegerFromObjectElseNull(actual, this::getAccess), getAccessKind())
             .addOptions(options)
-            .as(createDescription("Is equal " + name.toLowerCase(Locale.ROOT) + " access"))
+            .as(createCrumbDescription("Has equal " + name.toLowerCase(Locale.ROOT) + " access"))
             .isEqualTo(getIntegerFromObjectElseNull(expected, objectType, this::getAccess));
   }
 
@@ -132,13 +132,13 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
    *
    * @param expected an {@link Object} expected to be a {@link A}; may be null.
    */
-  protected void isEqualSignature(Object expected) {
+  protected void hasEqualSignature(Object expected) {
     if (hasOption(StandardAssertOption.IGNORE_SIGNATURE)) {
       return;
     }
 
     assertThat(getStringFromObjectElseNull(actual, this::getSignature))
-            .as(createDescription("Is equal " + name.toLowerCase(Locale.ROOT) + " signature"))
+            .as(createCrumbDescription("Has equal " + name.toLowerCase(Locale.ROOT) + " signature"))
             .isEqualTo(getStringFromObjectElseNull(expected, objectType, this::getSignature));
   }
 
@@ -156,13 +156,13 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
    *
    * @param expected an {@link Object} expected to be a {@link A}; may be null.
    */
-  protected void isEqualVisibleAnnotations(Object expected) {
+  protected void hasEqualVisibleAnnotations(Object expected) {
     if (hasOption(StandardAssertOption.IGNORE_VISIBLE_ANNOTATIONS)) {
       return;
     }
 
     assertThatAnnotations(getListFromObjectElse(actual, this::getVisibleAnnotations, List.of()))
-            .as(createDescription("Is equal " + name.toLowerCase(Locale.ROOT) + " visible annotations"))
+            .as(createCrumbDescription("Has equal " + name.toLowerCase(Locale.ROOT) + " visible annotations"))
             .containsExactlyInAnyOrderElementsOf(getListFromObjectElse(expected, objectType, this::getVisibleAnnotations, List.of()));
   }
 
@@ -180,13 +180,13 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
    *
    * @param expected an {@link Object} expected to be a {@link A}; may be null.
    */
-  protected void isEqualInvisibleAnnotations(Object expected) {
+  protected void hasEqualInvisibleAnnotations(Object expected) {
     if (hasOption(StandardAssertOption.IGNORE_INVISIBLE_ANNOTATIONS)) {
       return;
     }
 
     assertThatAnnotations(getListFromObjectElse(actual, this::getInvisibleAnnotations, List.of()))
-            .as(createDescription("Is equal " + name.toLowerCase(Locale.ROOT) + " invisible annotations"))
+            .as(createCrumbDescription("Has equal " + name.toLowerCase(Locale.ROOT) + " invisible annotations"))
             .containsExactlyInAnyOrderElementsOf(getListFromObjectElse(expected, objectType, this::getInvisibleAnnotations, List.of()));
   }
 
@@ -204,13 +204,13 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
    *
    * @param expected an {@link Object} expected to be a {@link A}; may be null.
    */
-  protected void isEqualVisibleTypeAnnotations(Object expected) {
+  protected void hasEqualVisibleTypeAnnotations(Object expected) {
     if (hasOption(StandardAssertOption.IGNORE_VISIBLE_TYPE_ANNOTATIONS)) {
       return;
     }
 
     assertThatTypeAnnotations(getListFromObjectElse(actual, this::getVisibleTypeAnnotations, List.of()))
-            .as(createDescription("Is equal " + name.toLowerCase(Locale.ROOT) + " visible type annotations"))
+            .as(createCrumbDescription("Has equal " + name.toLowerCase(Locale.ROOT) + " visible type annotations"))
             .containsExactlyInAnyOrderElementsOf(getListFromObjectElse(expected, objectType, this::getVisibleTypeAnnotations, List.of()));
   }
 
@@ -228,13 +228,13 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
    *
    * @param expected an {@link Object} expected to be a {@link A}; may be null.
    */
-  protected void isEqualInvisibleTypeAnnotationNodes(Object expected) {
+  protected void hasEqualInvisibleTypeAnnotation(Object expected) {
     if (hasOption(StandardAssertOption.IGNORE_INVISIBLE_TYPE_ANNOTATIONS)) {
       return;
     }
 
     assertThatTypeAnnotations(getListFromObjectElse(actual, this::getInvisibleTypeAnnotations, List.of()))
-            .as(createDescription("Is equal " + name.toLowerCase(Locale.ROOT) + " invisible type annotations"))
+            .as(createCrumbDescription("Has equal " + name.toLowerCase(Locale.ROOT) + " invisible type annotations"))
             .containsExactlyInAnyOrderElementsOf(getListFromObjectElse(expected, objectType, this::getInvisibleTypeAnnotations, List.of()));
   }
 
@@ -252,13 +252,13 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
    *
    * @param expected an {@link Object} expected to be a {@link A}; may be null.
    */
-  protected void isEqualAttributes(Object expected) {
+  protected void hasEqualAttributes(Object expected) {
     if (hasOption(StandardAssertOption.IGNORE_ATTRIBUTES)) {
       return;
     }
 
     assertThatAttributes(getListFromObjectElse(actual, this::getAttributes, List.of()))
-            .as(createDescription("Is equal " + name.toLowerCase(Locale.ROOT) + " attributes"))
+            .as(createCrumbDescription("Has equal " + name.toLowerCase(Locale.ROOT) + " attributes"))
             .containsExactlyInAnyOrderElementsOf(getListFromObjectElse(expected, objectType, this::getAttributes, List.of()));
   }
 

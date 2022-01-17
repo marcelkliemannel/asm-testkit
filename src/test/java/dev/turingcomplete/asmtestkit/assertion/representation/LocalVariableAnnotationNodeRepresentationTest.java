@@ -25,7 +25,8 @@ class LocalVariableAnnotationNodeRepresentationTest {
   void testToStringOf() throws IOException {
     @Language("Java")
     String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.*;" +
-                     "import java.util.Locale;class MyClass {" +
+                     "import java.util.Locale;" +
+                     "class MyClass {" +
                      "   String myMethod(String param) {" +
                      "     String @VisibleTypeParameterAnnotationA [] a = { param + 1 };" +
                      "     @VisibleTypeParameterAnnotationB String b = param + 2;" +

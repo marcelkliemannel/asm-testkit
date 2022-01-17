@@ -61,7 +61,7 @@ public abstract class AbstractAnnotationNodeAssert<S extends AsmAssert<S, A>, A 
    */
   protected void hasEqualDescriptor(Object expected) {
     Assertions.assertThat(getStringFromObjectElseNull(actual, AnnotationNode.class, annotationNode -> annotationNode.desc))
-              .as(createDescription("Has equal descriptor"))
+              .as(createCrumbDescription("Has equal descriptor"))
               .isEqualTo(getStringFromObjectElseNull(expected, AnnotationNode.class, annotationNode -> annotationNode.desc));
   }
 
@@ -73,7 +73,7 @@ public abstract class AbstractAnnotationNodeAssert<S extends AsmAssert<S, A>, A 
    */
   protected void hasEqualValues(Object expected) {
     Assertions.assertThat(convertAnnotationNodeValuesToMap(getListFromObjectElseNull(actual, (AnnotationNode annotationNode) -> annotationNode.values)))
-              .as(createDescription("Has equal values"))
+              .as(createCrumbDescription("Has equal values"))
               .containsExactlyInAnyOrderEntriesOf(convertAnnotationNodeValuesToMap(getListFromObjectElseNull(expected, AnnotationNode.class, annotationNode -> annotationNode.values)));
   }
 

@@ -6,6 +6,8 @@ import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.option.StandardAssertOption;
 import dev.turingcomplete.asmtestkit.assertion.representation.FieldNodeRepresentation;
 import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.description.Description;
+import org.assertj.core.description.TextDescription;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Type;
@@ -86,7 +88,7 @@ public class FieldNodeAssert extends ClassEntityAssert<FieldNodeAssert, FieldNod
 
     assertThat(getFromObjectElseNull(actual, (FieldNode fieldNode) -> Type.getType(fieldNode.desc)))
             .addOptions(options)
-            .as(createDescription("Has equal field descriptor"))
+            .as(createCrumbDescription("Has equal field descriptor"))
             .isEqualTo(getFromObjectElseNull(expected, FieldNode.class, fieldNode -> Type.getType(fieldNode.desc)));
   }
 
@@ -103,7 +105,7 @@ public class FieldNodeAssert extends ClassEntityAssert<FieldNodeAssert, FieldNod
     }
 
     assertThat(getFromObjectElseNull(actual, (FieldNode fieldNode) -> fieldNode.value))
-            .as(createDescription("Has equal field value"))
+            .as(createCrumbDescription("Has equal field value"))
             .isEqualTo(getFromObjectElseNull(expected, FieldNode.class, fieldNode -> fieldNode.value));
   }
 
@@ -153,8 +155,8 @@ public class FieldNodeAssert extends ClassEntityAssert<FieldNodeAssert, FieldNod
   }
 
   @Override
-  protected String createSelfDescription(FieldNode actual) {
-    return "Field: " + Optional.ofNullable(actual).map(fieldNode -> fieldNode.name).orElse(null);
+  protected Description createSelfDescription(FieldNode actual) {
+    return new TextDescription("Field: %s", Optional.ofNullable(actual).map(fieldNode -> fieldNode.name).orElse("null"));
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

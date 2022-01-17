@@ -91,7 +91,7 @@ public class LocalVariableAnnotationNodeAssert
     List<String> expectedRanges = getListFromObjectElseNull(expected, LocalVariableAnnotationNode.class, getRanges);
 
     Assertions.assertThat(actualRanges)
-              .as(createDescription("Has equal ranges"))
+              .as(createCrumbDescription("Has equal ranges"))
               .containsExactlyElementsOf(expectedRanges);
   }
 

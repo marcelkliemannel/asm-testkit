@@ -78,7 +78,7 @@ class FieldNodeAssertTest {
     Assertions.assertThatThrownBy(() -> assertThat(firstFieldNode)
                       .isEqualTo(secondFieldNode))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Field: first > Is equal field name] \n" +
+              .hasMessage("[Field: first > Has equal field name] \n" +
                           "expected: \"second\"\n" +
                           " but was: \"first\"");
   }
@@ -119,7 +119,7 @@ class FieldNodeAssertTest {
     Assertions.assertThatThrownBy(() -> assertThat(first1FieldNode)
                       .isEqualTo(first2FieldNode))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Field: first > Is equal field access > Field: first > Is equal field access > Is equal access values] \n" +
+              .hasMessage("[Field: first > Has equal field access > Has equal access values] \n" +
                           "Expecting actual:\n" +
                           "  [\"protected\"]\n" +
                           "to contain exactly in any order:\n" +
@@ -145,7 +145,7 @@ class FieldNodeAssertTest {
     Assertions.assertThatThrownBy(() -> assertThat(first1FieldNode)
                       .isEqualTo(first2FieldNode))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Field: first > Is equal field signature] \n" +
+              .hasMessage("[Field: first > Has equal field signature] \n" +
                           "expected: \"[T;\"\n" +
                           " but was: \"[[TT;\"");
   }
@@ -189,7 +189,7 @@ class FieldNodeAssertTest {
     Assertions.assertThatThrownBy(() -> assertThat(first1FieldNode)
                       .isEqualTo(first2FieldNode))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Field: first > Is equal field visible annotations] \n" +
+              .hasMessage("[Field: first > Has equal field visible annotations] \n" +
                           "Expecting actual:\n" +
                           "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationA]\n" +
                           "to contain exactly in any order:\n" +
@@ -219,7 +219,7 @@ class FieldNodeAssertTest {
     Assertions.assertThatThrownBy(() -> assertThat(first1FieldNode)
                       .isEqualTo(first2FieldNode))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Field: first > Is equal field invisible annotations] \n" +
+              .hasMessage("[Field: first > Has equal field invisible annotations] \n" +
                           "Expecting actual:\n" +
                           "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleAnnotationA]\n" +
                           "to contain exactly in any order:\n" +
@@ -265,7 +265,7 @@ class FieldNodeAssertTest {
     Assertions.assertThatThrownBy(() -> assertThat(first1FieldNode)
                       .isEqualTo(first2FieldNode))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Field: first > Is equal field visible type annotations] \n" +
+              .hasMessage("[Field: first > Has equal field visible type annotations] \n" +
                           "Expecting actual:\n" +
                           "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: field; path: [,\n" +
                           "    @dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: field; path: null]\n" +
@@ -312,7 +312,7 @@ class FieldNodeAssertTest {
     Assertions.assertThatThrownBy(() -> assertThat(first1FieldNode)
                       .isEqualTo(first2FieldNode))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Field: first > Is equal field invisible type annotations] \n" +
+              .hasMessage("[Field: first > Has equal field invisible type annotations] \n" +
                           "Expecting actual:\n" +
                           "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotation // reference: field; path: [,\n" +
                           "    @dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotation // reference: field; path: null]\n" +
@@ -341,7 +341,7 @@ class FieldNodeAssertTest {
     Assertions.assertThatThrownBy(() -> assertThat(first1FieldNode)
                       .isEqualTo(first2FieldNode))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Field: first > Is equal field attributes] \n" +
+              .hasMessage("[Field: first > Has equal field attributes] \n" +
                           "Expecting actual:\n" +
                           "  [Foonull]\n" +
                           "to contain exactly in any order:\n" +

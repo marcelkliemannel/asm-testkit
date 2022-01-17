@@ -70,7 +70,7 @@ public class LocalVariableNodeAssert extends AsmAssert<LocalVariableNodeAssert, 
    */
   protected void hasEqualIndex(Object expected) {
     Assertions.assertThat(getIntegerFromObjectElseNull(actual, (LocalVariableNode localVariableNode) -> localVariableNode.index))
-              .as(createDescription("Has equal index"))
+              .as(createCrumbDescription("Has equal index"))
               .isEqualTo(getFromObjectElseNull(expected, LocalVariableNode.class, localVariableNode -> localVariableNode.index));
   }
 
@@ -83,7 +83,7 @@ public class LocalVariableNodeAssert extends AsmAssert<LocalVariableNodeAssert, 
    */
   protected void hasEqualName(Object expected) {
     Assertions.assertThat(getStringFromObjectElseNull(actual, (LocalVariableNode localVariableNode) -> localVariableNode.name))
-              .as(createDescription("Has equal name"))
+              .as(createCrumbDescription("Has equal name"))
               .isEqualTo(getStringFromObjectElseNull(expected, LocalVariableNode.class, localVariableNode -> localVariableNode.name));
   }
 
@@ -96,7 +96,7 @@ public class LocalVariableNodeAssert extends AsmAssert<LocalVariableNodeAssert, 
    */
   protected void hasEqualDescriptor(Object expected) {
     Assertions.assertThat(getStringFromObjectElseNull(actual, (LocalVariableNode localVariableNode) -> localVariableNode.desc))
-              .as(createDescription("Has equal descriptor"))
+              .as(createCrumbDescription("Has equal descriptor"))
               .isEqualTo(getStringFromObjectElseNull(expected, LocalVariableNode.class, localVariableNode -> localVariableNode.desc));
   }
 
@@ -109,7 +109,7 @@ public class LocalVariableNodeAssert extends AsmAssert<LocalVariableNodeAssert, 
    */
   protected void hasEqualSignature(Object expected) {
     Assertions.assertThat(getStringFromObjectElseNull(actual, (LocalVariableNode localVariableNode) -> localVariableNode.signature))
-              .as(createDescription("Has equal signature"))
+              .as(createCrumbDescription("Has equal signature"))
               .isEqualTo(getStringFromObjectElseNull(expected, LocalVariableNode.class, localVariableNode -> localVariableNode.signature));
   }
 
@@ -122,7 +122,7 @@ public class LocalVariableNodeAssert extends AsmAssert<LocalVariableNodeAssert, 
    */
   protected void hasEqualStartLabel(Object expected) {
     AsmAssertions.assertThat(getFromObjectElseNull(actual, (LocalVariableNode localVariableNode) -> localVariableNode.start))
-                 .as(createDescription("Has equal start label"))
+                 .as(createCrumbDescription("Has equal start label"))
                  .isEqualTo(getFromObjectElseNull(expected, LocalVariableNode.class, localVariableNode -> localVariableNode.start));
   }
 
@@ -135,7 +135,7 @@ public class LocalVariableNodeAssert extends AsmAssert<LocalVariableNodeAssert, 
    */
   protected void hasEqualEndLabel(Object expected) {
     AsmAssertions.assertThat(getFromObjectElseNull(actual, (LocalVariableNode localVariableNode) -> localVariableNode.end))
-                 .as(createDescription("Has equal end label"))
+                 .as(createCrumbDescription("Has equal end label"))
                  .isEqualTo(getFromObjectElseNull(expected, LocalVariableNode.class, localVariableNode -> localVariableNode.end));
   }
 

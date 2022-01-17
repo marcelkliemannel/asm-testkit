@@ -71,7 +71,7 @@ public abstract class AbstractTypeAnnotationNodeAssert<S extends AbstractTypeAnn
   protected void hasEqualTypePath(Object expected) {
     AsmAssertions.assertThat(getFromObjectElseNull(actual, (TypeAnnotationNode typeAnnotationNode) -> typeAnnotationNode.typePath))
                  .addOptions(options)
-                 .as(createDescription("Has equal type path"))
+                 .as(createCrumbDescription("Has equal type path"))
                  .isEqualTo(getFromObjectElseNull(expected, TypeAnnotationNode.class, typeAnnotationNode -> typeAnnotationNode.typePath));
   }
 
@@ -85,7 +85,7 @@ public abstract class AbstractTypeAnnotationNodeAssert<S extends AbstractTypeAnn
   protected void hasEqualTypeReference(Object expected) {
     AsmAssertions.assertThat(getFromObjectElseNull(actual, (TypeAnnotationNode typeAnnotationNode) -> new TypeReference(actual.typeRef)))
                  .addOptions(options)
-                 .as(createDescription("Has equal type reference"))
+                 .as(createCrumbDescription("Has equal type reference"))
                  .isEqualTo(getFromObjectElseNull(expected, TypeAnnotationNode.class, typeAnnotationNode -> new TypeReference(typeAnnotationNode.typeRef)));
 
   }

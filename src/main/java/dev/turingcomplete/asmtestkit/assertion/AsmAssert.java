@@ -1,15 +1,18 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
+import dev.turingcomplete.asmtestkit.assertion._internal.AsmWritableAssertionInfo;
 import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.representation.AsmRepresentation;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.description.Description;
 import org.assertj.core.description.TextDescription;
 import org.assertj.core.presentation.Representation;
+import org.objectweb.asm.Label;
 
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -54,9 +57,7 @@ public abstract class AsmAssert<S extends AbstractAssert<S, A>, A>
 
     this.name = name;
 
-    if (defaultRepresentation != null) {
-      info.useRepresentation(defaultRepresentation);
-    }
+    info = new AsmWritableAssertionInfo(defaultRepresentation);
     info.description(createSelfDescription(actual));
 
     if (defaultComparator != null) {
@@ -66,6 +67,22 @@ public abstract class AsmAssert<S extends AbstractAssert<S, A>, A>
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  @Override
+  public AsmWritableAssertionInfo getWritableAssertionInfo() {
+    if (!(info instanceof AsmWritableAssertionInfo)) {
+      throw new IllegalStateException("Expected info to be of type:" + AsmWritableAssertionInfo.class.getName());
+    }
+
+    return (AsmWritableAssertionInfo) info;
+  }
+
+  public S useLabelNames(Map<Label, String> labelNames) {
+    getWritableAssertionInfo().useLabelNames(labelNames);
+
+    //noinspection unchecked
+    return (S) this;
+  }
 
   /**
    * Adds the given {@link AssertOption}.
@@ -100,31 +117,16 @@ public abstract class AsmAssert<S extends AbstractAssert<S, A>, A>
     return options.contains(Objects.requireNonNull(option));
   }
 
-  protected Description createDescription(Description description) {
-    return createDescription(description.value());
-  }
-
-  protected Description createDescription() {
-    return createDescription(null, new Object[0]);
-  }
-
-  protected String createSelfDescription(A actual) {
-    Representation representation = info.representation();
+  protected Description createSelfDescription(A actual) {
+    Representation representation = getWritableAssertionInfo().representation();
     String representationOfActual = representation instanceof AsmRepresentation
             ? ((AsmRepresentation<?>) representation).toSimplifiedStringOf(actual)
             : representation.toStringOf(actual);
-    return name + ": " + representationOfActual;
+    return new TextDescription("%s: %s", name, representationOfActual);
   }
 
-  protected Description createDescription(String description, Object... args) {
-    String selfDescription = descriptionText();
-    if (!selfDescription.equals(createSelfDescription(actual))) {
-      selfDescription = selfDescription + " > " + selfDescription;
-    }
-
-    return description != null
-            ? new TextDescription("%s > %s", selfDescription, String.format(description, args))
-            : new TextDescription(selfDescription);
+  protected Description createCrumbDescription(String description, Object... args) {
+    return getWritableAssertionInfo().createCrumbDescription(description, args);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

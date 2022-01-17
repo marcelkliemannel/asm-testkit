@@ -1,7 +1,10 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
+import dev.turingcomplete.asmtestkit.assertion._internal.AsmWritableAssertionInfo;
 import org.assertj.core.api.AbstractIterableAssert;
+import org.objectweb.asm.Label;
 
+import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -29,9 +32,26 @@ public class AsmIterableAssert<S extends AsmIterableAssert<S, E, A>, E, A extend
     super(actual, selfType);
 
     this.createElementAssert = createElementAssert;
+    info = new AsmWritableAssertionInfo(info.representation());
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  @Override
+  public AsmWritableAssertionInfo getWritableAssertionInfo() {
+    if (!(info instanceof AsmWritableAssertionInfo)) {
+      throw new IllegalStateException("Expected info to be of type:" + AsmWritableAssertionInfo.class.getName());
+    }
+
+    return (AsmWritableAssertionInfo) info;
+  }
+
+  public S useLabelNames(Map<Label, String> labelNames) {
+    getWritableAssertionInfo().useLabelNames(labelNames);
+
+    //noinspection unchecked
+    return (S) this;
+  }
 
   @Override
   protected A toAssert(E value, String description) {

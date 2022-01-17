@@ -12,7 +12,7 @@ public abstract class AsmRepresentation<T> extends StandardRepresentation {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
-  protected final Class<T> objectClass;
+  private final Class<T> objectClass;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
@@ -21,6 +21,15 @@ public abstract class AsmRepresentation<T> extends StandardRepresentation {
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  /**
+   * Gets the {@link Class} of {@link T}.
+   *
+   * @return a {@link Class}; never null.
+   */
+  public final Class<T> getObjectClass() {
+    return objectClass;
+  }
 
   /**
    * Creates a {@link String} representation of the given {@code object}.
