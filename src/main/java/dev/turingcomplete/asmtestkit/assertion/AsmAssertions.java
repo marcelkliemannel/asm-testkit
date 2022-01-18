@@ -572,7 +572,7 @@ public final class AsmAssertions {
    */
   public static AsmIterableAssert<?, TryCatchBlockNode, TryCatchBlockNodeAssert> assertThatTryCatchBlocks(Iterable<TryCatchBlockNode> actual) {
     return new AsmIterableAssert<>(actual, AsmAssertions::assertThat)
-            .as("Try Catch Block")
+            .as("Try Catch Blocks")
             .withRepresentation(TryCatchBlockNodeRepresentation.INSTANCE)
             .usingElementComparator(TryCatchBlockNodeComparator.INSTANCE)
             .usingComparator(TryCatchBlockNodeComparator.ITERABLE_INSTANCE);

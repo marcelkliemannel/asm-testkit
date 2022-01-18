@@ -1,13 +1,11 @@
 package dev.turingcomplete.asmtestkit.assertion._internal;
 
-import dev.turingcomplete.asmtestkit.assertion.representation.AsmRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.WithLabelNamesRepresentation;
 import org.assertj.core.api.WritableAssertionInfo;
-import org.assertj.core.description.Description;
-import org.assertj.core.description.TextDescription;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Label;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +18,9 @@ public final class AsmWritableAssertionInfo extends WritableAssertionInfo {
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   public AsmWritableAssertionInfo(Representation defaultRepresentation) {
-    useRepresentation(defaultRepresentation);
+    if (defaultRepresentation != null) {
+      useRepresentation(defaultRepresentation);
+    }
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
@@ -28,6 +28,10 @@ public final class AsmWritableAssertionInfo extends WritableAssertionInfo {
   public void useLabelNames(Map<Label, String> labelNames) {
     this.labelNames.clear();
     this.labelNames.putAll(labelNames);
+  }
+
+  public Map<Label, String> labelNames() {
+    return Collections.unmodifiableMap(labelNames);
   }
 
   @Override
@@ -40,21 +44,10 @@ public final class AsmWritableAssertionInfo extends WritableAssertionInfo {
     super.useRepresentation(newRepresentation);
   }
 
-  public Description createCrumbDescription(String description, Object... args) {
-    String selfDescription = descriptionText();
-    if (!selfDescription.equals(descriptionText())) {
-      selfDescription = selfDescription + " > " + selfDescription;
-    }
-
-    return description != null
-            ? new TextDescription("%s > %s", selfDescription, String.format(description, args))
-            : new TextDescription(selfDescription);
-  }
-
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 
-  private static class WithLabelNamesRepresentationAdapter<T> extends AsmRepresentation<T> {
+  private static class WithLabelNamesRepresentationAdapter<T> extends WithLabelNamesRepresentation<T> {
 
     private final WithLabelNamesRepresentation<T> delegate;
     private final Map<Label, String>              labelNamesReference;
@@ -74,6 +67,16 @@ public final class AsmWritableAssertionInfo extends WritableAssertionInfo {
     @Override
     protected String doToStringOf(T object) {
       return delegate.toStringOf(object, labelNamesReference);
+    }
+
+    @Override
+    protected String doToSimplifiedStringOf(T object, Map<Label, String> labelNames) {
+      return delegate.toSimplifiedStringOf(object, labelNames);
+    }
+
+    @Override
+    protected String doToStringOf(T object, Map<Label, String> labelNames) {
+      return delegate.toStringOf(object, labelNames);
     }
   }
 }

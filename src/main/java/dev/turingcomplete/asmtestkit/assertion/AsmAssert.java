@@ -2,10 +2,10 @@ package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.assertion._internal.AsmWritableAssertionInfo;
 import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
-import dev.turingcomplete.asmtestkit.assertion.representation.AsmRepresentation;
+import dev.turingcomplete.asmtestkit.assertion.representation._internal.CrumbDescription;
+import dev.turingcomplete.asmtestkit.assertion.representation._internal.SelfDescription;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.description.Description;
-import org.assertj.core.description.TextDescription;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Label;
 
@@ -58,7 +58,7 @@ public abstract class AsmAssert<S extends AbstractAssert<S, A>, A>
     this.name = name;
 
     info = new AsmWritableAssertionInfo(defaultRepresentation);
-    info.description(createSelfDescription(actual));
+    info.description(new SelfDescription(name, actual, info));
 
     if (defaultComparator != null) {
       //noinspection ResultOfMethodCallIgnored
@@ -82,6 +82,10 @@ public abstract class AsmAssert<S extends AbstractAssert<S, A>, A>
 
     //noinspection unchecked
     return (S) this;
+  }
+
+  public Map<Label, String> labelNames() {
+    return getWritableAssertionInfo().labelNames();
   }
 
   /**
@@ -117,16 +121,8 @@ public abstract class AsmAssert<S extends AbstractAssert<S, A>, A>
     return options.contains(Objects.requireNonNull(option));
   }
 
-  protected Description createSelfDescription(A actual) {
-    Representation representation = getWritableAssertionInfo().representation();
-    String representationOfActual = representation instanceof AsmRepresentation
-            ? ((AsmRepresentation<?>) representation).toSimplifiedStringOf(actual)
-            : representation.toStringOf(actual);
-    return new TextDescription("%s: %s", name, representationOfActual);
-  }
-
-  protected Description createCrumbDescription(String description, Object... args) {
-    return getWritableAssertionInfo().createCrumbDescription(description, args);
+  protected final Description createCrumbDescription(String description, Object... args) {
+    return new CrumbDescription(info, description, args);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

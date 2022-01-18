@@ -22,6 +22,7 @@ import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LocalVariableAnnotationNode;
 import org.objectweb.asm.tree.LocalVariableNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.TryCatchBlockNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.io.IOException;
@@ -32,6 +33,7 @@ import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatFi
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLabels;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLocalVariableAnnotations;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLocalVariables;
+import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatTryCatchBlocks;
 import static dev.turingcomplete.asmtestkit.compile.CompilationEnvironment.create;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -470,6 +472,58 @@ class AsmAssertionsTest {
                         "and elements not expected:\n" +
                         "  [#1 java.lang.String a (L1-L4)]\n" +
                         "when comparing values using LocalVariableNodeComparator");
+  }
+
+  @Test
+  void testAssertThatTryCatchBlocks() throws IOException {
+    @Language("Java")
+    String myClass = "class MyClass<T> {" +
+                     "   void myMethod() {" +
+                     "     try {" +
+                     "       throw new java.io.IOException();" +
+                     "     }" +
+                     "     catch (java.io.IOException | java.lang.IllegalArgumentException e) {" +
+                     "       System.out.println(2);" +
+                     "     }" +
+                     "     finally {" +
+                     "       System.out.println(4);" +
+                     "     }" +
+                     "   }" +
+                     " }";
+
+    MethodNode methodNode = create()
+            .addJavaInputSource(myClass)
+            .compile()
+            .readClassNode("MyClass")
+            .methods.get(1);
+
+
+    TryCatchBlockNode firstTryCatchBlock = methodNode.tryCatchBlocks.get(0);
+    TryCatchBlockNode secondTryCatchBlock = methodNode.tryCatchBlocks.get(1);
+    TryCatchBlockNode thirdTryCatchBlock = methodNode.tryCatchBlocks.get(2);
+
+    // Positive
+    assertThatTryCatchBlocks(List.of(firstTryCatchBlock, secondTryCatchBlock))
+            .containsExactlyInAnyOrderElementsOf(List.of(firstTryCatchBlock, secondTryCatchBlock));
+
+    // Negative
+    ThrowableAssert.ThrowingCallable throwingCallable = () -> assertThatTryCatchBlocks(List.of(firstTryCatchBlock, secondTryCatchBlock))
+            .useLabelNames(MethodNodeUtils.extractLabelNames(methodNode))
+            .containsExactlyInAnyOrderElementsOf(List.of(secondTryCatchBlock, thirdTryCatchBlock));
+    assertThatThrownBy(throwingCallable)
+            .isInstanceOf(AssertionError.class)
+            .hasMessage("[Try Catch Blocks] \n" +
+                        "Expecting actual:\n" +
+                        "  [java.io.IOException, range: L0-L1, handled in: L1,\n" +
+                        "    java.lang.IllegalArgumentException, range: L0-L1, handled in: L1]\n" +
+                        "to contain exactly in any order:\n" +
+                        "  [java.lang.IllegalArgumentException, range: L0-L1, handled in: L1,\n" +
+                        "    finally, range: L0-L2, handled in: L3]\n" +
+                        "elements not found:\n" +
+                        "  [finally, range: L0-L2, handled in: L3]\n" +
+                        "and elements not expected:\n" +
+                        "  [java.io.IOException, range: L0-L1, handled in: L1]\n" +
+                        "when comparing values using TryCatchBlockNodeComparator");
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

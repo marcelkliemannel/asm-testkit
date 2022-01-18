@@ -6,7 +6,6 @@ import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.option.StandardAssertOption;
 import dev.turingcomplete.asmtestkit.assertion.representation.FieldNodeRepresentation;
 import org.assertj.core.api.AbstractAssert;
-import org.assertj.core.description.Description;
 import org.assertj.core.description.TextDescription;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Attribute;
@@ -60,6 +59,8 @@ public class FieldNodeAssert extends ClassEntityAssert<FieldNodeAssert, FieldNod
    */
   protected FieldNodeAssert(FieldNode actual) {
     super("Field", actual, FieldNodeAssert.class, FieldNode.class, FieldNodeRepresentation.INSTANCE, FieldNodeComparator.INSTANCE);
+
+    info.description(new TextDescription("Field: %s", Optional.ofNullable(actual).map(fieldNode -> fieldNode.name).orElse("null")));
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
@@ -152,11 +153,6 @@ public class FieldNodeAssert extends ClassEntityAssert<FieldNodeAssert, FieldNod
   @Override
   protected List<Attribute> getAttributes(FieldNode fieldNode) {
     return fieldNode.attrs;
-  }
-
-  @Override
-  protected Description createSelfDescription(FieldNode actual) {
-    return new TextDescription("Field: %s", Optional.ofNullable(actual).map(fieldNode -> fieldNode.name).orElse("null"));
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
