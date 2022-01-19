@@ -5,12 +5,14 @@ import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.util.TraceMethodVisitor;
 
+import static dev.turingcomplete.asmtestkit.assertion.representation._internal.RepresentationUtils.appendToFirstLine;
+
 /**
  * An AssertJ {@link Representation} for an {@link AbstractInsnNode}.
  *
  * <p>Example output:
- * <pre>{@code BIPUSH 42 (Opcode: 16)}</pre>
- * <pre>{@code LOOKUPSWITCH (Opcode: 171)
+ * <pre>{@code BIPUSH 42 // opcode: 16}</pre>
+ * <pre>{@code LOOKUPSWITCH // opcode: 171
  *  1: L0
  *  2: L1
  *  default: L2}</pre>
@@ -59,22 +61,12 @@ public class InstructionRepresentation extends AsmRepresentation<AbstractInsnNod
   }
 
   static String appendOpcode(int opcode, String textifiedInstruction) {
-    String result = textifiedInstruction;
     if (opcode >= 0) {
-      String opcodeRepresentation = " (Opcode: " + opcode + ")";
-
-      int indexOfFirstNewLine = result.indexOf("\n");
-      if (indexOfFirstNewLine >= 0) {
-        // In case the instruction has multiple line, the opcode will be
-        // appended to the first one.
-        result = result.replaceFirst("\n", opcodeRepresentation + "\n");
-      }
-      else {
-        result += opcodeRepresentation;
-      }
+      return appendToFirstLine(textifiedInstruction, " // opcode: " + opcode);
     }
-
-    return result;
+    else {
+      return textifiedInstruction;
+    }
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

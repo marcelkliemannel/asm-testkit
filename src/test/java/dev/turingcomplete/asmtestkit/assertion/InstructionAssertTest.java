@@ -26,8 +26,8 @@ class InstructionAssertTest {
                                        .isEqualTo(new IntInsnNode(Opcodes.BIPUSH, 5)))
             .isInstanceOf(AssertionError.class)
             .hasMessage("[Instruction: LDC \"foo\"] \n" +
-                        "expected: BIPUSH 5 (Opcode: 16)\n" +
-                        " but was: LDC \"foo\" (Opcode: 18)\n" +
+                        "expected: BIPUSH 5 // opcode: 16\n" +
+                        " but was: LDC \"foo\" // opcode: 18\n" +
                         "when comparing values using InstructionComparator");
   }
 

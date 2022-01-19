@@ -14,7 +14,7 @@ import java.util.Objects;
  * <p>Example output:
  * <pre>{@code
  * @TypeParameterAnnotation // reference: exception_parameter=0; path: null
- * java.io.IOException, from: L0-L1, handled in: L1
+ * java.io.IOException, from: L0-L1; handled in: L1
  * }</pre>
  *
  * <p>The simplified representation omits the type parameter annotations.
@@ -108,11 +108,11 @@ public class TryCatchBlockNodeRepresentation extends WithLabelNamesRepresentatio
     }
 
     // Range
-    representation.append(", range: ")
+    representation.append(" // range: ")
                   .append(labelNodeRepresentation.toStringOf(tryCatchBlockNode.start, labelNames))
                   .append("-")
                   .append(labelNodeRepresentation.toStringOf(tryCatchBlockNode.end, labelNames))
-                  .append(", handled in: ")
+                  .append("; handled in: ")
                   .append(labelNodeRepresentation.toStringOf(tryCatchBlockNode.handler, labelNames));
 
     return representation.toString();

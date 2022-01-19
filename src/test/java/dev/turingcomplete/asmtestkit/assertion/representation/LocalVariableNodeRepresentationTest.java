@@ -10,7 +10,6 @@ import org.objectweb.asm.tree.LocalVariableNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 import static dev.turingcomplete.asmtestkit.compile.CompilationEnvironment.create;
@@ -31,25 +30,27 @@ class LocalVariableNodeRepresentationTest {
                      "   }" +
                      " }";
 
-    List<LocalVariableNode> localVariableNodes = create()
+    MethodNode methodNode = create()
             .addToClasspath(VisibleAnnotationA.class)
             .addJavaInputSource(myClass)
             .compile()
             .readClassNode("MyClass")
-            .methods.get(1).localVariables;
+            .methods.get(1);
 
-    LocalVariableNode thisLocalVariableNode = localVariableNodes.get(0);
-    LocalVariableNode secondLocalVariableNode = localVariableNodes.get(1);
-    LocalVariableNode thirdLocalVariableNode = localVariableNodes.get(2);
+    LocalVariableNode thisLocalVariableNode = methodNode.localVariables.get(0);
+    LocalVariableNode secondLocalVariableNode = methodNode.localVariables.get(1);
+    LocalVariableNode thirdLocalVariableNode = methodNode.localVariables.get(2);
 
-    Assertions.assertThat(LocalVariableNodeRepresentation.INSTANCE.toStringOf(thisLocalVariableNode))
-              .isEqualTo(String.format("#0 MyClass this (L%s-L%s) // signature: LMyClass<TT;>;", thisLocalVariableNode.start.getLabel().hashCode(), thisLocalVariableNode.end.getLabel().hashCode()));
+    Map<Label, String> labelNames = MethodNodeUtils.extractLabelNames(methodNode);
 
-    Assertions.assertThat(LocalVariableNodeRepresentation.INSTANCE.toStringOf(secondLocalVariableNode))
-              .isEqualTo(String.format("#1 java.lang.String a (L%s-L%s)", secondLocalVariableNode.start.getLabel().hashCode(), secondLocalVariableNode.end.getLabel().hashCode()));
+    Assertions.assertThat(LocalVariableNodeRepresentation.INSTANCE.toStringOf(thisLocalVariableNode, labelNames))
+              .isEqualTo("#0 MyClass this // range: L0-L3 // signature: LMyClass<TT;>;");
 
-    Assertions.assertThat(LocalVariableNodeRepresentation.INSTANCE.toStringOf(thirdLocalVariableNode))
-              .isEqualTo(String.format("#2 java.lang.Number b (L%s-L%s) // signature: TT;", thirdLocalVariableNode.start.getLabel().hashCode(), thirdLocalVariableNode.end.getLabel().hashCode()));
+    Assertions.assertThat(LocalVariableNodeRepresentation.INSTANCE.toStringOf(secondLocalVariableNode, labelNames))
+              .isEqualTo("#1 java.lang.String a // range: L1-L3");
+
+    Assertions.assertThat(LocalVariableNodeRepresentation.INSTANCE.toStringOf(thirdLocalVariableNode, labelNames))
+              .isEqualTo("#2 java.lang.Number b // range: L2-L3 // signature: TT;");
   }
 
   @Test
@@ -72,7 +73,7 @@ class LocalVariableNodeRepresentationTest {
     LocalVariableNode localVariableNode = methodNode.localVariables.get(0);
 
     Assertions.assertThat(LocalVariableNodeRepresentation.INSTANCE.toStringOf(localVariableNode, labelNames))
-              .isEqualTo("#0 MyClass this (L0-L2)");
+              .isEqualTo("#0 MyClass this // range: L0-L2");
   }
 
   @Test

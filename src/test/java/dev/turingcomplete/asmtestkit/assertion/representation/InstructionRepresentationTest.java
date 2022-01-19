@@ -39,10 +39,10 @@ class InstructionRepresentationTest {
 
     List<String> expectedRepresentations = List.of("L0",
                                                    "LINENUMBER 1 L0",
-                                                   "GETSTATIC java/lang/System.out : Ljava/io/PrintStream; (Opcode: 178)",
-                                                   "BIPUSH 42 (Opcode: 16)",
-                                                   "INVOKEVIRTUAL java/io/PrintStream.println (I)V (Opcode: 182)",
-                                                   "RETURN (Opcode: 177)",
+                                                   "GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178",
+                                                   "BIPUSH 42 // opcode: 16",
+                                                   "INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182",
+                                                   "RETURN // opcode: 177",
                                                    "L0");
 
     Assertions.assertThat(Arrays.stream(instructions.toArray()).map(InstructionRepresentation.INSTANCE::toStringOf))
@@ -70,7 +70,7 @@ class InstructionRepresentationTest {
     Assertions.assertThat(lookupSwitch).isPresent();
 
     Assertions.assertThat(InstructionRepresentation.INSTANCE.toStringOf(lookupSwitch.get()))
-              .isEqualTo("LOOKUPSWITCH (Opcode: 171)\n" +
+              .isEqualTo("LOOKUPSWITCH // opcode: 171\n" +
                          " 1: L0\n" +
                          " 2: L1\n" +
                          " default: L2");

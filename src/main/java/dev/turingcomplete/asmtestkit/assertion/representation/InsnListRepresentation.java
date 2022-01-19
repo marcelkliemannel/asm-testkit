@@ -15,9 +15,9 @@ import org.objectweb.asm.util.TraceMethodVisitor;
  * <pre>{@code
  * L0
  *   LINENUMBER 3 L0
- *   GETSTATIC java/lang/System.out : Ljava/io/PrintStream; (Opcode: 178)
- *   ICONST_1 (Opcode: 4)
- *   INVOKEVIRTUAL java/io/PrintStream.println (I)V (Opcode: 182)
+ *   GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178
+ *   ICONST_1 // opcode: 4
+ *   INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182
  * L1
  * }</pre>
  *

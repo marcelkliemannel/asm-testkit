@@ -92,9 +92,9 @@ public class LocalVariableNodeRepresentation extends WithLabelNamesRepresentatio
                   .append(typeRepresentation.toStringOf(Type.getType(localVariableNode.desc)))
                   .append(" ")
                   .append(localVariableNode.name)
-                  .append(" (").append(labelNodeRepresentation.doToStringOf(localVariableNode.start, labelNames))
+                  .append(" // range: ").append(labelNodeRepresentation.doToStringOf(localVariableNode.start, labelNames))
                   .append("-")
-                  .append(labelNodeRepresentation.doToStringOf(localVariableNode.end, labelNames)).append(")");
+                  .append(labelNodeRepresentation.doToStringOf(localVariableNode.end, labelNames));
 
     if (localVariableNode.signature != null) {
       representation.append(" // signature: ").append(localVariableNode.signature);

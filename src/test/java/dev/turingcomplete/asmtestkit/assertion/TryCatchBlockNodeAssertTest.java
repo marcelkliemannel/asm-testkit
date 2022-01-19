@@ -32,7 +32,7 @@ class TryCatchBlockNodeAssertTest {
                                                      .useLabelNames(labelNames)
                                                      .isEqualTo(secondTryCatchBlock))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Try Catch Block: finally, range: L1-null, handled in: null > Has equal start] \n" +
+              .hasMessage("[Try Catch Block: finally // range: L1-null; handled in: null > Has equal start] \n" +
                           "expected: L2\n" +
                           " but was: L1\n" +
                           "when comparing values using LabelNodeComparator");
@@ -50,7 +50,7 @@ class TryCatchBlockNodeAssertTest {
                                                      .useLabelNames(labelNames)
                                                      .isEqualTo(secondTryCatchBlock))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Try Catch Block: finally, range: null-L1, handled in: null > Has equal end] \n" +
+              .hasMessage("[Try Catch Block: finally // range: null-L1; handled in: null > Has equal end] \n" +
                           "expected: L2\n" +
                           " but was: L1\n" +
                           "when comparing values using LabelNodeComparator");
@@ -68,7 +68,7 @@ class TryCatchBlockNodeAssertTest {
                                                      .useLabelNames(labelNames)
                                                      .isEqualTo(secondTryCatchBlock))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Try Catch Block: finally, range: null-null, handled in: L1 > Has equal handler] \n" +
+              .hasMessage("[Try Catch Block: finally // range: null-null; handled in: L1 > Has equal handler] \n" +
                           "expected: L2\n" +
                           " but was: L1\n" +
                           "when comparing values using LabelNodeComparator");
@@ -82,7 +82,7 @@ class TryCatchBlockNodeAssertTest {
     Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(firstTryCatchBlock)
                                                      .isEqualTo(secondTryCatchBlock))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Try Catch Block: java.io.IOException, range: null-null, handled in: null > Has equal type] \n" +
+              .hasMessage("[Try Catch Block: java.io.IOException // range: null-null; handled in: null > Has equal type] \n" +
                           "expected: \"java.lang.IllegalArgumentException\"\n" +
                           " but was: \"java.io.IOException\"");
   }
@@ -97,7 +97,7 @@ class TryCatchBlockNodeAssertTest {
     Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(firstTryCatchBlock)
                                                      .isEqualTo(secondTryCatchBlock))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Try Catch Block: finally, range: null-null, handled in: null > Has equal visible type annotations] \n" +
+              .hasMessage("[Try Catch Block: finally // range: null-null; handled in: null > Has equal visible type annotations] \n" +
                           "Expecting actual:\n" +
                           "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: *]\n" +
                           "to contain exactly in any order:\n" +
@@ -119,7 +119,7 @@ class TryCatchBlockNodeAssertTest {
     Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(firstTryCatchBlock)
                                                      .isEqualTo(secondTryCatchBlock))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Try Catch Block: finally, range: null-null, handled in: null > Has equal visible type annotations] \n" +
+              .hasMessage("[Try Catch Block: finally // range: null-null; handled in: null > Has equal visible type annotations] \n" +
                           "Expecting actual:\n" +
                           "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotation // reference: class_type_parameter=0; path: *]\n" +
                           "to contain exactly in any order:\n" +

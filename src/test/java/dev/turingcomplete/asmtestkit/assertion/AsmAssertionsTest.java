@@ -249,17 +249,17 @@ class AsmAssertionsTest {
             .hasMessage("[Instructions] \n" +
                         "expected: L0\n" +
                         "  LINENUMBER 1 L0\n" +
-                        "  NEW java/lang/IllegalArgumentException (Opcode: 187)\n" +
-                        "  DUP (Opcode: 89)\n" +
-                        "  INVOKESPECIAL java/lang/IllegalArgumentException.<init> ()V (Opcode: 183)\n" +
-                        "  ATHROW (Opcode: 191)\n" +
+                        "  NEW java/lang/IllegalArgumentException // opcode: 187\n" +
+                        "  DUP // opcode: 89\n" +
+                        "  INVOKESPECIAL java/lang/IllegalArgumentException.<init> ()V // opcode: 183\n" +
+                        "  ATHROW // opcode: 191\n" +
                         "L1\n" +
                         " but was: L0\n" +
                         "  LINENUMBER 1 L0\n" +
-                        "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream; (Opcode: 178)\n" +
-                        "  ICONST_1 (Opcode: 4)\n" +
-                        "  INVOKEVIRTUAL java/io/PrintStream.println (I)V (Opcode: 182)\n" +
-                        "  RETURN (Opcode: 177)\n" +
+                        "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
+                        "  ICONST_1 // opcode: 4\n" +
+                        "  INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
+                        "  RETURN // opcode: 177\n" +
                         "L1\n" +
                         "when comparing values using InsnListComparator");
   }
@@ -303,17 +303,17 @@ class AsmAssertionsTest {
             .hasMessage("[Instructions - ignore line numbers] \n" +
                         "expected: L0\n" +
                         "  LINENUMBER 1 L0\n" +
-                        "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream; (Opcode: 178)\n" +
-                        "  ICONST_2 (Opcode: 5)\n" +
-                        "  INVOKEVIRTUAL java/io/PrintStream.println (I)V (Opcode: 182)\n" +
-                        "  RETURN (Opcode: 177)\n" +
+                        "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
+                        "  ICONST_2 // opcode: 5\n" +
+                        "  INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
+                        "  RETURN // opcode: 177\n" +
                         "L1\n" +
                         " but was: L0\n" +
                         "  LINENUMBER 1 L0\n" +
-                        "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream; (Opcode: 178)\n" +
-                        "  ICONST_1 (Opcode: 4)\n" +
-                        "  INVOKEVIRTUAL java/io/PrintStream.println (I)V (Opcode: 182)\n" +
-                        "  RETURN (Opcode: 177)\n" +
+                        "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
+                        "  ICONST_1 // opcode: 4\n" +
+                        "  INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
+                        "  RETURN // opcode: 177\n" +
                         "L1\n" +
                         "when comparing values using InsnListComparator");
   }
@@ -464,13 +464,14 @@ class AsmAssertionsTest {
             .isInstanceOf(AssertionError.class)
             .hasMessage("[Local Variables] \n" +
                         "Expecting actual:\n" +
-                        "  [#1 java.lang.String a (L1-L4), #2 int[] b (L2-L4)]\n" +
+                        "  [#1 java.lang.String a // range: L1-L4, #2 int[] b // range: L2-L4]\n" +
                         "to contain exactly in any order:\n" +
-                        "  [#2 int[] b (L2-L4), #3 java.lang.Object c (L3-L4) // signature: TT;]\n" +
+                        "  [#2 int[] b // range: L2-L4,\n" +
+                        "    #3 java.lang.Object c // range: L3-L4 // signature: TT;]\n" +
                         "elements not found:\n" +
-                        "  [#3 java.lang.Object c (L3-L4) // signature: TT;]\n" +
+                        "  [#3 java.lang.Object c // range: L3-L4 // signature: TT;]\n" +
                         "and elements not expected:\n" +
-                        "  [#1 java.lang.String a (L1-L4)]\n" +
+                        "  [#1 java.lang.String a // range: L1-L4]\n" +
                         "when comparing values using LocalVariableNodeComparator");
   }
 
@@ -514,15 +515,15 @@ class AsmAssertionsTest {
             .isInstanceOf(AssertionError.class)
             .hasMessage("[Try Catch Blocks] \n" +
                         "Expecting actual:\n" +
-                        "  [java.io.IOException, range: L0-L1, handled in: L1,\n" +
-                        "    java.lang.IllegalArgumentException, range: L0-L1, handled in: L1]\n" +
+                        "  [java.io.IOException // range: L0-L1; handled in: L1,\n" +
+                        "    java.lang.IllegalArgumentException // range: L0-L1; handled in: L1]\n" +
                         "to contain exactly in any order:\n" +
-                        "  [java.lang.IllegalArgumentException, range: L0-L1, handled in: L1,\n" +
-                        "    finally, range: L0-L2, handled in: L3]\n" +
+                        "  [java.lang.IllegalArgumentException // range: L0-L1; handled in: L1,\n" +
+                        "    finally // range: L0-L2; handled in: L3]\n" +
                         "elements not found:\n" +
-                        "  [finally, range: L0-L2, handled in: L3]\n" +
+                        "  [finally // range: L0-L2; handled in: L3]\n" +
                         "and elements not expected:\n" +
-                        "  [java.io.IOException, range: L0-L1, handled in: L1]\n" +
+                        "  [java.io.IOException // range: L0-L1; handled in: L1]\n" +
                         "when comparing values using TryCatchBlockNodeComparator");
   }
 
