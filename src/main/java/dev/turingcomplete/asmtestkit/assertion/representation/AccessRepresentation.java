@@ -121,7 +121,10 @@ public class AccessRepresentation extends StandardRepresentation {
       int access = number.intValue();
       String textifiedAccess = "(" + access + ")";
       if (access > 0) {
-        textifiedAccess += " " + toJavaSourceCodeRepresentation(access);
+        String javaSourceCodeRepresentation = toJavaSourceCodeRepresentation(access);
+        if (!javaSourceCodeRepresentation.isBlank()) {
+          textifiedAccess += " " + javaSourceCodeRepresentation;
+        }
       }
       return textifiedAccess;
     }

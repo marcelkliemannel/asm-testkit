@@ -9,6 +9,7 @@ import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public final class RepresentationUtils {
@@ -31,6 +32,34 @@ public final class RepresentationUtils {
     }
 
     return attributes.stream().map(attributeRepresentation::toStringOf).collect(Collectors.toList());
+  }
+
+  public static String prependToFirstLine(String text, String toPrepend) {
+    Objects.requireNonNull(text);
+    Objects.requireNonNull(toPrepend);
+
+    int indexOfFirstNewLine = text.indexOf("\n");
+    if (indexOfFirstNewLine >= 0) {
+      return toPrepend + text.replaceAll("\n", "\n" + " ".repeat(toPrepend.length()));
+    }
+    else {
+      return toPrepend + text;
+    }
+  }
+
+  public static String appendToFirstLine(String text, String toAppend) {
+    Objects.requireNonNull(text);
+    Objects.requireNonNull(toAppend);
+
+    int indexOfFirstNewLine = text.indexOf("\n");
+    if (indexOfFirstNewLine >= 0) {
+      // In case the instruction has multiple line, the opcode will be
+      // appended to the first one.
+      return text.replaceFirst("\n", toAppend + "\n");
+    }
+    else {
+      return text + toAppend;
+    }
   }
 
   public static List<String> createAnnotationNodesRepresentations(AnnotationNodeRepresentation annotationNodeRepresentation,

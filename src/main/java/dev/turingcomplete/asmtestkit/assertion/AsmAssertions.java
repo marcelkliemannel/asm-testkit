@@ -9,6 +9,7 @@ import dev.turingcomplete.asmtestkit.assertion.comparator.InsnListComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.LabelNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.LocalVariableAnnotationNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.LocalVariableNodeComparator;
+import dev.turingcomplete.asmtestkit.assertion.comparator.ParameterNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.TryCatchBlockNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.TypeAnnotationNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.TypeComparator;
@@ -21,6 +22,7 @@ import dev.turingcomplete.asmtestkit.assertion.representation.InsnListRepresenta
 import dev.turingcomplete.asmtestkit.assertion.representation.LabelNodeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.LocalVariableAnnotationNodeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.LocalVariableNodeRepresentation;
+import dev.turingcomplete.asmtestkit.assertion.representation.ParameterNodeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.TryCatchBlockNodeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypeAnnotationNodeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypePathRepresentation;
@@ -39,6 +41,7 @@ import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.LocalVariableAnnotationNode;
 import org.objectweb.asm.tree.LocalVariableNode;
+import org.objectweb.asm.tree.ParameterNode;
 import org.objectweb.asm.tree.TryCatchBlockNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
@@ -293,6 +296,16 @@ public final class AsmAssertions {
    */
   public static TryCatchBlockNodeAssert assertThat(TryCatchBlockNode actual) {
     return new TryCatchBlockNodeAssert(actual);
+  }
+
+  /**
+   * Creates a {@link ParameterNodeAssert}.
+   *
+   * @param actual a {@link ParameterNode}; may be null.
+   * @return a new {@link ParameterNodeAssert}; never null.
+   */
+  public static ParameterNodeAssert assertThat(ParameterNode actual) {
+    return new ParameterNodeAssert(actual);
   }
 
   // ---- Iterable ---------------------------------------------------------- //
@@ -576,6 +589,27 @@ public final class AsmAssertions {
             .withRepresentation(TryCatchBlockNodeRepresentation.INSTANCE)
             .usingElementComparator(TryCatchBlockNodeComparator.INSTANCE)
             .usingComparator(TryCatchBlockNodeComparator.ITERABLE_INSTANCE);
+  }
+
+  /**
+   * Creates an {@link AsmIterableAssert} for {@link ParameterNode}s which
+   * uses {@link ParameterNodeRepresentation#INSTANCE} for the representation
+   * and for equality {@link ParameterNodeComparator#INSTANCE} and
+   * {@link ParameterNodeComparator#ITERABLE_INSTANCE}.
+   *
+   * <p>To override the representation or comparator call
+   * {@link AsmIterableAssert#usingComparator(Comparator)} or
+   * {@link AsmIterableAssert#withRepresentation(Representation)}.
+   *
+   * @param actual an {@link Iterable} of {@link ParameterNode}s; may be null.
+   * @return a new {@link AsmIterableAssert}; never null.
+   */
+  public static AsmIterableAssert<?, ParameterNode, ParameterNodeAssert> assertThatParameters(Iterable<ParameterNode> actual) {
+    return new AsmIterableAssert<>(actual, AsmAssertions::assertThat)
+            .as("Parameters")
+            .withRepresentation(ParameterNodeRepresentation.INSTANCE)
+            .usingElementComparator(ParameterNodeComparator.INSTANCE)
+            .usingComparator(ParameterNodeComparator.ITERABLE_INSTANCE);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

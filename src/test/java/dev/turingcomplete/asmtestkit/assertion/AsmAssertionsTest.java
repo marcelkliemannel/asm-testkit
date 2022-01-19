@@ -22,6 +22,7 @@ import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LocalVariableAnnotationNode;
 import org.objectweb.asm.tree.LocalVariableNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.ParameterNode;
 import org.objectweb.asm.tree.TryCatchBlockNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
@@ -33,6 +34,7 @@ import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatFi
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLabels;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLocalVariableAnnotations;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLocalVariables;
+import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatParameters;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatTryCatchBlocks;
 import static dev.turingcomplete.asmtestkit.compile.CompilationEnvironment.create;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -525,6 +527,31 @@ class AsmAssertionsTest {
                         "and elements not expected:\n" +
                         "  [java.io.IOException // range: L0-L1; handled in: L1]\n" +
                         "when comparing values using TryCatchBlockNodeComparator");
+  }
+
+  @Test
+  void testAssertThatParameters() {
+    var first = new ParameterNode("a", 16);
+    var second = new ParameterNode("b", 16);
+    var third = new ParameterNode("b", 4112);
+
+    // Positive
+    assertThatParameters(List.of(first, second, third))
+            .containsExactlyInAnyOrderElementsOf(List.of(first, second, third));
+
+    // Negative
+    assertThatThrownBy(() -> assertThatParameters(List.of(first, second)).containsExactlyInAnyOrderElementsOf(List.of(second, third)))
+            .isInstanceOf(AssertionError.class)
+            .hasMessage("[Parameters] \n" +
+                        "Expecting actual:\n" +
+                        "  [(16) final a, (16) final b]\n" +
+                        "to contain exactly in any order:\n" +
+                        "  [(16) final b, (4112) final synthetic b]\n" +
+                        "elements not found:\n" +
+                        "  [(4112) final synthetic b]\n" +
+                        "and elements not expected:\n" +
+                        "  [(16) final a]\n" +
+                        "when comparing values using ParameterNodeComparator");
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

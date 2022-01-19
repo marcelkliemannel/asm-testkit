@@ -1,5 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -31,6 +32,12 @@ class AccessRepresentationTest {
 
     assertThat(accessRepresentation.toJavaSourceCodeRepresentation(access))
             .isEqualTo(expectedToReadableRepresentation);
+  }
+
+  @Test
+  void testInvalidAccessToStringOf() {
+    assertThat(PARAMETER_INSTANCE.toStringOf(10))
+            .isEqualTo("(10)"); // there should be no appended spaces
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
