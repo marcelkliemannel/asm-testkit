@@ -53,7 +53,7 @@ public class AttributeComparator extends AsmComparator<Attribute> {
    *
    * <p>The default value is {@link AttributeRepresentation#INSTANCE}.
    *
-   * @param attributeRepresentation a {@link AttributeRepresentation}; never null.
+   * @param attributeRepresentation an {@link AttributeRepresentation}; never null.
    * @return {@code this} {@link AttributeComparator}; never null.
    */
   public AttributeComparator useAttributeRepresentation(AttributeRepresentation attributeRepresentation) {

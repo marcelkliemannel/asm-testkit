@@ -27,7 +27,7 @@ public final class AnnotationNodeUtils {
    * values.
    *
    * @param annotationClass the annotation {@link Class}; never null.
-   * @param values          an optional  array with key value pairs (the first
+   * @param values          an optional array with key value pairs (the first
    *                        element is the name and the second the value); may be null.
    * @return a new {@link AnnotationNode}; never null.
    */

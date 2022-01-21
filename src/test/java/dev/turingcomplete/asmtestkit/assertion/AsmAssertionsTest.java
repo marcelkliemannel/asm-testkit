@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAnnotationDefaultValues;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatFields;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLabels;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLocalVariableAnnotations;
@@ -552,6 +553,32 @@ class AsmAssertionsTest {
                         "and elements not expected:\n" +
                         "  [(16) final a]\n" +
                         "when comparing values using ParameterNodeComparator");
+  }
+
+  @Test
+  void testAssertThatAnnotationDefaultValues() {
+    AnnotationNode first = AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "1");
+    AnnotationNode second = AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "2");
+    AnnotationNode third = AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "3");
+
+
+    // Positive
+    assertThatAnnotationDefaultValues(List.of(first, second, third))
+            .containsExactlyInAnyOrderElementsOf(List.of(first, second, third));
+
+    // Negative
+    assertThatThrownBy(() -> assertThatAnnotationDefaultValues(List.of(first, second)).containsExactlyInAnyOrderElementsOf(List.of(second, third)))
+            .isInstanceOf(AssertionError.class)
+            .hasMessage("[Annotation Default Values] \n" +
+                        "Expecting actual:\n" +
+                        "  [@java.lang.Deprecated(since=\"1\"), @java.lang.Deprecated(since=\"2\")]\n" +
+                        "to contain exactly in any order:\n" +
+                        "  [@java.lang.Deprecated(since=\"2\"), @java.lang.Deprecated(since=\"3\")]\n" +
+                        "elements not found:\n" +
+                        "  [@java.lang.Deprecated(since=\"3\")]\n" +
+                        "and elements not expected:\n" +
+                        "  [@java.lang.Deprecated(since=\"1\")]\n" +
+                        "when comparing values using AnnotationDefaultValueComparator");
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

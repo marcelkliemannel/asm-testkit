@@ -2,6 +2,7 @@ package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
 import dev.turingcomplete.asmtestkit.asmutils.InsnListUtils;
+import dev.turingcomplete.asmtestkit.assertion.comparator.AnnotationDefaultValueComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.AnnotationNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.AttributeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.FieldNodeComparator;
@@ -15,6 +16,7 @@ import dev.turingcomplete.asmtestkit.assertion.comparator.TypeAnnotationNodeComp
 import dev.turingcomplete.asmtestkit.assertion.comparator.TypeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.TypePathComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.TypeReferenceComparator;
+import dev.turingcomplete.asmtestkit.assertion.representation.AnnotationDefaultValueRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.AnnotationNodeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.AttributeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.FieldNodeRepresentation;
@@ -306,6 +308,16 @@ public final class AsmAssertions {
    */
   public static ParameterNodeAssert assertThat(ParameterNode actual) {
     return new ParameterNodeAssert(actual);
+  }
+
+  /**
+   * Creates an {@link AnnotationDefaultValueAssert}.
+   *
+   * @param actual a {@link Object}; may be null.
+   * @return a new {@link AnnotationDefaultValueAssert}; never null.
+   */
+  public static AnnotationDefaultValueAssert assertThatAnnotationDefaultValue(Object actual) {
+    return new AnnotationDefaultValueAssert(actual);
   }
 
   // ---- Iterable ---------------------------------------------------------- //
@@ -610,6 +622,27 @@ public final class AsmAssertions {
             .withRepresentation(ParameterNodeRepresentation.INSTANCE)
             .usingElementComparator(ParameterNodeComparator.INSTANCE)
             .usingComparator(ParameterNodeComparator.ITERABLE_INSTANCE);
+  }
+
+  /**
+   * Creates an {@link AsmIterableAssert} for annotation default values which
+   * uses {@link AnnotationDefaultValueRepresentation#INSTANCE} for the
+   * representation and for equality {@link AnnotationDefaultValueComparator#INSTANCE}
+   * and {@link AnnotationDefaultValueComparator#ITERABLE_INSTANCE}.
+   *
+   * <p>To override the representation or comparator call
+   * {@link AsmIterableAssert#usingComparator(Comparator)} or
+   * {@link AsmIterableAssert#withRepresentation(Representation)}.
+   *
+   * @param actual an {@link Iterable} of {@link Object}s; may be null.
+   * @return a new {@link AsmIterableAssert}; never null.
+   */
+  public static AsmIterableAssert<?, Object, AnnotationDefaultValueAssert> assertThatAnnotationDefaultValues(Iterable<Object> actual) {
+    return new AsmIterableAssert<>(actual, AsmAssertions::assertThatAnnotationDefaultValue)
+            .as("Annotation Default Values")
+            .withRepresentation(AnnotationDefaultValueRepresentation.INSTANCE)
+            .usingElementComparator(AnnotationDefaultValueComparator.INSTANCE)
+            .usingComparator(AnnotationDefaultValueComparator.ITERABLE_INSTANCE);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
