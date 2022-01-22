@@ -1,10 +1,9 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
+import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.tree.LabelNode;
-
-import java.util.Map;
 
 /**
  * An AssertJ {@link Representation} for a {@link LabelNode}.
@@ -12,7 +11,7 @@ import java.util.Map;
  * The {@link #toStringOf(String)} implementation will output a {@code L}
  * followed by the hash code of the {@link LabelNode#getLabel()}. To map the
  * {@link Label} to a consistent name use
- * {@link #doToStringOf(LabelNode, Map)}.
+ * {@link #doToStringOf(LabelNode, LabelNameLookup)}.
  */
 public class LabelNodeRepresentation extends WithLabelNamesRepresentation<LabelNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -43,12 +42,12 @@ public class LabelNodeRepresentation extends WithLabelNamesRepresentation<LabelN
 
   @Override
   protected String doToStringOf(LabelNode labelNode) {
-    return doToStringOf(labelNode, Map.of());
+    return doToStringOf(labelNode, LabelNameLookup.EMPTY);
   }
 
   @Override
-  public String doToStringOf(LabelNode labelNode, Map<Label, String> labelNames) {
-    return labelNames.getOrDefault(labelNode.getLabel(), "L" + labelNode.getLabel().hashCode());
+  public String doToStringOf(LabelNode labelNode, LabelNameLookup labelNameLookup) {
+    return labelNameLookup.find(labelNode.getLabel()).orElse("L" + labelNode.getLabel().hashCode());
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

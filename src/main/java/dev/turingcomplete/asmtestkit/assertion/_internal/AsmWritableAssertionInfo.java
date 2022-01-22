@@ -1,5 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion._internal;
 
+import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
 import dev.turingcomplete.asmtestkit.assertion.representation.WithLabelNamesRepresentation;
 import org.assertj.core.api.WritableAssertionInfo;
 import org.assertj.core.presentation.Representation;
@@ -13,7 +14,8 @@ public final class AsmWritableAssertionInfo extends WritableAssertionInfo {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
-  private final Map<Label, String> labelNames = new HashMap<>();
+  private final Map<Label, String> labelNames      = new HashMap<>();
+  private final LabelNameLookup    labelNameLookup = LabelNameLookup.create(labelNames);
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
@@ -34,11 +36,15 @@ public final class AsmWritableAssertionInfo extends WritableAssertionInfo {
     return Collections.unmodifiableMap(labelNames);
   }
 
+  public LabelNameLookup labelNameLookup() {
+    return labelNameLookup;
+  }
+
   @Override
   public void useRepresentation(Representation newRepresentation) {
     if (newRepresentation instanceof WithLabelNamesRepresentation) {
       var withLabelNamesRepresentation = (WithLabelNamesRepresentation<?>) newRepresentation;
-      newRepresentation = new WithLabelNamesRepresentationAdapter<>(withLabelNamesRepresentation, labelNames);
+      newRepresentation = new WithLabelNamesRepresentationAdapter<>(withLabelNamesRepresentation, labelNameLookup);
     }
 
     super.useRepresentation(newRepresentation);
@@ -46,37 +52,4 @@ public final class AsmWritableAssertionInfo extends WritableAssertionInfo {
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
-
-  private static class WithLabelNamesRepresentationAdapter<T> extends WithLabelNamesRepresentation<T> {
-
-    private final WithLabelNamesRepresentation<T> delegate;
-    private final Map<Label, String>              labelNamesReference;
-
-    private WithLabelNamesRepresentationAdapter(WithLabelNamesRepresentation<T> delegate, Map<Label, String> labelNamesReference) {
-      super(delegate.getObjectClass());
-
-      this.delegate = delegate;
-      this.labelNamesReference = labelNamesReference;
-    }
-
-    @Override
-    protected String doToSimplifiedStringOf(T object) {
-      return delegate.toSimplifiedStringOf(object, labelNamesReference);
-    }
-
-    @Override
-    protected String doToStringOf(T object) {
-      return delegate.toStringOf(object, labelNamesReference);
-    }
-
-    @Override
-    protected String doToSimplifiedStringOf(T object, Map<Label, String> labelNames) {
-      return delegate.toSimplifiedStringOf(object, labelNames);
-    }
-
-    @Override
-    protected String doToStringOf(T object, Map<Label, String> labelNames) {
-      return delegate.toStringOf(object, labelNames);
-    }
-  }
 }

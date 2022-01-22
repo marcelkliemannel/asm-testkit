@@ -1,12 +1,11 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
+import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
 import org.assertj.core.presentation.Representation;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.tree.LocalVariableAnnotationNode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -65,26 +64,26 @@ public class LocalVariableAnnotationNodeRepresentation
 
   @Override
   protected String doToStringOf(LocalVariableAnnotationNode annotationNode) {
-    return toStringOf(annotationNode, Map.of());
+    return toStringOf(annotationNode, LabelNameLookup.EMPTY);
   }
 
   @Override
-  public String doToStringOf(LocalVariableAnnotationNode annotationNode, Map<Label, String> labelNames) {
+  public String doToStringOf(LocalVariableAnnotationNode annotationNode, LabelNameLookup labelNameLookup) {
     String representation = super.doToStringOf(annotationNode);
 
-    representation += toRangeStringOf(annotationNode, labelNames).stream().collect(Collectors.joining("; ", " // range: ", ""));
+    representation += toRangeStringOf(annotationNode, labelNameLookup).stream().collect(Collectors.joining("; ", " // range: ", ""));
 
     return representation;
   }
 
-  public List<String> toRangeStringOf(LocalVariableAnnotationNode annotationNode, Map<Label, String> labelNames) {
+  public List<String> toRangeStringOf(LocalVariableAnnotationNode annotationNode, LabelNameLookup labelNameLookup) {
     List<String> ranges = new ArrayList<>();
 
     for (int i = 0; i < annotationNode.start.size(); i++) {
       String range = "#" + annotationNode.index.get(i) + " ";
-      range += labelNodeRepresentation.doToStringOf(annotationNode.start.get(i), labelNames);
+      range += labelNodeRepresentation.doToStringOf(annotationNode.start.get(i), labelNameLookup);
       range += "-";
-      range += labelNodeRepresentation.doToStringOf(annotationNode.end.get(i), labelNames);
+      range += labelNodeRepresentation.doToStringOf(annotationNode.end.get(i), labelNameLookup);
       ranges.add(range);
     }
 

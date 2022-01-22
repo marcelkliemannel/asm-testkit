@@ -1,7 +1,8 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
+import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.ComparatorUtils;
-import dev.turingcomplete.asmtestkit.assertion.comparator._internal.IterableComparator;
+import dev.turingcomplete.asmtestkit.assertion.comparator._internal.WithLabelNamesIterableComparator;
 import org.objectweb.asm.tree.TryCatchBlockNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
@@ -14,7 +15,7 @@ import java.util.Objects;
  * <p>Two {@code TryCatchBlockNode}s will be considered as equal if their start,
  * end and handler labels, type, and (in)visible type annotations are equal.
  */
-public class TryCatchBlockNodeComparator extends AsmComparator<TryCatchBlockNode> {
+public class TryCatchBlockNodeComparator extends AbstractWithLabelNamesAsmComparator<TryCatchBlockNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
@@ -26,7 +27,7 @@ public class TryCatchBlockNodeComparator extends AsmComparator<TryCatchBlockNode
    * A reusable {@link Comparator} instance for an {@link Iterable} of
    * {@link TryCatchBlockNode}s.
    */
-  public static final Comparator<Iterable<? extends TryCatchBlockNode>> ITERABLE_INSTANCE = new IterableComparator<>(INSTANCE);
+  public static final Comparator<Iterable<? extends TryCatchBlockNode>> ITERABLE_INSTANCE = new WithLabelNamesIterableComparator<>(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
@@ -67,14 +68,14 @@ public class TryCatchBlockNodeComparator extends AsmComparator<TryCatchBlockNode
   }
 
   @Override
-  protected int doCompare(TryCatchBlockNode first, TryCatchBlockNode second) {
-    return Comparator.comparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.start, labelNodeComparator)
-                     .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.end, labelNodeComparator)
-                     .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.handler, labelNodeComparator)
-                     .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.type, ComparatorUtils.STRING_COMPARATOR)
-                     .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.visibleTypeAnnotations, typeAnnotationNodesComparator)
-                     .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.invisibleTypeAnnotations, typeAnnotationNodesComparator)
-                     .compare(first, second);
+  protected int doCompare(TryCatchBlockNode first, TryCatchBlockNode second, LabelNameLookup labelNameLookup) {
+    return WithLabelNamesAsmComparator.comparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.start, labelNodeComparator, labelNameLookup)
+                                      .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.end, labelNodeComparator)
+                                      .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.handler, labelNodeComparator)
+                                      .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.type, ComparatorUtils.STRING_COMPARATOR)
+                                      .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.visibleTypeAnnotations, typeAnnotationNodesComparator)
+                                      .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.invisibleTypeAnnotations, typeAnnotationNodesComparator)
+                                      .compare(first, second);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

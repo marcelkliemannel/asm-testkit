@@ -11,6 +11,8 @@ import org.objectweb.asm.util.TraceMethodVisitor;
 /**
  * An AssertJ {@link Representation} for an {@link InsnList}.
  *
+ * <p>This representation may produce a multiline {@link String}.
+ *
  * <p>Example output:
  * <pre>{@code
  * L0

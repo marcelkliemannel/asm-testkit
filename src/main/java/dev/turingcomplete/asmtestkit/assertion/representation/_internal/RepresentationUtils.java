@@ -34,7 +34,7 @@ public final class RepresentationUtils {
     return attributes.stream().map(attributeRepresentation::toStringOf).collect(Collectors.toList());
   }
 
-  public static String prependToFirstLine(String text, String toPrepend) {
+  public static String prependToFirstLine(String toPrepend, String text) {
     Objects.requireNonNull(text);
     Objects.requireNonNull(toPrepend);
 
@@ -47,7 +47,7 @@ public final class RepresentationUtils {
     }
   }
 
-  public static String appendToFirstLine(String text, String toAppend) {
+  public static String appendToFirstLine(String toAppend, String text) {
     Objects.requireNonNull(text);
     Objects.requireNonNull(toAppend);
 
@@ -63,11 +63,8 @@ public final class RepresentationUtils {
   }
 
   public static List<String> createAnnotationNodesRepresentations(AnnotationNodeRepresentation annotationNodeRepresentation,
-                                                                  TypeAnnotationNodeRepresentation typeAnnotationNodeRepresentation,
                                                                   List<AnnotationNode> visibleAnnotations,
-                                                                  List<AnnotationNode> invisibleAnnotations,
-                                                                  List<TypeAnnotationNode> typeVisibleAnnotations,
-                                                                  List<TypeAnnotationNode> typeInvisibleAnnotations) {
+                                                                  List<AnnotationNode> invisibleAnnotations) {
 
     List<String> representations = new ArrayList<>();
 
@@ -82,6 +79,15 @@ public final class RepresentationUtils {
         representations.add(annotationNodeRepresentation.toStringOf(annotationNode) + INVISIBLE_POSTFIX);
       }
     }
+
+    return representations;
+  }
+
+  public static List<String> createTypeAnnotationNodesRepresentations(TypeAnnotationNodeRepresentation typeAnnotationNodeRepresentation,
+                                                                      List<TypeAnnotationNode> typeVisibleAnnotations,
+                                                                      List<TypeAnnotationNode> typeInvisibleAnnotations) {
+
+    List<String> representations = new ArrayList<>();
 
     if (typeVisibleAnnotations != null) {
       for (AnnotationNode annotationNode : typeVisibleAnnotations) {

@@ -27,7 +27,7 @@ public class DummyAttribute extends Attribute implements TextifierSupport {
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Override
-  public void textify(StringBuilder outputBuilder, Map<Label, String> labelNames) {
+  public void textify(StringBuilder outputBuilder, Map<Label, String> labelNameLookup) {
     outputBuilder.append(content);
   }
 

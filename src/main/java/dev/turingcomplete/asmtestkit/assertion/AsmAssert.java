@@ -1,6 +1,8 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.assertion._internal.AsmWritableAssertionInfo;
+import dev.turingcomplete.asmtestkit.assertion.comparator.WithLabelNamesAsmComparator;
+import dev.turingcomplete.asmtestkit.assertion.comparator._internal.WithLabelNamesAsmComparatorAdapter;
 import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.representation._internal.CrumbDescription;
 import dev.turingcomplete.asmtestkit.assertion.representation._internal.SelfDescription;
@@ -77,15 +79,42 @@ public abstract class AsmAssert<S extends AbstractAssert<S, A>, A>
     return (AsmWritableAssertionInfo) info;
   }
 
+  /**
+   * Makes the given label names known.
+   *
+   * @param labelNames a {@link Map} of {@link Label}s to their {@link String}
+   *                   names; never null.
+   * @return {@code this} {@link S}; never null.
+   * @see #labelNames()
+   * @see #labelNameLookup()
+   */
   public S useLabelNames(Map<Label, String> labelNames) {
+    Objects.requireNonNull(labelNames);
     getWritableAssertionInfo().useLabelNames(labelNames);
 
     //noinspection unchecked
     return (S) this;
   }
 
+  /**
+   * Gets a copy of all current known label names.
+   *
+   * @return a {@link Map} of {@link Label}s to their {@link String} names;
+   * never null.
+   * @see #useLabelNames(Map)
+   */
   public Map<Label, String> labelNames() {
     return getWritableAssertionInfo().labelNames();
+  }
+
+  /**
+   * Gets a {@link LabelNameLookup} for the known label names.
+   *
+   * @return a {@link LabelNameLookup}; never null.
+   * @see #useLabelNames(Map)
+   */
+  public LabelNameLookup labelNameLookup() {
+    return getWritableAssertionInfo().labelNameLookup();
   }
 
   /**
@@ -96,6 +125,7 @@ public abstract class AsmAssert<S extends AbstractAssert<S, A>, A>
    */
   public AsmAssert<S, A> addOption(AssertOption option) {
     this.options.add(Objects.requireNonNull(option));
+
     return this;
   }
 
@@ -108,6 +138,7 @@ public abstract class AsmAssert<S extends AbstractAssert<S, A>, A>
    */
   public AsmAssert<S, A> addOptions(Collection<AssertOption> options) {
     this.options.addAll(Objects.requireNonNull(options));
+
     return this;
   }
 
@@ -123,6 +154,21 @@ public abstract class AsmAssert<S extends AbstractAssert<S, A>, A>
 
   protected final Description createCrumbDescription(String description, Object... args) {
     return new CrumbDescription(info, description, args);
+  }
+
+  @Override
+  public S usingComparator(Comparator<? super A> customComparator) {
+    return usingComparator(customComparator, null);
+  }
+
+  @Override
+  public S usingComparator(Comparator<? super A> customComparator, String customComparatorDescription) {
+    Comparator<? super A> _customComparator = customComparator;
+    if (customComparator instanceof WithLabelNamesAsmComparator) {
+      _customComparator = WithLabelNamesAsmComparatorAdapter.wrapIfNeeded(customComparator, getWritableAssertionInfo().labelNameLookup());
+    }
+
+    return super.usingComparator(_customComparator, customComparatorDescription);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

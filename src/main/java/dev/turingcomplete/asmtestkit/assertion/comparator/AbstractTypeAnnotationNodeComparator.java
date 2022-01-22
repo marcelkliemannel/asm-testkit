@@ -1,5 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
+import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
 import dev.turingcomplete.asmtestkit.assertion.representation.AbstractTypeAnnotationNodeRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypePathRepresentation;
 import org.objectweb.asm.tree.TypeAnnotationNode;
@@ -50,7 +51,12 @@ public abstract class AbstractTypeAnnotationNodeComparator<S extends AbstractTyp
 
   @Override
   protected int doCompare(A first, A second) {
-    int annotationNodeCompare = super.doCompare(first, second);
+    return doCompare(first, second, LabelNameLookup.EMPTY);
+  }
+
+  @Override
+  protected int doCompare(A first, A second, LabelNameLookup labelNameLookup) {
+    int annotationNodeCompare = super.doCompare(first, second, labelNameLookup);
     if (annotationNodeCompare != 0) {
       return annotationNodeCompare;
     }

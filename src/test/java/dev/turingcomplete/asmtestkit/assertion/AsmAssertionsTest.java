@@ -1,7 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils;
-import dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils;
 import dev.turingcomplete.asmtestkit.assertion.__helper.DummyAttribute;
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationA;
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;
@@ -30,6 +29,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import static dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils.extractLabelNames;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAnnotationDefaultValues;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatFields;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLabels;
@@ -322,7 +322,7 @@ class AsmAssertionsTest {
   }
 
   @Test
-  void testAssertThatFields() {
+  void testAssertThatLabels() {
     var firstLabel = new Label();
     var firstLabelNode = new LabelNode(firstLabel);
 
@@ -357,7 +357,7 @@ class AsmAssertionsTest {
   }
 
   @Test
-  void testAssertThatLabels() {
+  void testAssertThatFields() {
     var first1FieldNode = new FieldNode(0, "first", "I", null, null);
     var first2FieldNode = new FieldNode(0, "first", "I", null, null);
     var secondFieldNode = new FieldNode(0, "second", "Ljava/lang/String;", null, "foo");
@@ -416,7 +416,7 @@ class AsmAssertionsTest {
 
     // Negative
     ThrowableAssert.ThrowingCallable throwingCallable = () -> assertThatLocalVariableAnnotations(List.of(firstLocalVariableAnnotationNode, secondLocalVariableAnnotationNode))
-            .useLabelNames(MethodNodeUtils.extractLabelNames(methodNode))
+            .useLabelNames(extractLabelNames(methodNode))
             .containsExactlyInAnyOrderElementsOf(List.of(secondLocalVariableAnnotationNode, thirdLocalVariableAnnotationNode));
     assertThatThrownBy(throwingCallable)
             .isInstanceOf(AssertionError.class)
@@ -461,7 +461,7 @@ class AsmAssertionsTest {
 
     // Negative
     ThrowableAssert.ThrowingCallable throwingCallable = () -> assertThatLocalVariables(List.of(firstVariable, secondVariable))
-            .useLabelNames(MethodNodeUtils.extractLabelNames(methodNode))
+            .useLabelNames(extractLabelNames(methodNode))
             .containsExactlyInAnyOrderElementsOf(List.of(secondVariable, thirdVariable));
     assertThatThrownBy(throwingCallable)
             .isInstanceOf(AssertionError.class)
@@ -495,25 +495,37 @@ class AsmAssertionsTest {
                      "   }" +
                      " }";
 
-    MethodNode methodNode = create()
+    MethodNode methodA = create()
+            .addJavaInputSource(myClass)
+            .compile()
+            .readClassNode("MyClass")
+            .methods.get(1);
+
+    MethodNode methodB = create()
             .addJavaInputSource(myClass)
             .compile()
             .readClassNode("MyClass")
             .methods.get(1);
 
 
-    TryCatchBlockNode firstTryCatchBlock = methodNode.tryCatchBlocks.get(0);
-    TryCatchBlockNode secondTryCatchBlock = methodNode.tryCatchBlocks.get(1);
-    TryCatchBlockNode thirdTryCatchBlock = methodNode.tryCatchBlocks.get(2);
+    TryCatchBlockNode firstATryCatchBlock = methodA.tryCatchBlocks.get(0);
+    TryCatchBlockNode firstBTryCatchBlock = methodB.tryCatchBlocks.get(0);
+    TryCatchBlockNode secondATryCatchBlock = methodA.tryCatchBlocks.get(1);
+    TryCatchBlockNode secondBTryCatchBlock = methodB.tryCatchBlocks.get(1);
+    TryCatchBlockNode thirdATryCatchBlock = methodA.tryCatchBlocks.get(2);
+    TryCatchBlockNode thirdBTryCatchBlock = methodB.tryCatchBlocks.get(2);
+
+    Map<Label, String> labelNames = extractLabelNames(methodA, methodB);
 
     // Positive
-    assertThatTryCatchBlocks(List.of(firstTryCatchBlock, secondTryCatchBlock))
-            .containsExactlyInAnyOrderElementsOf(List.of(firstTryCatchBlock, secondTryCatchBlock));
+    assertThatTryCatchBlocks(List.of(firstATryCatchBlock, secondATryCatchBlock, thirdATryCatchBlock))
+            .useLabelNames(labelNames)
+            .containsExactlyInAnyOrderElementsOf(List.of(firstBTryCatchBlock, secondBTryCatchBlock, thirdBTryCatchBlock));
 
     // Negative
-    ThrowableAssert.ThrowingCallable throwingCallable = () -> assertThatTryCatchBlocks(List.of(firstTryCatchBlock, secondTryCatchBlock))
-            .useLabelNames(MethodNodeUtils.extractLabelNames(methodNode))
-            .containsExactlyInAnyOrderElementsOf(List.of(secondTryCatchBlock, thirdTryCatchBlock));
+    ThrowableAssert.ThrowingCallable throwingCallable = () -> assertThatTryCatchBlocks(List.of(firstATryCatchBlock, secondATryCatchBlock))
+            .useLabelNames(labelNames)
+            .containsExactlyInAnyOrderElementsOf(List.of(secondBTryCatchBlock, thirdBTryCatchBlock));
     assertThatThrownBy(throwingCallable)
             .isInstanceOf(AssertionError.class)
             .hasMessage("[Try Catch Blocks] \n" +

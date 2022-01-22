@@ -17,7 +17,7 @@ class RepresentationUtilsTest {
           "'',test,test"
   })
   void testPrependToFirstLine(String text, String toPrepend, String expected) {
-    Assertions.assertThat(RepresentationUtils.prependToFirstLine(text, toPrepend))
+    Assertions.assertThat(RepresentationUtils.prependToFirstLine(toPrepend, text))
               .isEqualTo(expected);
   }
 

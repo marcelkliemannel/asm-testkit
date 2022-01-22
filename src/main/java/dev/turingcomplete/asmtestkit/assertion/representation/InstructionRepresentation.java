@@ -62,7 +62,7 @@ public class InstructionRepresentation extends AsmRepresentation<AbstractInsnNod
 
   static String appendOpcode(int opcode, String textifiedInstruction) {
     if (opcode >= 0) {
-      return appendToFirstLine(textifiedInstruction, " // opcode: " + opcode);
+      return appendToFirstLine(" // opcode: " + opcode, textifiedInstruction);
     }
     else {
       return textifiedInstruction;

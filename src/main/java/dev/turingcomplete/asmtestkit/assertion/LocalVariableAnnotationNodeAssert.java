@@ -7,13 +7,10 @@ import dev.turingcomplete.asmtestkit.assertion.representation.LocalVariableAnnot
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.presentation.Representation;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.tree.LocalVariableAnnotationNode;
 
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getListFromObjectElseNull;
@@ -37,9 +34,6 @@ public class LocalVariableAnnotationNodeAssert
         extends AbstractTypeAnnotationNodeAssert<LocalVariableAnnotationNodeAssert, LocalVariableAnnotationNode> {
 
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
-
-  private final Map<Label, String> labelNames = new HashMap<>();
-
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
@@ -57,12 +51,6 @@ public class LocalVariableAnnotationNodeAssert
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
-
-  public LocalVariableAnnotationNodeAssert useLabelNames(Map<Label, String> labelNames) {
-    this.labelNames.putAll(labelNames);
-
-    return this;
-  }
 
   @Override
   public LocalVariableAnnotationNodeAssert isEqualTo(Object expected) {
@@ -85,7 +73,7 @@ public class LocalVariableAnnotationNodeAssert
 
     Function<LocalVariableAnnotationNode, List<String>> getRanges = localVariableAnnotationNode -> {
       //noinspection CodeBlock2Expr
-      return localVariableAnnotationNodeRepresentation.toRangeStringOf(localVariableAnnotationNode, labelNames);
+      return localVariableAnnotationNodeRepresentation.toRangeStringOf(localVariableAnnotationNode, labelNameLookup());
     };
     List<String> actualRanges = getListFromObjectElseNull(actual, getRanges);
     List<String> expectedRanges = getListFromObjectElseNull(expected, LocalVariableAnnotationNode.class, getRanges);

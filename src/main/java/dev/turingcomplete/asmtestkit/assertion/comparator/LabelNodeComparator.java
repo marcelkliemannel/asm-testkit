@@ -1,10 +1,12 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
+import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.ComparatorUtils;
-import dev.turingcomplete.asmtestkit.assertion.comparator._internal.IterableComparator;
+import dev.turingcomplete.asmtestkit.assertion.comparator._internal.WithLabelNamesIterableComparator;
 import org.objectweb.asm.tree.LabelNode;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 /**
  * A comparison function to order {@link LabelNode}s.
@@ -12,7 +14,7 @@ import java.util.Comparator;
  * <p>Two {@code Attribute}s will be considered as equal if their
  * {@link LabelNode#getLabel()}s are equal.
  */
-public class LabelNodeComparator extends AsmComparator<LabelNode> {
+public class LabelNodeComparator extends AbstractWithLabelNamesAsmComparator<LabelNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
@@ -24,7 +26,7 @@ public class LabelNodeComparator extends AsmComparator<LabelNode> {
    * A reusable {@link Comparator} instance for an {@link Iterable} of
    * {@link LabelNode}s.
    */
-  public static final Comparator<Iterable<? extends LabelNode>> ITERABLE_INSTANCE = new IterableComparator<>(INSTANCE);
+  public static final Comparator<Iterable<? extends LabelNode>> ITERABLE_INSTANCE = new WithLabelNamesIterableComparator<>(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
@@ -46,6 +48,16 @@ public class LabelNodeComparator extends AsmComparator<LabelNode> {
   @Override
   protected int doCompare(LabelNode first, LabelNode second) {
     return ComparatorUtils.OBJECT_COMPARATOR.compare(first.getLabel(), second.getLabel());
+  }
+
+  @Override
+  protected int doCompare(LabelNode first, LabelNode second, LabelNameLookup labelNameLookup) {
+    Objects.requireNonNull(labelNameLookup);
+
+    var firstName = labelNameLookup.find(first.getLabel()).orElse(null);
+    var secondName = labelNameLookup.find(second.getLabel()).orElse(null);
+    return ComparatorUtils.OBJECT_COMPARATOR.compare(firstName != null ? firstName : first.getLabel(),
+                                                     secondName != null ? secondName : second.getLabel());
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

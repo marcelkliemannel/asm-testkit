@@ -10,6 +10,7 @@ import java.util.StringJoiner;
 
 import static dev.turingcomplete.asmtestkit.assertion.representation._internal.RepresentationUtils.createAnnotationNodesRepresentations;
 import static dev.turingcomplete.asmtestkit.assertion.representation._internal.RepresentationUtils.createAttributesRepresentations;
+import static dev.turingcomplete.asmtestkit.assertion.representation._internal.RepresentationUtils.createTypeAnnotationNodesRepresentations;
 
 /**
  * An AssertJ {@link Representation} for a {@link FieldNode}.
@@ -167,9 +168,11 @@ public class FieldNodeRepresentation extends AsmRepresentation<FieldNode> {
                                                               .append(System.lineSeparator()));
 
     // Annotations
-    createAnnotationNodesRepresentations(annotationNodeRepresentation, typeAnnotationNodeRepresentation,
-                                         fieldNode.visibleAnnotations, fieldNode.invisibleAnnotations,
-                                         fieldNode.visibleTypeAnnotations, fieldNode.invisibleTypeAnnotations)
+    createAnnotationNodesRepresentations(annotationNodeRepresentation, fieldNode.visibleAnnotations, fieldNode.invisibleAnnotations)
+            .forEach(annotationNodeRepresentation -> representation.append(annotationNodeRepresentation).append(System.lineSeparator()));
+
+    // Type annotations
+    createTypeAnnotationNodesRepresentations(typeAnnotationNodeRepresentation, fieldNode.visibleTypeAnnotations, fieldNode.invisibleTypeAnnotations)
             .forEach(annotationNodeRepresentation -> representation.append(annotationNodeRepresentation).append(System.lineSeparator()));
 
     // Access, type and name

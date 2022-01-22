@@ -1,6 +1,9 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator._internal;
 
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public final class ComparatorUtils {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -33,6 +36,30 @@ public final class ComparatorUtils {
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  public static <T> List<T> toList(T[] array) {
+    if (array == null) {
+      return null;
+    }
+
+    return Arrays.stream(array).collect(Collectors.toList());
+  }
+
+  public static <T> Integer compareNullCheck(T first, T second) {
+    // Instance null check
+    if (first != null && second == null) {
+      return 1;
+    }
+    else if (first == null && second != null) {
+      return -1;
+    }
+    else if (first == null) { // Both null
+      return 0;
+    }
+
+    return null;
+  }
+
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 

@@ -44,6 +44,7 @@ class CompilationResultTest {
 
   @Test
   void testReadClassNodes() throws IOException {
+    // TODO: test class not found
     Map<String, String> testSources = createTestSources(20);
     CompilationResult result = CompilationEnvironment
             .create()

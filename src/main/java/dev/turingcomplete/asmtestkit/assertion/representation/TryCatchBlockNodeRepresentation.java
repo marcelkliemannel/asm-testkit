@@ -1,15 +1,16 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
+import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
 import org.assertj.core.presentation.Representation;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.tree.TryCatchBlockNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
-import java.util.Map;
 import java.util.Objects;
 
 /**
  * An AssertJ {@link Representation} for a {@link TryCatchBlockNode}.
+ *
+ * <p>This representation may produce a multiline {@link String}.
  *
  * <p>Example output:
  * <pre>{@code
@@ -96,7 +97,7 @@ public class TryCatchBlockNodeRepresentation extends WithLabelNamesRepresentatio
   }
 
   @Override
-  protected String doToSimplifiedStringOf(TryCatchBlockNode tryCatchBlockNode, Map<Label, String> labelNames) {
+  protected String doToSimplifiedStringOf(TryCatchBlockNode tryCatchBlockNode, LabelNameLookup labelNameLookup) {
     var representation = new StringBuilder();
 
     // Type
@@ -109,22 +110,22 @@ public class TryCatchBlockNodeRepresentation extends WithLabelNamesRepresentatio
 
     // Range
     representation.append(" // range: ")
-                  .append(labelNodeRepresentation.toStringOf(tryCatchBlockNode.start, labelNames))
+                  .append(labelNodeRepresentation.toStringOf(tryCatchBlockNode.start, labelNameLookup))
                   .append("-")
-                  .append(labelNodeRepresentation.toStringOf(tryCatchBlockNode.end, labelNames))
+                  .append(labelNodeRepresentation.toStringOf(tryCatchBlockNode.end, labelNameLookup))
                   .append("; handled in: ")
-                  .append(labelNodeRepresentation.toStringOf(tryCatchBlockNode.handler, labelNames));
+                  .append(labelNodeRepresentation.toStringOf(tryCatchBlockNode.handler, labelNameLookup));
 
     return representation.toString();
   }
 
   @Override
   protected String doToStringOf(TryCatchBlockNode tryCatchBlockNode) {
-    return doToStringOf(tryCatchBlockNode, Map.of());
+    return doToStringOf(tryCatchBlockNode, LabelNameLookup.EMPTY);
   }
 
   @Override
-  public String doToStringOf(TryCatchBlockNode tryCatchBlockNode, Map<Label, String> labelNames) {
+  public String doToStringOf(TryCatchBlockNode tryCatchBlockNode, LabelNameLookup labelNameLookup) {
     var representation = new StringBuilder();
 
     // Annotations
@@ -139,7 +140,7 @@ public class TryCatchBlockNodeRepresentation extends WithLabelNamesRepresentatio
       }
     }
 
-    representation.append(doToSimplifiedStringOf(tryCatchBlockNode, labelNames));
+    representation.append(doToSimplifiedStringOf(tryCatchBlockNode, labelNameLookup));
 
     return representation.toString();
   }

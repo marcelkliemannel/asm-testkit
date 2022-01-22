@@ -1,8 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
-import org.objectweb.asm.Label;
-
-import java.util.Map;
+import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
 
 public abstract class WithLabelNamesRepresentation<T> extends AsmRepresentation<T> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -15,25 +13,25 @@ public abstract class WithLabelNamesRepresentation<T> extends AsmRepresentation<
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
-  public final String toSimplifiedStringOf(Object object, Map<Label, String> labelNames) {
+  public final String toSimplifiedStringOf(Object object, LabelNameLookup labelNameLookup) {
     return getObjectClass().isInstance(object)
-            ? doToSimplifiedStringOf(getObjectClass().cast(object), labelNames)
+            ? doToSimplifiedStringOf(getObjectClass().cast(object), labelNameLookup)
             : null;
   }
 
-  protected String doToSimplifiedStringOf(T object, Map<Label, String> labelNames) {
+  protected String doToSimplifiedStringOf(T object, LabelNameLookup labelNameLookup) {
     return doToSimplifiedStringOf(object);
   }
 
-  public final String toStringOf(Object object, Map<Label, String> labelNames) {
+  public final String toStringOf(Object object, LabelNameLookup labelNameLookup) {
     if (getObjectClass().isInstance(object)) {
-      return doToStringOf(getObjectClass().cast(object), labelNames);
+      return doToStringOf(getObjectClass().cast(object), labelNameLookup);
     }
 
     return null;
   }
 
-  protected abstract String doToStringOf(T object, Map<Label, String> labelNames);
+  protected abstract String doToStringOf(T object, LabelNameLookup labelNameLookup);
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //

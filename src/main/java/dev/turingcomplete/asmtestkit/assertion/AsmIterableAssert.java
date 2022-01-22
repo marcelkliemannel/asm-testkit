@@ -1,9 +1,11 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.assertion._internal.AsmWritableAssertionInfo;
+import dev.turingcomplete.asmtestkit.assertion.comparator._internal.WithLabelNamesAsmComparatorAdapter;
 import org.assertj.core.api.AbstractIterableAssert;
 import org.objectweb.asm.Label;
 
+import java.util.Comparator;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -62,6 +64,21 @@ public class AsmIterableAssert<S extends AsmIterableAssert<S, E, A>, E, A extend
   protected S newAbstractIterableAssert(Iterable<? extends E> iterable) {
     //noinspection unchecked
     return (S) new AsmIterableAssert<S, E, A>(iterable, createElementAssert);
+  }
+
+  @Override
+  public S usingComparator(Comparator<? super Iterable<? extends E>> customComparator) {
+    return usingComparator(customComparator, null);
+  }
+
+  @Override
+  public S usingComparator(Comparator<? super Iterable<? extends E>> customComparator, String customComparatorDescription) {
+    return super.usingComparator(WithLabelNamesAsmComparatorAdapter.wrapIfNeeded(customComparator, getWritableAssertionInfo().labelNameLookup()), customComparatorDescription);
+  }
+
+  @Override
+  public S usingElementComparator(Comparator<? super E> elementComparator) {
+    return super.usingElementComparator(WithLabelNamesAsmComparatorAdapter.wrapIfNeeded(elementComparator, getWritableAssertionInfo().labelNameLookup()));
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

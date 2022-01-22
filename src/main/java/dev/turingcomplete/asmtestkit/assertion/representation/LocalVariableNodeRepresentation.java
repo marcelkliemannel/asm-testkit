@@ -1,11 +1,10 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
+import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
 import org.assertj.core.presentation.Representation;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.LocalVariableNode;
 
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -81,20 +80,20 @@ public class LocalVariableNodeRepresentation extends WithLabelNamesRepresentatio
 
   @Override
   protected String doToStringOf(LocalVariableNode localVariableNode) {
-    return toStringOf(localVariableNode, Map.of());
+    return toStringOf(localVariableNode, LabelNameLookup.EMPTY);
   }
 
   @Override
-  public String doToStringOf(LocalVariableNode localVariableNode, Map<Label, String> labelNames) {
+  public String doToStringOf(LocalVariableNode localVariableNode, LabelNameLookup labelNameLookup) {
     var representation = new StringBuilder();
 
     representation.append("#").append(localVariableNode.index).append(" ")
                   .append(typeRepresentation.toStringOf(Type.getType(localVariableNode.desc)))
                   .append(" ")
                   .append(localVariableNode.name)
-                  .append(" // range: ").append(labelNodeRepresentation.doToStringOf(localVariableNode.start, labelNames))
+                  .append(" // range: ").append(labelNodeRepresentation.doToStringOf(localVariableNode.start, labelNameLookup))
                   .append("-")
-                  .append(labelNodeRepresentation.doToStringOf(localVariableNode.end, labelNames));
+                  .append(labelNodeRepresentation.doToStringOf(localVariableNode.end, labelNameLookup));
 
     if (localVariableNode.signature != null) {
       representation.append(" // signature: ").append(localVariableNode.signature);

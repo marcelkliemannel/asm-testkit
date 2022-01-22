@@ -1,14 +1,12 @@
 package dev.turingcomplete.asmtestkit.assertion.representation._internal;
 
+import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
 import dev.turingcomplete.asmtestkit.assertion._internal.AsmWritableAssertionInfo;
 import dev.turingcomplete.asmtestkit.assertion.representation.AsmRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.WithLabelNamesRepresentation;
 import org.assertj.core.api.AssertionInfo;
 import org.assertj.core.description.Description;
 import org.assertj.core.presentation.Representation;
-import org.objectweb.asm.Label;
-
-import java.util.Map;
 
 public final class SelfDescription extends Description {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -32,8 +30,8 @@ public final class SelfDescription extends Description {
     Representation representation = assertionInfo.representation();
     String actualRepresentation;
     if (assertionInfo instanceof AsmWritableAssertionInfo && representation instanceof WithLabelNamesRepresentation) {
-      Map<Label, String> labelNames = ((AsmWritableAssertionInfo) assertionInfo).labelNames();
-      actualRepresentation = ((WithLabelNamesRepresentation<?>) representation).toSimplifiedStringOf(actual, labelNames);
+      LabelNameLookup labelNameLookup = ((AsmWritableAssertionInfo) assertionInfo).labelNameLookup();
+      actualRepresentation = ((WithLabelNamesRepresentation<?>) representation).toSimplifiedStringOf(actual, labelNameLookup);
     }
     else if (representation instanceof AsmRepresentation) {
       actualRepresentation = ((AsmRepresentation<?>) representation).toSimplifiedStringOf(actual);

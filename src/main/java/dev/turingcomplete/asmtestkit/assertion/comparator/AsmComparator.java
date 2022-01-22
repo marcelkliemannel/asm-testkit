@@ -1,8 +1,12 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
+import org.assertj.core.internal.DescribableComparator;
+
 import java.util.Comparator;
 
-public abstract class AsmComparator<T> implements Comparator<T> {
+import static dev.turingcomplete.asmtestkit.assertion.comparator._internal.ComparatorUtils.compareNullCheck;
+
+public abstract class AsmComparator<T> extends DescribableComparator<T> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
@@ -14,18 +18,8 @@ public abstract class AsmComparator<T> implements Comparator<T> {
 
   @Override
   public final int compare(T first, T second) {
-    // Instance null check
-    if (first != null && second == null) {
-      return 1;
-    }
-    else if (first == null && second != null) {
-      return -1;
-    }
-    else if (first == null) { // Both null
-      return 0;
-    }
-
-    return doCompare(first, second);
+    Integer nullCheckResult = compareNullCheck(first, second);
+    return nullCheckResult != null ? nullCheckResult : doCompare(first, second);
   }
 
   /**
@@ -39,6 +33,11 @@ public abstract class AsmComparator<T> implements Comparator<T> {
    * @return the comparison result.
    */
   protected abstract int doCompare(T first, T second);
+
+  @Override
+  public String description() {
+    return getClass().getSimpleName();
+  }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //

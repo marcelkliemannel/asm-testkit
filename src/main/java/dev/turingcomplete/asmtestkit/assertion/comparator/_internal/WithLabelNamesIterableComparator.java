@@ -1,35 +1,32 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator._internal;
 
+import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
+import dev.turingcomplete.asmtestkit.assertion.comparator.WithLabelNamesAsmComparator;
+
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static dev.turingcomplete.asmtestkit.assertion.comparator._internal.ComparatorUtils.compareNullCheck;
 
-/**
- * A comparison function to order {@link Iterable}s of {@link T}s.
- *
- * <p>The order of the elements are not taking into account. This gets archives
- * by ordering the {@link Iterable}s before comparing their elements.
- */
-public class IterableComparator<T> implements Comparator<Iterable<? extends T>> {
+public class WithLabelNamesIterableComparator<T> extends IterableComparator<T> implements WithLabelNamesAsmComparator<Iterable<? extends T>> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
-
-  protected final Comparator<T> elementsComparator;
-
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  public IterableComparator(Comparator<T> elementsComparator) {
-    this.elementsComparator = elementsComparator;
+  public WithLabelNamesIterableComparator(Comparator<T> elementsComparator) {
+    super(elementsComparator);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Override
-  public int compare(Iterable<? extends T> first, Iterable<? extends T> second) {
+  public int compare(Iterable<? extends T> first, Iterable<? extends T> second, LabelNameLookup labelNameLookup) {
+    Objects.requireNonNull(labelNameLookup);
+
     Integer nullCheckResult = compareNullCheck(first, second);
     if (nullCheckResult != null) {
       return nullCheckResult;
@@ -45,7 +42,9 @@ public class IterableComparator<T> implements Comparator<Iterable<? extends T>> 
     Iterator<T> secondSortedIterator = secondSorted.iterator();
     for (T firstElement : firstSorted) {
       T selectElement = secondSortedIterator.next();
-      int result = elementsComparator.compare(firstElement, selectElement);
+      int result = elementsComparator instanceof WithLabelNamesAsmComparator
+              ? ((WithLabelNamesAsmComparator<T>) elementsComparator).compare(firstElement, selectElement, labelNameLookup)
+              : elementsComparator.compare(firstElement, selectElement);
       if (result != 0) {
         return result;
       }
