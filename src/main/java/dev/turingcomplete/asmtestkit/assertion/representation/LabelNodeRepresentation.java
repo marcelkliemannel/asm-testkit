@@ -22,7 +22,6 @@ public class LabelNodeRepresentation extends AbstractWithLabelNamesAsmRepresenta
    */
   public static final LabelNodeRepresentation INSTANCE = create();
 
-
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected LabelNodeRepresentation() {

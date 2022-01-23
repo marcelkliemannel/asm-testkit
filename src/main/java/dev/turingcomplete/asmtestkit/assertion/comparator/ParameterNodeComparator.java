@@ -1,11 +1,12 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
+import dev.turingcomplete.asmtestkit.node.AccessFlags;
+import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.ComparatorUtils;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.IterableComparator;
 import org.objectweb.asm.tree.ParameterNode;
 
 import java.util.Comparator;
-import java.util.Objects;
 
 /**
  * A comparison function to order {@link ParameterNode}s.
@@ -28,9 +29,6 @@ public class ParameterNodeComparator extends AsmComparator<ParameterNode> {
   public static final Comparator<Iterable<? extends ParameterNode>> ITERABLE_INSTANCE = new IterableComparator<>(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
-
-  private AccessComparator accessComparator = AccessComparator.INSTANCE;
-
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected ParameterNodeComparator() {
@@ -47,23 +45,10 @@ public class ParameterNodeComparator extends AsmComparator<ParameterNode> {
     return new ParameterNodeComparator();
   }
 
-  /**
-   * Sets the used {@link AccessComparator}.
-   *
-   * <p>The default value is {@link AccessComparator#INSTANCE}.
-   *
-   * @param accessComparator an {@link AccessComparator}; never null.
-   * @return {@code this} {@link ParameterNodeComparator}; never null.
-   */
-  public ParameterNodeComparator useAccessComparator(AccessComparator accessComparator) {
-    this.accessComparator = Objects.requireNonNull(accessComparator);
-
-    return this;
-  }
-
   @Override
   protected int doCompare(ParameterNode first, ParameterNode second) {
-    return Comparator.comparing((ParameterNode parameterNode) -> parameterNode.access, accessComparator)
+    return Comparator.comparing((ParameterNode parameterNode) -> AccessFlags.create(parameterNode.access, AccessKind.PARAMETER),
+                                asmComparators.elementComparator(AccessFlags.class))
                      .thenComparing((ParameterNode parameterNode) -> parameterNode.name, ComparatorUtils.STRING_COMPARATOR)
                      .compare(first, second);
   }

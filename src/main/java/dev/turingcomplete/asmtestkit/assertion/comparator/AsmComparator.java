@@ -13,6 +13,7 @@ public abstract class AsmComparator<T> extends DescribableComparator<T> {
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
   protected AsmRepresentations asmRepresentations = DefaultAsmRepresentations.INSTANCE;
+  protected AsmComparators     asmComparators     = DefaultAsmComparators.INSTANCE;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 

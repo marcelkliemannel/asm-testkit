@@ -1,6 +1,5 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
-import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
 import org.assertj.core.presentation.Representation;
 
 /**
@@ -32,13 +31,15 @@ public interface AsmRepresentations extends Representation, WithLabelNamesAsmRep
   String toSimplifiedStringOf(Object object);
 
   /**
-   * Creates a {@link String} representation of the given access flags.
+   * Gets an {@link AsmRepresentation} for the given ASM {@code elementClass}.
    *
-   * @param access the access flags as a combined {@code int}; never null.
-   * @return the {@link String} representation; may be null.
-   * @throws IllegalArgumentException if the given {@link AccessKind} is unknown.
+   * @param elementClass an ASM element {@link Class}; never null.
+   * @param <T>          the type of the ASM element.
+   * @return the matching {@link AsmRepresentation}; never null.
+   * @throws IllegalArgumentException if there is no representation for the
+   *                                  given {@code elementClass}.
    */
-  String toStringOf(int access, AccessKind accessKind);
+  <T> AsmRepresentation<T> getAsmRepresentation(Class<T> elementClass);
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //

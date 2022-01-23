@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
+import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import dev.turingcomplete.asmtestkit.assertion.option.StandardAssertOption;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;
@@ -13,11 +13,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAccess;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAnnotations;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAttributes;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatTypeAnnotations;
-import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getIntegerFromObjectElseNull;
+import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getFromObjectElseNull;
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getListFromObjectElse;
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getStringFromObjectElseNull;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -105,26 +104,19 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
       return;
     }
 
-    assertThatAccess(getIntegerFromObjectElseNull(actual, this::getAccess), getAccessKind())
-            .addOptions(options)
-            .as(createCrumbDescription("Has equal " + name.toLowerCase(Locale.ROOT) + " access"))
-            .isEqualTo(getIntegerFromObjectElseNull(expected, objectType, this::getAccess));
+    AsmAssertions.assertThat(getFromObjectElseNull(actual, this::getAccessFlags))
+                 .addOptions(options)
+                 .as(createCrumbDescription("Has equal " + name.toLowerCase(Locale.ROOT) + " access"))
+                 .isEqualTo(getFromObjectElseNull(expected, objectType, this::getAccessFlags));
   }
 
   /**
-   * Gets the access of the given {@code entity}.
+   * Gets the {@link AccessFlags} of the given {@code entity}.
    *
    * @param entity the {@link A} entity; never null.
    * @return the access as {@link Integer}; may be null.
    */
-  protected abstract Integer getAccess(A entity);
-
-  /**
-   * Gets the {@link AccessKind} of {@link #getAccess(Object)}.
-   *
-   * @return the {@link AccessKind}; never null.
-   */
-  protected abstract AccessKind getAccessKind();
+  protected abstract AccessFlags getAccessFlags(A entity);
 
   /**
    * Checks whether the signature of the given expected {@link A} is

@@ -111,7 +111,7 @@ public class TryCatchBlockNodeAssert extends AsmAssert<TryCatchBlockNodeAssert, 
   protected void hasEqualType(Object expected) {
     Function<TryCatchBlockNode, Type> transformTypeName = (TryCatchBlockNode tryCatchBlockNode) -> {
       //noinspection CodeBlock2Expr
-      return tryCatchBlockNode.type != null ? TypeUtils.toType(tryCatchBlockNode.type) : null;
+      return tryCatchBlockNode.type != null ? TypeUtils.toTypeElseNull(tryCatchBlockNode.type) : null;
     };
     AsmAssertions.assertThat(getFromObjectElseNull(actual, transformTypeName))
                  .as(createCrumbDescription("Has equal type"))

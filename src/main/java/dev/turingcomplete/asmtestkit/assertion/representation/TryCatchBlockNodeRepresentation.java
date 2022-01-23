@@ -53,7 +53,7 @@ public class TryCatchBlockNodeRepresentation extends AbstractWithLabelNamesAsmRe
 
     // Type
     if (tryCatchBlockNode.type != null) {
-      representation.append(asmRepresentations.toStringOf(TypeUtils.toType(tryCatchBlockNode.type)));
+      representation.append(asmRepresentations.toStringOf(TypeUtils.toTypeElseNull(tryCatchBlockNode.type)));
     }
     else {
       representation.append("finally");

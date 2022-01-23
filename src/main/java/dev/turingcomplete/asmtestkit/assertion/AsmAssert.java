@@ -80,7 +80,7 @@ public abstract class AsmAssert<S extends AbstractAssert<S, A>, A>
    *                           never null.
    * @return {@code this} {@link S}; never null.
    */
-  public S useAsmRepresentationsCombiner(AsmRepresentations asmRepresentations) {
+  public S useAsmRepresentations(AsmRepresentations asmRepresentations) {
     this.asmRepresentations = Objects.requireNonNull(asmRepresentations);
 
     //noinspection unchecked

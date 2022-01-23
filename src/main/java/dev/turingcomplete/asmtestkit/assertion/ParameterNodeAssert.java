@@ -1,5 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
+import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import dev.turingcomplete.asmtestkit.assertion.comparator.ParameterNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.representation.ParameterNodeRepresentation;
@@ -9,9 +10,9 @@ import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.tree.ParameterNode;
 
 import java.util.Comparator;
+import java.util.function.Function;
 
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getFromObjectElseNull;
-import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getIntegerFromObjectElseNull;
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getStringFromObjectElseNull;
 
 /**
@@ -68,9 +69,10 @@ public class ParameterNodeAssert extends AsmAssert<ParameterNodeAssert, Paramete
    *                 {@link ParameterNode}; may be null.
    */
   protected void hasEqualAccess(Object expected) {
-    AsmAssertions.assertThatParameterAccess(getIntegerFromObjectElseNull(actual, (ParameterNode parameterNode) -> parameterNode.access))
+    Function<ParameterNode, AccessFlags> getParameterAccess = parameterNode -> AccessFlags.forParameter(parameterNode.access);
+    AsmAssertions.assertThat(getFromObjectElseNull(actual, getParameterAccess))
                  .as(createCrumbDescription("Has equal access"))
-                 .isEqualTo(getFromObjectElseNull(expected, ParameterNode.class, parameterNode -> parameterNode.access));
+                 .isEqualTo(getFromObjectElseNull(expected, ParameterNode.class, getParameterAccess));
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

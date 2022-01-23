@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
+import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import dev.turingcomplete.asmtestkit.assertion.comparator.FieldNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.option.StandardAssertOption;
@@ -116,13 +116,8 @@ public class FieldNodeAssert extends ClassEntityAssert<FieldNodeAssert, FieldNod
   }
 
   @Override
-  protected Integer getAccess(FieldNode fieldNode) {
-    return fieldNode.access;
-  }
-
-  @Override
-  protected AccessKind getAccessKind() {
-    return AccessKind.FIELD;
+  protected AccessFlags getAccessFlags(FieldNode fieldNode) {
+    return AccessFlags.forField(fieldNode.access);
   }
 
   @Override

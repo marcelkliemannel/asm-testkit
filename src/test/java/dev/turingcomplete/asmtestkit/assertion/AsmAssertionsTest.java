@@ -1,5 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
+import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils;
 import dev.turingcomplete.asmtestkit.assertion.__helper.DummyAttribute;
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationA;
@@ -11,6 +12,7 @@ import org.assertj.core.api.ThrowableAssert;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Label;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.TypePath;
 import org.objectweb.asm.TypeReference;
@@ -30,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import static dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils.extractLabelNames;
+import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAccessFlags;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAnnotationDefaultValues;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatFields;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLabels;
@@ -591,6 +594,31 @@ class AsmAssertionsTest {
                         "and elements not expected:\n" +
                         "  [@java.lang.Deprecated(since=\"1\")]\n" +
                         "when comparing values using AnnotationDefaultValueComparator");
+  }
+
+  @Test
+  void testAssertAccessFlags() {
+    var first = AccessFlags.forClass(Opcodes.ACC_PUBLIC);
+    var second = AccessFlags.forClass(Opcodes.ACC_ABSTRACT);
+    var third = AccessFlags.forClass(Opcodes.ACC_INTERFACE);
+
+    // Positive
+    assertThatAccessFlags(List.of(first, second, third))
+            .containsExactlyInAnyOrderElementsOf(List.of(first, second, third));
+
+    // Negative
+    assertThatThrownBy(() -> assertThatAccessFlags(List.of(first, second)).containsExactlyInAnyOrderElementsOf(List.of(second, third)))
+            .isInstanceOf(AssertionError.class)
+            .hasMessage("[Access Flags] \n" +
+                        "Expecting actual:\n" +
+                        "  [(1) public, (1024) abstract]\n" +
+                        "to contain exactly in any order:\n" +
+                        "  [(1024) abstract, (512) interface]\n" +
+                        "elements not found:\n" +
+                        "  [(512) interface]\n" +
+                        "and elements not expected:\n" +
+                        "  [(1) public]\n" +
+                        "when comparing values using AccessFlagsComparator");
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

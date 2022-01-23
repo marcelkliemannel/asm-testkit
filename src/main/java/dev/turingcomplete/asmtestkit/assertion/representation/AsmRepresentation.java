@@ -6,7 +6,7 @@ import org.assertj.core.presentation.Representation;
  * An AssertJ {@link Representation} which represents one specific ASM
  * {@link #getObjectClass()}.
  */
-public interface AsmRepresentation extends Representation {
+public interface AsmRepresentation<T> extends Representation {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
@@ -16,7 +16,7 @@ public interface AsmRepresentation extends Representation {
    *
    * @return a {@link Class}; never null.
    */
-  Class<?> getObjectClass();
+  Class<T> getObjectClass();
 
   /**
    * Creates a simplified {@link String} representation of the given

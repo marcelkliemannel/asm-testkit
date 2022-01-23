@@ -14,14 +14,14 @@ import java.util.Comparator;
  * ordered based on the lexicographical order of their
  * {@code InstructionRepresentation}.
  *
- * <p>For a {@link Comparator} for an {@link Iterable} of
- * {@link AbstractInsnNode}s use {@link InsnListComparator}.
+ * <p>Use {@link InsnListComparator} for a {@link Comparator} of an
+ * {@link Iterable} of {@link AbstractInsnNode}s.
  */
 public class InstructionComparator extends AbstractWithLabelNamesAsmComparator<AbstractInsnNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
-   * A reusable {@link AccessComparator} instance.
+   * A reusable {@link AccessFlagsComparator} instance.
    */
   public static final InstructionComparator INSTANCE = create();
 

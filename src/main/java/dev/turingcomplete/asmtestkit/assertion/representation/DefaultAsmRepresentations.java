@@ -1,5 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
+import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
 import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
 import org.assertj.core.api.AbstractAssert;
@@ -36,7 +37,7 @@ import static java.lang.Integer.toHexString;
  * {@link AbstractAssert#setCustomRepresentation(Representation)} to all AssertJ
  * assertions in order to get a proper representation of ASM objects.
  *
- * <p>Note that {@link AccessRepresentation} is not part of this representation
+ * <p>Note that {@link AccessFlagsRepresentation} is not part of this representation
  * because it is not clear which {@link AccessKind} to use.
  */
 public final class DefaultAsmRepresentations extends StandardRepresentation implements AsmRepresentations {
@@ -47,30 +48,31 @@ public final class DefaultAsmRepresentations extends StandardRepresentation impl
    */
   public static final DefaultAsmRepresentations INSTANCE = create();
 
-  private static final Map<Class<?>, Supplier<AsmRepresentation>> SINGLE_ASM_REPRESENTATIONS = new HashMap<>();
+  private static final Map<Class<?>, Container<?>> ASM_REPRESENTATIONS = new HashMap<>();
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   static {
-    registerSingleAsmRepresentation(Attribute.class, () -> AttributeRepresentation.INSTANCE);
-    registerSingleAsmRepresentation(AnnotationNode.class, () -> AnnotationNodeRepresentation.INSTANCE);
-    registerSingleAsmRepresentation(TypeAnnotationNode.class, () -> TypeAnnotationNodeRepresentation.INSTANCE);
-    registerSingleAsmRepresentation(LocalVariableAnnotationNode.class, () -> LocalVariableAnnotationNodeRepresentation.INSTANCE);
-    registerSingleAsmRepresentation(TypePath.class, () -> TypePathRepresentation.INSTANCE);
-    registerSingleAsmRepresentation(Type.class, () -> TypeRepresentation.INSTANCE);
-    registerSingleAsmRepresentation(TypeReference.class, () -> TypeReferenceRepresentation.INSTANCE);
-    registerSingleAsmRepresentation(FieldNode.class, () -> FieldNodeRepresentation.INSTANCE);
-    registerSingleAsmRepresentation(AbstractInsnNode.class, () -> InstructionRepresentation.INSTANCE);
-    registerSingleAsmRepresentation(LabelNode.class, () -> LabelNodeRepresentation.INSTANCE);
-    registerSingleAsmRepresentation(InsnList.class, () -> InsnListRepresentation.INSTANCE);
-    registerSingleAsmRepresentation(MethodNode.class, () -> MethodNodeRepresentation.INSTANCE);
-    registerSingleAsmRepresentation(LocalVariableNode.class, () -> LocalVariableNodeRepresentation.INSTANCE);
-    registerSingleAsmRepresentation(ParameterNode.class, () -> ParameterNodeRepresentation.INSTANCE);
-    registerSingleAsmRepresentation(TryCatchBlockNode.class, () -> TryCatchBlockNodeRepresentation.INSTANCE);
+    registerAsmRepresentation(Attribute.class, () -> AttributeRepresentation.INSTANCE);
+    registerAsmRepresentation(AnnotationNode.class, () -> AnnotationNodeRepresentation.INSTANCE);
+    registerAsmRepresentation(TypeAnnotationNode.class, () -> TypeAnnotationNodeRepresentation.INSTANCE);
+    registerAsmRepresentation(LocalVariableAnnotationNode.class, () -> LocalVariableAnnotationNodeRepresentation.INSTANCE);
+    registerAsmRepresentation(TypePath.class, () -> TypePathRepresentation.INSTANCE);
+    registerAsmRepresentation(Type.class, () -> TypeRepresentation.INSTANCE);
+    registerAsmRepresentation(TypeReference.class, () -> TypeReferenceRepresentation.INSTANCE);
+    registerAsmRepresentation(FieldNode.class, () -> FieldNodeRepresentation.INSTANCE);
+    registerAsmRepresentation(AbstractInsnNode.class, () -> InstructionRepresentation.INSTANCE);
+    registerAsmRepresentation(LabelNode.class, () -> LabelNodeRepresentation.INSTANCE);
+    registerAsmRepresentation(InsnList.class, () -> InsnListRepresentation.INSTANCE);
+    registerAsmRepresentation(MethodNode.class, () -> MethodNodeRepresentation.INSTANCE);
+    registerAsmRepresentation(LocalVariableNode.class, () -> LocalVariableNodeRepresentation.INSTANCE);
+    registerAsmRepresentation(ParameterNode.class, () -> ParameterNodeRepresentation.INSTANCE);
+    registerAsmRepresentation(TryCatchBlockNode.class, () -> TryCatchBlockNodeRepresentation.INSTANCE);
+    registerAsmRepresentation(AccessFlags.class, () -> AccessFlagsRepresentation.INSTANCE);
 
     // An 'InsnList' is an 'Iterable' and would be handled in the 'toStringOf'
-    registerFormatterForType(InsnList.class, insnList -> SINGLE_ASM_REPRESENTATIONS.get(InsnList.class).get().toStringOf(insnList));
+    registerFormatterForType(InsnList.class, insnList -> ASM_REPRESENTATIONS.get(InsnList.class).get().toStringOf(insnList));
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
@@ -91,15 +93,24 @@ public final class DefaultAsmRepresentations extends StandardRepresentation impl
    * <p>If there is already a registered representation for the
    * {@code objectClass}, it will be replaced.
    *
-   * @param objectClass             the {@link Class} the given
-   *                                {@link AsmRepresentation} is supposed
-   *                                to handle; never null.
-   * @param singleAsmRepresentation a {@link Supplier} which provides a custom
-   *                                {@link AsmRepresentation}; never null.
+   * @param objectClass       the {@link Class} the given {@link AsmRepresentation}
+   *                          is supposed to handle; never null.
+   * @param asmRepresentation a {@link Supplier} which provides a custom
+   *                          {@link AsmRepresentation}; never null.
    */
-  public static void registerSingleAsmRepresentation(Class<?> objectClass, Supplier<AsmRepresentation> singleAsmRepresentation) {
-    SINGLE_ASM_REPRESENTATIONS.put(Objects.requireNonNull(objectClass),
-                                   Objects.requireNonNull(singleAsmRepresentation));
+  public static <T> void registerAsmRepresentation(Class<T> objectClass, Supplier<AsmRepresentation<T>> asmRepresentation) {
+    ASM_REPRESENTATIONS.put(Objects.requireNonNull(objectClass),
+                            new Container<>(Objects.requireNonNull(asmRepresentation)));
+  }
+
+  @Override
+  public <T> AsmRepresentation<T> getAsmRepresentation(Class<T> elementClass) {
+    if (!ASM_REPRESENTATIONS.containsKey(elementClass)) {
+      throw new IllegalArgumentException("No representation for: " + elementClass.getName());
+    }
+
+    //noinspection unchecked
+    return (AsmRepresentation<T>) ASM_REPRESENTATIONS.get(elementClass).get();
   }
 
   // ---- toStringOf -------------------------------------------------------- //
@@ -114,11 +125,6 @@ public final class DefaultAsmRepresentations extends StandardRepresentation impl
   @Override
   public String unambiguousToStringOf(Object object) {
     return toStringOf(object) + " (" + toHexString(System.identityHashCode(object)) + ")";
-  }
-
-  @Override
-  public String toStringOf(int access, AccessKind accessKind) {
-    return AccessRepresentation.instance(Objects.requireNonNull(accessKind)).toStringOf(access);
   }
 
   @Override
@@ -176,22 +182,38 @@ public final class DefaultAsmRepresentations extends StandardRepresentation impl
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
 
-  private Optional<AsmRepresentation> findSingleAsmRepresentation(Object object) {
+  private Optional<? extends AsmRepresentation<?>> findSingleAsmRepresentation(Object object) {
     assert object != null;
 
     // Fast path
-    if (SINGLE_ASM_REPRESENTATIONS.containsKey(object.getClass())) {
-      return Optional.of(SINGLE_ASM_REPRESENTATIONS.get(object.getClass()).get());
+    if (ASM_REPRESENTATIONS.containsKey(object.getClass())) {
+      return Optional.of(ASM_REPRESENTATIONS.get(object.getClass()).get());
     }
 
-    for (Map.Entry<Class<?>, Supplier<AsmRepresentation>> entry : SINGLE_ASM_REPRESENTATIONS.entrySet()) {
-      if (entry.getKey().isAssignableFrom(object.getClass())) {
-        return Optional.of(entry.getValue().get());
-      }
-    }
-
-    return Optional.empty();
+    // Check for subtypes
+    return ASM_REPRESENTATIONS.entrySet().stream()
+                              .filter(entry -> entry.getKey().isAssignableFrom(object.getClass()))
+                              .map(entry -> entry.getValue().get())
+                              .findFirst();
   }
 
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
+
+  private static class Container<T> {
+
+    AsmRepresentation<T>           asmRepresentation;
+    Supplier<AsmRepresentation<T>> asmRepresentationSupplier;
+
+    Container(Supplier<AsmRepresentation<T>> asmRepresentationSupplier) {
+      this.asmRepresentationSupplier = asmRepresentationSupplier;
+    }
+
+    AsmRepresentation<?> get() {
+      if (asmRepresentation == null) {
+        asmRepresentation = Objects.requireNonNull(asmRepresentationSupplier.get());
+      }
+
+      return asmRepresentation;
+    }
+  }
 }

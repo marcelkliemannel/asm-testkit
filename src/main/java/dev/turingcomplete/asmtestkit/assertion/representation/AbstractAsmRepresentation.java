@@ -11,7 +11,7 @@ import java.util.Objects;
  *
  * @param <T> the type of the ASM object that gets represented.
  */
-public abstract class AbstractAsmRepresentation<T> extends StandardRepresentation implements AsmRepresentation {
+public abstract class AbstractAsmRepresentation<T> extends StandardRepresentation implements AsmRepresentation<T> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 

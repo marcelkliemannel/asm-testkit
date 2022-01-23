@@ -9,7 +9,6 @@ import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LocalVariableAnnotationNode;
 
 import java.util.Comparator;
-import java.util.Objects;
 
 /**
  * A comparison function to order {@link LocalVariableAnnotationNode}s.
@@ -38,9 +37,6 @@ public class LocalVariableAnnotationNodeComparator
   public static final Comparator<Iterable<? extends LocalVariableAnnotationNode>> ITERABLE_INSTANCE = WithLabelNamesIterableAsmComparator.create(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
-
-  private Comparator<Iterable<? extends LabelNode>> labelNodesComparator = LabelNodeComparator.ITERABLE_INSTANCE;
-
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected LocalVariableAnnotationNodeComparator() {
@@ -57,22 +53,6 @@ public class LocalVariableAnnotationNodeComparator
     return new LocalVariableAnnotationNodeComparator();
   }
 
-  /**
-   * Sets the used {@link Comparator} for an {@link Iterable} of
-   * {@link LabelNode}s
-   *
-   * <p>The default value is {@link LabelNodeComparator#ITERABLE_INSTANCE}.
-   *
-   * @param labelNodesComparator a {@link Comparator} for an {@link Iterable}
-   *                             of {@link LabelNode}s; never null.
-   * @return {@code this} {@link LocalVariableAnnotationNodeComparator}; never null.
-   */
-  public LocalVariableAnnotationNodeComparator useLabelNodesComparator(Comparator<Iterable<? extends LabelNode>> labelNodesComparator) {
-    this.labelNodesComparator = Objects.requireNonNull(labelNodesComparator);
-
-    return this;
-  }
-
   @Override
   protected int doCompare(LocalVariableAnnotationNode first, LocalVariableAnnotationNode second) {
     return doCompare(first, second, LabelNameLookup.EMPTY);
@@ -85,8 +65,8 @@ public class LocalVariableAnnotationNodeComparator
       return typeAnnotationNodeCompare;
     }
 
-    return WithLabelNamesAsmComparator.comparing((LocalVariableAnnotationNode localVariableAnnotationNode) -> localVariableAnnotationNode.start, labelNodesComparator, labelNameLookup)
-                                      .thenComparing((LocalVariableAnnotationNode localVariableAnnotationNode) -> localVariableAnnotationNode.end, labelNodesComparator)
+    return WithLabelNamesAsmComparator.comparing((LocalVariableAnnotationNode localVariableAnnotationNode) -> localVariableAnnotationNode.start, asmComparators.iterableComparator(LabelNode.class), labelNameLookup)
+                                      .thenComparing((LocalVariableAnnotationNode localVariableAnnotationNode) -> localVariableAnnotationNode.end, asmComparators.iterableComparator(LabelNode.class))
                                       .thenComparing((LocalVariableAnnotationNode localVariableAnnotationNode) -> localVariableAnnotationNode.index, new IterableComparator<>(ComparatorUtils.INTEGER_COMPARATOR))
                                       .compare(first, second);
   }

@@ -1,5 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
+import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.IterableComparator;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.tree.AnnotationNode;
@@ -7,7 +8,6 @@ import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.util.Comparator;
-import java.util.Objects;
 
 import static dev.turingcomplete.asmtestkit.assertion.comparator._internal.ComparatorUtils.OBJECT_COMPARATOR;
 import static dev.turingcomplete.asmtestkit.assertion.comparator._internal.ComparatorUtils.STRING_COMPARATOR;
@@ -38,12 +38,6 @@ public class FieldNodeComparator extends AsmComparator<FieldNode> {
   public static final Comparator<Iterable<? extends FieldNode>> ITERABLE_INSTANCE = new IterableComparator<>(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
-
-  private AccessComparator                                   accessComparator             = AccessComparator.INSTANCE;
-  private Comparator<Iterable<? extends AnnotationNode>>     annotationNodeComparator     = AnnotationNodeComparator.ITERABLE_INSTANCE;
-  private Comparator<Iterable<? extends TypeAnnotationNode>> typeAnnotationNodeComparator = TypeAnnotationNodeComparator.ITERABLE_INSTANCE;
-  private Comparator<Iterable<? extends Attribute>>          attributesComparator         = AttributeComparator.ITERABLE_INSTANCE;
-
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected FieldNodeComparator() {
@@ -60,80 +54,18 @@ public class FieldNodeComparator extends AsmComparator<FieldNode> {
     return new FieldNodeComparator();
   }
 
-  /**
-   * Sets the used {@link AccessComparator}.
-   *
-   * <p>The default value is {@link AccessComparator#INSTANCE}.
-   *
-   * @param accessComparator an {@link AccessComparator}; never null.
-   * @return {@code this} {@link FieldNodeComparator}; never null.
-   */
-  public FieldNodeComparator useAccessComparator(AccessComparator accessComparator) {
-    this.accessComparator = Objects.requireNonNull(accessComparator);
-
-    return this;
-  }
-
-  /**
-   * Sets the used {@link Comparator} for an {@link Iterable} of
-   * {@link AnnotationNode}s
-   *
-   * <p>The default value is {@link AnnotationNodeComparator#ITERABLE_INSTANCE}.
-   *
-   * @param annotationNodeComparator a {@link Comparator} for an {@link Iterable}
-   *                                 of {@link AnnotationNode}s; never null.
-   * @return {@code this} {@link FieldNodeComparator}; never null.
-   */
-  public FieldNodeComparator useAnnotationNodeComparator(Comparator<Iterable<? extends AnnotationNode>> annotationNodeComparator) {
-    this.annotationNodeComparator = Objects.requireNonNull(annotationNodeComparator);
-
-    return this;
-  }
-
-  /**
-   * Sets the used {@link Comparator} for an {@link Iterable} of
-   * {@link TypeAnnotationNode}s
-   *
-   * <p>The default value is {@link TypeAnnotationNodeComparator#ITERABLE_INSTANCE}.
-   *
-   * @param typeAnnotationNodeComparator a {@link Comparator} for an {@link Iterable}
-   *                                     of {@link TypeAnnotationNode}s; never null.
-   * @return {@code this} {@link FieldNodeComparator}; never null.
-   */
-  public FieldNodeComparator useTypeAnnotationNodeComparator(Comparator<Iterable<? extends TypeAnnotationNode>> typeAnnotationNodeComparator) {
-    this.typeAnnotationNodeComparator = Objects.requireNonNull(typeAnnotationNodeComparator);
-
-    return this;
-  }
-
-  /**
-   * Sets the used {@link Comparator} for an {@link Iterable} of
-   * {@link Attribute}s
-   *
-   * <p>The default value is {@link AttributeComparator#ITERABLE_INSTANCE}.
-   *
-   * @param attributesComparator a {@link Comparator} for an {@link Iterable}
-   *                             of {@link Attribute}s; never null.
-   * @return {@code this} {@link FieldNodeComparator}; never null.
-   */
-  public FieldNodeComparator useAttributeComparator(Comparator<Iterable<? extends Attribute>> attributesComparator) {
-    this.attributesComparator = Objects.requireNonNull(attributesComparator);
-
-    return this;
-  }
-
   @Override
   public int doCompare(FieldNode first, FieldNode second) {
     return comparing((FieldNode fieldNode) -> fieldNode.name, STRING_COMPARATOR)
             .thenComparing((FieldNode fieldNode) -> fieldNode.desc, STRING_COMPARATOR)
-            .thenComparing((FieldNode fieldNode) -> fieldNode.access, accessComparator)
+            .thenComparing((FieldNode fieldNode) -> AccessFlags.forField(fieldNode.access), asmComparators.elementComparator(AccessFlags.class))
             .thenComparing((FieldNode fieldNode) -> fieldNode.signature, STRING_COMPARATOR)
             .thenComparing((FieldNode fieldNode) -> fieldNode.value, OBJECT_COMPARATOR)
-            .thenComparing((FieldNode fieldNode) -> fieldNode.visibleAnnotations, annotationNodeComparator)
-            .thenComparing((FieldNode fieldNode) -> fieldNode.invisibleAnnotations, annotationNodeComparator)
-            .thenComparing((FieldNode fieldNode) -> fieldNode.visibleTypeAnnotations, typeAnnotationNodeComparator)
-            .thenComparing((FieldNode fieldNode) -> fieldNode.invisibleTypeAnnotations, typeAnnotationNodeComparator)
-            .thenComparing((FieldNode fieldNode) -> fieldNode.attrs, attributesComparator)
+            .thenComparing((FieldNode fieldNode) -> fieldNode.visibleAnnotations, asmComparators.iterableComparator(AnnotationNode.class))
+            .thenComparing((FieldNode fieldNode) -> fieldNode.invisibleAnnotations, asmComparators.iterableComparator(AnnotationNode.class))
+            .thenComparing((FieldNode fieldNode) -> fieldNode.visibleTypeAnnotations, asmComparators.iterableComparator(TypeAnnotationNode.class))
+            .thenComparing((FieldNode fieldNode) -> fieldNode.invisibleTypeAnnotations, asmComparators.iterableComparator(TypeAnnotationNode.class))
+            .thenComparing((FieldNode fieldNode) -> fieldNode.attrs, asmComparators.iterableComparator(Attribute.class))
             .compare(first, second);
   }
 

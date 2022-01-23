@@ -1,35 +1,9 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
+import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import dev.turingcomplete.asmtestkit.asmutils.InsnListUtils;
-import dev.turingcomplete.asmtestkit.assertion.comparator.AnnotationDefaultValueComparator;
-import dev.turingcomplete.asmtestkit.assertion.comparator.AnnotationNodeComparator;
-import dev.turingcomplete.asmtestkit.assertion.comparator.AttributeComparator;
-import dev.turingcomplete.asmtestkit.assertion.comparator.FieldNodeComparator;
-import dev.turingcomplete.asmtestkit.assertion.comparator.InsnListComparator;
-import dev.turingcomplete.asmtestkit.assertion.comparator.LabelNodeComparator;
-import dev.turingcomplete.asmtestkit.assertion.comparator.LocalVariableAnnotationNodeComparator;
-import dev.turingcomplete.asmtestkit.assertion.comparator.LocalVariableNodeComparator;
-import dev.turingcomplete.asmtestkit.assertion.comparator.ParameterNodeComparator;
-import dev.turingcomplete.asmtestkit.assertion.comparator.TryCatchBlockNodeComparator;
-import dev.turingcomplete.asmtestkit.assertion.comparator.TypeAnnotationNodeComparator;
-import dev.turingcomplete.asmtestkit.assertion.comparator.TypeComparator;
-import dev.turingcomplete.asmtestkit.assertion.comparator.TypePathComparator;
-import dev.turingcomplete.asmtestkit.assertion.comparator.TypeReferenceComparator;
-import dev.turingcomplete.asmtestkit.assertion.representation.AnnotationDefaultValueRepresentation;
-import dev.turingcomplete.asmtestkit.assertion.representation.AnnotationNodeRepresentation;
-import dev.turingcomplete.asmtestkit.assertion.representation.AttributeRepresentation;
-import dev.turingcomplete.asmtestkit.assertion.representation.FieldNodeRepresentation;
-import dev.turingcomplete.asmtestkit.assertion.representation.InsnListRepresentation;
-import dev.turingcomplete.asmtestkit.assertion.representation.LabelNodeRepresentation;
-import dev.turingcomplete.asmtestkit.assertion.representation.LocalVariableAnnotationNodeRepresentation;
-import dev.turingcomplete.asmtestkit.assertion.representation.LocalVariableNodeRepresentation;
-import dev.turingcomplete.asmtestkit.assertion.representation.ParameterNodeRepresentation;
-import dev.turingcomplete.asmtestkit.assertion.representation.TryCatchBlockNodeRepresentation;
-import dev.turingcomplete.asmtestkit.assertion.representation.TypeAnnotationNodeRepresentation;
-import dev.turingcomplete.asmtestkit.assertion.representation.TypePathRepresentation;
-import dev.turingcomplete.asmtestkit.assertion.representation.TypeReferenceRepresentation;
-import dev.turingcomplete.asmtestkit.assertion.representation.TypeRepresentation;
+import dev.turingcomplete.asmtestkit.assertion.comparator.*;
+import dev.turingcomplete.asmtestkit.assertion.representation.*;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Type;
@@ -48,7 +22,6 @@ import org.objectweb.asm.tree.TryCatchBlockNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.util.Comparator;
-import java.util.Objects;
 
 public final class AsmAssertions {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -61,103 +34,17 @@ public final class AsmAssertions {
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
-  // ---- Access ------------------------------------------------------------ //
-
-  /**
-   * Creates an {@link AccessAssert} for class accesses.
-   *
-   * @param access an {@link Integer} of class access flags; may be null.
-   * @return a new {@link AccessAssert}; never null.
-   */
-  public static AccessAssert assertThatClassAccess(Integer access) {
-    return new AccessAssert(access, AccessKind.CLASS);
-  }
-
-  /**
-   * Creates an {@link AccessAssert} for field accesses.
-   *
-   * @param access an {@link Integer} of field access flags; may be null.
-   * @return a new {@link AccessAssert}; never null.
-   */
-  public static AccessAssert assertThatFieldAccess(Integer access) {
-    return new AccessAssert(access, AccessKind.FIELD);
-  }
-
-  /**
-   * Creates an {@link AccessAssert} for method accesses.
-   *
-   * @param access an {@link Integer} of method access flags; may be null.
-   * @return a new {@link AccessAssert}; never null.
-   */
-  public static AccessAssert assertThatMethodAccess(Integer access) {
-    return new AccessAssert(access, AccessKind.METHOD);
-  }
-
-  /**
-   * Creates an {@link AccessAssert} for parameter accesses.
-   *
-   * @param access an {@link Integer} of parameter access flags; may be null.
-   * @return a new {@link AccessAssert}; never null.
-   */
-  public static AccessAssert assertThatParameterAccess(Integer access) {
-    return new AccessAssert(access, AccessKind.PARAMETER);
-  }
-
-  /**
-   * Creates an {@link AccessAssert} for module accesses.
-   *
-   * @param access an {@link Integer} of module access flags; may be null.
-   * @return a new {@link AccessAssert}; never null.
-   */
-  public static AccessAssert assertThatModuleAccess(Integer access) {
-    return new AccessAssert(access, AccessKind.MODULE);
-  }
-
-  /**
-   * Creates an {@link AccessAssert} for module requires accesses.
-   *
-   * @param access an {@link Integer} of module requires access flags; may be
-   *               null.
-   * @return a new {@link AccessAssert}; never null.
-   */
-  public static AccessAssert assertThatModuleRequiresAccess(Integer access) {
-    return new AccessAssert(access, AccessKind.MODULE_REQUIRES);
-  }
-
-  /**
-   * Creates an {@link AccessAssert} for module exports accesses.
-   *
-   * @param access an {@link Integer} of module exports access flags; may be
-   *               null.
-   * @return a new {@link AccessAssert}; never null.
-   */
-  public static AccessAssert assertThatModuleExportsAccess(Integer access) {
-    return new AccessAssert(access, AccessKind.MODULE_EXPORTS);
-  }
-
-  /**
-   * Creates an {@link AccessAssert} for module opens accesses.
-   *
-   * @param access an {@link Integer} of module opens access flags; may be null.
-   * @return a new {@link AccessAssert}; never null.
-   */
-  public static AccessAssert assertThatModuleOpensAccess(Integer access) {
-    return new AccessAssert(access, AccessKind.MODULE_OPENS);
-  }
-
-  /**
-   * Creates an {@link AccessAssert} for the given {@code accessKind}.
-   *
-   * @param access     an {@link Integer} of class access flags; may be null.
-   * @param accessKind the {@link AccessKind} the {@code access} parameter;
-   *                   not null.
-   * @return a new {@link AccessAssert}; never null.
-   */
-  public static AccessAssert assertThatAccess(Integer access, AccessKind accessKind) {
-    return new AccessAssert(access, Objects.requireNonNull(accessKind));
-  }
-
   // ---- ASM Objects ------------------------------------------------------- //
+
+  /**
+   * Creates an {@link AccessFlags}.
+   *
+   * @param actual an {@link AccessFlags}; may be null.
+   * @return a new {@link AccessFlagsAssert}; never null.
+   */
+  public static AccessFlagsAssert assertThat(AccessFlags actual) {
+    return new AccessFlagsAssert(actual);
+  }
 
   /**
    * Creates an {@link AttributeAssert}.
@@ -643,6 +530,27 @@ public final class AsmAssertions {
             .withRepresentation(AnnotationDefaultValueRepresentation.INSTANCE)
             .usingElementComparator(AnnotationDefaultValueComparator.INSTANCE)
             .usingComparator(AnnotationDefaultValueComparator.ITERABLE_INSTANCE);
+  }
+
+  /**
+   * Creates an {@link AsmIterableAssert} for {@link AccessFlags}s which
+   * uses {@link AccessFlagsRepresentation#INSTANCE} for the representation
+   * and for equality {@link AccessFlagsComparator#INSTANCE} and
+   * {@link AccessFlagsComparator#ITERABLE_INSTANCE}.
+   *
+   * <p>To override the representation or comparator call
+   * {@link AsmIterableAssert#usingComparator(Comparator)} or
+   * {@link AsmIterableAssert#withRepresentation(Representation)}.
+   *
+   * @param actual an {@link Iterable} of {@link AccessFlags}s; may be null.
+   * @return a new {@link AsmIterableAssert}; never null.
+   */
+  public static AsmIterableAssert<?, AccessFlags, AccessFlagsAssert> assertThatAccessFlags(Iterable<AccessFlags> actual) {
+    return new AsmIterableAssert<>(actual, AsmAssertions::assertThat)
+            .as("Access Flags")
+            .withRepresentation(AccessFlagsRepresentation.INSTANCE)
+            .usingElementComparator(AccessFlagsComparator.INSTANCE)
+            .usingComparator(AccessFlagsComparator.ITERABLE_INSTANCE);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

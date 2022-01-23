@@ -2,11 +2,10 @@ package dev.turingcomplete.asmtestkit.assertion.comparator;
 
 import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
 import dev.turingcomplete.asmtestkit.assertion.representation.AbstractTypeAnnotationNodeRepresentation;
-import dev.turingcomplete.asmtestkit.assertion.representation.TypePathRepresentation;
+import org.objectweb.asm.TypePath;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.util.Comparator;
-import java.util.Objects;
 
 import static dev.turingcomplete.asmtestkit.assertion.comparator._internal.ComparatorUtils.INTEGER_COMPARATOR;
 
@@ -22,32 +21,13 @@ public abstract class AbstractTypeAnnotationNodeComparator<S extends AbstractTyp
         extends AbstractAnnotationNodeComparator<S, A> {
 
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
-
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
-
-  private TypePathComparator typePathComparator = TypePathComparator.INSTANCE;
-
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected AbstractTypeAnnotationNodeComparator() {
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
-
-  /**
-   * Sets the used {@link TypePathComparator}.
-   *
-   * <p>The default value is {@link TypePathComparator#INSTANCE}.
-   *
-   * @param typePathComparator a {@link TypePathRepresentation}; never null.
-   * @return {@code this} {@link S}; never null.
-   */
-  public S useTypePathComparator(TypePathComparator typePathComparator) {
-    this.typePathComparator = Objects.requireNonNull(typePathComparator);
-
-    //noinspection unchecked
-    return (S) this;
-  }
 
   @Override
   protected int doCompare(A first, A second) {
@@ -62,7 +42,7 @@ public abstract class AbstractTypeAnnotationNodeComparator<S extends AbstractTyp
     }
 
     return Comparator.comparing((TypeAnnotationNode typeAnnotationNode) -> typeAnnotationNode.typeRef, INTEGER_COMPARATOR)
-                     .thenComparing((TypeAnnotationNode typeAnnotationNode) -> typeAnnotationNode.typePath, typePathComparator)
+                     .thenComparing((TypeAnnotationNode typeAnnotationNode) -> typeAnnotationNode.typePath, asmComparators.elementComparator(TypePath.class))
                      .compare(first, second);
   }
 

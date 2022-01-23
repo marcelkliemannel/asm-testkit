@@ -7,8 +7,8 @@ import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LineNumberNode;
 
+import java.util.Comparator;
 import java.util.Iterator;
-import java.util.Objects;
 
 import static dev.turingcomplete.asmtestkit.asmutils.InsnListUtils.numerateLabels;
 import static org.assertj.core.util.IterableUtil.sizeOf;
@@ -20,7 +20,7 @@ import static org.assertj.core.util.IterableUtil.sizeOf;
  * size and equal {@link AbstractInsnNode}s (using {@link InstructionComparator}
  * for comparison).
  */
-public class InsnListComparator implements WithLabelNamesAsmComparator<Iterable<? extends AbstractInsnNode>> {
+public class InsnListComparator extends AbstractWithLabelNamesAsmComparator<Iterable<? extends AbstractInsnNode>> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
@@ -36,8 +36,7 @@ public class InsnListComparator implements WithLabelNamesAsmComparator<Iterable<
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
-  private InstructionComparator instructionComparator = InstructionComparator.INSTANCE;
-  private boolean               ignoreLineNumbers     = false;
+  private boolean ignoreLineNumbers = false;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
@@ -56,20 +55,6 @@ public class InsnListComparator implements WithLabelNamesAsmComparator<Iterable<
   }
 
   /**
-   * Sets the used {@link InstructionComparator}.
-   *
-   * <p>The default value is {@link InstructionComparator#INSTANCE}.
-   *
-   * @param instructionComparator an {@link InstructionComparator}; never null.
-   * @return {@code this} {@link InsnListComparator}; never null.
-   */
-  public InsnListComparator useInstructionComparator(InstructionComparator instructionComparator) {
-    this.instructionComparator = Objects.requireNonNull(instructionComparator);
-
-    return this;
-  }
-
-  /**
    * Exclude {@link LineNumberNode}s (and its associated {@link LabelNode}s)
    * from the comparison.
    *
@@ -82,14 +67,9 @@ public class InsnListComparator implements WithLabelNamesAsmComparator<Iterable<
   }
 
   @Override
-  public int compare(Iterable<? extends AbstractInsnNode> first, Iterable<? extends AbstractInsnNode> second) {
-    return compare(first, second, LabelNameLookup.EMPTY);
-  }
-
-  @Override
-  public int compare(Iterable<? extends AbstractInsnNode> first,
-                     Iterable<? extends AbstractInsnNode> second,
-                     LabelNameLookup labelNameLookup) {
+  protected int doCompare(Iterable<? extends AbstractInsnNode> first,
+                          Iterable<? extends AbstractInsnNode> second,
+                          LabelNameLookup labelNameLookup) {
 
     // Clear line numbers
     if (ignoreLineNumbers) {
@@ -107,16 +87,31 @@ public class InsnListComparator implements WithLabelNamesAsmComparator<Iterable<
     LabelNameLookup _labelNameLookup = labelNameLookup.merge(createLabelNameLookup(first, second));
 
     // Compare each instruction
+    Comparator<AbstractInsnNode> instructionComparator = asmComparators.elementComparator(AbstractInsnNode.class);
     Iterator<? extends AbstractInsnNode> secondIterator = second.iterator();
     for (AbstractInsnNode firstInstruction : first) {
       AbstractInsnNode secondInstruction = secondIterator.next();
-      int instructionCompare = instructionComparator.compare(firstInstruction, secondInstruction, _labelNameLookup);
+      int instructionCompare = compareInstructions(instructionComparator, firstInstruction, secondInstruction, _labelNameLookup);
       if (instructionCompare != 0) {
         return instructionCompare;
       }
     }
 
     return 0;
+  }
+
+  private int compareInstructions(Comparator<AbstractInsnNode> instructionComparator,
+                                  AbstractInsnNode firstInstruction,
+                                  AbstractInsnNode secondInstruction,
+                                  LabelNameLookup _labelNameLookup) {
+
+    if (instructionComparator instanceof WithLabelNamesAsmComparator) {
+      return ((WithLabelNamesAsmComparator<AbstractInsnNode>) instructionComparator)
+              .compare(firstInstruction, secondInstruction, _labelNameLookup);
+    }
+    else {
+      return instructionComparator.compare(firstInstruction, secondInstruction);
+    }
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
