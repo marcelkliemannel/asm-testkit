@@ -339,7 +339,7 @@ class AsmAssertionsTest {
 
     // Negative
     ThrowableAssert.ThrowingCallable throwingCallable = () -> assertThatLabels(List.of(firstLabelNode, secondLabelNode))
-            .useLabelNames(Map.of(firstLabel, "L1", secondLabel, "L2", thirdLabel, "L3"))
+            .useLabelNameLookup(LabelNameLookup.create(Map.of(firstLabel, "L1", secondLabel, "L2", thirdLabel, "L3")))
             .containsExactlyInAnyOrderElementsOf(List.of(thirdLabelNode, fourthLabelNode));
     assertThatThrownBy(throwingCallable)
             .isInstanceOf(AssertionError.class)
@@ -416,7 +416,7 @@ class AsmAssertionsTest {
 
     // Negative
     ThrowableAssert.ThrowingCallable throwingCallable = () -> assertThatLocalVariableAnnotations(List.of(firstLocalVariableAnnotationNode, secondLocalVariableAnnotationNode))
-            .useLabelNames(extractLabelNames(methodNode))
+            .useLabelNameLookup(LabelNameLookup.create(extractLabelNames(methodNode)))
             .containsExactlyInAnyOrderElementsOf(List.of(secondLocalVariableAnnotationNode, thirdLocalVariableAnnotationNode));
     assertThatThrownBy(throwingCallable)
             .isInstanceOf(AssertionError.class)
@@ -461,7 +461,7 @@ class AsmAssertionsTest {
 
     // Negative
     ThrowableAssert.ThrowingCallable throwingCallable = () -> assertThatLocalVariables(List.of(firstVariable, secondVariable))
-            .useLabelNames(extractLabelNames(methodNode))
+            .useLabelNameLookup(LabelNameLookup.create(extractLabelNames(methodNode)))
             .containsExactlyInAnyOrderElementsOf(List.of(secondVariable, thirdVariable));
     assertThatThrownBy(throwingCallable)
             .isInstanceOf(AssertionError.class)
@@ -515,16 +515,16 @@ class AsmAssertionsTest {
     TryCatchBlockNode thirdATryCatchBlock = methodA.tryCatchBlocks.get(2);
     TryCatchBlockNode thirdBTryCatchBlock = methodB.tryCatchBlocks.get(2);
 
-    Map<Label, String> labelNames = extractLabelNames(methodA, methodB);
+    LabelNameLookup labelNameLookup = LabelNameLookup.create(extractLabelNames(methodA, methodB));
 
     // Positive
     assertThatTryCatchBlocks(List.of(firstATryCatchBlock, secondATryCatchBlock, thirdATryCatchBlock))
-            .useLabelNames(labelNames)
+            .useLabelNameLookup(labelNameLookup)
             .containsExactlyInAnyOrderElementsOf(List.of(firstBTryCatchBlock, secondBTryCatchBlock, thirdBTryCatchBlock));
 
     // Negative
     ThrowableAssert.ThrowingCallable throwingCallable = () -> assertThatTryCatchBlocks(List.of(firstATryCatchBlock, secondATryCatchBlock))
-            .useLabelNames(labelNames)
+            .useLabelNameLookup(labelNameLookup)
             .containsExactlyInAnyOrderElementsOf(List.of(secondBTryCatchBlock, thirdBTryCatchBlock));
     assertThatThrownBy(throwingCallable)
             .isInstanceOf(AssertionError.class)

@@ -8,19 +8,19 @@ import org.objectweb.asm.tree.LabelNode;
 /**
  * An AssertJ {@link Representation} for a {@link LabelNode}.
  *
- * The {@link #toStringOf(String)} implementation will output a {@code L}
+ * The {@link #toStringOf(Object)} implementation will output a {@code L}
  * followed by the hash code of the {@link LabelNode#getLabel()}. To map the
  * {@link Label} to a consistent name use
  * {@link #doToStringOf(LabelNode, LabelNameLookup)}.
  */
-public class LabelNodeRepresentation extends WithLabelNamesRepresentation<LabelNode> {
+public class LabelNodeRepresentation extends AbstractWithLabelNamesAsmRepresentation<LabelNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
   /**
    * A reusable {@link LabelNodeRepresentation} instance.
    */
-  public static final LabelNodeRepresentation INSTANCE = new LabelNodeRepresentation();
+  public static final LabelNodeRepresentation INSTANCE = create();
 
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //

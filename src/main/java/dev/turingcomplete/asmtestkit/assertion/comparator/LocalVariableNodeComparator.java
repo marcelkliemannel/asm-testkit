@@ -2,7 +2,7 @@ package dev.turingcomplete.asmtestkit.assertion.comparator;
 
 import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.ComparatorUtils;
-import dev.turingcomplete.asmtestkit.assertion.comparator._internal.WithLabelNamesIterableComparator;
+import dev.turingcomplete.asmtestkit.assertion.comparator._internal.WithLabelNamesIterableAsmComparator;
 import org.objectweb.asm.tree.LocalVariableNode;
 
 import java.util.Comparator;
@@ -25,7 +25,7 @@ public class LocalVariableNodeComparator extends AbstractWithLabelNamesAsmCompar
    * A reusable {@link Comparator} instance for an {@link Iterable} of
    * {@link LocalVariableNode}s.
    */
-  public static final Comparator<Iterable<? extends LocalVariableNode>> ITERABLE_INSTANCE = new WithLabelNamesIterableComparator<>(INSTANCE);
+  public static final Comparator<Iterable<? extends LocalVariableNode>> ITERABLE_INSTANCE = WithLabelNamesIterableAsmComparator.create(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 

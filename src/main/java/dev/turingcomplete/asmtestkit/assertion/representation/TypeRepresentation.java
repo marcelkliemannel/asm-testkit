@@ -9,13 +9,13 @@ import java.util.Objects;
 /**
  * An AssertJ {@link Representation} for a {@link Type}.
  */
-public class TypeRepresentation extends AsmRepresentation<Type> {
+public class TypeRepresentation extends AbstractSingleAsmRepresentation<Type> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
    * A reusable {@link TypeRepresentation} instance.
    */
-  public static final TypeRepresentation INSTANCE = new TypeRepresentation();
+  public static final TypeRepresentation INSTANCE = create();
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 

@@ -25,13 +25,13 @@ import org.objectweb.asm.util.TraceMethodVisitor;
  *
  * <p>Example simplified output: {@code 2 instructions}.
  */
-public class InsnListRepresentation extends AsmRepresentation<InsnList> {
+public class InsnListRepresentation extends AbstractSingleAsmRepresentation<InsnList> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
    * A reusable {@link InsnListRepresentation} instance.
    */
-  public static final InsnListRepresentation INSTANCE = new InsnListRepresentation();
+  public static final InsnListRepresentation INSTANCE = create();
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 

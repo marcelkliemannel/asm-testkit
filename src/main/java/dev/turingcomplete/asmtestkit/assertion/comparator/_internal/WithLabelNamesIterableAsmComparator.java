@@ -12,17 +12,26 @@ import java.util.stream.StreamSupport;
 
 import static dev.turingcomplete.asmtestkit.assertion.comparator._internal.ComparatorUtils.compareNullCheck;
 
-public class WithLabelNamesIterableComparator<T> extends IterableComparator<T> implements WithLabelNamesAsmComparator<Iterable<? extends T>> {
+public class WithLabelNamesIterableAsmComparator<T> extends IterableComparator<T> implements WithLabelNamesAsmComparator<Iterable<? extends T>> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  public WithLabelNamesIterableComparator(Comparator<T> elementsComparator) {
+  protected WithLabelNamesIterableAsmComparator(Comparator<T> elementsComparator) {
     super(elementsComparator);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
+  /**
+   * Creates a new {@link WithLabelNamesIterableAsmComparator} instance.
+   *
+   * @return a new {@link WithLabelNamesIterableAsmComparator}; never null;
+   */
+  public static <T> WithLabelNamesIterableAsmComparator<T> create(Comparator<T> elementsComparator) {
+    return new WithLabelNamesIterableAsmComparator<>(elementsComparator);
+  }
+  
   @Override
   public int compare(Iterable<? extends T> first, Iterable<? extends T> second, LabelNameLookup labelNameLookup) {
     Objects.requireNonNull(labelNameLookup);

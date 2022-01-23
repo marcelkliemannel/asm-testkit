@@ -1,35 +1,32 @@
-package dev.turingcomplete.asmtestkit.assertion.representation;
+package dev.turingcomplete.asmtestkit.asmutils;
 
-import org.junit.jupiter.api.Test;
+import org.objectweb.asm.Type;
 
 import java.util.Objects;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-class AsmRepresentationTest {
+public final class TypeUtils {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
+
+  private TypeUtils() {
+    throw new UnsupportedOperationException();
+  }
+
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
-  @Test
-  void testNullArgument() {
-    assertThat(new DummyAsmRepresentation().toStringOf(null))
-            .isEqualTo(null);
+  /**
+   * Creates a {@link Type} from the given internal name (e.g.,
+   * {@code java/lang/String}).
+   *
+   * @param internalName an internal name as {@link String}; never null.
+   * @return a {@link Type} representing the internal name; never null.
+   */
+  public static Type toType(String internalName) {
+    Objects.requireNonNull(internalName);
+    return Type.getType("L" + internalName + ";");
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
-
-  private static class DummyAsmRepresentation extends AsmRepresentation<Object> {
-
-    protected DummyAsmRepresentation() {
-      super(Object.class);
-    }
-
-    @Override
-    protected String doToStringOf(Object object) {
-      return Objects.toString(object);
-    }
-  }
 }

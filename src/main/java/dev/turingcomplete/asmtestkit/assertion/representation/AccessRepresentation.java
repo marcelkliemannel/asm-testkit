@@ -8,12 +8,19 @@ import org.assertj.core.presentation.StandardRepresentation;
 import java.util.Comparator;
 import java.util.Objects;
 
-import static dev.turingcomplete.asmtestkit.asmutils.AccessKind.*;
+import static dev.turingcomplete.asmtestkit.asmutils.AccessKind.CLASS;
+import static dev.turingcomplete.asmtestkit.asmutils.AccessKind.FIELD;
+import static dev.turingcomplete.asmtestkit.asmutils.AccessKind.METHOD;
+import static dev.turingcomplete.asmtestkit.asmutils.AccessKind.MODULE;
+import static dev.turingcomplete.asmtestkit.asmutils.AccessKind.MODULE_EXPORTS;
+import static dev.turingcomplete.asmtestkit.asmutils.AccessKind.MODULE_OPENS;
+import static dev.turingcomplete.asmtestkit.asmutils.AccessKind.MODULE_REQUIRES;
+import static dev.turingcomplete.asmtestkit.asmutils.AccessKind.PARAMETER;
 
 /**
  * An AssertJ {@link Representation} for access flags.
  *
- * Example output: {@code (513) public interface}.
+ * <p>Example output: {@code (513) public interface}.
  */
 public class AccessRepresentation extends StandardRepresentation {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -91,6 +98,7 @@ public class AccessRepresentation extends StandardRepresentation {
    *
    * @param accessKind an {@link AccessKind}; never null.
    * @return an {@link AccessRepresentation}; never null.
+   * @throws IllegalArgumentException if the given {@link AccessKind} is unknown.
    */
   public static AccessRepresentation instance(AccessKind accessKind) {
     switch (Objects.requireNonNull(accessKind)) {
@@ -111,7 +119,7 @@ public class AccessRepresentation extends StandardRepresentation {
       case MODULE_OPENS:
         return MODULE_OPENS_INSTANCE;
       default:
-        throw new IllegalStateException("Unknown " + AccessKind.class.getSimpleName() + ": " + accessKind + ". Please report this as a bug.");
+        throw new IllegalArgumentException("Unknown " + AccessKind.class.getSimpleName() + ": " + accessKind + ". Please report this as a bug.");
     }
   }
 

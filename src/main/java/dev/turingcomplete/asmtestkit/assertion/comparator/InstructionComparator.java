@@ -1,10 +1,10 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
+import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
 import dev.turingcomplete.asmtestkit.assertion.representation.InstructionRepresentation;
 import org.objectweb.asm.tree.AbstractInsnNode;
 
 import java.util.Comparator;
-import java.util.Objects;
 
 /**
  * A comparison function to order {@link AbstractInsnNode}s.
@@ -17,7 +17,7 @@ import java.util.Objects;
  * <p>For a {@link Comparator} for an {@link Iterable} of
  * {@link AbstractInsnNode}s use {@link InsnListComparator}.
  */
-public class InstructionComparator implements Comparator<AbstractInsnNode> {
+public class InstructionComparator extends AbstractWithLabelNamesAsmComparator<AbstractInsnNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
@@ -26,9 +26,6 @@ public class InstructionComparator implements Comparator<AbstractInsnNode> {
   public static final InstructionComparator INSTANCE = create();
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
-
-  private InstructionRepresentation instructionRepresentation = InstructionRepresentation.INSTANCE;
-
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected InstructionComparator() {
@@ -45,24 +42,10 @@ public class InstructionComparator implements Comparator<AbstractInsnNode> {
     return new InstructionComparator();
   }
 
-  /**
-   * Sets the used {@link InstructionRepresentation}.
-   *
-   * <p>The default value is {@link InstructionRepresentation#INSTANCE}.
-   *
-   * @param instructionRepresentation an {@link InstructionRepresentation};
-   *                                  never null.
-   * @return {@code this} {@link InstructionComparator}; never null.
-   */
-  public InstructionComparator useInstructionRepresentation(InstructionRepresentation instructionRepresentation) {
-    this.instructionRepresentation = Objects.requireNonNull(instructionRepresentation);
-
-    return this;
-  }
-
   @Override
-  public int compare(AbstractInsnNode first, AbstractInsnNode second) {
-    return instructionRepresentation.toStringOf(first).compareTo(instructionRepresentation.toStringOf(second));
+  protected int doCompare(AbstractInsnNode first, AbstractInsnNode second, LabelNameLookup labelNameLookup) {
+    return asmRepresentations.toStringOf(first, labelNameLookup)
+                             .compareTo(asmRepresentations.toStringOf(second, labelNameLookup));
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

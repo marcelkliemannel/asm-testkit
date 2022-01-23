@@ -3,10 +3,9 @@ package dev.turingcomplete.asmtestkit.assertion;
 import dev.turingcomplete.asmtestkit.assertion._internal.AsmWritableAssertionInfo;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.WithLabelNamesAsmComparatorAdapter;
 import org.assertj.core.api.AbstractIterableAssert;
-import org.objectweb.asm.Label;
 
 import java.util.Comparator;
-import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -48,11 +47,29 @@ public class AsmIterableAssert<S extends AsmIterableAssert<S, E, A>, E, A extend
     return (AsmWritableAssertionInfo) info;
   }
 
-  public S useLabelNames(Map<Label, String> labelNames) {
-    getWritableAssertionInfo().useLabelNames(labelNames);
+  /**
+   * Sets the given {@link LabelNameLookup} to look up known label names.
+   *
+   * @param labelNameLookup a {@link LabelNameLookup} to set; never null.
+   * @return {@code this} {@link S}; never null.
+   * @see #labelNameLookup()
+   */
+  public S useLabelNameLookup(LabelNameLookup labelNameLookup) {
+    Objects.requireNonNull(labelNameLookup);
+    getWritableAssertionInfo().useLabelNameLookup(labelNameLookup);
 
     //noinspection unchecked
     return (S) this;
+  }
+
+  /**
+   * Gets the current {@link LabelNameLookup} to look up known label names.
+   *
+   * @return the current {@link LabelNameLookup}; never null.
+   * @see #labelNameLookup()
+   */
+  public LabelNameLookup labelNameLookup() {
+    return getWritableAssertionInfo().labelNameLookup();
   }
 
   @Override
@@ -77,8 +94,8 @@ public class AsmIterableAssert<S extends AsmIterableAssert<S, E, A>, E, A extend
   }
 
   @Override
-  public S usingElementComparator(Comparator<? super E> elementComparator) {
-    return super.usingElementComparator(WithLabelNamesAsmComparatorAdapter.wrapIfNeeded(elementComparator, getWritableAssertionInfo().labelNameLookup()));
+  public S usingElementComparator(Comparator<? super E> customElementComparator) {
+    return super.usingElementComparator(WithLabelNamesAsmComparatorAdapter.wrapIfNeeded(customElementComparator, getWritableAssertionInfo().labelNameLookup()));
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

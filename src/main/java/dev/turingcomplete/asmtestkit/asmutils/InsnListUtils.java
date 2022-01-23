@@ -89,6 +89,27 @@ public final class InsnListUtils {
     return filteredInsnList;
   }
 
+  /**
+   * Converts the given {@link Iterable} of {@link AbstractInsnNode} into a
+   * {@link InsnList}.
+   *
+   * @param instructions an {@link Iterable} of {@link AbstractInsnNode}s;
+   *                     never null.
+   * @return a new {@link InsnList}; never null.
+   */
+  public static Map<Label, String> numerateLabels(Iterable<? extends AbstractInsnNode> instructions) {
+    Map<Label, String> result = new HashMap<>();
+
+    int i = 0;
+    for (AbstractInsnNode instruction : instructions) {
+      if (instruction instanceof LabelNode) {
+        result.put(((LabelNode) instruction).getLabel(), "L" + i);
+      }
+    }
+
+    return result;
+  }
+
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 }

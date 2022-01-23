@@ -61,7 +61,7 @@ public final class AsmAssertions {
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
-  // --- Access
+  // ---- Access ------------------------------------------------------------ //
 
   /**
    * Creates an {@link AccessAssert} for class accesses.

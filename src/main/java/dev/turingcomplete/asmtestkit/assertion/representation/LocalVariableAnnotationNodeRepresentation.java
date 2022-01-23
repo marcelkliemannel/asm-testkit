@@ -6,7 +6,6 @@ import org.objectweb.asm.tree.LocalVariableAnnotationNode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -23,12 +22,9 @@ public class LocalVariableAnnotationNodeRepresentation
   /**
    * A reusable {@link LocalVariableAnnotationNodeRepresentation} instance.
    */
-  public static final LocalVariableAnnotationNodeRepresentation INSTANCE = new LocalVariableAnnotationNodeRepresentation();
+  public static final LocalVariableAnnotationNodeRepresentation INSTANCE = create();
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
-
-  private LabelNodeRepresentation labelNodeRepresentation = LabelNodeRepresentation.INSTANCE;
-
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected LocalVariableAnnotationNodeRepresentation() {
@@ -44,22 +40,6 @@ public class LocalVariableAnnotationNodeRepresentation
    */
   public static LocalVariableAnnotationNodeRepresentation create() {
     return new LocalVariableAnnotationNodeRepresentation();
-  }
-
-  /**
-   * Sets the used {@link LabelNodeRepresentation}.
-   *
-   * <p>The default value is {@link LabelNodeRepresentation#INSTANCE}.
-   *
-   * @param labelNodeRepresentation a {@link LabelNodeRepresentation};
-   *                                never null.
-   * @return {@code this} {@link LocalVariableAnnotationNodeRepresentation};
-   * never null.
-   */
-  public LocalVariableAnnotationNodeRepresentation useLabelNodeRepresentation(LabelNodeRepresentation labelNodeRepresentation) {
-    this.labelNodeRepresentation = Objects.requireNonNull(labelNodeRepresentation);
-
-    return this;
   }
 
   @Override
@@ -81,9 +61,9 @@ public class LocalVariableAnnotationNodeRepresentation
 
     for (int i = 0; i < annotationNode.start.size(); i++) {
       String range = "#" + annotationNode.index.get(i) + " ";
-      range += labelNodeRepresentation.doToStringOf(annotationNode.start.get(i), labelNameLookup);
+      range += asmRepresentations.toStringOf(annotationNode.start.get(i), labelNameLookup);
       range += "-";
-      range += labelNodeRepresentation.doToStringOf(annotationNode.end.get(i), labelNameLookup);
+      range += asmRepresentations.toStringOf(annotationNode.end.get(i), labelNameLookup);
       ranges.add(range);
     }
 

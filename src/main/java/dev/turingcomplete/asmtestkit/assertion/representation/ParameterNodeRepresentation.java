@@ -4,8 +4,6 @@ import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.tree.ParameterNode;
 
-import java.util.Objects;
-
 /**
  * An AssertJ {@link Representation} for a {@link ParameterNode}.
  *
@@ -13,52 +11,35 @@ import java.util.Objects;
  *
  * <p>The simplified output just contains the parameter name.
  */
-public class ParameterNodeRepresentation extends AsmRepresentation<ParameterNode> {
+public class ParameterNodeRepresentation extends AbstractSingleAsmRepresentation<ParameterNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
    * A reusable {@link ParameterNodeRepresentation} instance.
    */
-  public static final ParameterNodeRepresentation INSTANCE = new ParameterNodeRepresentation();
+  public static final ParameterNodeRepresentation INSTANCE = create();
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
-
-  private AccessRepresentation accessRepresentation = AccessRepresentation.PARAMETER_INSTANCE;
-
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  public ParameterNodeRepresentation() {
+  protected ParameterNodeRepresentation() {
     super(ParameterNode.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   /**
-   * Sets the used {@link AccessRepresentation} for {@link AccessKind#PARAMETER}.
+   * Creates a new {@link ParameterNodeRepresentation} instance.
    *
-   * <p>The default value is {@link AccessRepresentation#PARAMETER_INSTANCE}.
-   *
-   * @param accessRepresentation a {@link AccessRepresentation};
-   *                             never null.
-   * @return {@code this} {@link ParameterNodeRepresentation}; never null.
-   * @throws IllegalArgumentException if the given {@code accessRepresentation}
-   *                                  is not for {@link AccessKind#PARAMETER}.
+   * @return a new {@link ParameterNodeRepresentation}; never null;
    */
-  public ParameterNodeRepresentation useAccessRepresentation(AccessRepresentation accessRepresentation) {
-    Objects.requireNonNull(accessRepresentation);
-
-    if (accessRepresentation.accessKind != AccessKind.PARAMETER) {
-      throw new IllegalArgumentException("Must have " + AccessKind.class.getSimpleName() + ": " + AccessKind.PARAMETER);
-    }
-
-    this.accessRepresentation = accessRepresentation;
-
-    return this;
+  public static ParameterNodeRepresentation create() {
+    return new ParameterNodeRepresentation();
   }
 
   @Override
   protected String doToStringOf(ParameterNode parameterNode) {
-    return accessRepresentation.toStringOf(parameterNode.access) + " " + parameterNode.name;
+    return asmRepresentations.toStringOf(parameterNode.access, AccessKind.PARAMETER) + " " + parameterNode.name;
   }
 
   @Override

@@ -3,11 +3,9 @@ package dev.turingcomplete.asmtestkit.assertion.comparator;
 import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.tree.MethodNode;
 
 import java.io.IOException;
-import java.util.Map;
 
 import static dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils.extractLabelNames;
 import static dev.turingcomplete.asmtestkit.assertion.comparator.TryCatchBlockNodeComparator.INSTANCE;
@@ -46,8 +44,9 @@ class TryCatchBlockNodeComparatorTest {
             .readClassNode("MyClass")
             .methods.get(1);
 
-    Map<Label, String> labelNames = extractLabelNames(firstMethod, secondMethod);
-    assertThat(INSTANCE.compare(firstMethod.tryCatchBlocks.get(0), secondMethod.tryCatchBlocks.get(0), LabelNameLookup.create(labelNames)))
+    assertThat(INSTANCE.compare(firstMethod.tryCatchBlocks.get(0),
+                                secondMethod.tryCatchBlocks.get(0),
+                                LabelNameLookup.create(extractLabelNames(firstMethod, secondMethod))))
             .isEqualTo(0);
   }
 
@@ -89,9 +88,9 @@ class TryCatchBlockNodeComparatorTest {
             .readClassNode("MyClass2")
             .methods.get(1);
 
-    Map<Label, String> labelNames = extractLabelNames(firstMethod, secondMethod);
-
-    assertThat(INSTANCE.compare(firstMethod.tryCatchBlocks.get(0), secondMethod.tryCatchBlocks.get(0), LabelNameLookup.create(labelNames)))
+    assertThat(INSTANCE.compare(firstMethod.tryCatchBlocks.get(0),
+                                secondMethod.tryCatchBlocks.get(0),
+                                LabelNameLookup.create(extractLabelNames(firstMethod, secondMethod))))
             .isNotEqualTo(0);
   }
 

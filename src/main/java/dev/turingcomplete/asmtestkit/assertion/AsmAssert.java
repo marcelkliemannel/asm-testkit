@@ -4,17 +4,17 @@ import dev.turingcomplete.asmtestkit.assertion._internal.AsmWritableAssertionInf
 import dev.turingcomplete.asmtestkit.assertion.comparator.WithLabelNamesAsmComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.WithLabelNamesAsmComparatorAdapter;
 import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
+import dev.turingcomplete.asmtestkit.assertion.representation.AsmRepresentations;
+import dev.turingcomplete.asmtestkit.assertion.representation.DefaultAsmRepresentations;
 import dev.turingcomplete.asmtestkit.assertion.representation._internal.CrumbDescription;
 import dev.turingcomplete.asmtestkit.assertion.representation._internal.SelfDescription;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.description.Description;
 import org.assertj.core.presentation.Representation;
-import org.objectweb.asm.Label;
 
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -35,8 +35,9 @@ public abstract class AsmAssert<S extends AbstractAssert<S, A>, A>
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
-  protected final String            name;
-  protected final Set<AssertOption> options = new HashSet<>();
+  protected final String             name;
+  protected final Set<AssertOption>  options            = new HashSet<>();
+  protected       AsmRepresentations asmRepresentations = DefaultAsmRepresentations.INSTANCE;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
@@ -70,6 +71,22 @@ public abstract class AsmAssert<S extends AbstractAssert<S, A>, A>
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
+  /**
+   * Sets the used {@link AsmRepresentations}.
+   *
+   * <p>The default value is {@link DefaultAsmRepresentations#INSTANCE}.
+   *
+   * @param asmRepresentations an {@link AsmRepresentations};
+   *                           never null.
+   * @return {@code this} {@link S}; never null.
+   */
+  public S useAsmRepresentationsCombiner(AsmRepresentations asmRepresentations) {
+    this.asmRepresentations = Objects.requireNonNull(asmRepresentations);
+
+    //noinspection unchecked
+    return (S) this;
+  }
+
   @Override
   public AsmWritableAssertionInfo getWritableAssertionInfo() {
     if (!(info instanceof AsmWritableAssertionInfo)) {
@@ -80,38 +97,24 @@ public abstract class AsmAssert<S extends AbstractAssert<S, A>, A>
   }
 
   /**
-   * Makes the given label names known.
+   * Sets the given {@link LabelNameLookup} to look up known label names.
    *
-   * @param labelNames a {@link Map} of {@link Label}s to their {@link String}
-   *                   names; never null.
+   * @param labelNameLookup a {@link LabelNameLookup} to set; never null.
    * @return {@code this} {@link S}; never null.
-   * @see #labelNames()
    * @see #labelNameLookup()
    */
-  public S useLabelNames(Map<Label, String> labelNames) {
-    Objects.requireNonNull(labelNames);
-    getWritableAssertionInfo().useLabelNames(labelNames);
+  public S useLabelNameLookup(LabelNameLookup labelNameLookup) {
+    getWritableAssertionInfo().useLabelNameLookup(Objects.requireNonNull(labelNameLookup));
 
     //noinspection unchecked
     return (S) this;
   }
 
   /**
-   * Gets a copy of all current known label names.
+   * Gets the current {@link LabelNameLookup} to look up known label names.
    *
-   * @return a {@link Map} of {@link Label}s to their {@link String} names;
-   * never null.
-   * @see #useLabelNames(Map)
-   */
-  public Map<Label, String> labelNames() {
-    return getWritableAssertionInfo().labelNames();
-  }
-
-  /**
-   * Gets a {@link LabelNameLookup} for the known label names.
-   *
-   * @return a {@link LabelNameLookup}; never null.
-   * @see #useLabelNames(Map)
+   * @return the current {@link LabelNameLookup}; never null.
+   * @see #labelNameLookup()
    */
   public LabelNameLookup labelNameLookup() {
     return getWritableAssertionInfo().labelNameLookup();

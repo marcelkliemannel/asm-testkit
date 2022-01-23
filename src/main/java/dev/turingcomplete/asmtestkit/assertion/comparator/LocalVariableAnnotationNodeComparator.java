@@ -3,7 +3,7 @@ package dev.turingcomplete.asmtestkit.assertion.comparator;
 import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.ComparatorUtils;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.IterableComparator;
-import dev.turingcomplete.asmtestkit.assertion.comparator._internal.WithLabelNamesIterableComparator;
+import dev.turingcomplete.asmtestkit.assertion.comparator._internal.WithLabelNamesIterableAsmComparator;
 import dev.turingcomplete.asmtestkit.assertion.representation.AbstractTypeAnnotationNodeRepresentation;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LocalVariableAnnotationNode;
@@ -35,7 +35,7 @@ public class LocalVariableAnnotationNodeComparator
    * A reusable {@link Comparator} instance for an {@link Iterable} of
    * {@link LocalVariableAnnotationNode}s.
    */
-  public static final Comparator<Iterable<? extends LocalVariableAnnotationNode>> ITERABLE_INSTANCE = new WithLabelNamesIterableComparator<>(INSTANCE);
+  public static final Comparator<Iterable<? extends LocalVariableAnnotationNode>> ITERABLE_INSTANCE = WithLabelNamesIterableAsmComparator.create(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 

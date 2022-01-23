@@ -1,8 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion.representation._internal;
 
-import dev.turingcomplete.asmtestkit.assertion.representation.AnnotationNodeRepresentation;
-import dev.turingcomplete.asmtestkit.assertion.representation.AttributeRepresentation;
-import dev.turingcomplete.asmtestkit.assertion.representation.TypeAnnotationNodeRepresentation;
+import dev.turingcomplete.asmtestkit.assertion.representation.AsmRepresentations;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
@@ -26,12 +24,12 @@ public final class RepresentationUtils {
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
-  public static List<String> createAttributesRepresentations(AttributeRepresentation attributeRepresentation, List<Attribute> attributes) {
+  public static List<String> createAttributesRepresentations(AsmRepresentations asmRepresentationsProvider, List<Attribute> attributes) {
     if (attributes == null) {
       return List.of();
     }
 
-    return attributes.stream().map(attributeRepresentation::toStringOf).collect(Collectors.toList());
+    return attributes.stream().map(asmRepresentationsProvider::toStringOf).collect(Collectors.toList());
   }
 
   public static String prependToFirstLine(String toPrepend, String text) {
@@ -62,7 +60,7 @@ public final class RepresentationUtils {
     }
   }
 
-  public static List<String> createAnnotationNodesRepresentations(AnnotationNodeRepresentation annotationNodeRepresentation,
+  public static List<String> createAnnotationNodesRepresentations(AsmRepresentations asmRepresentationsProvider,
                                                                   List<AnnotationNode> visibleAnnotations,
                                                                   List<AnnotationNode> invisibleAnnotations) {
 
@@ -70,20 +68,20 @@ public final class RepresentationUtils {
 
     if (visibleAnnotations != null) {
       for (AnnotationNode annotationNode : visibleAnnotations) {
-        representations.add(annotationNodeRepresentation.toStringOf(annotationNode));
+        representations.add(asmRepresentationsProvider.toStringOf(annotationNode));
       }
     }
 
     if (invisibleAnnotations != null) {
       for (AnnotationNode annotationNode : invisibleAnnotations) {
-        representations.add(annotationNodeRepresentation.toStringOf(annotationNode) + INVISIBLE_POSTFIX);
+        representations.add(asmRepresentationsProvider.toStringOf(annotationNode) + INVISIBLE_POSTFIX);
       }
     }
 
     return representations;
   }
 
-  public static List<String> createTypeAnnotationNodesRepresentations(TypeAnnotationNodeRepresentation typeAnnotationNodeRepresentation,
+  public static List<String> createTypeAnnotationNodesRepresentations(AsmRepresentations asmRepresentationsProvider,
                                                                       List<TypeAnnotationNode> typeVisibleAnnotations,
                                                                       List<TypeAnnotationNode> typeInvisibleAnnotations) {
 
@@ -91,13 +89,13 @@ public final class RepresentationUtils {
 
     if (typeVisibleAnnotations != null) {
       for (AnnotationNode annotationNode : typeVisibleAnnotations) {
-        representations.add(typeAnnotationNodeRepresentation.toStringOf(annotationNode));
+        representations.add(asmRepresentationsProvider.toStringOf(annotationNode));
       }
     }
 
     if (typeInvisibleAnnotations != null) {
       for (AnnotationNode annotationNode : typeInvisibleAnnotations) {
-        representations.add(typeAnnotationNodeRepresentation.toStringOf(annotationNode) + INVISIBLE_POSTFIX);
+        representations.add(asmRepresentationsProvider.toStringOf(annotationNode) + INVISIBLE_POSTFIX);
       }
     }
 

@@ -8,7 +8,7 @@ import org.objectweb.asm.tree.TypeAnnotationNode;
  *
  * <p>Example output: {@code @TypeParameterAnnotation // reference: class_extends=-1; path: null}.
  *
- * <p>The simplified output omits any values, reference and path.
+ * <p>The simplified output omits any values, reference, and path.
  */
 public class TypeAnnotationNodeRepresentation
         extends AbstractTypeAnnotationNodeRepresentation<TypeAnnotationNodeRepresentation, TypeAnnotationNode> {
@@ -18,7 +18,7 @@ public class TypeAnnotationNodeRepresentation
   /**
    * A reusable {@link TypeAnnotationNodeRepresentation} instance.
    */
-  public static final TypeAnnotationNodeRepresentation INSTANCE = new TypeAnnotationNodeRepresentation();
+  public static final TypeAnnotationNodeRepresentation INSTANCE = create();
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //

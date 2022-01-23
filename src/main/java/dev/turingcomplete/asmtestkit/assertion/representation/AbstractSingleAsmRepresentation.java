@@ -1,34 +1,63 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
-import org.assertj.core.presentation.Representation;
 import org.assertj.core.presentation.StandardRepresentation;
 
 import java.util.Objects;
 
 /**
- * A base class for an AssertJ {@link Representation} for ASM objects.
+ * A skeletal implementation of {@link SingleAsmRepresentation}, which can be
+ * used as a base class to create a representation of a specific ASM {@link T}
+ * object.
+ *
+ * @param <T> the type of the ASM object that gets represented.
  */
-public abstract class AsmRepresentation<T> extends StandardRepresentation {
+public abstract class AbstractSingleAsmRepresentation<T> extends StandardRepresentation implements SingleAsmRepresentation {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
+
+  protected AsmRepresentations asmRepresentations = DefaultAsmRepresentations.INSTANCE;
 
   private final Class<T> objectClass;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  protected AsmRepresentation(Class<T> objectClass) {
+  protected AbstractSingleAsmRepresentation(Class<T> objectClass) {
     this.objectClass = Objects.requireNonNull(objectClass);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   /**
-   * Gets the {@link Class} of {@link T}.
+   * Sets the used {@link AsmRepresentations}.
    *
-   * @return a {@link Class}; never null.
+   * <p>The default value is {@link DefaultAsmRepresentations#INSTANCE}.
+   *
+   * @param asmRepresentations an {@link AsmRepresentations};
+   *                                   never null.
+   * @return {@code this} {@link AbstractSingleAsmRepresentation}; never null.
    */
+  public AbstractSingleAsmRepresentation<T> useAsmRepresentationsCombiner(AsmRepresentations asmRepresentations) {
+    this.asmRepresentations = Objects.requireNonNull(asmRepresentations);
+
+    return this;
+  }
+
+  @Override
   public final Class<T> getObjectClass() {
     return objectClass;
+  }
+
+  @Override
+  public final String toStringOf(Object object) {
+    return super.toStringOf(object);
+  }
+
+  protected final String fallbackToStringOf(Object object) {
+    if (objectClass.equals(object) || objectClass.isAssignableFrom(objectClass)) {
+      return doToStringOf(objectClass.cast(object));
+    }
+
+    return super.fallbackToStringOf(object);
   }
 
   /**
@@ -43,25 +72,7 @@ public abstract class AsmRepresentation<T> extends StandardRepresentation {
    */
   protected abstract String doToStringOf(T object);
 
-  /**
-   * Creates a simplified {@link String} representation of the given
-   * {@code object}.
-   *
-   * <p>Subtypes should override {@link #doToSimplifiedStringOf(Object)}.
-   * Otherwise, the same value as {@link #doToStringOf(Object)} will be
-   * returned.
-   *
-   * <p>A simplified representation should have a limited length and should
-   * not contain line breaks. It should reflect the essence of an object,
-   * without meta information.
-   *
-   * <p>In case the representation is undefined, the implementation should
-   * return null.
-   *
-   * @param object the object of type {@link T} to create a simple representation
-   *               of; may be null.
-   * @return the {@link String} representation; may be null.
-   */
+  @Override
   public final String toSimplifiedStringOf(Object object) {
     return object != null && (objectClass.equals(object) || objectClass.isAssignableFrom(objectClass))
             ? doToSimplifiedStringOf(objectClass.cast(object))
@@ -88,19 +99,6 @@ public abstract class AsmRepresentation<T> extends StandardRepresentation {
    */
   protected String doToSimplifiedStringOf(T object) {
     return doToStringOf(object);
-  }
-
-  @Override
-  protected final String fallbackToStringOf(Object object) {
-    if (objectClass.isInstance(object)) {
-      return doToStringOf(objectClass.cast(object));
-    }
-
-    return super.fallbackToStringOf(object);
-  }
-
-  protected boolean isApplicable(Class<?> objectClass) {
-    return this.objectClass.equals(objectClass) || this.objectClass.isAssignableFrom(objectClass);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

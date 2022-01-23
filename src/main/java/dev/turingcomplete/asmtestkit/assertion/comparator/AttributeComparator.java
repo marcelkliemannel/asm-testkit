@@ -5,7 +5,6 @@ import dev.turingcomplete.asmtestkit.assertion.representation.AttributeRepresent
 import org.objectweb.asm.Attribute;
 
 import java.util.Comparator;
-import java.util.Objects;
 
 /**
  * A comparison function to order {@link Attribute}s.
@@ -29,9 +28,6 @@ public class AttributeComparator extends AsmComparator<Attribute> {
   public static final Comparator<Iterable<? extends Attribute>> ITERABLE_INSTANCE = new IterableComparator<>(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
-
-  private AttributeRepresentation attributeRepresentation = AttributeRepresentation.INSTANCE;
-
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected AttributeComparator() {
@@ -48,23 +44,9 @@ public class AttributeComparator extends AsmComparator<Attribute> {
     return new AttributeComparator();
   }
 
-  /**
-   * Sets the used {@link AttributeRepresentation}.
-   *
-   * <p>The default value is {@link AttributeRepresentation#INSTANCE}.
-   *
-   * @param attributeRepresentation an {@link AttributeRepresentation}; never null.
-   * @return {@code this} {@link AttributeComparator}; never null.
-   */
-  public AttributeComparator useAttributeRepresentation(AttributeRepresentation attributeRepresentation) {
-    this.attributeRepresentation = Objects.requireNonNull(attributeRepresentation);
-
-    return this;
-  }
-
   @Override
   public int doCompare(Attribute first, Attribute second) {
-    return attributeRepresentation.toStringOf(first).compareTo(attributeRepresentation.toStringOf(second));
+    return asmRepresentations.toStringOf(first).compareTo(asmRepresentations.toStringOf(second));
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

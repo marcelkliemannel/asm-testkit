@@ -1,5 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
+import dev.turingcomplete.asmtestkit.assertion.representation.AsmRepresentations;
+import dev.turingcomplete.asmtestkit.assertion.representation.DefaultAsmRepresentations;
 import org.assertj.core.internal.DescribableComparator;
 
 import java.util.Comparator;
@@ -9,6 +11,9 @@ import static dev.turingcomplete.asmtestkit.assertion.comparator._internal.Compa
 public abstract class AsmComparator<T> extends DescribableComparator<T> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
+
+  protected AsmRepresentations asmRepresentations = DefaultAsmRepresentations.INSTANCE;
+
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected AsmComparator() {

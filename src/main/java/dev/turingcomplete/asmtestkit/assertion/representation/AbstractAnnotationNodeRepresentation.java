@@ -8,8 +8,6 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.util.TraceAnnotationVisitor;
 
-import java.util.Objects;
-
 /**
  * Base class for an AssertJ {@link Representation} for an {@link AnnotationNode}
  * or its subtypes.
@@ -17,13 +15,14 @@ import java.util.Objects;
  * @param <S> the 'self' type of {@code this} {@link AsmAssert}.
  * @param <A> an {@link AnnotationNode} or a subtype of the actual object.
  */
-public abstract class AbstractAnnotationNodeRepresentation<S, A extends AnnotationNode> extends WithLabelNamesRepresentation<A> {
+public abstract class AbstractAnnotationNodeRepresentation<S, A extends AnnotationNode>
+        extends AbstractWithLabelNamesAsmRepresentation<A> {
+
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
-  private TypeRepresentation typeRepresentation = TypeRepresentation.INSTANCE;
-  private boolean            hideValues         = false;
+  private boolean hideValues = false;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
@@ -32,21 +31,6 @@ public abstract class AbstractAnnotationNodeRepresentation<S, A extends Annotati
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
-
-  /**
-   * Sets the used {@link TypeRepresentation}.
-   *
-   * <p>The default value is {@link TypeRepresentation#INSTANCE}.
-   *
-   * @param typeRepresentation a {@link TypeRepresentation}; never null.
-   * @return {@code this} {@link S}; never null.
-   */
-  public S useTypePathRepresentation(TypeRepresentation typeRepresentation) {
-    this.typeRepresentation = Objects.requireNonNull(typeRepresentation);
-
-    //noinspection unchecked
-    return (S) this;
-  }
 
   /**
    * Hides the values of the annotation in the representation.
@@ -72,7 +56,7 @@ public abstract class AbstractAnnotationNodeRepresentation<S, A extends Annotati
    */
   @Override
   public String doToSimplifiedStringOf(A annotationNode) {
-    String className = annotationNode.desc != null ? typeRepresentation.doToStringOf(Type.getType(annotationNode.desc)) : null;
+    String className = annotationNode.desc != null ? asmRepresentations.toStringOf(Type.getType(annotationNode.desc)) : null;
     return "@" + className;
   }
 
@@ -91,7 +75,7 @@ public abstract class AbstractAnnotationNodeRepresentation<S, A extends Annotati
   }
 
   @Override
-  public String doToStringOf(A object, LabelNameLookup labelNameLookup) {
+  protected String doToStringOf(A object, LabelNameLookup labelNameLookup) {
     return doToStringOf(object);
   }
 

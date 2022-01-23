@@ -2,7 +2,7 @@ package dev.turingcomplete.asmtestkit.assertion.comparator;
 
 import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.ComparatorUtils;
-import dev.turingcomplete.asmtestkit.assertion.comparator._internal.WithLabelNamesIterableComparator;
+import dev.turingcomplete.asmtestkit.assertion.comparator._internal.WithLabelNamesIterableAsmComparator;
 import org.objectweb.asm.tree.LabelNode;
 
 import java.util.Comparator;
@@ -26,7 +26,7 @@ public class LabelNodeComparator extends AbstractWithLabelNamesAsmComparator<Lab
    * A reusable {@link Comparator} instance for an {@link Iterable} of
    * {@link LabelNode}s.
    */
-  public static final Comparator<Iterable<? extends LabelNode>> ITERABLE_INSTANCE = new WithLabelNamesIterableComparator<>(INSTANCE);
+  public static final Comparator<Iterable<? extends LabelNode>> ITERABLE_INSTANCE = WithLabelNamesIterableAsmComparator.create(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //

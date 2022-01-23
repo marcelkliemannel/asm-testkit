@@ -5,7 +5,6 @@ import dev.turingcomplete.asmtestkit.assertion.representation.TypeRepresentation
 import org.objectweb.asm.Type;
 
 import java.util.Comparator;
-import java.util.Objects;
 
 /**
  * A comparison function to order {@link Type}s.
@@ -29,9 +28,6 @@ public class TypeComparator extends AsmComparator<Type> {
   public static final Comparator<Iterable<? extends Type>> ITERABLE_INSTANCE = new IterableComparator<>(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
-
-  private TypeRepresentation typeRepresentation = TypeRepresentation.INSTANCE;
-
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected TypeComparator() {
@@ -48,23 +44,9 @@ public class TypeComparator extends AsmComparator<Type> {
     return new TypeComparator();
   }
 
-  /**
-   * Sets the used {@link TypeRepresentation}.
-   *
-   * <p>The default value is {@link TypeRepresentation#INSTANCE}.
-   *
-   * @param typeRepresentation a {@link TypeRepresentation}; never null.
-   * @return {@code this} {@link TypeComparator}; never null.
-   */
-  public TypeComparator useTypeRepresentation(TypeRepresentation typeRepresentation) {
-    this.typeRepresentation = Objects.requireNonNull(typeRepresentation);
-
-    return this;
-  }
-
   @Override
   protected int doCompare(Type first, Type second) {
-    return typeRepresentation.toStringOf(first).compareTo(typeRepresentation.toStringOf(second));
+    return asmRepresentations.toStringOf(first).compareTo(asmRepresentations.toStringOf(second));
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

@@ -6,13 +6,13 @@ import org.objectweb.asm.TypePath;
 /**
  * An AssertJ {@link Representation} for a {@link TypePath}.
  */
-public class TypePathRepresentation extends AsmRepresentation<TypePath> {
+public class TypePathRepresentation extends AbstractSingleAsmRepresentation<TypePath> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
    * A reusable {@link TypePathRepresentation} instance.
    */
-  public static final TypePathRepresentation INSTANCE = new TypePathRepresentation();
+  public static final TypePathRepresentation INSTANCE = create();
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //

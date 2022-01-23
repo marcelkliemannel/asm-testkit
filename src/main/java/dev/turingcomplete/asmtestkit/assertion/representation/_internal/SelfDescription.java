@@ -2,8 +2,8 @@ package dev.turingcomplete.asmtestkit.assertion.representation._internal;
 
 import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
 import dev.turingcomplete.asmtestkit.assertion._internal.AsmWritableAssertionInfo;
-import dev.turingcomplete.asmtestkit.assertion.representation.AsmRepresentation;
-import dev.turingcomplete.asmtestkit.assertion.representation.WithLabelNamesRepresentation;
+import dev.turingcomplete.asmtestkit.assertion.representation.AbstractSingleAsmRepresentation;
+import dev.turingcomplete.asmtestkit.assertion.representation.AbstractWithLabelNamesAsmRepresentation;
 import org.assertj.core.api.AssertionInfo;
 import org.assertj.core.description.Description;
 import org.assertj.core.presentation.Representation;
@@ -29,12 +29,12 @@ public final class SelfDescription extends Description {
   public String value() {
     Representation representation = assertionInfo.representation();
     String actualRepresentation;
-    if (assertionInfo instanceof AsmWritableAssertionInfo && representation instanceof WithLabelNamesRepresentation) {
+    if (assertionInfo instanceof AsmWritableAssertionInfo && representation instanceof AbstractWithLabelNamesAsmRepresentation) {
       LabelNameLookup labelNameLookup = ((AsmWritableAssertionInfo) assertionInfo).labelNameLookup();
-      actualRepresentation = ((WithLabelNamesRepresentation<?>) representation).toSimplifiedStringOf(actual, labelNameLookup);
+      actualRepresentation = ((AbstractWithLabelNamesAsmRepresentation<?>) representation).toSimplifiedStringOf(actual, labelNameLookup);
     }
-    else if (representation instanceof AsmRepresentation) {
-      actualRepresentation = ((AsmRepresentation<?>) representation).toSimplifiedStringOf(actual);
+    else if (representation instanceof AbstractSingleAsmRepresentation) {
+      actualRepresentation = ((AbstractSingleAsmRepresentation<?>) representation).toSimplifiedStringOf(actual);
     }
     else {
       actualRepresentation = representation.toStringOf(actual);

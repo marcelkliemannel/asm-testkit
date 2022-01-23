@@ -18,7 +18,7 @@ public class AnnotationNodeRepresentation
   /**
    * A reusable {@link AnnotationNodeRepresentation} instance.
    */
-  public static final AnnotationNodeRepresentation INSTANCE = new AnnotationNodeRepresentation();
+  public static final AnnotationNodeRepresentation INSTANCE = create();
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //

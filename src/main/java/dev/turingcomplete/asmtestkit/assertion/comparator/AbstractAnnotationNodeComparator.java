@@ -1,7 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
 import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
-import dev.turingcomplete.asmtestkit.assertion.representation.AnnotationNodeRepresentation;
 import org.objectweb.asm.tree.AnnotationNode;
 
 import java.util.Comparator;
@@ -19,31 +18,12 @@ public abstract class AbstractAnnotationNodeComparator<S extends AbstractAnnotat
 
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
-
-  private AnnotationNodeRepresentation annotationNodeRepresentation = AnnotationNodeRepresentation.INSTANCE;
-
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected AbstractAnnotationNodeComparator() {
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
-
-  /**
-   * Sets the used {@link AnnotationNodeRepresentation}.
-   *
-   * <p>The default value is {@link AnnotationNodeRepresentation#INSTANCE}.
-   *
-   * @param annotationNodeRepresentation an {@link AnnotationNodeRepresentation};
-   *                                     never null.
-   * @return {@code this} {@link S}; never null.
-   */
-  protected S useAnnotationNodeRepresentation(AnnotationNodeRepresentation annotationNodeRepresentation) {
-    this.annotationNodeRepresentation = Objects.requireNonNull(annotationNodeRepresentation);
-
-    //noinspection unchecked
-    return (S) this;
-  }
 
   @Override
   protected int doCompare(A first, A second) {
@@ -63,8 +43,7 @@ public abstract class AbstractAnnotationNodeComparator<S extends AbstractAnnotat
       }
     }
 
-    return annotationNodeRepresentation.toStringOf(first)
-                                       .compareTo(annotationNodeRepresentation.toStringOf(second));
+    return asmRepresentations.toStringOf(first).compareTo(asmRepresentations.toStringOf(second));
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

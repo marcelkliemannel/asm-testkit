@@ -19,13 +19,13 @@ import static dev.turingcomplete.asmtestkit.assertion.representation._internal.R
  *
  * <p>The simplified output will not have the appended opcode information.
  */
-public class InstructionRepresentation extends AsmRepresentation<AbstractInsnNode> {
+public class InstructionRepresentation extends AbstractSingleAsmRepresentation<AbstractInsnNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
    * A reusable {@link InstructionRepresentation} instance.
    */
-  public static final InstructionRepresentation INSTANCE = new InstructionRepresentation();
+  public static final InstructionRepresentation INSTANCE = create();
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //

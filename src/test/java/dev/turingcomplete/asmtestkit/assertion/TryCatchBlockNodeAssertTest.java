@@ -4,7 +4,6 @@ import dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAn
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.TypePath;
 import org.objectweb.asm.tree.LabelNode;
@@ -25,11 +24,11 @@ class TryCatchBlockNodeAssertTest {
     var firstTryCatchBlock = new TryCatchBlockNode(new LabelNode(), null, null, null);
     var secondTryCatchBlock = new TryCatchBlockNode(new LabelNode(), null, null, null);
 
-    Map<Label, String> labelNames = Map.of(firstTryCatchBlock.start.getLabel(), "L1",
-                                           secondTryCatchBlock.start.getLabel(), "L2");
+    LabelNameLookup labelNameLookup = LabelNameLookup.create(Map.of(firstTryCatchBlock.start.getLabel(), "L1",
+                                                                    secondTryCatchBlock.start.getLabel(), "L2"));
 
     Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(firstTryCatchBlock)
-                                                     .useLabelNames(labelNames)
+                                                     .useLabelNameLookup(labelNameLookup)
                                                      .isEqualTo(secondTryCatchBlock))
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Try Catch Block: finally // range: L1-null; handled in: null > Has equal start] \n" +
@@ -43,11 +42,11 @@ class TryCatchBlockNodeAssertTest {
     var firstTryCatchBlock = new TryCatchBlockNode(null, new LabelNode(), null, null);
     var secondTryCatchBlock = new TryCatchBlockNode(null, new LabelNode(), null, null);
 
-    Map<Label, String> labelNames = Map.of(firstTryCatchBlock.end.getLabel(), "L1",
-                                           secondTryCatchBlock.end.getLabel(), "L2");
+    LabelNameLookup labelNameLookup = LabelNameLookup.create(Map.of(firstTryCatchBlock.end.getLabel(), "L1",
+                                                                    secondTryCatchBlock.end.getLabel(), "L2"));
 
     Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(firstTryCatchBlock)
-                                                     .useLabelNames(labelNames)
+                                                     .useLabelNameLookup(labelNameLookup)
                                                      .isEqualTo(secondTryCatchBlock))
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Try Catch Block: finally // range: null-L1; handled in: null > Has equal end] \n" +
@@ -61,11 +60,11 @@ class TryCatchBlockNodeAssertTest {
     var firstTryCatchBlock = new TryCatchBlockNode(null, null, new LabelNode(), null);
     var secondTryCatchBlock = new TryCatchBlockNode(null, null, new LabelNode(), null);
 
-    Map<Label, String> labelNames = Map.of(firstTryCatchBlock.handler.getLabel(), "L1",
-                                           secondTryCatchBlock.handler.getLabel(), "L2");
+    LabelNameLookup labelNameLookup = LabelNameLookup.create(Map.of(firstTryCatchBlock.handler.getLabel(), "L1",
+                                                                    secondTryCatchBlock.handler.getLabel(), "L2"));
 
     Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(firstTryCatchBlock)
-                                                     .useLabelNames(labelNames)
+                                                     .useLabelNameLookup(labelNameLookup)
                                                      .isEqualTo(secondTryCatchBlock))
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Try Catch Block: finally // range: null-null; handled in: L1 > Has equal handler] \n" +
@@ -83,8 +82,9 @@ class TryCatchBlockNodeAssertTest {
                                                      .isEqualTo(secondTryCatchBlock))
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Try Catch Block: java.io.IOException // range: null-null; handled in: null > Has equal type] \n" +
-                          "expected: \"java.lang.IllegalArgumentException\"\n" +
-                          " but was: \"java.io.IOException\"");
+                          "expected: java.lang.IllegalArgumentException\n" +
+                          " but was: java.io.IOException\n" +
+                          "when comparing values using TypeComparator");
   }
 
   @Test

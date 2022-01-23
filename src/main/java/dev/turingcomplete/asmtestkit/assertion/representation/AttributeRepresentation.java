@@ -9,13 +9,13 @@ import org.objectweb.asm.Attribute;
  *
  * <p>Example output: {@code NameContent}.
  */
-public class AttributeRepresentation extends AsmRepresentation<Attribute> {
+public class AttributeRepresentation extends AbstractSingleAsmRepresentation<Attribute> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
    * A reusable {@link AttributeRepresentation} instance.
    */
-  public static final AttributeRepresentation INSTANCE = new AttributeRepresentation();
+  public static final AttributeRepresentation INSTANCE = create();
 
   private static final String ASM_TEXTIFIER_PREFIX = "ATTRIBUTE ";
 

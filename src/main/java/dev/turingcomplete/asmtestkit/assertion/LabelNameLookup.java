@@ -29,6 +29,16 @@ public interface LabelNameLookup {
   }
 
   /**
+   * Merges the given {@link LabelNameLookup} with this one.
+   *
+   * @param labelNameLookup a {@link LabelNameLookup} to merge; never null.
+   * @return the resulting (possible new) {@link LabelNameLookup}; never null.
+   */
+  default LabelNameLookup merge(LabelNameLookup labelNameLookup) {
+    return label -> find(label).or(() -> labelNameLookup.find(label));
+  }
+
+  /**
    * Looks up a label name for the given {@link Label}.
    *
    * @param label a {@link Label}; never null.

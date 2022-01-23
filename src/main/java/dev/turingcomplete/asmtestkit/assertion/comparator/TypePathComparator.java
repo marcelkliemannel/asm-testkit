@@ -5,7 +5,6 @@ import dev.turingcomplete.asmtestkit.assertion.representation.TypePathRepresenta
 import org.objectweb.asm.TypePath;
 
 import java.util.Comparator;
-import java.util.Objects;
 
 /**
  * A comparison function to order {@link TypePath}s.
@@ -29,9 +28,6 @@ public class TypePathComparator extends AsmComparator<TypePath> {
   public static final Comparator<Iterable<? extends TypePath>> ITERABLE_INSTANCE = new IterableComparator<>(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
-
-  private TypePathRepresentation typePathRepresentation = TypePathRepresentation.INSTANCE;
-
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected TypePathComparator() {
@@ -48,23 +44,9 @@ public class TypePathComparator extends AsmComparator<TypePath> {
     return new TypePathComparator();
   }
 
-  /**
-   * Sets the used {@link TypePathRepresentation}.
-   *
-   * <p>The default value is {@link TypePathRepresentation#INSTANCE}.
-   *
-   * @param typePathRepresentation a {@link TypePathRepresentation}; never null.
-   * @return {@code this} {@link TypePathComparator}; never null.
-   */
-  public TypePathComparator useTypePathRepresentation(TypePathRepresentation typePathRepresentation) {
-    this.typePathRepresentation = Objects.requireNonNull(typePathRepresentation);
-
-    return this;
-  }
-
   @Override
   protected int doCompare(TypePath first, TypePath second) {
-    return typePathRepresentation.toStringOf(first).compareTo(typePathRepresentation.toStringOf(second));
+    return asmRepresentations.toStringOf(first).compareTo(asmRepresentations.toStringOf(second));
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
