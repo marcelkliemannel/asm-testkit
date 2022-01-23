@@ -19,7 +19,7 @@ import static dev.turingcomplete.asmtestkit.assertion.representation._internal.R
  *
  * <p>The simplified output will not have the appended opcode information.
  */
-public class InstructionRepresentation extends AbstractSingleAsmRepresentation<AbstractInsnNode> {
+public class InstructionRepresentation extends AbstractAsmRepresentation<AbstractInsnNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**

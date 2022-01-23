@@ -10,7 +10,7 @@ import static org.objectweb.asm.TypeReference.*;
  *
  * <p>Example output: {@code class_type_parameter=1}
  */
-public class TypeReferenceRepresentation extends AbstractSingleAsmRepresentation<TypeReference> {
+public class TypeReferenceRepresentation extends AbstractAsmRepresentation<TypeReference> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**

@@ -5,13 +5,13 @@ import org.assertj.core.presentation.StandardRepresentation;
 import java.util.Objects;
 
 /**
- * A skeletal implementation of {@link SingleAsmRepresentation}, which can be
+ * A skeletal implementation of {@link AsmRepresentation}, which can be
  * used as a base class to create a representation of a specific ASM {@link T}
  * object.
  *
  * @param <T> the type of the ASM object that gets represented.
  */
-public abstract class AbstractSingleAsmRepresentation<T> extends StandardRepresentation implements SingleAsmRepresentation {
+public abstract class AbstractAsmRepresentation<T> extends StandardRepresentation implements AsmRepresentation {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
@@ -21,7 +21,7 @@ public abstract class AbstractSingleAsmRepresentation<T> extends StandardReprese
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  protected AbstractSingleAsmRepresentation(Class<T> objectClass) {
+  protected AbstractAsmRepresentation(Class<T> objectClass) {
     this.objectClass = Objects.requireNonNull(objectClass);
   }
 
@@ -34,9 +34,9 @@ public abstract class AbstractSingleAsmRepresentation<T> extends StandardReprese
    *
    * @param asmRepresentations an {@link AsmRepresentations};
    *                                   never null.
-   * @return {@code this} {@link AbstractSingleAsmRepresentation}; never null.
+   * @return {@code this} {@link AbstractAsmRepresentation}; never null.
    */
-  public AbstractSingleAsmRepresentation<T> useAsmRepresentationsCombiner(AsmRepresentations asmRepresentations) {
+  public AbstractAsmRepresentation<T> useAsmRepresentationsCombiner(AsmRepresentations asmRepresentations) {
     this.asmRepresentations = Objects.requireNonNull(asmRepresentations);
 
     return this;

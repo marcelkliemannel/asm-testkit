@@ -25,7 +25,7 @@ import org.objectweb.asm.util.TraceMethodVisitor;
  *
  * <p>Example simplified output: {@code 2 instructions}.
  */
-public class InsnListRepresentation extends AbstractSingleAsmRepresentation<InsnList> {
+public class InsnListRepresentation extends AbstractAsmRepresentation<InsnList> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**

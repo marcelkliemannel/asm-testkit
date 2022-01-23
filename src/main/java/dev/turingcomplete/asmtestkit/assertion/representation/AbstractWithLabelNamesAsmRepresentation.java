@@ -13,7 +13,7 @@ import java.util.Objects;
  * @param <T> the type of the ASM object that gets represented.
  */
 public abstract class AbstractWithLabelNamesAsmRepresentation<T>
-        extends AbstractSingleAsmRepresentation<T> implements WithLabelNamesAsmRepresentation {
+        extends AbstractAsmRepresentation<T> implements WithLabelNamesAsmRepresentation {
 
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //

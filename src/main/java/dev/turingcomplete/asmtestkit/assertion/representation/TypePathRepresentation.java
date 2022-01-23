@@ -6,7 +6,7 @@ import org.objectweb.asm.TypePath;
 /**
  * An AssertJ {@link Representation} for a {@link TypePath}.
  */
-public class TypePathRepresentation extends AbstractSingleAsmRepresentation<TypePath> {
+public class TypePathRepresentation extends AbstractAsmRepresentation<TypePath> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**

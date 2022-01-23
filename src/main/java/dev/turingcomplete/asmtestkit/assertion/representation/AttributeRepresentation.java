@@ -9,7 +9,7 @@ import org.objectweb.asm.Attribute;
  *
  * <p>Example output: {@code NameContent}.
  */
-public class AttributeRepresentation extends AbstractSingleAsmRepresentation<Attribute> {
+public class AttributeRepresentation extends AbstractAsmRepresentation<Attribute> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**

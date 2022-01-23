@@ -22,7 +22,7 @@ import static dev.turingcomplete.asmtestkit.assertion.representation._internal.R
  *
  * <p>Example simplified output: {@code (131073) public deprecated int myField}.
  */
-public class FieldNodeRepresentation extends AbstractSingleAsmRepresentation<FieldNode> {
+public class FieldNodeRepresentation extends AbstractAsmRepresentation<FieldNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**

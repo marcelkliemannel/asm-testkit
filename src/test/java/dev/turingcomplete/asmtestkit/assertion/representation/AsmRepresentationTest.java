@@ -6,7 +6,7 @@ import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SingleAsmRepresentationTest {
+class AsmRepresentationTest {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
@@ -21,7 +21,7 @@ class SingleAsmRepresentationTest {
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 
-  private static class DummyAsmRepresentation extends AbstractSingleAsmRepresentation<Object> {
+  private static class DummyAsmRepresentation extends AbstractAsmRepresentation<Object> {
 
     protected DummyAsmRepresentation() {
       super(Object.class);

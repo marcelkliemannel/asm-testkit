@@ -11,7 +11,7 @@ import org.objectweb.asm.tree.ParameterNode;
  *
  * <p>The simplified output just contains the parameter name.
  */
-public class ParameterNodeRepresentation extends AbstractSingleAsmRepresentation<ParameterNode> {
+public class ParameterNodeRepresentation extends AbstractAsmRepresentation<ParameterNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**

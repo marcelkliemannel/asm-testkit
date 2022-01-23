@@ -30,7 +30,7 @@ import java.util.function.Supplier;
 import static java.lang.Integer.toHexString;
 
 /**
- * Combines various {@link SingleAsmRepresentation} into one {@link Representation}.
+ * Combines various {@link AsmRepresentation} into one {@link Representation}.
  *
  * <p>This {@code Representation} can be set via
  * {@link AbstractAssert#setCustomRepresentation(Representation)} to all AssertJ
@@ -47,7 +47,7 @@ public final class DefaultAsmRepresentations extends StandardRepresentation impl
    */
   public static final DefaultAsmRepresentations INSTANCE = create();
 
-  private static final Map<Class<?>, Supplier<SingleAsmRepresentation>> SINGLE_ASM_REPRESENTATIONS = new HashMap<>();
+  private static final Map<Class<?>, Supplier<AsmRepresentation>> SINGLE_ASM_REPRESENTATIONS = new HashMap<>();
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
@@ -85,19 +85,19 @@ public final class DefaultAsmRepresentations extends StandardRepresentation impl
   }
 
   /**
-   * Registers a custom {@link SingleAsmRepresentation} which gets lazily
+   * Registers a custom {@link AsmRepresentation} which gets lazily
    * initialized.
    *
    * <p>If there is already a registered representation for the
    * {@code objectClass}, it will be replaced.
    *
    * @param objectClass             the {@link Class} the given
-   *                                {@link SingleAsmRepresentation} is supposed
+   *                                {@link AsmRepresentation} is supposed
    *                                to handle; never null.
    * @param singleAsmRepresentation a {@link Supplier} which provides a custom
-   *                                {@link SingleAsmRepresentation}; never null.
+   *                                {@link AsmRepresentation}; never null.
    */
-  public static void registerSingleAsmRepresentation(Class<?> objectClass, Supplier<SingleAsmRepresentation> singleAsmRepresentation) {
+  public static void registerSingleAsmRepresentation(Class<?> objectClass, Supplier<AsmRepresentation> singleAsmRepresentation) {
     SINGLE_ASM_REPRESENTATIONS.put(Objects.requireNonNull(objectClass),
                                    Objects.requireNonNull(singleAsmRepresentation));
   }
@@ -176,7 +176,7 @@ public final class DefaultAsmRepresentations extends StandardRepresentation impl
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
 
-  private Optional<SingleAsmRepresentation> findSingleAsmRepresentation(Object object) {
+  private Optional<AsmRepresentation> findSingleAsmRepresentation(Object object) {
     assert object != null;
 
     // Fast path
@@ -184,7 +184,7 @@ public final class DefaultAsmRepresentations extends StandardRepresentation impl
       return Optional.of(SINGLE_ASM_REPRESENTATIONS.get(object.getClass()).get());
     }
 
-    for (Map.Entry<Class<?>, Supplier<SingleAsmRepresentation>> entry : SINGLE_ASM_REPRESENTATIONS.entrySet()) {
+    for (Map.Entry<Class<?>, Supplier<AsmRepresentation>> entry : SINGLE_ASM_REPRESENTATIONS.entrySet()) {
       if (entry.getKey().isAssignableFrom(object.getClass())) {
         return Optional.of(entry.getValue().get());
       }

@@ -2,7 +2,7 @@ package dev.turingcomplete.asmtestkit.assertion.representation._internal;
 
 import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
 import dev.turingcomplete.asmtestkit.assertion._internal.AsmWritableAssertionInfo;
-import dev.turingcomplete.asmtestkit.assertion.representation.AbstractSingleAsmRepresentation;
+import dev.turingcomplete.asmtestkit.assertion.representation.AbstractAsmRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.AbstractWithLabelNamesAsmRepresentation;
 import org.assertj.core.api.AssertionInfo;
 import org.assertj.core.description.Description;
@@ -33,8 +33,8 @@ public final class SelfDescription extends Description {
       LabelNameLookup labelNameLookup = ((AsmWritableAssertionInfo) assertionInfo).labelNameLookup();
       actualRepresentation = ((AbstractWithLabelNamesAsmRepresentation<?>) representation).toSimplifiedStringOf(actual, labelNameLookup);
     }
-    else if (representation instanceof AbstractSingleAsmRepresentation) {
-      actualRepresentation = ((AbstractSingleAsmRepresentation<?>) representation).toSimplifiedStringOf(actual);
+    else if (representation instanceof AbstractAsmRepresentation) {
+      actualRepresentation = ((AbstractAsmRepresentation<?>) representation).toSimplifiedStringOf(actual);
     }
     else {
       actualRepresentation = representation.toStringOf(actual);

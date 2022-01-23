@@ -2,7 +2,7 @@ package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.option.StandardAssertOption;
-import dev.turingcomplete.asmtestkit.assertion.representation.AbstractSingleAsmRepresentation;
+import dev.turingcomplete.asmtestkit.assertion.representation.AbstractAsmRepresentation;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.TypePath;
@@ -42,7 +42,7 @@ public abstract class AbstractTypeAnnotationNodeAssert<S extends AbstractTypeAnn
   protected AbstractTypeAnnotationNodeAssert(String name,
                                              A actual,
                                              Class<?> selfType,
-                                             AbstractSingleAsmRepresentation<A> defaultRepresentation,
+                                             AbstractAsmRepresentation<A> defaultRepresentation,
                                              Comparator<A> defaultComparator) {
 
     super(name, actual, selfType, defaultRepresentation, defaultComparator);

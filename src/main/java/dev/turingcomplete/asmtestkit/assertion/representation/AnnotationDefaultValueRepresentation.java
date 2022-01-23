@@ -6,7 +6,7 @@ import org.objectweb.asm.tree.AnnotationNode;
 /**
  * An AssertJ {@link Representation} for an annotation default value.
  */
-public class AnnotationDefaultValueRepresentation extends AbstractSingleAsmRepresentation<Object> {
+public class AnnotationDefaultValueRepresentation extends AbstractAsmRepresentation<Object> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**

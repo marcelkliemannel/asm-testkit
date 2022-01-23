@@ -14,7 +14,7 @@ import static dev.turingcomplete.asmtestkit.assertion.representation.DefaultAsmR
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Test that all {@link SingleAsmRepresentation} are registered.
+ * Test that all {@link AsmRepresentation} are registered.
  */
 class DefaultAsmRepresentationsTest {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -53,7 +53,7 @@ class DefaultAsmRepresentationsTest {
 
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 
-  private static class CustomRepresentation extends AbstractSingleAsmRepresentation<Integer> {
+  private static class CustomRepresentation extends AbstractAsmRepresentation<Integer> {
 
     protected CustomRepresentation() {
       super(Integer.class);
