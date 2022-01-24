@@ -3,6 +3,7 @@ package dev.turingcomplete.asmtestkit.assertion;
 import dev.turingcomplete.asmtestkit.assertion.comparator.AnnotationDefaultValueComparator;
 import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.representation.AnnotationDefaultValueRepresentation;
+import dev.turingcomplete.asmtestkit.node.AnnotationDefaultValue;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;
 
@@ -22,7 +23,7 @@ import java.util.Comparator;
  * {@link AnnotationDefaultValueComparator} call {@link #withRepresentation(Representation)}
  * or {@link #usingComparator(Comparator)}.
  */
-public class AnnotationDefaultValueAssert extends AsmAssert<AnnotationDefaultValueAssert, Object> {
+public class AnnotationDefaultValueAssert extends AsmAssert<AnnotationDefaultValueAssert, AnnotationDefaultValue> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
@@ -32,7 +33,7 @@ public class AnnotationDefaultValueAssert extends AsmAssert<AnnotationDefaultVal
    *
    * @param actual the actual annotation default {@link Object} value; may be null.
    */
-  public AnnotationDefaultValueAssert(Object actual) {
+  public AnnotationDefaultValueAssert(AnnotationDefaultValue actual) {
     super("Annotation default value",
           actual,
           AnnotationDefaultValueAssert.class,

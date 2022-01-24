@@ -1,6 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
 import dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils;
+import dev.turingcomplete.asmtestkit.node.AnnotationDefaultValue;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.tree.AnnotationNode;
 
@@ -15,11 +16,13 @@ class AnnotationDefaultValueRepresentationTest {
 
   @Test
   void testToStringOf() {
-    assertThat(INSTANCE.toStringOf(5))
+    assertThat(INSTANCE.toStringOf(AnnotationDefaultValue.create(5)))
               .isEqualTo("5");
 
     AnnotationNode annotationNode = AnnotationNodeUtils.createAnnotationNode(Deprecated.class);
-    assertThat(INSTANCE.toStringOf(annotationNode))
+    AnnotationDefaultValue annotationDefaultValue = AnnotationDefaultValue.create(annotationNode);
+
+    assertThat(INSTANCE.toStringOf(annotationDefaultValue))
             .isEqualTo(AnnotationNodeRepresentation.INSTANCE.toStringOf(annotationNode));
   }
 

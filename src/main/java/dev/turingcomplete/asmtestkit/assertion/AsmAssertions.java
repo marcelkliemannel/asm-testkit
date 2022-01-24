@@ -1,9 +1,10 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import dev.turingcomplete.asmtestkit.asmutils.InsnListUtils;
 import dev.turingcomplete.asmtestkit.assertion.comparator.*;
 import dev.turingcomplete.asmtestkit.assertion.representation.*;
+import dev.turingcomplete.asmtestkit.node.AccessFlags;
+import dev.turingcomplete.asmtestkit.node.AnnotationDefaultValue;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Type;
@@ -37,7 +38,7 @@ public final class AsmAssertions {
   // ---- ASM Objects ------------------------------------------------------- //
 
   /**
-   * Creates an {@link AccessFlags}.
+   * Creates an {@link AccessFlagsAssert}.
    *
    * @param actual an {@link AccessFlags}; may be null.
    * @return a new {@link AccessFlagsAssert}; never null.
@@ -200,10 +201,10 @@ public final class AsmAssertions {
   /**
    * Creates an {@link AnnotationDefaultValueAssert}.
    *
-   * @param actual a {@link Object}; may be null.
+   * @param actual an {@link AnnotationDefaultValue}; may be null.
    * @return a new {@link AnnotationDefaultValueAssert}; never null.
    */
-  public static AnnotationDefaultValueAssert assertThatAnnotationDefaultValue(Object actual) {
+  public static AnnotationDefaultValueAssert assertThat(AnnotationDefaultValue actual) {
     return new AnnotationDefaultValueAssert(actual);
   }
 
@@ -512,8 +513,8 @@ public final class AsmAssertions {
   }
 
   /**
-   * Creates an {@link AsmIterableAssert} for annotation default values which
-   * uses {@link AnnotationDefaultValueRepresentation#INSTANCE} for the
+   * Creates an {@link AsmIterableAssert} for {@link AnnotationDefaultValue}s
+   * which uses {@link AnnotationDefaultValueRepresentation#INSTANCE} for the
    * representation and for equality {@link AnnotationDefaultValueComparator#INSTANCE}
    * and {@link AnnotationDefaultValueComparator#ITERABLE_INSTANCE}.
    *
@@ -521,11 +522,12 @@ public final class AsmAssertions {
    * {@link AsmIterableAssert#usingComparator(Comparator)} or
    * {@link AsmIterableAssert#withRepresentation(Representation)}.
    *
-   * @param actual an {@link Iterable} of {@link Object}s; may be null.
+   * @param actual an {@link Iterable} of {@link AnnotationDefaultValue}s;
+   *               may be null.
    * @return a new {@link AsmIterableAssert}; never null.
    */
-  public static AsmIterableAssert<?, Object, AnnotationDefaultValueAssert> assertThatAnnotationDefaultValues(Iterable<Object> actual) {
-    return new AsmIterableAssert<>(actual, AsmAssertions::assertThatAnnotationDefaultValue)
+  public static AsmIterableAssert<?, AnnotationDefaultValue, AnnotationDefaultValueAssert> assertThatAnnotationDefaultValues(Iterable<AnnotationDefaultValue> actual) {
+    return new AsmIterableAssert<>(actual, AsmAssertions::assertThat)
             .as("Annotation Default Values")
             .withRepresentation(AnnotationDefaultValueRepresentation.INSTANCE)
             .usingElementComparator(AnnotationDefaultValueComparator.INSTANCE)

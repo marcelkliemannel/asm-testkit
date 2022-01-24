@@ -1,10 +1,10 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils;
+import dev.turingcomplete.asmtestkit.node.AnnotationDefaultValue;
 import org.junit.jupiter.api.Test;
-import org.objectweb.asm.tree.AnnotationNode;
 
-import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAnnotationDefaultValue;
+import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AnnotationDefaultValueAssertTest {
@@ -15,12 +15,12 @@ class AnnotationDefaultValueAssertTest {
 
   @Test
   void testIsEqualTo() {
-    assertThatAnnotationDefaultValue("foo")
-            .isEqualTo("foo");
+    assertThat(AnnotationDefaultValue.create("foo"))
+            .isEqualTo(AnnotationDefaultValue.create("foo"));
 
-    assertThatThrownBy(() -> assertThatAnnotationDefaultValue("foo").isEqualTo("bar"))
+    assertThatThrownBy(() -> assertThat(AnnotationDefaultValue.create("foo")).isEqualTo(AnnotationDefaultValue.create("bar")))
             .isInstanceOf(AssertionError.class)
-            .hasMessage("[Annotation default value: foo] \n" +
+            .hasMessage("[Annotation default value: \"foo\"] \n" +
                         "expected: \"bar\"\n" +
                         " but was: \"foo\"\n" +
                         "when comparing values using AnnotationDefaultValueComparator");
@@ -28,13 +28,13 @@ class AnnotationDefaultValueAssertTest {
 
   @Test
   void testIsEqualToAnnotation() {
-    AnnotationNode first = AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "forRemoval", true);
-    AnnotationNode second = AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "forRemoval", false);
+    AnnotationDefaultValue first = AnnotationDefaultValue.create(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "forRemoval", true));
+    AnnotationDefaultValue second = AnnotationDefaultValue.create(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "forRemoval", false));
 
-    assertThatAnnotationDefaultValue(first)
+    assertThat(first)
             .isEqualTo(first);
 
-    assertThatThrownBy(() -> assertThatAnnotationDefaultValue(first).isEqualTo(second))
+    assertThatThrownBy(() -> assertThat(first).isEqualTo(second))
             .isInstanceOf(AssertionError.class)
             .hasMessage("[Annotation default value: @java.lang.Deprecated(forRemoval=true)] \n" +
                         "expected: @java.lang.Deprecated(forRemoval=false)\n" +

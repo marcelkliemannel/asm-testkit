@@ -45,8 +45,8 @@ class AccessFlagsRepresentationTest {
                      Arguments.of(AccessFlags.forParameter(Opcodes.ACC_SYNTHETIC + Opcodes.ACC_MANDATED), "synthetic mandated"),
                      Arguments.of(AccessFlags.forModule(Opcodes.ACC_OPEN + Opcodes.ACC_MANDATED), "open mandated"),
                      Arguments.of(AccessFlags.forModuleRequires(Opcodes.ACC_TRANSITIVE + Opcodes.ACC_STATIC_PHASE), "transitive static_phase"),
-                     Arguments.of(AccessFlags.forParameter(Opcodes.ACC_SYNTHETIC + Opcodes.ACC_MANDATED), "synthetic mandated"),
-                     Arguments.of(AccessFlags.forParameter(Opcodes.ACC_SYNTHETIC + Opcodes.ACC_MANDATED), "synthetic mandated"));
+                     Arguments.of(AccessFlags.forModuleOpens(Opcodes.ACC_SYNTHETIC + Opcodes.ACC_MANDATED), "synthetic mandated"),
+                     Arguments.of(AccessFlags.forModuleExports(Opcodes.ACC_SYNTHETIC + Opcodes.ACC_MANDATED), "synthetic mandated"));
   }
 
   // -- Inner Type -------------------------------------------------------------------------------------------------- //

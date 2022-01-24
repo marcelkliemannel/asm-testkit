@@ -1,12 +1,13 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils;
 import dev.turingcomplete.asmtestkit.assertion.__helper.DummyAttribute;
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationA;
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationB;
 import dev.turingcomplete.asmtestkit.compile.CompilationResult;
+import dev.turingcomplete.asmtestkit.node.AccessFlags;
+import dev.turingcomplete.asmtestkit.node.AnnotationDefaultValue;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert;
 import org.intellij.lang.annotations.Language;
@@ -572,9 +573,9 @@ class AsmAssertionsTest {
 
   @Test
   void testAssertThatAnnotationDefaultValues() {
-    AnnotationNode first = AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "1");
-    AnnotationNode second = AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "2");
-    AnnotationNode third = AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "3");
+    AnnotationDefaultValue first = AnnotationDefaultValue.create(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "1"));
+    AnnotationDefaultValue second = AnnotationDefaultValue.create(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "2"));
+    AnnotationDefaultValue third = AnnotationDefaultValue.create(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "3"));
 
 
     // Positive

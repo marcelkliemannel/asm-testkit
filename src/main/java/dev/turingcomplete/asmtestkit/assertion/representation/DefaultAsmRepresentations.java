@@ -3,6 +3,7 @@ package dev.turingcomplete.asmtestkit.assertion.representation;
 import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
 import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
+import dev.turingcomplete.asmtestkit.node.AnnotationDefaultValue;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;
 import org.assertj.core.presentation.StandardRepresentation;
@@ -70,6 +71,7 @@ public final class DefaultAsmRepresentations extends StandardRepresentation impl
     registerAsmRepresentation(ParameterNode.class, () -> ParameterNodeRepresentation.INSTANCE);
     registerAsmRepresentation(TryCatchBlockNode.class, () -> TryCatchBlockNodeRepresentation.INSTANCE);
     registerAsmRepresentation(AccessFlags.class, () -> AccessFlagsRepresentation.INSTANCE);
+    registerAsmRepresentation(AnnotationDefaultValue.class, () -> AnnotationDefaultValueRepresentation.INSTANCE);
 
     // An 'InsnList' is an 'Iterable' and would be handled in the 'toStringOf'
     registerFormatterForType(InsnList.class, insnList -> ASM_REPRESENTATIONS.get(InsnList.class).get().toStringOf(insnList));
