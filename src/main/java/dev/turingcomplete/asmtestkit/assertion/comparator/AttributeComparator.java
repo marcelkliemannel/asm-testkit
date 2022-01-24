@@ -31,6 +31,7 @@ public class AttributeComparator extends AsmComparator<Attribute> {
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected AttributeComparator() {
+    super(AttributeComparator.class, Attribute.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //

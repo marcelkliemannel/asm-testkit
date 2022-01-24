@@ -28,6 +28,7 @@ public class AccessFlagsComparator extends AsmComparator<AccessFlags> {
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected AccessFlagsComparator() {
+    super(AccessFlagsComparator.class, AccessFlags.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //

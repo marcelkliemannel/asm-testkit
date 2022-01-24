@@ -22,7 +22,7 @@ public class TryCatchBlockNodeComparator extends AbstractWithLabelNamesAsmCompar
   /**
    * A reusable {@link TryCatchBlockNodeComparator} instance.
    */
-  public static final TryCatchBlockNodeComparator INSTANCE = new TryCatchBlockNodeComparator();
+  public static final TryCatchBlockNodeComparator INSTANCE = create();
 
   /**
    * A reusable {@link Comparator} instance for an {@link Iterable} of
@@ -32,7 +32,21 @@ public class TryCatchBlockNodeComparator extends AbstractWithLabelNamesAsmCompar
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
+
+  protected TryCatchBlockNodeComparator() {
+    super(TryCatchBlockNodeComparator.class, TryCatchBlockNode.class);
+  }
+
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  /**
+   * Creates a new {@link TryCatchBlockNodeComparator} instance.
+   *
+   * @return a new {@link TryCatchBlockNodeComparator}; never null;
+   */
+  public static TryCatchBlockNodeComparator create() {
+    return new TryCatchBlockNodeComparator();
+  }
 
   @Override
   protected int doCompare(TryCatchBlockNode first, TryCatchBlockNode second, LabelNameLookup labelNameLookup) {

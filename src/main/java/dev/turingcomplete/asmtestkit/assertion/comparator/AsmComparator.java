@@ -2,9 +2,11 @@ package dev.turingcomplete.asmtestkit.assertion.comparator;
 
 import dev.turingcomplete.asmtestkit.assertion.representation.AsmRepresentations;
 import dev.turingcomplete.asmtestkit.assertion.representation.DefaultAsmRepresentations;
+import org.assertj.core.api.Assert;
 import org.assertj.core.internal.DescribableComparator;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 import static dev.turingcomplete.asmtestkit.assertion.comparator._internal.ComparatorUtils.compareNullCheck;
 
@@ -12,31 +14,68 @@ public abstract class AsmComparator<T> extends DescribableComparator<T> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
+  @SuppressWarnings("FieldCanBeLocal")
+  private final Class<?> selfType;
+  private final Class<T> elementType;
+
   protected AsmRepresentations asmRepresentations = DefaultAsmRepresentations.INSTANCE;
   protected AsmComparators     asmComparators     = DefaultAsmComparators.INSTANCE;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  protected AsmComparator() {
+  protected AsmComparator(Class<?> selfType, Class<?> elementType) {
+    // TODO selfType.cast(this);
+    this.selfType = Objects.requireNonNull(selfType);
+    //noinspection unchecked
+    this.elementType = (Class<T>) Objects.requireNonNull(elementType);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
-  @Override
-  public final int compare(T first, T second) {
-    Integer nullCheckResult = compareNullCheck(first, second);
-    return nullCheckResult != null ? nullCheckResult : doCompare(first, second);
+  public Class<T> elementType() {
+    return elementType;
   }
 
   /**
-   * Compares its two non-null arguments.
+   * Determines the order of the given {@link Object}s.
+   *
+   * <p>The original method from the {@link Comparator} interface uses the
+   * type parameter {@link T}, with which the compiler would prevent wrong input
+   * type usages. However, if this {@code Comparator} gets used inside an
+   * AssertJ {@link Assert}, e.g., {@link Assert#isEqualTo(Object)}, it would
+   * pass any {@code Object} to this method regardless if it is of the type
+   * {@link T}. This would then lead to a {@link ClassCastException} during the
+   * subsequent call to {@link #doCompare(Object, Object)}.
+   *
+   * @param first  an object expected to be of type {@link T}; may be null
+   * @param second an object expected to be of type {@link T}; may be null
+   * @return an {@code int} indicating the order of {@code first} and
+   * {@code second}.
+   */
+  @Override
+  public final int compare(Object first, Object second) {
+    Integer nullCheckResult = compareNullCheck(first, second);
+    if (nullCheckResult != null) {
+      return nullCheckResult;
+    }
+
+    if (!elementType.isInstance(first) || !elementType.isInstance(second)) {
+      return -1;
+    }
+
+    return doCompare(elementType.cast(first), elementType.cast(second));
+  }
+
+  /**
+   * Determines the order of the given {@link T}s.
    *
    * <p>The same rules to determine the result as defined for the
    * {@link Comparator} apply.
    *
    * @param first  first object to be compared; never null.
    * @param second object to be compared; never null.
-   * @return the comparison result.
+   * @return an {@code int} indicating the order of {@code first} and
+   * {@code second}.
    */
   protected abstract int doCompare(T first, T second);
 

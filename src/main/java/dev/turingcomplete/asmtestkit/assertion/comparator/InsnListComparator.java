@@ -41,6 +41,7 @@ public class InsnListComparator extends AbstractWithLabelNamesAsmComparator<Iter
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected InsnListComparator() {
+    super(InsnListComparator.class, Iterable.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //

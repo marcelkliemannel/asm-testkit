@@ -7,6 +7,7 @@ import dev.turingcomplete.asmtestkit.assertion.comparator._internal.WithLabelNam
 import dev.turingcomplete.asmtestkit.assertion.representation.AbstractTypeAnnotationNodeRepresentation;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LocalVariableAnnotationNode;
+import org.objectweb.asm.tree.LocalVariableNode;
 
 import java.util.Comparator;
 
@@ -40,6 +41,7 @@ public class LocalVariableAnnotationNodeComparator
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected LocalVariableAnnotationNodeComparator() {
+    super(LocalVariableAnnotationNodeComparator.class, LocalVariableAnnotationNode.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //

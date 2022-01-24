@@ -3,6 +3,7 @@ package dev.turingcomplete.asmtestkit.assertion.comparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.IterableComparator;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypePathRepresentation;
 import org.objectweb.asm.TypePath;
+import org.objectweb.asm.TypeReference;
 
 import java.util.Comparator;
 
@@ -31,6 +32,7 @@ public class TypePathComparator extends AsmComparator<TypePath> {
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected TypePathComparator() {
+    super(TypePathComparator.class, TypePath.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //

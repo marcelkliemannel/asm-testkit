@@ -2,6 +2,7 @@ package dev.turingcomplete.asmtestkit.assertion.comparator._internal;
 
 import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
 import dev.turingcomplete.asmtestkit.assertion.comparator.AbstractWithLabelNamesAsmComparator;
+import dev.turingcomplete.asmtestkit.assertion.comparator.AsmComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.WithLabelNamesAsmComparator;
 
 import java.util.Comparator;
@@ -18,6 +19,8 @@ public class WithLabelNamesAsmComparatorAdapter<T> extends AbstractWithLabelName
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected WithLabelNamesAsmComparatorAdapter(Comparator<? super T> delegate, LabelNameLookup labelNameLookup) {
+    super(delegate.getClass(), getComparatorElementClass(delegate));
+
     this.delegate = Objects.requireNonNull(delegate);
     this.labelNameLookup = Objects.requireNonNull(labelNameLookup);
   }
@@ -72,6 +75,15 @@ public class WithLabelNamesAsmComparatorAdapter<T> extends AbstractWithLabelName
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
+
+  private static <T> Class<?> getComparatorElementClass(Comparator<? super T> delegate) {
+    if (delegate instanceof AsmComparator) {
+      return ((AsmComparator<?>) delegate).elementType();
+    }
+
+    return Object.class;
+  }
+
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 
   private static class ThenComparingWithLabelNamesAsmComparator<T> extends WithLabelNamesAsmComparatorAdapter<T> {

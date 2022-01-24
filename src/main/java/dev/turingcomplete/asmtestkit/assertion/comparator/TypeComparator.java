@@ -31,6 +31,7 @@ public class TypeComparator extends AsmComparator<Type> {
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected TypeComparator() {
+    super(TypeComparator.class, Type.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //

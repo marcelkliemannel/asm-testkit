@@ -19,19 +19,39 @@ class AsmComparatorTest {
             .isEqualTo(0);
 
     assertThat(dummyAsmComparator.compare(null, "Right"))
-            .isLessThanOrEqualTo(-1);
+            .isLessThan(0);
 
     assertThat(dummyAsmComparator.compare("Left", null))
-            .isGreaterThanOrEqualTo(1);
+            .isGreaterThan(0);
+  }
+
+  @Test
+  void testWrongElementType() {
+    var dummyAsmComparator = new DummyAsmComparator();
+
+    //noinspection EqualsWithItself
+    assertThat(dummyAsmComparator.compare(1, 1)) // Same value but wrong type
+            .isLessThan(0);
+
+    //noinspection EqualsWithItself
+    assertThat(dummyAsmComparator.compare("foo", "foo")) // Same value and correct type
+            .isEqualTo(0);
+
+    assertThat(dummyAsmComparator.compare("Left", 1))
+            .isLessThan(0);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 
-  private static class DummyAsmComparator extends AsmComparator<Object> {
+  private static class DummyAsmComparator extends AsmComparator<String> {
+
+    protected DummyAsmComparator() {
+      super(DummyAsmComparator.class, String.class);
+    }
 
     @Override
-    protected int doCompare(Object first, Object second) {
+    protected int doCompare(String first, String second) {
       return 0;
     }
   }

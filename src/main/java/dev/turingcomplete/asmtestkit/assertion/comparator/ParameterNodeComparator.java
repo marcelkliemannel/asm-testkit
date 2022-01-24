@@ -5,6 +5,7 @@ import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.ComparatorUtils;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.IterableComparator;
 import org.objectweb.asm.tree.ParameterNode;
+import org.objectweb.asm.tree.TryCatchBlockNode;
 
 import java.util.Comparator;
 
@@ -20,7 +21,7 @@ public class ParameterNodeComparator extends AsmComparator<ParameterNode> {
   /**
    * A reusable {@link ParameterNodeComparator} instance.
    */
-  public static final ParameterNodeComparator INSTANCE = new ParameterNodeComparator();
+  public static final ParameterNodeComparator INSTANCE = create();
 
   /**
    * A reusable {@link Comparator} instance for an {@link Iterable} of
@@ -32,6 +33,7 @@ public class ParameterNodeComparator extends AsmComparator<ParameterNode> {
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected ParameterNodeComparator() {
+    super(ParameterNodeComparator.class, ParameterNode.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //

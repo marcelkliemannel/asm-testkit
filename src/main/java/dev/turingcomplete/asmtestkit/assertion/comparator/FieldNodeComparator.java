@@ -41,6 +41,7 @@ public class FieldNodeComparator extends AsmComparator<FieldNode> {
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected FieldNodeComparator() {
+    super(FieldNodeComparator.class, FieldNode.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //

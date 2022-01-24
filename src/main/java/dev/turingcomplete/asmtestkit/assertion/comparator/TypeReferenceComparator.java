@@ -29,6 +29,7 @@ public class TypeReferenceComparator extends AsmComparator<TypeReference> {
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected TypeReferenceComparator() {
+    super(TypeReferenceComparator.class, TypeReference.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //

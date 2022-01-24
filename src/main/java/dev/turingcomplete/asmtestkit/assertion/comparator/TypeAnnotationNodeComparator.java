@@ -1,6 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.WithLabelNamesIterableAsmComparator;
+import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.util.Comparator;
@@ -25,6 +26,7 @@ public class TypeAnnotationNodeComparator
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected TypeAnnotationNodeComparator() {
+    super(TypeAnnotationNodeComparator.class, TypeAnnotationNode.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //

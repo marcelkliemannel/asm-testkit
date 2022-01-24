@@ -32,6 +32,7 @@ public class AnnotationNodeComparator extends AbstractAnnotationNodeComparator<A
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected AnnotationNodeComparator() {
+    super(AnnotationNodeComparator.class, AnnotationNode.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //

@@ -29,6 +29,7 @@ public class InstructionComparator extends AbstractWithLabelNamesAsmComparator<A
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected InstructionComparator() {
+    super(InstructionComparator.class, AbstractInsnNode.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //

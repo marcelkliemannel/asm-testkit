@@ -30,7 +30,21 @@ public class LocalVariableNodeComparator extends AbstractWithLabelNamesAsmCompar
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
+
+  protected LocalVariableNodeComparator() {
+    super(LocalVariableNodeComparator.class, LocalVariableNode.class);
+  }
+
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  /**
+   * Creates a new {@link LocalVariableNodeComparator} instance.
+   *
+   * @return a new {@link LocalVariableNodeComparator}; never null;
+   */
+  public static LocalVariableNodeComparator create() {
+    return new LocalVariableNodeComparator();
+  }
 
   @Override
   protected int doCompare(LocalVariableNode first, LocalVariableNode second, LabelNameLookup labelNameLookup) {

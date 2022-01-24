@@ -13,25 +13,26 @@ import static dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils.convert
  * A base class for a comparison function to order {@link AnnotationNode}s or
  * its subtypes.
  */
-public abstract class AbstractAnnotationNodeComparator<S extends AbstractAnnotationNodeComparator<S, A>, A extends AnnotationNode>
-        extends AbstractWithLabelNamesAsmComparator<A> {
+public abstract class AbstractAnnotationNodeComparator<S extends AbstractAnnotationNodeComparator<S, T>, T extends AnnotationNode>
+        extends AbstractWithLabelNamesAsmComparator<T> {
 
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  protected AbstractAnnotationNodeComparator() {
+  protected AbstractAnnotationNodeComparator(Class<?> selfType, Class<?> elementType) {
+    super(selfType, elementType);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Override
-  protected int doCompare(A first, A second) {
+  protected int doCompare(T first, T second) {
     return doCompare(first, second, LabelNameLookup.EMPTY);
   }
 
   @Override
-  protected int doCompare(A first, A second, LabelNameLookup labelNameLookup) {
+  protected int doCompare(T first, T second, LabelNameLookup labelNameLookup) {
     int descResult = Comparator.comparing((AnnotationNode annotationNode) -> annotationNode.desc)
                                .compare(first, second);
 

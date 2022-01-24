@@ -10,6 +10,12 @@ public abstract class AbstractWithLabelNamesAsmComparator<T> extends AsmComparat
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
+  protected AbstractWithLabelNamesAsmComparator(Class<?> selfType, Class<?> elementType) {
+    super(selfType, elementType);
+  }
+
+  // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
   public final int compare(T first, T second, LabelNameLookup labelNameLookup) {
     Objects.requireNonNull(labelNameLookup);
 
@@ -45,7 +51,6 @@ public abstract class AbstractWithLabelNamesAsmComparator<T> extends AsmComparat
    */
   protected abstract int doCompare(T first, T second, LabelNameLookup labelNameLookup);
 
-  // -- Exposed Methods --------------------------------------------------------------------------------------------- //
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 }

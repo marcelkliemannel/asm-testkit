@@ -17,25 +17,26 @@ import static dev.turingcomplete.asmtestkit.assertion.comparator._internal.Compa
  * equal. If their values are not equal they will be ordered based on the
  * lexicographical order of their {@link AbstractTypeAnnotationNodeRepresentation}s.
  */
-public abstract class AbstractTypeAnnotationNodeComparator<S extends AbstractTypeAnnotationNodeComparator<S, A>, A extends TypeAnnotationNode>
-        extends AbstractAnnotationNodeComparator<S, A> {
+public abstract class AbstractTypeAnnotationNodeComparator<S extends AbstractTypeAnnotationNodeComparator<S, T>, T extends TypeAnnotationNode>
+        extends AbstractAnnotationNodeComparator<S, T> {
 
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  protected AbstractTypeAnnotationNodeComparator() {
+  protected AbstractTypeAnnotationNodeComparator(Class<?> selfType, Class<?> elementType) {
+    super(selfType, elementType);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Override
-  protected int doCompare(A first, A second) {
+  protected int doCompare(T first, T second) {
     return doCompare(first, second, LabelNameLookup.EMPTY);
   }
 
   @Override
-  protected int doCompare(A first, A second, LabelNameLookup labelNameLookup) {
+  protected int doCompare(T first, T second, LabelNameLookup labelNameLookup) {
     int annotationNodeCompare = super.doCompare(first, second, labelNameLookup);
     if (annotationNodeCompare != 0) {
       return annotationNodeCompare;

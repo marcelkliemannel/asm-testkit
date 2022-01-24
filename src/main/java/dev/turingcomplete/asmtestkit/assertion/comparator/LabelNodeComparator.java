@@ -4,6 +4,7 @@ import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.ComparatorUtils;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.WithLabelNamesIterableAsmComparator;
 import org.objectweb.asm.tree.LabelNode;
+import org.objectweb.asm.tree.LocalVariableAnnotationNode;
 
 import java.util.Comparator;
 import java.util.Objects;
@@ -32,6 +33,7 @@ public class LabelNodeComparator extends AbstractWithLabelNamesAsmComparator<Lab
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected LabelNodeComparator() {
+    super(LabelNodeComparator.class, LabelNode.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
