@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
 import dev.turingcomplete.asmtestkit.node.AccessFlags;
-import dev.turingcomplete.asmtestkit.node.AnnotationDefaultValue;
+import dev.turingcomplete.asmtestkit.node.AnnotationDefault;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.TypePath;
@@ -52,7 +52,8 @@ public final class DefaultAsmComparators implements AsmComparators {
     registerAsmComparator(ParameterNode.class, () -> ParameterNodeComparator.INSTANCE, () -> ParameterNodeComparator.ITERABLE_INSTANCE);
     registerAsmComparator(TryCatchBlockNode.class, () -> TryCatchBlockNodeComparator.INSTANCE, () -> TryCatchBlockNodeComparator.ITERABLE_INSTANCE);
     registerAsmComparator(AccessFlags.class, () -> AccessFlagsComparator.INSTANCE, () -> AccessFlagsComparator.ITERABLE_INSTANCE);
-    registerAsmComparator(AnnotationDefaultValue.class, () -> AnnotationDefaultValueComparator.INSTANCE, () -> AnnotationDefaultValueComparator.ITERABLE_INSTANCE);
+    registerAsmComparator(AnnotationDefault.class, () -> AnnotationDefaultValueComparator.INSTANCE, () -> AnnotationDefaultValueComparator.ITERABLE_INSTANCE);
+    registerAsmComparator(MethodNode.class, () -> MethodNodeComparator.INSTANCE, () -> MethodNodeComparator.ITERABLE_INSTANCE);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //

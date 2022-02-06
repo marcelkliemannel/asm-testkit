@@ -1,13 +1,14 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils;
+import dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils;
 import dev.turingcomplete.asmtestkit.assertion.__helper.DummyAttribute;
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationA;
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationB;
 import dev.turingcomplete.asmtestkit.compile.CompilationResult;
 import dev.turingcomplete.asmtestkit.node.AccessFlags;
-import dev.turingcomplete.asmtestkit.node.AnnotationDefaultValue;
+import dev.turingcomplete.asmtestkit.node.AnnotationDefault;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert;
 import org.intellij.lang.annotations.Language;
@@ -32,13 +33,14 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import static dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils.extractLabelNames;
+import static dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils.extractLabelIndices;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAccessFlags;
-import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAnnotationDefaultValues;
+import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAnnotationDefaulls;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatFields;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLabels;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLocalVariableAnnotations;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLocalVariables;
+import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatMethods;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatParameters;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatTryCatchBlocks;
 import static dev.turingcomplete.asmtestkit.compile.CompilationEnvironment.create;
@@ -343,7 +345,7 @@ class AsmAssertionsTest {
 
     // Negative
     ThrowableAssert.ThrowingCallable throwingCallable = () -> assertThatLabels(List.of(firstLabelNode, secondLabelNode))
-            .useLabelNameLookup(LabelNameLookup.create(Map.of(firstLabel, "L1", secondLabel, "L2", thirdLabel, "L3")))
+            .useLabelNameLookup(DefaultLabelIndexLookup.create(Map.of(firstLabel, 1, secondLabel, 2, thirdLabel, 3)))
             .containsExactlyInAnyOrderElementsOf(List.of(thirdLabelNode, fourthLabelNode));
     assertThatThrownBy(throwingCallable)
             .isInstanceOf(AssertionError.class)
@@ -420,7 +422,7 @@ class AsmAssertionsTest {
 
     // Negative
     ThrowableAssert.ThrowingCallable throwingCallable = () -> assertThatLocalVariableAnnotations(List.of(firstLocalVariableAnnotationNode, secondLocalVariableAnnotationNode))
-            .useLabelNameLookup(LabelNameLookup.create(extractLabelNames(methodNode)))
+            .useLabelNameLookup(DefaultLabelIndexLookup.create(extractLabelIndices(methodNode)))
             .containsExactlyInAnyOrderElementsOf(List.of(secondLocalVariableAnnotationNode, thirdLocalVariableAnnotationNode));
     assertThatThrownBy(throwingCallable)
             .isInstanceOf(AssertionError.class)
@@ -465,7 +467,7 @@ class AsmAssertionsTest {
 
     // Negative
     ThrowableAssert.ThrowingCallable throwingCallable = () -> assertThatLocalVariables(List.of(firstVariable, secondVariable))
-            .useLabelNameLookup(LabelNameLookup.create(extractLabelNames(methodNode)))
+            .useLabelNameLookup(DefaultLabelIndexLookup.create(extractLabelIndices(methodNode)))
             .containsExactlyInAnyOrderElementsOf(List.of(secondVariable, thirdVariable));
     assertThatThrownBy(throwingCallable)
             .isInstanceOf(AssertionError.class)
@@ -519,16 +521,16 @@ class AsmAssertionsTest {
     TryCatchBlockNode thirdATryCatchBlock = methodA.tryCatchBlocks.get(2);
     TryCatchBlockNode thirdBTryCatchBlock = methodB.tryCatchBlocks.get(2);
 
-    LabelNameLookup labelNameLookup = LabelNameLookup.create(extractLabelNames(methodA, methodB));
+    LabelIndexLookup labelIndexLookup = DefaultLabelIndexLookup.create(MethodNodeUtils.extractLabelIndices(methodA, methodB));
 
     // Positive
     assertThatTryCatchBlocks(List.of(firstATryCatchBlock, secondATryCatchBlock, thirdATryCatchBlock))
-            .useLabelNameLookup(labelNameLookup)
+            .useLabelNameLookup(labelIndexLookup)
             .containsExactlyInAnyOrderElementsOf(List.of(firstBTryCatchBlock, secondBTryCatchBlock, thirdBTryCatchBlock));
 
     // Negative
     ThrowableAssert.ThrowingCallable throwingCallable = () -> assertThatTryCatchBlocks(List.of(firstATryCatchBlock, secondATryCatchBlock))
-            .useLabelNameLookup(labelNameLookup)
+            .useLabelNameLookup(labelIndexLookup)
             .containsExactlyInAnyOrderElementsOf(List.of(secondBTryCatchBlock, thirdBTryCatchBlock));
     assertThatThrownBy(throwingCallable)
             .isInstanceOf(AssertionError.class)
@@ -573,19 +575,19 @@ class AsmAssertionsTest {
 
   @Test
   void testAssertThatAnnotationDefaultValues() {
-    AnnotationDefaultValue first = AnnotationDefaultValue.create(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "1"));
-    AnnotationDefaultValue second = AnnotationDefaultValue.create(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "2"));
-    AnnotationDefaultValue third = AnnotationDefaultValue.create(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "3"));
+    AnnotationDefault first = AnnotationDefault.create(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "1"));
+    AnnotationDefault second = AnnotationDefault.create(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "2"));
+    AnnotationDefault third = AnnotationDefault.create(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "3"));
 
 
     // Positive
-    assertThatAnnotationDefaultValues(List.of(first, second, third))
+    assertThatAnnotationDefaulls(List.of(first, second, third))
             .containsExactlyInAnyOrderElementsOf(List.of(first, second, third));
 
     // Negative
-    assertThatThrownBy(() -> assertThatAnnotationDefaultValues(List.of(first, second)).containsExactlyInAnyOrderElementsOf(List.of(second, third)))
+    assertThatThrownBy(() -> assertThatAnnotationDefaulls(List.of(first, second)).containsExactlyInAnyOrderElementsOf(List.of(second, third)))
             .isInstanceOf(AssertionError.class)
-            .hasMessage("[Annotation Default Values] \n" +
+            .hasMessage("[Annotation Defaults] \n" +
                         "Expecting actual:\n" +
                         "  [@java.lang.Deprecated(since=\"1\"), @java.lang.Deprecated(since=\"2\")]\n" +
                         "to contain exactly in any order:\n" +
@@ -620,6 +622,116 @@ class AsmAssertionsTest {
                         "and elements not expected:\n" +
                         "  [(1) public]\n" +
                         "when comparing values using AccessFlagsComparator");
+  }
+
+  @Test
+  void testAssertThatMethods() throws IOException {
+    @Language("Java")
+    String myClass = "class MyClass {" +
+                     "   void myMethod1() {" +
+                     "     System.out.println(1);" +
+                     "   }" +
+                     "   int myMethod2() {" +
+                     "     System.out.println(2);" +
+                     "     return 1;" +
+                     "   }" +
+                     "   String myMethod3() {" +
+                     "     System.out.println(3);" +
+                     "     return null;" +
+                     "   }" +
+                     " }";
+
+    List<MethodNode> methods = create()
+            .addJavaInputSource(myClass)
+            .compile()
+            .readClassNode("MyClass")
+            .methods;
+
+    MethodNode firstMethodNode = methods.get(0);
+    MethodNode secondMethodNode = methods.get(1);
+    MethodNode thirdMethodNode = methods.get(2);
+
+    // Positive
+    assertThatMethods(List.of(firstMethodNode, secondMethodNode, thirdMethodNode))
+            .containsExactlyInAnyOrderElementsOf(List.of(firstMethodNode, secondMethodNode, thirdMethodNode));
+
+    // Negative
+    ThrowableAssert.ThrowingCallable throwingCallable = () -> assertThatMethods(List.of(firstMethodNode, secondMethodNode))
+            .containsExactlyInAnyOrderElementsOf(List.of(secondMethodNode, thirdMethodNode));
+    assertThatThrownBy(throwingCallable)
+            .isInstanceOf(AssertionError.class)
+            .hasMessage("[Methods] \n" +
+                        "Expecting actual:\n" +
+                        "  [(0) <init>()\n" +
+                        "    L0\n" +
+                        "      LINENUMBER 1 L0\n" +
+                        "      ALOAD 0 // opcode: 25\n" +
+                        "      INVOKESPECIAL java/lang/Object.<init> ()V // opcode: 183\n" +
+                        "      RETURN // opcode: 177\n" +
+                        "    L1\n" +
+                        "  // Local variable: #0 MyClass this // range: L0-L1\n" +
+                        "  // Max locals: 1\n" +
+                        "  // Max stack: 1,\n" +
+                        "    (0) void myMethod1()\n" +
+                        "    L0\n" +
+                        "      LINENUMBER 1 L0\n" +
+                        "      GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
+                        "      ICONST_1 // opcode: 4\n" +
+                        "      INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
+                        "      RETURN // opcode: 177\n" +
+                        "    L1\n" +
+                        "  // Local variable: #0 MyClass this // range: L0-L1\n" +
+                        "  // Max locals: 1\n" +
+                        "  // Max stack: 2]\n" +
+                        "to contain exactly in any order:\n" +
+                        "  [(0) void myMethod1()\n" +
+                        "    L0\n" +
+                        "      LINENUMBER 1 L0\n" +
+                        "      GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
+                        "      ICONST_1 // opcode: 4\n" +
+                        "      INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
+                        "      RETURN // opcode: 177\n" +
+                        "    L1\n" +
+                        "  // Local variable: #0 MyClass this // range: L0-L1\n" +
+                        "  // Max locals: 1\n" +
+                        "  // Max stack: 2,\n" +
+                        "    (0) int myMethod2()\n" +
+                        "    L0\n" +
+                        "      LINENUMBER 1 L0\n" +
+                        "      GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
+                        "      ICONST_2 // opcode: 5\n" +
+                        "      INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
+                        "      ICONST_1 // opcode: 4\n" +
+                        "      IRETURN // opcode: 172\n" +
+                        "    L1\n" +
+                        "  // Local variable: #0 MyClass this // range: L0-L1\n" +
+                        "  // Max locals: 1\n" +
+                        "  // Max stack: 2]\n" +
+                        "elements not found:\n" +
+                        "  [(0) int myMethod2()\n" +
+                        "    L0\n" +
+                        "      LINENUMBER 1 L0\n" +
+                        "      GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
+                        "      ICONST_2 // opcode: 5\n" +
+                        "      INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
+                        "      ICONST_1 // opcode: 4\n" +
+                        "      IRETURN // opcode: 172\n" +
+                        "    L1\n" +
+                        "  // Local variable: #0 MyClass this // range: L0-L1\n" +
+                        "  // Max locals: 1\n" +
+                        "  // Max stack: 2]\n" +
+                        "and elements not expected:\n" +
+                        "  [(0) <init>()\n" +
+                        "    L0\n" +
+                        "      LINENUMBER 1 L0\n" +
+                        "      ALOAD 0 // opcode: 25\n" +
+                        "      INVOKESPECIAL java/lang/Object.<init> ()V // opcode: 183\n" +
+                        "      RETURN // opcode: 177\n" +
+                        "    L1\n" +
+                        "  // Local variable: #0 MyClass this // range: L0-L1\n" +
+                        "  // Max locals: 1\n" +
+                        "  // Max stack: 1]\n" +
+                        "when comparing values using MethodNodeComparator");
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

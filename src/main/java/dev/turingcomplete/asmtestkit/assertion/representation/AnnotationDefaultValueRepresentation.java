@@ -1,12 +1,12 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
-import dev.turingcomplete.asmtestkit.node.AnnotationDefaultValue;
+import dev.turingcomplete.asmtestkit.node.AnnotationDefault;
 import org.assertj.core.presentation.Representation;
 
 /**
  * An AssertJ {@link Representation} for an annotation default value.
  */
-public class AnnotationDefaultValueRepresentation extends AbstractAsmRepresentation<AnnotationDefaultValue> {
+public class AnnotationDefaultValueRepresentation extends AbstractAsmRepresentation<AnnotationDefault> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
@@ -18,7 +18,7 @@ public class AnnotationDefaultValueRepresentation extends AbstractAsmRepresentat
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected AnnotationDefaultValueRepresentation() {
-    super(AnnotationDefaultValue.class);
+    super(AnnotationDefault.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
@@ -33,8 +33,8 @@ public class AnnotationDefaultValueRepresentation extends AbstractAsmRepresentat
   }
 
   @Override
-  protected String doToStringOf(AnnotationDefaultValue annotationDefaultValue) {
-    return asmRepresentations.toStringOf(annotationDefaultValue.defaultValue());
+  protected String doToStringOf(AnnotationDefault annotationDefault) {
+    return asmRepresentations.toStringOf(annotationDefault.defaultValue());
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

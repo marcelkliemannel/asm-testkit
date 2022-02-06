@@ -1,6 +1,5 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils;
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationA;
 import org.assertj.core.api.Assertions;
 import org.intellij.lang.annotations.Language;
@@ -10,6 +9,7 @@ import org.objectweb.asm.tree.MethodNode;
 
 import java.io.IOException;
 
+import static dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils.extractLabelIndices;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThat;
 import static dev.turingcomplete.asmtestkit.compile.CompilationEnvironment.create;
 
@@ -44,10 +44,10 @@ class LocalVariableAnnotationNodeAssertTest {
     AsmAssertions.assertThat(firstLocalVariableAnnotationNode)
                  .isEqualTo(firstLocalVariableAnnotationNode);
 
-    LabelNameLookup labelNameLookup = LabelNameLookup.create(MethodNodeUtils.extractLabelNames(methodNode));
+    LabelIndexLookup labelIndexLookup = DefaultLabelIndexLookup.create(extractLabelIndices(methodNode));
 
     Assertions.assertThatThrownBy(() -> assertThat(firstLocalVariableAnnotationNode)
-                      .useLabelNameLookup(labelNameLookup)
+                      .useLabelIndexLookup(labelIndexLookup)
                       .isEqualTo(secondLocalVariableAnnotationNode))
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Local Variable Annotation: @dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA > Has equal ranges] \n" +

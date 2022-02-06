@@ -1,6 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
-import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
+import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
+import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
 
 import java.util.Comparator;
 import java.util.Objects;
@@ -16,8 +17,8 @@ public abstract class AbstractWithLabelNamesAsmComparator<T> extends AsmComparat
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
-  public final int compare(T first, T second, LabelNameLookup labelNameLookup) {
-    Objects.requireNonNull(labelNameLookup);
+  public final int compare(T first, T second, LabelIndexLookup labelIndexLookup) {
+    Objects.requireNonNull(labelIndexLookup);
 
     // Instance null check
     if (first != null && second == null) {
@@ -30,12 +31,12 @@ public abstract class AbstractWithLabelNamesAsmComparator<T> extends AsmComparat
       return 0;
     }
 
-    return doCompare(first, second, labelNameLookup);
+    return doCompare(first, second, labelIndexLookup);
   }
 
   @Override
   protected int doCompare(T first, T second) {
-    return doCompare(first, second, LabelNameLookup.EMPTY);
+    return doCompare(first, second, DefaultLabelIndexLookup.create());
   }
 
   /**
@@ -46,10 +47,10 @@ public abstract class AbstractWithLabelNamesAsmComparator<T> extends AsmComparat
    *
    * @param first           first object to be compared; never null.
    * @param second          object to be compared; never null.
-   * @param labelNameLookup the {@link LabelNameLookup}; never null.
+   * @param labelIndexLookup the {@link LabelIndexLookup}; never null.
    * @return the comparison result.
    */
-  protected abstract int doCompare(T first, T second, LabelNameLookup labelNameLookup);
+  protected abstract int doCompare(T first, T second, LabelIndexLookup labelIndexLookup);
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //

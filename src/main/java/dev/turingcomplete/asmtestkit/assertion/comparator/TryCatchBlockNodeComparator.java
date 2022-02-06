@@ -1,7 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
-import dev.turingcomplete.asmtestkit.asmutils.TypeUtils;
-import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
+import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.WithLabelNamesIterableAsmComparator;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.LabelNode;
@@ -10,11 +9,14 @@ import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.util.Comparator;
 
+import static dev.turingcomplete.asmtestkit.asmutils.TypeUtils.toTypeElseNull;
+
 /**
  * A comparison function to order {@link TryCatchBlockNode}s.
  *
- * <p>Two {@code TryCatchBlockNode}s will be considered as equal if their start,
- * end and handler labels, type, and (in)visible type annotations are equal.
+ * <p>Two {@code TryCatchBlockNode}s will be considered as equal if if all the
+ * {@code public} {@link TryCatchBlockNode} fields are equal. Otherwise, they
+ * will be ordered by the comparison of the first non-matching field.
  */
 public class TryCatchBlockNodeComparator extends AbstractWithLabelNamesAsmComparator<TryCatchBlockNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -49,11 +51,11 @@ public class TryCatchBlockNodeComparator extends AbstractWithLabelNamesAsmCompar
   }
 
   @Override
-  protected int doCompare(TryCatchBlockNode first, TryCatchBlockNode second, LabelNameLookup labelNameLookup) {
-    return WithLabelNamesAsmComparator.comparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.start, asmComparators.elementComparator(LabelNode.class), labelNameLookup)
+  protected int doCompare(TryCatchBlockNode first, TryCatchBlockNode second, LabelIndexLookup labelIndexLookup) {
+    return WithLabelNamesAsmComparator.comparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.start, asmComparators.elementComparator(LabelNode.class), labelIndexLookup)
                                       .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.end, asmComparators.elementComparator(LabelNode.class))
                                       .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.handler, asmComparators.elementComparator(LabelNode.class))
-                                      .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> TypeUtils.toTypeElseNull(tryCatchBlockNode.type), asmComparators.elementComparator(Type.class))
+                                      .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> toTypeElseNull(tryCatchBlockNode.type), asmComparators.elementComparator(Type.class))
                                       .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.visibleTypeAnnotations, asmComparators.iterableComparator(TypeAnnotationNode.class))
                                       .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.invisibleTypeAnnotations, asmComparators.iterableComparator(TypeAnnotationNode.class))
                                       .compare(first, second);

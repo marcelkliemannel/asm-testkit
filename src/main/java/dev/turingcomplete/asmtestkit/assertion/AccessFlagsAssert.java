@@ -1,7 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.assertion.comparator.AccessFlagsComparator;
-import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.representation.AccessFlagsRepresentation;
 import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import org.assertj.core.api.AbstractAssert;
@@ -18,8 +17,6 @@ import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getF
  * <p>An instance can be created via {@link AsmAssertions#assertThat(AccessFlags)}.
  * Use {@link AsmAssertions#assertThatAccessFlags(Iterable)} for
  * multiple {@code AccessFlags}.
- *
- * <p>There are no direct supported {@link AssertOption}s yet.
  *
  * <p>To override the used {@link AccessFlagsRepresentation} or {@link AccessFlagsComparator}
  * use {@link #withRepresentation(Representation)} or {@link #usingComparator(Comparator)}.

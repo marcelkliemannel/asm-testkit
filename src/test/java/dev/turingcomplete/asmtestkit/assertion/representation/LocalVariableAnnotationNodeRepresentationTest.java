@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
-import dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils;
-import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
+import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
+import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationA;
 import org.assertj.core.api.Assertions;
 import org.intellij.lang.annotations.Language;
@@ -12,6 +12,7 @@ import org.objectweb.asm.tree.MethodNode;
 import java.io.IOException;
 import java.util.List;
 
+import static dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils.extractLabelIndices;
 import static dev.turingcomplete.asmtestkit.compile.CompilationEnvironment.create;
 
 class LocalVariableAnnotationNodeRepresentationTest {
@@ -71,14 +72,14 @@ class LocalVariableAnnotationNodeRepresentationTest {
             .readClassNode("MyClass")
             .methods.get(1);
 
-    LabelNameLookup labelNameLookup = LabelNameLookup.create(MethodNodeUtils.extractLabelNames(myMethod));
+    LabelIndexLookup labelIndexLookup = DefaultLabelIndexLookup.create(extractLabelIndices(myMethod));
     LocalVariableAnnotationNode firstLocalVariableAnnotationNode = myMethod.visibleLocalVariableAnnotations.get(0);
     LocalVariableAnnotationNode secondLocalVariableAnnotationNode = myMethod.visibleLocalVariableAnnotations.get(1);
 
-    Assertions.assertThat(LocalVariableAnnotationNodeRepresentation.INSTANCE.toStringOf(firstLocalVariableAnnotationNode, labelNameLookup))
+    Assertions.assertThat(LocalVariableAnnotationNodeRepresentation.INSTANCE.toStringOf(firstLocalVariableAnnotationNode, labelIndexLookup))
               .isEqualTo("@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: #2 L1-L3");
 
-    Assertions.assertThat(LocalVariableAnnotationNodeRepresentation.INSTANCE.toStringOf(secondLocalVariableAnnotationNode, labelNameLookup))
+    Assertions.assertThat(LocalVariableAnnotationNodeRepresentation.INSTANCE.toStringOf(secondLocalVariableAnnotationNode, labelIndexLookup))
               .isEqualTo("@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationB // reference: local_variable; path: null // range: #3 L2-L3");
   }
 

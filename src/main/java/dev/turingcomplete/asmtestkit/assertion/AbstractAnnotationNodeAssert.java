@@ -1,6 +1,5 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.option.StandardAssertOption;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
@@ -16,9 +15,6 @@ import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getS
 /**
  * The base class for an AssertJ {@link AbstractAssert} for an
  * {@link AnnotationNode} or its subtypes.
- *
- * <p>The supported {@link AssertOption} is:
- * {@link StandardAssertOption#IGNORE_ANNOTATION_VALUES}.
  *
  * @param <S> the 'self' type of {@code this} {@link AsmAssert}.
  * @param <A> an {@link AnnotationNode} or a subtype of the actual object.

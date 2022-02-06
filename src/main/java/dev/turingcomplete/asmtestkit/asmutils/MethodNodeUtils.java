@@ -31,7 +31,7 @@ public final class MethodNodeUtils {
    * @return a {@link Map} which maps a {@link Label} to its {@link String} name;
    * never null.
    */
-  public static Map<Label, String> extractLabelNames(MethodNode firstMethodNode, MethodNode... additionalMethodNodes) {
+  public static Map<Label, Integer> extractLabelIndices(MethodNode firstMethodNode, MethodNode... additionalMethodNodes) {
     Objects.requireNonNull(firstMethodNode);
     Objects.requireNonNull(additionalMethodNodes);
 
@@ -39,8 +39,24 @@ public final class MethodNodeUtils {
                  .flatMap(methodNode -> {
                    var extendedTextifier = new TextifierUtils.ExtendedTextifier();
                    methodNode.accept(new TraceMethodVisitor(extendedTextifier));
-                   return extendedTextifier.getLabelNames().entrySet().stream();
+                   return extendedTextifier.labelIndices().entrySet().stream();
                  }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+  }
+
+  /**
+   * Creates a copy of the given {@link MethodNode}.
+   *
+   * @param methodNode the {@link MethodNode} to be copied; never null.
+   * @return a new {@link MethodNode}; never null.
+   */
+  public static MethodNode copy(MethodNode methodNode) {
+    Objects.requireNonNull(methodNode);
+
+    String[] exceptions = methodNode.exceptions != null ? methodNode.exceptions.toArray(String[]::new) : null;
+    var copy = new MethodNode(methodNode.access, methodNode.name, methodNode.desc, methodNode.signature, exceptions);
+    methodNode.accept(copy);
+
+    return copy;
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

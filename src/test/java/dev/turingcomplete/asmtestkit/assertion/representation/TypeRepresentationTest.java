@@ -81,6 +81,12 @@ class TypeRepresentationTest {
             .isEqualTo("java.lang.String");
   }
 
+  @Test
+  void testMethodDescriptor() {
+    assertThat(new TypeRepresentation().toStringOf(Type.getMethodType("(I)Ljava/lang/String;")))
+            .isEqualTo("(I)Ljava/lang/String;");
+  }
+
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 }

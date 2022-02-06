@@ -1,6 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
-import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
+import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
+import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.tree.LocalVariableAnnotationNode;
 
@@ -44,26 +45,26 @@ public class LocalVariableAnnotationNodeRepresentation
 
   @Override
   protected String doToStringOf(LocalVariableAnnotationNode annotationNode) {
-    return toStringOf(annotationNode, LabelNameLookup.EMPTY);
+    return toStringOf(annotationNode, DefaultLabelIndexLookup.create());
   }
 
   @Override
-  public String doToStringOf(LocalVariableAnnotationNode annotationNode, LabelNameLookup labelNameLookup) {
+  public String doToStringOf(LocalVariableAnnotationNode annotationNode, LabelIndexLookup labelIndexLookup) {
     String representation = super.doToStringOf(annotationNode);
 
-    representation += toRangeStringOf(annotationNode, labelNameLookup).stream().collect(Collectors.joining("; ", " // range: ", ""));
+    representation += toRangeStringOf(annotationNode, labelIndexLookup).stream().collect(Collectors.joining("; ", " // range: ", ""));
 
     return representation;
   }
 
-  public List<String> toRangeStringOf(LocalVariableAnnotationNode annotationNode, LabelNameLookup labelNameLookup) {
+  public List<String> toRangeStringOf(LocalVariableAnnotationNode annotationNode, LabelIndexLookup labelIndexLookup) {
     List<String> ranges = new ArrayList<>();
 
     for (int i = 0; i < annotationNode.start.size(); i++) {
       String range = "#" + annotationNode.index.get(i) + " ";
-      range += asmRepresentations.toStringOf(annotationNode.start.get(i), labelNameLookup);
+      range += asmRepresentations.toStringOf(annotationNode.start.get(i), labelIndexLookup);
       range += "-";
-      range += asmRepresentations.toStringOf(annotationNode.end.get(i), labelNameLookup);
+      range += asmRepresentations.toStringOf(annotationNode.end.get(i), labelIndexLookup);
       ranges.add(range);
     }
 

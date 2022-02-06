@@ -1,12 +1,12 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
-import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
+import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Label;
 
 /**
  * An AssertJ {@link Representation} which handles representations of ASM
- * objects that are supporting {@link LabelNameLookup}.
+ * objects that are supporting {@link LabelIndexLookup}.
  */
 public interface WithLabelNamesAsmRepresentation extends Representation {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -18,7 +18,7 @@ public interface WithLabelNamesAsmRepresentation extends Representation {
    * {@code object} respecting names of {@link Label}s.
    *
    * <p>The default implementation will return the same values as
-   * {@link #toStringOf(Object, LabelNameLookup)}.
+   * {@link #toStringOf(Object, LabelIndexLookup)}.
    *
    * <p>A simplified representation should have a limited length and should
    * not contain line breaks. It should reflect the essence of an object,
@@ -29,12 +29,12 @@ public interface WithLabelNamesAsmRepresentation extends Representation {
    *
    * @param object          the object to create a simple representation of;
    *                        may be null.
-   * @param labelNameLookup a {@link LabelNameLookup} to look up names of
+   * @param labelIndexLookup a {@link LabelIndexLookup} to look up names of
    *                        {@link Label}s; never null.
    * @return the {@link String} representation; may be null.
    */
-  default String toSimplifiedStringOf(Object object, LabelNameLookup labelNameLookup) {
-    return toStringOf(object, labelNameLookup);
+  default String toSimplifiedStringOf(Object object, LabelIndexLookup labelIndexLookup) {
+    return toStringOf(object, labelIndexLookup);
   }
 
   /**
@@ -46,11 +46,11 @@ public interface WithLabelNamesAsmRepresentation extends Representation {
    *
    * @param object          the object to create a representation of; may be
    *                        null.
-   * @param labelNameLookup a {@link LabelNameLookup} to look up names of
+   * @param labelIndexLookup a {@link LabelIndexLookup} to look up names of
    *                        {@link Label}s; never null.
    * @return the {@link String} representation; may be null.
    */
-  String toStringOf(Object object, LabelNameLookup labelNameLookup);
+  String toStringOf(Object object, LabelIndexLookup labelIndexLookup);
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //

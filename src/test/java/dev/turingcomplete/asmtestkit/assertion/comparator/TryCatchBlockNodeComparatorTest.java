@@ -1,13 +1,13 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
-import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
+import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.tree.MethodNode;
 
 import java.io.IOException;
 
-import static dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils.extractLabelNames;
+import static dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils.extractLabelIndices;
 import static dev.turingcomplete.asmtestkit.assertion.comparator.TryCatchBlockNodeComparator.INSTANCE;
 import static dev.turingcomplete.asmtestkit.compile.CompilationEnvironment.create;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,7 +46,7 @@ class TryCatchBlockNodeComparatorTest {
 
     assertThat(INSTANCE.compare(firstMethod.tryCatchBlocks.get(0),
                                 secondMethod.tryCatchBlocks.get(0),
-                                LabelNameLookup.create(extractLabelNames(firstMethod, secondMethod))))
+                                DefaultLabelIndexLookup.create(extractLabelIndices(firstMethod, secondMethod))))
             .isEqualTo(0);
   }
 
@@ -90,7 +90,7 @@ class TryCatchBlockNodeComparatorTest {
 
     assertThat(INSTANCE.compare(firstMethod.tryCatchBlocks.get(0),
                                 secondMethod.tryCatchBlocks.get(0),
-                                LabelNameLookup.create(extractLabelNames(firstMethod, secondMethod))))
+                                DefaultLabelIndexLookup.create(extractLabelIndices(firstMethod, secondMethod))))
             .isNotEqualTo(0);
   }
 

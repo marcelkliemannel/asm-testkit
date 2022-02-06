@@ -6,6 +6,8 @@ import org.objectweb.asm.util.Textifier;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -46,6 +48,8 @@ public final class TextifierUtils {
 
   public static class ExtendedTextifier extends Textifier {
 
+    private final Map<Label, Integer> labelIndices = new HashMap<>();
+
     public ExtendedTextifier() {
       super(Opcodes.ASM9);
 
@@ -70,8 +74,21 @@ public final class TextifierUtils {
       return new ExtendedTextifier();
     }
 
-    public Map<Label, String> getLabelNames() {
-      return labelNames != null ? labelNames : Map.of();
+    @Override
+    protected void appendLabel(Label label) {
+      super.appendLabel(label);
+
+      if (!labelIndices.containsKey(label)) {
+        labelIndices.put(label, labelIndices.size());
+      }
+    }
+
+    public Map<Label, Integer> labelIndices() {
+      return Collections.unmodifiableMap(labelIndices);
+    }
+
+    public Map<Label, String> labelNames() {
+      return labelNames != null ? Collections.unmodifiableMap(labelNames) : Map.of();
     }
   }
 }

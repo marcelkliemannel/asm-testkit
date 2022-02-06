@@ -1,5 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
+import dev.turingcomplete.asmtestkit.asmutils.LocalVariableNodeUtils;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.tree.LocalVariableNode;
@@ -33,10 +34,10 @@ class LocalVariableNodeComparatorTest {
             .methods.get(1).localVariables;
 
     LocalVariableNode firstVariable = localVariables.get(0);
-    LocalVariableNode  secondVariable = localVariables.get(1);
+    LocalVariableNode copyFirstVariable = LocalVariableNodeUtils.copy(firstVariable);
+    LocalVariableNode secondVariable = localVariables.get(1);
 
-    //noinspection EqualsWithItself
-    assertThat(LocalVariableNodeComparator.INSTANCE.compare(firstVariable, firstVariable))
+    assertThat(LocalVariableNodeComparator.INSTANCE.compare(firstVariable, copyFirstVariable))
             .isEqualTo(0);
 
     assertThat(LocalVariableNodeComparator.INSTANCE.compare(firstVariable, secondVariable))

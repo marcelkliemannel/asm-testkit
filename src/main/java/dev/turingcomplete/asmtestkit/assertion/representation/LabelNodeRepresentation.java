@@ -1,6 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
-import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
+import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
+import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.tree.LabelNode;
@@ -11,7 +12,7 @@ import org.objectweb.asm.tree.LabelNode;
  * The {@link #toStringOf(Object)} implementation will output a {@code L}
  * followed by the hash code of the {@link LabelNode#getLabel()}. To map the
  * {@link Label} to a consistent name use
- * {@link #doToStringOf(LabelNode, LabelNameLookup)}.
+ * {@link #doToStringOf(LabelNode, LabelIndexLookup)}.
  */
 public class LabelNodeRepresentation extends AbstractWithLabelNamesAsmRepresentation<LabelNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -41,12 +42,12 @@ public class LabelNodeRepresentation extends AbstractWithLabelNamesAsmRepresenta
 
   @Override
   protected String doToStringOf(LabelNode labelNode) {
-    return doToStringOf(labelNode, LabelNameLookup.EMPTY);
+    return doToStringOf(labelNode, DefaultLabelIndexLookup.create());
   }
 
   @Override
-  public String doToStringOf(LabelNode labelNode, LabelNameLookup labelNameLookup) {
-    return labelNameLookup.find(labelNode.getLabel()).orElse("L" + labelNode.getLabel().hashCode());
+  public String doToStringOf(LabelNode labelNode, LabelIndexLookup labelIndexLookup) {
+    return "L" + labelIndexLookup.find(labelNode.getLabel()).orElse(labelNode.getLabel().hashCode());
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

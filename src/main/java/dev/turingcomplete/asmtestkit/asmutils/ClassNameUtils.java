@@ -59,6 +59,18 @@ public final class ClassNameUtils {
   }
 
   /**
+   * Gets the internal name of the given {@link Class}.
+   *
+   * <p>For example, returns {@code java/lang/String} for {@link Class}.
+   *
+   * @param aClass a {@link Class}; never null.
+   * @return the internal name of the given class; never null.
+   */
+  public static String toInternalName(Class<?> aClass) {
+    return Objects.requireNonNull(aClass).getName().replace('.', '/');
+  }
+
+  /**
    * Converts the given internal name ('slash' format) to a fully qualified
    * name ('dot' format).
    *

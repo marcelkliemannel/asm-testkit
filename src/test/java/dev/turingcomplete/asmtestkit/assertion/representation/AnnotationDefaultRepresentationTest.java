@@ -1,14 +1,14 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
 import dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils;
-import dev.turingcomplete.asmtestkit.node.AnnotationDefaultValue;
+import dev.turingcomplete.asmtestkit.node.AnnotationDefault;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.tree.AnnotationNode;
 
 import static dev.turingcomplete.asmtestkit.assertion.representation.AnnotationDefaultValueRepresentation.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class AnnotationDefaultValueRepresentationTest {
+class AnnotationDefaultRepresentationTest {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
@@ -16,13 +16,13 @@ class AnnotationDefaultValueRepresentationTest {
 
   @Test
   void testToStringOf() {
-    assertThat(INSTANCE.toStringOf(AnnotationDefaultValue.create(5)))
+    assertThat(INSTANCE.toStringOf(AnnotationDefault.create(5)))
               .isEqualTo("5");
 
     AnnotationNode annotationNode = AnnotationNodeUtils.createAnnotationNode(Deprecated.class);
-    AnnotationDefaultValue annotationDefaultValue = AnnotationDefaultValue.create(annotationNode);
+    AnnotationDefault annotationDefault = AnnotationDefault.create(annotationNode);
 
-    assertThat(INSTANCE.toStringOf(annotationDefaultValue))
+    assertThat(INSTANCE.toStringOf(annotationDefault))
             .isEqualTo(AnnotationNodeRepresentation.INSTANCE.toStringOf(annotationNode));
   }
 

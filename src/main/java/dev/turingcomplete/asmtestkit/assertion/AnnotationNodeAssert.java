@@ -1,8 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.assertion.comparator.AnnotationNodeComparator;
-import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
-import dev.turingcomplete.asmtestkit.assertion.option.StandardAssertOption;
 import dev.turingcomplete.asmtestkit.assertion.representation.AnnotationNodeRepresentation;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;
@@ -16,9 +14,6 @@ import java.util.Comparator;
  * <p>An instance can be created via {@link AsmAssertions#assertThat(AnnotationNode)}.
  * Use {@link AsmAssertions#assertThatAnnotations(Iterable)} for multiple
  * {@code AnnotationNode}s.
- *
- * <p>The supported {@link AssertOption} is:
- * {@link StandardAssertOption#IGNORE_ANNOTATION_VALUES}.
  *
  * <p>To override the used {@link AnnotationNodeRepresentation} or
  * {@link AnnotationNodeComparator} call {@link #withRepresentation(Representation)}

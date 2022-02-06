@@ -1,9 +1,8 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import dev.turingcomplete.asmtestkit.assertion.comparator.ParameterNodeComparator;
-import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.representation.ParameterNodeRepresentation;
+import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.presentation.Representation;
@@ -22,8 +21,6 @@ import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getS
  * {@link AsmAssertions#assertThat(ParameterNode)}. Use
  * {@link AsmAssertions#assertThatParameters(Iterable)} for multiple
  * {@code ParameterNode}s.
- *
- * <p>There are no direct supported {@link AssertOption}s yet.
  *
  * <p>To override the used {@link ParameterNodeRepresentation} or
  * {@link ParameterNodeComparator} call {@link #withRepresentation(Representation)}

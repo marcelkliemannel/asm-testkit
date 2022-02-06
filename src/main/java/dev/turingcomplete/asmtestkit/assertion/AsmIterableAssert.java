@@ -3,6 +3,8 @@ package dev.turingcomplete.asmtestkit.assertion;
 import dev.turingcomplete.asmtestkit.assertion._internal.AsmWritableAssertionInfo;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.WithLabelNamesAsmComparatorAdapter;
 import org.assertj.core.api.AbstractIterableAssert;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.internal.Failures;
 
 import java.util.Comparator;
 import java.util.Objects;
@@ -20,6 +22,8 @@ public class AsmIterableAssert<S extends AsmIterableAssert<S, E, A>, E, A extend
 
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
+
+  private final Failures failures = Failures.instance();
 
   private final Function<E, A> createElementAssert;
 
@@ -48,27 +52,27 @@ public class AsmIterableAssert<S extends AsmIterableAssert<S, E, A>, E, A extend
   }
 
   /**
-   * Sets the given {@link LabelNameLookup} to look up known label names.
+   * Sets the given {@link LabelIndexLookup} to look up known label names.
    *
-   * @param labelNameLookup a {@link LabelNameLookup} to set; never null.
+   * @param labelIndexLookup a {@link LabelIndexLookup} to set; never null.
    * @return {@code this} {@link S}; never null.
    * @see #labelNameLookup()
    */
-  public S useLabelNameLookup(LabelNameLookup labelNameLookup) {
-    Objects.requireNonNull(labelNameLookup);
-    getWritableAssertionInfo().useLabelNameLookup(labelNameLookup);
+  public S useLabelNameLookup(LabelIndexLookup labelIndexLookup) {
+    Objects.requireNonNull(labelIndexLookup);
+    getWritableAssertionInfo().useLabelIndexLookup(labelIndexLookup);
 
     //noinspection unchecked
     return (S) this;
   }
 
   /**
-   * Gets the current {@link LabelNameLookup} to look up known label names.
+   * Gets the current {@link LabelIndexLookup} to look up known label names.
    *
-   * @return the current {@link LabelNameLookup}; never null.
+   * @return the current {@link LabelIndexLookup}; never null.
    * @see #labelNameLookup()
    */
-  public LabelNameLookup labelNameLookup() {
+  public LabelIndexLookup labelNameLookup() {
     return getWritableAssertionInfo().labelNameLookup();
   }
 
@@ -96,6 +100,32 @@ public class AsmIterableAssert<S extends AsmIterableAssert<S, E, A>, E, A extend
   @Override
   public S usingElementComparator(Comparator<? super E> customElementComparator) {
     return super.usingElementComparator(WithLabelNamesAsmComparatorAdapter.wrapIfNeeded(customElementComparator, getWritableAssertionInfo().labelNameLookup()));
+  }
+
+  /**
+   * The {@link super#containsExactlyInAnyOrderForProxy} fails if {@link #actual} or
+   * {@code expected} are null. But in most ASM assertion cases, both to be null
+   * is a valid state.
+   *
+   * <p>In the case {@code expected == null}, the super methods throws a generic
+   * {@link NullPointerException}, without pointing out in detail that causes the
+   * error. We want to fix that here with a more detailed error message.
+   */
+  @Override
+  protected S containsExactlyInAnyOrderForProxy(E[] expected) {
+    if (actual == null && expected == null) {
+      //noinspection unchecked
+      return (S) this;
+    }
+
+    if (actual != null) {
+      Assertions.assertThat(expected)
+                .as(descriptionText())
+                .withFailMessage(String.format("%nExpecting expected value not to be null if actual value is not null"))
+                .isNotNull();
+    }
+
+    return super.containsExactlyInAnyOrderForProxy(expected);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

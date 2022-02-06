@@ -97,26 +97,26 @@ public abstract class AsmAssert<S extends AbstractAssert<S, A>, A>
   }
 
   /**
-   * Sets the given {@link LabelNameLookup} to look up known label names.
+   * Sets the given {@link LabelIndexLookup} to look up known label indicies.
    *
-   * @param labelNameLookup a {@link LabelNameLookup} to set; never null.
+   * @param labelIndexLookup a {@link LabelIndexLookup} to set; never null.
    * @return {@code this} {@link S}; never null.
    * @see #labelNameLookup()
    */
-  public S useLabelNameLookup(LabelNameLookup labelNameLookup) {
-    getWritableAssertionInfo().useLabelNameLookup(Objects.requireNonNull(labelNameLookup));
+  public S useLabelIndexLookup(LabelIndexLookup labelIndexLookup) {
+    getWritableAssertionInfo().useLabelIndexLookup(Objects.requireNonNull(labelIndexLookup));
 
     //noinspection unchecked
     return (S) this;
   }
 
   /**
-   * Gets the current {@link LabelNameLookup} to look up known label names.
+   * Gets the current {@link LabelIndexLookup} to look up known label names.
    *
-   * @return the current {@link LabelNameLookup}; never null.
+   * @return the current {@link LabelIndexLookup}; never null.
    * @see #labelNameLookup()
    */
-  public LabelNameLookup labelNameLookup() {
+  public LabelIndexLookup labelNameLookup() {
     return getWritableAssertionInfo().labelNameLookup();
   }
 

@@ -1,11 +1,19 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.WithLabelNamesIterableAsmComparator;
-import org.objectweb.asm.Type;
+import dev.turingcomplete.asmtestkit.assertion.representation.AbstractTypeAnnotationNodeRepresentation;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.util.Comparator;
 
+/**
+ * A comparison function to order {@link TypeAnnotationNode}s.
+ *
+ * <p>Two {@code TypeAnnotationNode}s will be considered as equal if their
+ * descriptors, values (order is ignored), type references, and type paths are
+ * equal. If their values are not equal they will be ordered based on the
+ * lexicographical order of their {@link AbstractTypeAnnotationNodeRepresentation}s.
+ */
 public class TypeAnnotationNodeComparator
         extends AbstractTypeAnnotationNodeComparator<TypeAnnotationNodeComparator, TypeAnnotationNode> {
 

@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
-import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
+import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.tree.LabelNode;
@@ -25,11 +25,11 @@ class LabelNodeRepresentationTest {
   @Test
   void testToStringOfWithNames() {
     var label = new Label();
-    assertThat(LabelNodeRepresentation.INSTANCE.doToStringOf(new LabelNode(label), LabelNameLookup.create(Map.of(label, "L1"))))
+    assertThat(LabelNodeRepresentation.INSTANCE.doToStringOf(new LabelNode(label), DefaultLabelIndexLookup.create(Map.of(label, 1))))
             .isEqualTo("L1");
 
     var unknownLabel = new Label();
-    assertThat(LabelNodeRepresentation.INSTANCE.doToStringOf(new LabelNode(unknownLabel), LabelNameLookup.create(Map.of(label, "L1"))))
+    assertThat(LabelNodeRepresentation.INSTANCE.doToStringOf(new LabelNode(unknownLabel), DefaultLabelIndexLookup.create(Map.of(label, 1))))
             .isEqualTo("L" + unknownLabel.hashCode());
   }
 

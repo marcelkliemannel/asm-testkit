@@ -1,7 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.assertion.comparator.AttributeComparator;
-import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.representation.AttributeRepresentation;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;
@@ -16,8 +15,6 @@ import java.util.Comparator;
  * <p>An instance can be created via {@link AsmAssertions#assertThat(Attribute)}.
  * Use {@link AsmAssertions#assertThatAttributes(Iterable)} for multiple
  * {@code Attribute}s.
- *
- * <p>There are no direct supported {@link AssertOption}s yet.
  *
  * <p>To override the used {@link AttributeRepresentation} or
  * {@link AttributeComparator} call {@link #withRepresentation(Representation)}

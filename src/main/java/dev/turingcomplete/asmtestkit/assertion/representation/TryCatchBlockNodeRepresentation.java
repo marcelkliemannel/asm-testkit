@@ -1,10 +1,12 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
-import dev.turingcomplete.asmtestkit.asmutils.TypeUtils;
-import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
+import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
+import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.tree.TryCatchBlockNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
+
+import static dev.turingcomplete.asmtestkit.asmutils.TypeUtils.toTypeElseNull;
 
 /**
  * An AssertJ {@link Representation} for a {@link TryCatchBlockNode}.
@@ -48,12 +50,12 @@ public class TryCatchBlockNodeRepresentation extends AbstractWithLabelNamesAsmRe
   }
 
   @Override
-  protected String doToSimplifiedStringOf(TryCatchBlockNode tryCatchBlockNode, LabelNameLookup labelNameLookup) {
+  protected String doToSimplifiedStringOf(TryCatchBlockNode tryCatchBlockNode, LabelIndexLookup labelIndexLookup) {
     var representation = new StringBuilder();
 
     // Type
     if (tryCatchBlockNode.type != null) {
-      representation.append(asmRepresentations.toStringOf(TypeUtils.toTypeElseNull(tryCatchBlockNode.type)));
+      representation.append(asmRepresentations.toStringOf(toTypeElseNull(tryCatchBlockNode.type)));
     }
     else {
       representation.append("finally");
@@ -61,22 +63,22 @@ public class TryCatchBlockNodeRepresentation extends AbstractWithLabelNamesAsmRe
 
     // Range
     representation.append(" // range: ")
-                  .append(asmRepresentations.toStringOf(tryCatchBlockNode.start, labelNameLookup))
+                  .append(asmRepresentations.toStringOf(tryCatchBlockNode.start, labelIndexLookup))
                   .append("-")
-                  .append(asmRepresentations.toStringOf(tryCatchBlockNode.end, labelNameLookup))
+                  .append(asmRepresentations.toStringOf(tryCatchBlockNode.end, labelIndexLookup))
                   .append("; handled in: ")
-                  .append(asmRepresentations.toStringOf(tryCatchBlockNode.handler, labelNameLookup));
+                  .append(asmRepresentations.toStringOf(tryCatchBlockNode.handler, labelIndexLookup));
 
     return representation.toString();
   }
 
   @Override
   protected String doToStringOf(TryCatchBlockNode tryCatchBlockNode) {
-    return doToStringOf(tryCatchBlockNode, LabelNameLookup.EMPTY);
+    return doToStringOf(tryCatchBlockNode, DefaultLabelIndexLookup.create());
   }
 
   @Override
-  public String doToStringOf(TryCatchBlockNode tryCatchBlockNode, LabelNameLookup labelNameLookup) {
+  public String doToStringOf(TryCatchBlockNode tryCatchBlockNode, LabelIndexLookup labelIndexLookup) {
     var representation = new StringBuilder();
 
     // Annotations
@@ -91,7 +93,7 @@ public class TryCatchBlockNodeRepresentation extends AbstractWithLabelNamesAsmRe
       }
     }
 
-    representation.append(doToSimplifiedStringOf(tryCatchBlockNode, labelNameLookup));
+    representation.append(doToSimplifiedStringOf(tryCatchBlockNode, labelIndexLookup));
 
     return representation.toString();
   }

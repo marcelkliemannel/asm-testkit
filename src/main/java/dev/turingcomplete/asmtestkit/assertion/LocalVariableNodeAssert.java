@@ -1,7 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.assertion.comparator.LocalVariableNodeComparator;
-import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.representation.LocalVariableNodeRepresentation;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
@@ -22,8 +21,6 @@ import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getS
  * {@link AsmAssertions#assertThat(LocalVariableNode)}. Use
  * {@link AsmAssertions#assertThatLocalVariables(Iterable)} for multiple
  * {@code LocalVariableNode}s.
- *
- * <p>There are no direct supported {@link AssertOption}s yet.
  *
  * <p>To override the used {@link LocalVariableNodeRepresentation} or
  * {@link LocalVariableNodeComparator} call {@link #withRepresentation(Representation)}

@@ -1,6 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion._internal;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public final class AssertUtils {
@@ -13,6 +14,23 @@ public final class AssertUtils {
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
+
+  public static <T> void ifNotNull(T object, Consumer<T> task) {
+    if (object != null) {
+      task.accept(object);
+    }
+  }
+
+  public static <T> T getIfIndexExists(List<T> list, int index) {
+    if (index < list.size()) {
+      return list.get(index);
+    }
+    else {
+      return null;
+    }
+  }
+
+  // ----------
 
   public static <T> String getStringFromObjectElseNull(T object, Function<T, String> provide) {
     return object != null ? provide.apply(object) : null;

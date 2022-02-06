@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
-import dev.turingcomplete.asmtestkit.asmutils.InsnListUtils;
-import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
+import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
+import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.LabelNode;
@@ -10,7 +10,8 @@ import org.objectweb.asm.tree.LineNumberNode;
 import java.util.Comparator;
 import java.util.Iterator;
 
-import static dev.turingcomplete.asmtestkit.asmutils.InsnListUtils.numerateLabels;
+import static dev.turingcomplete.asmtestkit.asmutils.InsnListUtils.extractLabelIndices;
+import static dev.turingcomplete.asmtestkit.asmutils.InsnListUtils.filterLineNumbers;
 import static org.assertj.core.util.IterableUtil.sizeOf;
 
 /**
@@ -68,14 +69,21 @@ public class InsnListComparator extends AbstractWithLabelNamesAsmComparator<Iter
   }
 
   @Override
+  protected int doCompare(Iterable<? extends AbstractInsnNode> first, Iterable<? extends AbstractInsnNode> second) {
+    DefaultLabelIndexLookup labelIndexLookup = DefaultLabelIndexLookup.create(extractLabelIndices(first));
+    labelIndexLookup.putAll(extractLabelIndices(second));
+    return doCompare(first, second, labelIndexLookup);
+  }
+
+  @Override
   protected int doCompare(Iterable<? extends AbstractInsnNode> first,
                           Iterable<? extends AbstractInsnNode> second,
-                          LabelNameLookup labelNameLookup) {
+                          LabelIndexLookup labelIndexLookup) {
 
     // Clear line numbers
     if (ignoreLineNumbers) {
-      first = InsnListUtils.filterLineNumbers(first);
-      second = InsnListUtils.filterLineNumbers(second);
+      first = filterLineNumbers(first);
+      second = filterLineNumbers(second);
     }
 
     // Compare sizes
@@ -85,14 +93,15 @@ public class InsnListComparator extends AbstractWithLabelNamesAsmComparator<Iter
       return firstSize - secondSize;
     }
 
-    LabelNameLookup _labelNameLookup = labelNameLookup.merge(createLabelNameLookup(first, second));
+    extractLabelIndices(first).forEach(labelIndexLookup::putIfUnknown);
+    extractLabelIndices(second).forEach(labelIndexLookup::putIfUnknown);
 
     // Compare each instruction
     Comparator<AbstractInsnNode> instructionComparator = asmComparators.elementComparator(AbstractInsnNode.class);
     Iterator<? extends AbstractInsnNode> secondIterator = second.iterator();
     for (AbstractInsnNode firstInstruction : first) {
       AbstractInsnNode secondInstruction = secondIterator.next();
-      int instructionCompare = compareInstructions(instructionComparator, firstInstruction, secondInstruction, _labelNameLookup);
+      int instructionCompare = compareInstructions(instructionComparator, firstInstruction, secondInstruction, labelIndexLookup);
       if (instructionCompare != 0) {
         return instructionCompare;
       }
@@ -104,11 +113,11 @@ public class InsnListComparator extends AbstractWithLabelNamesAsmComparator<Iter
   private int compareInstructions(Comparator<AbstractInsnNode> instructionComparator,
                                   AbstractInsnNode firstInstruction,
                                   AbstractInsnNode secondInstruction,
-                                  LabelNameLookup _labelNameLookup) {
+                                  LabelIndexLookup _labelIndexLookup) {
 
     if (instructionComparator instanceof WithLabelNamesAsmComparator) {
       return ((WithLabelNamesAsmComparator<AbstractInsnNode>) instructionComparator)
-              .compare(firstInstruction, secondInstruction, _labelNameLookup);
+              .compare(firstInstruction, secondInstruction, _labelIndexLookup);
     }
     else {
       return instructionComparator.compare(firstInstruction, secondInstruction);
@@ -116,12 +125,5 @@ public class InsnListComparator extends AbstractWithLabelNamesAsmComparator<Iter
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
-
-  private LabelNameLookup createLabelNameLookup(Iterable<? extends AbstractInsnNode> first,
-                                                Iterable<? extends AbstractInsnNode> second) {
-
-    return LabelNameLookup.create(numerateLabels(first)).merge(LabelNameLookup.create(numerateLabels(second)));
-  }
-
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 }

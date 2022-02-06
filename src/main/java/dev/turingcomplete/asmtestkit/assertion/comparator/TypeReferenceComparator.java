@@ -9,7 +9,7 @@ import java.util.Comparator;
  * A comparison function to order {@link TypeReference}s.
  *
  * <p>Two {@code TypeReference}s will be compared based on their
- * {@link TypeReference#getValue()}.
+ * {@link TypeReference#getValue()}s.
  */
 public class TypeReferenceComparator extends AsmComparator<TypeReference> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //

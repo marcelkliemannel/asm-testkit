@@ -2,7 +2,6 @@ package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.assertion.comparator.AttributeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.LabelNodeComparator;
-import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.representation.InstructionRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.LabelNodeRepresentation;
 import org.assertj.core.api.AbstractAssert;
@@ -18,8 +17,6 @@ import java.util.Comparator;
  * <p>An instance can be created via {@link AsmAssertions#assertThat(LabelNode)}.
  * Use {@link AsmAssertions#assertThatLabels(Iterable)} for multiple
  * {@code LabelNode}s.
- *
- * <p>There are no direct supported {@link AssertOption}s yet.
  *
  * <p>To override the used {@link InstructionRepresentation} or
  * {@link AttributeComparator} call {@link #withRepresentation(Representation)}

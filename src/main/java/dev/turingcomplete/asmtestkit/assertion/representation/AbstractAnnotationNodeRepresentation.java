@@ -2,7 +2,7 @@ package dev.turingcomplete.asmtestkit.assertion.representation;
 
 import dev.turingcomplete.asmtestkit.asmutils._internal.TextifierUtils;
 import dev.turingcomplete.asmtestkit.assertion.AsmAssert;
-import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
+import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AnnotationNode;
@@ -75,7 +75,7 @@ public abstract class AbstractAnnotationNodeRepresentation<S, A extends Annotati
   }
 
   @Override
-  protected String doToStringOf(A object, LabelNameLookup labelNameLookup) {
+  protected String doToStringOf(A object, LabelIndexLookup labelIndexLookup) {
     return doToStringOf(object);
   }
 

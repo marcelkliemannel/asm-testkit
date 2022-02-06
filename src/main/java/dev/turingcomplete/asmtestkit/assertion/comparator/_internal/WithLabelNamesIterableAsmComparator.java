@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator._internal;
 
-import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
+import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
 import dev.turingcomplete.asmtestkit.assertion.comparator.WithLabelNamesAsmComparator;
 
 import java.util.Comparator;
@@ -33,8 +33,8 @@ public class WithLabelNamesIterableAsmComparator<T> extends IterableComparator<T
   }
   
   @Override
-  public int compare(Iterable<? extends T> first, Iterable<? extends T> second, LabelNameLookup labelNameLookup) {
-    Objects.requireNonNull(labelNameLookup);
+  public int compare(Iterable<? extends T> first, Iterable<? extends T> second, LabelIndexLookup labelIndexLookup) {
+    Objects.requireNonNull(labelIndexLookup);
 
     Integer nullCheckResult = compareNullCheck(first, second);
     if (nullCheckResult != null) {
@@ -52,7 +52,7 @@ public class WithLabelNamesIterableAsmComparator<T> extends IterableComparator<T
     for (T firstElement : firstSorted) {
       T selectElement = secondSortedIterator.next();
       int result = elementsComparator instanceof WithLabelNamesAsmComparator
-              ? ((WithLabelNamesAsmComparator<T>) elementsComparator).compare(firstElement, selectElement, labelNameLookup)
+              ? ((WithLabelNamesAsmComparator<T>) elementsComparator).compare(firstElement, selectElement, labelIndexLookup)
               : elementsComparator.compare(firstElement, selectElement);
       if (result != 0) {
         return result;

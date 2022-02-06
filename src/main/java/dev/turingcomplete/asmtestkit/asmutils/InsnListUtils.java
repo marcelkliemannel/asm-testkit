@@ -7,14 +7,21 @@ import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LineNumberNode;
+import org.objectweb.asm.tree.LocalVariableAnnotationNode;
+import org.objectweb.asm.tree.LocalVariableNode;
 import org.objectweb.asm.tree.LookupSwitchInsnNode;
+import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TableSwitchInsnNode;
+import org.objectweb.asm.tree.TryCatchBlockNode;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Stream;
+
+import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.ifNotNull;
 
 public final class InsnListUtils {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -50,22 +57,86 @@ public final class InsnListUtils {
    */
   public static InsnList filterLineNumbers(Iterable<? extends AbstractInsnNode> instructions) {
     Objects.requireNonNull(instructions);
+    return filterLineNumbers(instructions, Set.of());
+  }
+
+  /**
+   * Creates a new {@link MethodNode} by filtering all {@link LineNumberNode}s
+   * (and their related {@link LineNumberNode}s) from the given {@link MethodNode}.
+   *
+   * @param methodNode a {@link MethodNode}; never null.
+   * @return a new {@link MethodNode} with filtered line numbers; never null.
+   */
+  public static MethodNode filterLineNumbers(MethodNode methodNode) {
+    Objects.requireNonNull(methodNode);
+
+    var cleanedMethodNode = new MethodNode();
+
+    // Using a copy here to not modify the input method
+    MethodNode methodNodeCopy = MethodNodeUtils.copy(methodNode);
+    methodNodeCopy.instructions = filterLineNumbers(methodNodeCopy.instructions, collectRequiredLabels(methodNode));
+    methodNodeCopy.accept(cleanedMethodNode);
+
+    return cleanedMethodNode;
+  }
+
+  /**
+   * Creates a new {@link InsnList} by filtering all {@link LineNumberNode}s
+   * (and their related {@link LineNumberNode}s) from the given {@link MethodNode}.
+   *
+   * @param methodNode a {@link MethodNode}; never null.
+   * @return a new {@link InsnList} with filtered line numbers; never null.
+   */
+  public static InsnList filterLineNumbers2(MethodNode methodNode) {
+    Objects.requireNonNull(methodNode);
+    return filterLineNumbers(methodNode.instructions, collectRequiredLabels(methodNode));
+  }
+
+  /**
+   * Creates a mapping of indices for all {@link Label}s in the given {@link Iterable}
+   * of {@link AbstractInsnNode}s. The {@link Label}s will be numerated in teir
+   * order of occurrence.
+   *
+   * @param instructions an {@link Iterable} of {@link AbstractInsnNode}s;
+   *                     never null.
+   * @return a {@link Map} which maps {@link Label} to their {@link Integer}
+   * index; never null.
+   */
+  public static Map<Label, Integer> extractLabelIndices(Iterable<? extends AbstractInsnNode> instructions) {
+    Objects.requireNonNull(instructions);
+
+    Map<Label, Integer> result = new HashMap<>();
+
+    int i = 0;
+    for (AbstractInsnNode instruction : instructions) {
+      if (instruction instanceof LabelNode) {
+        result.put(((LabelNode) instruction).getLabel(), i);
+      }
+    }
+
+    return result;
+  }
+
+  // -- Private Methods --------------------------------------------------------------------------------------------- //
+
+  private static InsnList filterLineNumbers(Iterable<? extends AbstractInsnNode> instructions, Set<Label> requiredLabels) {
+    assert requiredLabels != null;
 
     // Collect all labels which are required by an instruction which is not
     // a line number.
-    Set<Label> requiredLabels = new HashSet<>();
+    Set<Label> _requiredLabels = new HashSet<>(requiredLabels);
     Map<LabelNode, LabelNode> clonedLabelNodes = new HashMap<>();
     for (AbstractInsnNode instruction : instructions) {
       if (instruction instanceof TableSwitchInsnNode) {
         TableSwitchInsnNode tableSwitchInsnNode = (TableSwitchInsnNode) instruction;
-        requiredLabels.add(tableSwitchInsnNode.dflt.getLabel());
-        tableSwitchInsnNode.labels.forEach(labelNode -> requiredLabels.add(labelNode.getLabel()));
+        _requiredLabels.add(tableSwitchInsnNode.dflt.getLabel());
+        tableSwitchInsnNode.labels.forEach(labelNode -> _requiredLabels.add(labelNode.getLabel()));
       }
       else if (instruction instanceof JumpInsnNode) {
-        requiredLabels.add(((JumpInsnNode) instruction).label.getLabel());
+        _requiredLabels.add(((JumpInsnNode) instruction).label.getLabel());
       }
       else if (instruction instanceof LookupSwitchInsnNode) {
-        ((LookupSwitchInsnNode) instruction).labels.forEach(labelNode -> requiredLabels.add(labelNode.getLabel()));
+        ((LookupSwitchInsnNode) instruction).labels.forEach(labelNode -> _requiredLabels.add(labelNode.getLabel()));
       }
       else if (instruction instanceof LabelNode) {
         clonedLabelNodes.put(((LabelNode) instruction), new LabelNode(((LabelNode) instruction).getLabel()));
@@ -80,7 +151,7 @@ public final class InsnListUtils {
     for (AbstractInsnNode instruction : instructions) {
       boolean deleteNode = instruction instanceof LineNumberNode;
       // Check if it is an obsolete label (only used by a line number)
-      deleteNode = deleteNode || (instruction instanceof LabelNode && !requiredLabels.contains(((LabelNode) instruction).getLabel()));
+      deleteNode = deleteNode || (instruction instanceof LabelNode && !_requiredLabels.contains(((LabelNode) instruction).getLabel()));
       if (!deleteNode) {
         filteredInsnList.add(instruction.clone(clonedLabelNodes));
       }
@@ -89,27 +160,37 @@ public final class InsnListUtils {
     return filteredInsnList;
   }
 
-  /**
-   * Converts the given {@link Iterable} of {@link AbstractInsnNode} into a
-   * {@link InsnList}.
-   *
-   * @param instructions an {@link Iterable} of {@link AbstractInsnNode}s;
-   *                     never null.
-   * @return a new {@link InsnList}; never null.
-   */
-  public static Map<Label, String> numerateLabels(Iterable<? extends AbstractInsnNode> instructions) {
-    Map<Label, String> result = new HashMap<>();
+  private static Set<Label> collectRequiredLabels(MethodNode methodNode) {
+    Set<Label> requiredLabels = new HashSet<>();
 
-    int i = 0;
-    for (AbstractInsnNode instruction : instructions) {
-      if (instruction instanceof LabelNode) {
-        result.put(((LabelNode) instruction).getLabel(), "L" + i);
+    if (methodNode.localVariables != null) {
+      for (LocalVariableNode localVariable : methodNode.localVariables) {
+        ifNotNull(localVariable.start, start -> requiredLabels.add(start.getLabel()));
+        ifNotNull(localVariable.end, end -> requiredLabels.add(end.getLabel()));
+      }
+    }
+    if (methodNode.tryCatchBlocks != null) {
+      for (TryCatchBlockNode tryCatchBlock : methodNode.tryCatchBlocks) {
+        ifNotNull(tryCatchBlock.start, start -> requiredLabels.add(start.getLabel()));
+        ifNotNull(tryCatchBlock.end, end -> requiredLabels.add(end.getLabel()));
+        ifNotNull(tryCatchBlock.handler, handler -> requiredLabels.add(handler.getLabel()));
       }
     }
 
-    return result;
+    Stream.Builder<LocalVariableAnnotationNode> localVariableAnnotations = Stream.builder();
+    ifNotNull(methodNode.visibleLocalVariableAnnotations, entry -> entry.forEach(localVariableAnnotations));
+    ifNotNull(methodNode.invisibleLocalVariableAnnotations, entry -> entry.forEach(localVariableAnnotations));
+    localVariableAnnotations.build().flatMap(localVariableAnnotation -> {
+                              Stream.Builder<LabelNode> builder = Stream.builder();
+                              ifNotNull(localVariableAnnotation.start, start -> start.forEach(builder));
+                              ifNotNull(localVariableAnnotation.end, start -> start.forEach(builder));
+                              return builder.build();
+                            })
+                            .map(LabelNode::getLabel)
+                            .forEach(requiredLabels::add);
+
+    return requiredLabels;
   }
 
-  // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 }

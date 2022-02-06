@@ -1,13 +1,13 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
-import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
+import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
+import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.ComparatorUtils;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.IterableComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.WithLabelNamesIterableAsmComparator;
 import dev.turingcomplete.asmtestkit.assertion.representation.AbstractTypeAnnotationNodeRepresentation;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LocalVariableAnnotationNode;
-import org.objectweb.asm.tree.LocalVariableNode;
 
 import java.util.Comparator;
 
@@ -57,17 +57,17 @@ public class LocalVariableAnnotationNodeComparator
 
   @Override
   protected int doCompare(LocalVariableAnnotationNode first, LocalVariableAnnotationNode second) {
-    return doCompare(first, second, LabelNameLookup.EMPTY);
+    return doCompare(first, second, DefaultLabelIndexLookup.create());
   }
 
   @Override
-  protected int doCompare(LocalVariableAnnotationNode first, LocalVariableAnnotationNode second, LabelNameLookup labelNameLookup) {
-    int typeAnnotationNodeCompare = super.doCompare(first, second, labelNameLookup);
+  protected int doCompare(LocalVariableAnnotationNode first, LocalVariableAnnotationNode second, LabelIndexLookup labelIndexLookup) {
+    int typeAnnotationNodeCompare = super.doCompare(first, second, labelIndexLookup);
     if (typeAnnotationNodeCompare != 0) {
       return typeAnnotationNodeCompare;
     }
 
-    return WithLabelNamesAsmComparator.comparing((LocalVariableAnnotationNode localVariableAnnotationNode) -> localVariableAnnotationNode.start, asmComparators.iterableComparator(LabelNode.class), labelNameLookup)
+    return WithLabelNamesAsmComparator.comparing((LocalVariableAnnotationNode localVariableAnnotationNode) -> localVariableAnnotationNode.start, asmComparators.iterableComparator(LabelNode.class), labelIndexLookup)
                                       .thenComparing((LocalVariableAnnotationNode localVariableAnnotationNode) -> localVariableAnnotationNode.end, asmComparators.iterableComparator(LabelNode.class))
                                       .thenComparing((LocalVariableAnnotationNode localVariableAnnotationNode) -> localVariableAnnotationNode.index, new IterableComparator<>(ComparatorUtils.INTEGER_COMPARATOR))
                                       .compare(first, second);

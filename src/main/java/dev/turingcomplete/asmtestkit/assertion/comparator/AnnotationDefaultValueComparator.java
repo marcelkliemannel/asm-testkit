@@ -2,24 +2,22 @@ package dev.turingcomplete.asmtestkit.assertion.comparator;
 
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.ComparatorUtils;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.IterableComparator;
-import dev.turingcomplete.asmtestkit.assertion.representation.AttributeRepresentation;
-import dev.turingcomplete.asmtestkit.node.AnnotationDefaultValue;
-import org.objectweb.asm.Attribute;
+import dev.turingcomplete.asmtestkit.node.AnnotationDefault;
 import org.objectweb.asm.tree.AnnotationNode;
 
 import java.util.Comparator;
 
 /**
- * A comparison function to order {@link AnnotationDefaultValue}s.
+ * A comparison function to order {@link AnnotationDefault}s.
  *
  * <p>Two {@code AnnotationDefaultValue}s will be considered as equal if:
  * <ul>
  *   <li>In case of an {@link AnnotationNode}: delegates the comparison to
  *   {@link AnnotationNodeComparator};
- *   <li>Otherwise: Comparison of their {@link Object#hashCode()} values.
+ *   <li>Otherwise: If they have the same {@link Object#hashCode()} value.
  * </ul>
  */
-public class AnnotationDefaultValueComparator extends AsmComparator<AnnotationDefaultValue> {
+public class AnnotationDefaultValueComparator extends AsmComparator<AnnotationDefault> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
@@ -31,13 +29,13 @@ public class AnnotationDefaultValueComparator extends AsmComparator<AnnotationDe
    * A reusable {@link Comparator} instance for an {@link Iterable} of
    * {@link Object}s.
    */
-  public static final Comparator<Iterable<? extends AnnotationDefaultValue>> ITERABLE_INSTANCE = new IterableComparator<>(INSTANCE);
+  public static final Comparator<Iterable<? extends AnnotationDefault>> ITERABLE_INSTANCE = new IterableComparator<>(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected AnnotationDefaultValueComparator() {
-    super(AnnotationDefaultValueComparator.class, AnnotationDefaultValue.class);
+    super(AnnotationDefaultValueComparator.class, AnnotationDefault.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
@@ -52,7 +50,7 @@ public class AnnotationDefaultValueComparator extends AsmComparator<AnnotationDe
   }
 
   @Override
-  protected int doCompare(AnnotationDefaultValue first, AnnotationDefaultValue second) {
+  protected int doCompare(AnnotationDefault first, AnnotationDefault second) {
     Object firstValue = first.defaultValue();
     Object secondValue = second.defaultValue();
 

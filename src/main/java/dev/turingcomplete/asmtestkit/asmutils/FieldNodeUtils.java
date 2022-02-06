@@ -1,32 +1,37 @@
 package dev.turingcomplete.asmtestkit.asmutils;
 
-import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldNode;
 
-public final class TypeUtils {
+import java.util.Objects;
+
+public final class FieldNodeUtils {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  private TypeUtils() {
+  private FieldNodeUtils() {
     throw new UnsupportedOperationException();
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   /**
-   * Creates a {@link Type} from the given internal or class name (e.g.,
-   * {@code java/lang/String} or {@code java.lang.String}).
+   * Creates a copy of the given {@link FieldNode}.
    *
-   * @param name an internal name as {@link String}; may be null.
-   * @return a {@link Type} representing the internal name; or null if the
-   * {@code name} is null.
+   * @param fieldNode the {@link FieldNode} to be copied; never null.
+   * @return a new {@link FieldNode}; never null.
    */
-  public static Type toTypeElseNull(String name) {
-    if (name == null) {
-      return null;
-    }
+  public static FieldNode copy(FieldNode fieldNode) {
+    Objects.requireNonNull(fieldNode);
 
-    return Type.getType("L" + ClassNameUtils.toInternalName(name) + ";");
+    var classNode = new ClassNode();
+    fieldNode.accept(classNode);
+
+    FieldNode copy = classNode.fields.get(0);
+    assert Objects.equals(copy.name, fieldNode.name);
+
+    return copy;
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

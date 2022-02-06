@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
-import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
+import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.WithLabelNamesAsmComparatorAdapter;
 
 import java.util.Comparator;
@@ -19,7 +19,7 @@ public interface WithLabelNamesAsmComparator<T> extends Comparator<T> {
   // -- Initialization ---------------------------------------------------------------------------------------------- //
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
-  int compare(T first, T second, LabelNameLookup labelNameLookup);
+  int compare(T first, T second, LabelIndexLookup labelIndexLookup);
 
   /**
    * Accepts a function that extracts a sort key from a type {@code T}, and
@@ -36,7 +36,7 @@ public interface WithLabelNamesAsmComparator<T> extends Comparator<T> {
    */
   static <T, U> WithLabelNamesAsmComparator<T> comparing(Function<? super T, ? extends U> keyExtractor,
                                                          Comparator<U> keyComparator,
-                                                         LabelNameLookup labelNameLookup) {
+                                                         LabelIndexLookup labelIndexLookup) {
     Objects.requireNonNull(keyExtractor);
     Objects.requireNonNull(keyComparator);
 
@@ -44,15 +44,15 @@ public interface WithLabelNamesAsmComparator<T> extends Comparator<T> {
     // WithLabelNamesAsmComparator or not. Otherwise, a subsequent call to
     // thenComparing would lose the labelNameLookup capability.
     var keyExtractingComparator = new WithLabelNamesAsmComparator<T>() {
-      final Comparator<U> _keyComparator = WithLabelNamesAsmComparatorAdapter.wrap(keyComparator, labelNameLookup);
+      final Comparator<U> _keyComparator = WithLabelNamesAsmComparatorAdapter.wrap(keyComparator, labelIndexLookup);
 
       @Override
       public int compare(T first, T second) {
-        return compare(first, second, labelNameLookup);
+        return compare(first, second, labelIndexLookup);
       }
 
       @Override
-      public int compare(T first, T second, LabelNameLookup labelNameLookup) {
+      public int compare(T first, T second, LabelIndexLookup labelNameLookup) {
         if (_keyComparator instanceof WithLabelNamesAsmComparator) {
           return ((WithLabelNamesAsmComparator<U>) _keyComparator).compare(keyExtractor.apply(first), keyExtractor.apply(second), labelNameLookup);
         }
@@ -61,7 +61,7 @@ public interface WithLabelNamesAsmComparator<T> extends Comparator<T> {
         }
       }
     };
-    return WithLabelNamesAsmComparatorAdapter.wrap(keyExtractingComparator, labelNameLookup);
+    return WithLabelNamesAsmComparatorAdapter.wrap(keyExtractingComparator, labelIndexLookup);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

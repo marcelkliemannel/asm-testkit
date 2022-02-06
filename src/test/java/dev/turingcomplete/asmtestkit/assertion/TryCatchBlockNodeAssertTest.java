@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotation;
+import dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA;
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -24,11 +24,11 @@ class TryCatchBlockNodeAssertTest {
     var firstTryCatchBlock = new TryCatchBlockNode(new LabelNode(), null, null, null);
     var secondTryCatchBlock = new TryCatchBlockNode(new LabelNode(), null, null, null);
 
-    LabelNameLookup labelNameLookup = LabelNameLookup.create(Map.of(firstTryCatchBlock.start.getLabel(), "L1",
-                                                                    secondTryCatchBlock.start.getLabel(), "L2"));
+    LabelIndexLookup labelIndexLookup = DefaultLabelIndexLookup.create(Map.of(firstTryCatchBlock.start.getLabel(), 1,
+                                                                       secondTryCatchBlock.start.getLabel(), 2));
 
     Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(firstTryCatchBlock)
-                                                     .useLabelNameLookup(labelNameLookup)
+                                                     .useLabelIndexLookup(labelIndexLookup)
                                                      .isEqualTo(secondTryCatchBlock))
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Try Catch Block: finally // range: L1-null; handled in: null > Has equal start] \n" +
@@ -42,11 +42,11 @@ class TryCatchBlockNodeAssertTest {
     var firstTryCatchBlock = new TryCatchBlockNode(null, new LabelNode(), null, null);
     var secondTryCatchBlock = new TryCatchBlockNode(null, new LabelNode(), null, null);
 
-    LabelNameLookup labelNameLookup = LabelNameLookup.create(Map.of(firstTryCatchBlock.end.getLabel(), "L1",
-                                                                    secondTryCatchBlock.end.getLabel(), "L2"));
+    LabelIndexLookup labelIndexLookup = DefaultLabelIndexLookup.create(Map.of(firstTryCatchBlock.end.getLabel(), 1,
+                                                                       secondTryCatchBlock.end.getLabel(), 2));
 
     Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(firstTryCatchBlock)
-                                                     .useLabelNameLookup(labelNameLookup)
+                                                     .useLabelIndexLookup(labelIndexLookup)
                                                      .isEqualTo(secondTryCatchBlock))
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Try Catch Block: finally // range: null-L1; handled in: null > Has equal end] \n" +
@@ -60,11 +60,11 @@ class TryCatchBlockNodeAssertTest {
     var firstTryCatchBlock = new TryCatchBlockNode(null, null, new LabelNode(), null);
     var secondTryCatchBlock = new TryCatchBlockNode(null, null, new LabelNode(), null);
 
-    LabelNameLookup labelNameLookup = LabelNameLookup.create(Map.of(firstTryCatchBlock.handler.getLabel(), "L1",
-                                                                    secondTryCatchBlock.handler.getLabel(), "L2"));
+    LabelIndexLookup labelIndexLookup = DefaultLabelIndexLookup.create(Map.of(firstTryCatchBlock.handler.getLabel(), 1,
+                                                                       secondTryCatchBlock.handler.getLabel(), 2));
 
     Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(firstTryCatchBlock)
-                                                     .useLabelNameLookup(labelNameLookup)
+                                                     .useLabelIndexLookup(labelIndexLookup)
                                                      .isEqualTo(secondTryCatchBlock))
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Try Catch Block: finally // range: null-null; handled in: L1 > Has equal handler] \n" +
@@ -112,22 +112,22 @@ class TryCatchBlockNodeAssertTest {
   @Test
   void testIsEqualToInvisibleTypeAnnotations() {
     var firstTryCatchBlock = new TryCatchBlockNode(null, null, null, null);
-    firstTryCatchBlock.invisibleTypeAnnotations = List.of(new TypeAnnotationNode(1, TypePath.fromString("*"), Type.getDescriptor(InvisibleTypeParameterAnnotation.class)));
+    firstTryCatchBlock.invisibleTypeAnnotations = List.of(new TypeAnnotationNode(1, TypePath.fromString("*"), Type.getDescriptor(InvisibleTypeParameterAnnotationA.class)));
     var secondTryCatchBlock = new TryCatchBlockNode(null, null, null, null);
-    secondTryCatchBlock.invisibleTypeAnnotations = List.of(new TypeAnnotationNode(1, TypePath.fromString("[2"), Type.getDescriptor(InvisibleTypeParameterAnnotation.class)));
+    secondTryCatchBlock.invisibleTypeAnnotations = List.of(new TypeAnnotationNode(1, TypePath.fromString("[2"), Type.getDescriptor(InvisibleTypeParameterAnnotationA.class)));
 
     Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(firstTryCatchBlock)
                                                      .isEqualTo(secondTryCatchBlock))
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Try Catch Block: finally // range: null-null; handled in: null > Has equal visible type annotations] \n" +
                           "Expecting actual:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotation // reference: class_type_parameter=0; path: *]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: *]\n" +
                           "to contain exactly in any order:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotation // reference: class_type_parameter=0; path: [2;]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: [2;]\n" +
                           "elements not found:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotation // reference: class_type_parameter=0; path: [2;]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: [2;]\n" +
                           "and elements not expected:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotation // reference: class_type_parameter=0; path: *]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: *]\n" +
                           "when comparing values using TypeAnnotationNodeComparator");
   }
 

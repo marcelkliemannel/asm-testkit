@@ -1,8 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.assertion.comparator.LocalVariableAnnotationNodeComparator;
-import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
-import dev.turingcomplete.asmtestkit.assertion.option.StandardAssertOption;
 import dev.turingcomplete.asmtestkit.assertion.representation.LocalVariableAnnotationNodeRepresentation;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
@@ -22,9 +20,6 @@ import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getL
  * {@link AsmAssertions#assertThat(LocalVariableAnnotationNode)}.
  * Use {@link AsmAssertions#assertThatLocalVariableAnnotations(Iterable)} for
  * multiple {@code LocalVariableAnnotationNode}s.
- *
- * <p>The supported {@link AssertOption} is
- * {@link StandardAssertOption#IGNORE_ANNOTATION_VALUES}.
  *
  * <p>To override the used {@link LocalVariableAnnotationNodeRepresentation} or
  * {@link LocalVariableAnnotationNodeComparator} call {@link #withRepresentation(Representation)}

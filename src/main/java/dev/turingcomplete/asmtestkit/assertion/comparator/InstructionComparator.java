@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
-import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
+import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
 import dev.turingcomplete.asmtestkit.assertion.representation.InstructionRepresentation;
 import org.objectweb.asm.tree.AbstractInsnNode;
 
@@ -44,9 +44,9 @@ public class InstructionComparator extends AbstractWithLabelNamesAsmComparator<A
   }
 
   @Override
-  protected int doCompare(AbstractInsnNode first, AbstractInsnNode second, LabelNameLookup labelNameLookup) {
-    return asmRepresentations.toStringOf(first, labelNameLookup)
-                             .compareTo(asmRepresentations.toStringOf(second, labelNameLookup));
+  protected int doCompare(AbstractInsnNode first, AbstractInsnNode second, LabelIndexLookup labelIndexLookup) {
+    return asmRepresentations.toStringOf(first, labelIndexLookup)
+                             .compareTo(asmRepresentations.toStringOf(second, labelIndexLookup));
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

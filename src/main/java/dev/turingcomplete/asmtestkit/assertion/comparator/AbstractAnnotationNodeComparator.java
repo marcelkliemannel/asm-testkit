@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
-import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
+import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
 import org.objectweb.asm.tree.AnnotationNode;
 
 import java.util.Comparator;
@@ -27,12 +27,7 @@ public abstract class AbstractAnnotationNodeComparator<S extends AbstractAnnotat
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Override
-  protected int doCompare(T first, T second) {
-    return doCompare(first, second, LabelNameLookup.EMPTY);
-  }
-
-  @Override
-  protected int doCompare(T first, T second, LabelNameLookup labelNameLookup) {
+  protected int doCompare(T first, T second, LabelIndexLookup labelIndexLookup) {
     int descResult = Comparator.comparing((AnnotationNode annotationNode) -> annotationNode.desc)
                                .compare(first, second);
 

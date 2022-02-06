@@ -1,10 +1,9 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
-import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
+import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.ComparatorUtils;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.WithLabelNamesIterableAsmComparator;
 import org.objectweb.asm.tree.LabelNode;
-import org.objectweb.asm.tree.LocalVariableAnnotationNode;
 
 import java.util.Comparator;
 import java.util.Objects;
@@ -13,7 +12,8 @@ import java.util.Objects;
  * A comparison function to order {@link LabelNode}s.
  *
  * <p>Two {@code Attribute}s will be considered as equal if their
- * {@link LabelNode#getLabel()}s are equal.
+ * {@link LabelNode#getLabel()}s are equal. Otherwise, they will be ordered by
+ * the index of the label.
  */
 public class LabelNodeComparator extends AbstractWithLabelNamesAsmComparator<LabelNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -53,11 +53,11 @@ public class LabelNodeComparator extends AbstractWithLabelNamesAsmComparator<Lab
   }
 
   @Override
-  protected int doCompare(LabelNode first, LabelNode second, LabelNameLookup labelNameLookup) {
-    Objects.requireNonNull(labelNameLookup);
+  protected int doCompare(LabelNode first, LabelNode second, LabelIndexLookup labelIndexLookup) {
+    Objects.requireNonNull(labelIndexLookup);
 
-    var firstName = labelNameLookup.find(first.getLabel()).orElse(null);
-    var secondName = labelNameLookup.find(second.getLabel()).orElse(null);
+    var firstName = labelIndexLookup.find(first.getLabel()).orElse(null);
+    var secondName = labelIndexLookup.find(second.getLabel()).orElse(null);
     return ComparatorUtils.OBJECT_COMPARATOR.compare(firstName != null ? firstName : first.getLabel(),
                                                      secondName != null ? secondName : second.getLabel());
   }

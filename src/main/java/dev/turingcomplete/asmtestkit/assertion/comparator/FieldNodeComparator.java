@@ -16,12 +16,9 @@ import static java.util.Comparator.comparing;
 /**
  * A comparison function to order {@link FieldNode}s.
  *
- * <p>Two {@code FieldNode}s will be considered as equal if their
- * name, descriptor, access, signature, value, (in)visible (type) annotations
- * and attributes are equal. Otherwise, they are ordered in the order of the
- * previous listing. For example, if they have different names in the
- * lexicographic order of their names; if they have the same name in the
- * lexicographic order of their descriptor; etc.
+ * <p>Two {@code FieldNode}s will be considered as equal if all the
+ * {@code public} {@link FieldNode} fields are equal. Otherwise, they will be
+ * ordered by the comparison of the first non-matching field.
  */
 public class FieldNodeComparator extends AsmComparator<FieldNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //

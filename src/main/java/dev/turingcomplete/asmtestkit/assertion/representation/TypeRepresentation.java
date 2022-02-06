@@ -99,6 +99,8 @@ public class TypeRepresentation extends AbstractAsmRepresentation<Type> {
   @Override
   protected String doToStringOf(Type type) {
     switch (type.getSort()) {
+      case Type.METHOD:
+        return type.toString();
       case Type.ARRAY:
         return doToStringOf(type.getElementType()) + "[]".repeat(type.getDimensions());
       case Type.OBJECT:

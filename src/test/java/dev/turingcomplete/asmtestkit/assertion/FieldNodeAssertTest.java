@@ -1,10 +1,11 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils;
+import dev.turingcomplete.asmtestkit.asmutils.FieldNodeUtils;
 import dev.turingcomplete.asmtestkit.assertion.__helper.DummyAttribute;
 import dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleAnnotationA;
 import dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleAnnotationB;
-import dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotation;
+import dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA;
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationA;
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationB;
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;
@@ -31,29 +32,22 @@ class FieldNodeAssertTest {
   @Test
   void testIsEqualTo() throws IOException {
     @Language("Java")
-    String firstMyClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;" +
-                          "class MyClass<T extends Number> {" +
-                          "  public final T[]@VisibleTypeParameterAnnotationA[] myField1 = null;" +
-                          "}";
+    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;" +
+                     "class MyClass<T extends Number> {" +
+                     "  public final T[]@VisibleTypeParameterAnnotationA[] myField1 = null;" +
+                     "}";
 
     FieldNode firstField = create()
             .addToClasspath(VisibleTypeParameterAnnotationA.class)
-            .addJavaInputSource(firstMyClass)
+            .addJavaInputSource(myClass)
             .compile()
             .readClassNode("MyClass")
             .fields
             .get(0);
 
-
-    @Language("Java")
-    String secondMyClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;" +
-                           "class MyClass<T extends Number> {" +
-                           "  public final T[]@VisibleTypeParameterAnnotationA[] myField1 = null;" +
-                           "}";
-
     FieldNode secondField = create()
             .addToClasspath(VisibleTypeParameterAnnotationA.class)
-            .addJavaInputSource(secondMyClass)
+            .addJavaInputSource(myClass)
             .compile()
             .readClassNode("MyClass")
             .fields
@@ -65,11 +59,11 @@ class FieldNodeAssertTest {
 
   @Test
   void testIsEqualToName() {
-    FieldNode firstFieldNode = new FieldNode(0, "first", "I", null, null);
+    var firstFieldNode = new FieldNode(0, "first", "I", null, null);
     var secondFieldNode = new FieldNode(0, "second", "I", null, null);
 
     assertThat(firstFieldNode)
-            .isEqualTo(firstFieldNode);
+            .isEqualTo(FieldNodeUtils.copy(firstFieldNode));
 
     assertThat(firstFieldNode)
             .addOption(StandardAssertOption.IGNORE_NAME)
@@ -89,7 +83,7 @@ class FieldNodeAssertTest {
     var first2FieldNode = new FieldNode(0, "first", "C", null, null);
 
     assertThat(first1FieldNode)
-            .isEqualTo(first1FieldNode);
+            .isEqualTo(FieldNodeUtils.copy(first1FieldNode));
 
     assertThat(first1FieldNode)
             .addOption(StandardAssertOption.IGNORE_DESCRIPTOR)
@@ -107,12 +101,12 @@ class FieldNodeAssertTest {
   @Test
   void testIsEqualToAccess() {
     var first1FieldNode = new FieldNode(Opcodes.ACC_PROTECTED, "first", "I", null, null);
-    FieldNode first2FieldNode = new FieldNode(Opcodes.ACC_PUBLIC + Opcodes.ACC_FINAL, "first", "I", null, null);
+    var first2FieldNode = new FieldNode(Opcodes.ACC_PUBLIC + Opcodes.ACC_FINAL, "first", "I", null, null);
 
     assertThat(first1FieldNode)
-            .isEqualTo(first1FieldNode);
+            .isEqualTo(FieldNodeUtils.copy(first1FieldNode));
 
-    assertThat(first2FieldNode)
+    assertThat(first1FieldNode)
             .addOption(StandardAssertOption.IGNORE_ACCESS)
             .isEqualTo(first2FieldNode);
 
@@ -136,7 +130,7 @@ class FieldNodeAssertTest {
     var first2FieldNode = new FieldNode(0, "first", "Ljava.lang.Object;", "[T;", null);
 
     assertThat(first1FieldNode)
-            .isEqualTo(first1FieldNode);
+            .isEqualTo(FieldNodeUtils.copy(first1FieldNode));
 
     assertThat(first1FieldNode)
             .addOption(StandardAssertOption.IGNORE_SIGNATURE)
@@ -156,7 +150,7 @@ class FieldNodeAssertTest {
     var first2FieldNode = new FieldNode(0, "first", "Ljava.lang.String;", null, "Bar");
 
     assertThat(first1FieldNode)
-            .isEqualTo(first1FieldNode);
+            .isEqualTo(FieldNodeUtils.copy(first1FieldNode));
 
     assertThat(first1FieldNode)
             .addOption(StandardAssertOption.IGNORE_VALUE)
@@ -180,7 +174,7 @@ class FieldNodeAssertTest {
                                                  AnnotationNodeUtils.createAnnotationNode(VisibleAnnotationB.class));
 
     assertThat(first1FieldNode)
-            .isEqualTo(first1FieldNode);
+            .isEqualTo(FieldNodeUtils.copy(first1FieldNode));
 
     assertThat(first1FieldNode)
             .addOption(StandardAssertOption.IGNORE_VISIBLE_ANNOTATIONS)
@@ -210,7 +204,7 @@ class FieldNodeAssertTest {
                                                    AnnotationNodeUtils.createAnnotationNode(InvisibleAnnotationB.class));
 
     assertThat(first1FieldNode)
-            .isEqualTo(first1FieldNode);
+            .isEqualTo(FieldNodeUtils.copy(first1FieldNode));
 
     assertThat(first1FieldNode)
             .addOption(StandardAssertOption.IGNORE_INVISIBLE_ANNOTATIONS)
@@ -253,10 +247,10 @@ class FieldNodeAssertTest {
     first1FieldNode.visibleTypeAnnotations = List.of(firstTypeAnnotation);
 
     FieldNode first2FieldNode = new FieldNode(0, "first", "Ljava.lang.String;", null, null);
-    first1FieldNode.visibleTypeAnnotations = List.of(firstTypeAnnotation, secondTypeAnnotation);
+    first2FieldNode.visibleTypeAnnotations = List.of(firstTypeAnnotation, secondTypeAnnotation);
 
     assertThat(first1FieldNode)
-            .isEqualTo(first1FieldNode);
+            .isEqualTo(FieldNodeUtils.copy(first1FieldNode));
 
     assertThat(first1FieldNode)
             .addOption(StandardAssertOption.IGNORE_VISIBLE_TYPE_ANNOTATIONS)
@@ -267,27 +261,26 @@ class FieldNodeAssertTest {
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Field: first > Has equal field visible type annotations] \n" +
                           "Expecting actual:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: field; path: [,\n" +
-                          "    @dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: field; path: null]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: field; path: []\n" +
                           "to contain exactly in any order:\n" +
-                          "  []\n" +
-                          "but the following elements were unexpected:\n" +
                           "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: field; path: [,\n" +
                           "    @dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: field; path: null]\n" +
+                          "but could not find the following elements:\n" +
+                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: field; path: null]\n" +
                           "when comparing values using TypeAnnotationNodeComparator");
   }
 
   @Test
   void testIsEqualToInvisibleTypeAnnotations() throws IOException {
     @Language("Java")
-    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotation;" +
+    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA;" +
                      "class MyClass<T> {" +
-                     "  T[]@InvisibleTypeParameterAnnotation[] myField1;" +
-                     "  T@InvisibleTypeParameterAnnotation[][] myField2;" +
+                     "  T[]@InvisibleTypeParameterAnnotationA[] myField1;" +
+                     "  T@InvisibleTypeParameterAnnotationA[][] myField2;" +
                      "}";
 
     List<FieldNode> fields = create()
-            .addToClasspath(InvisibleTypeParameterAnnotation.class)
+            .addToClasspath(InvisibleTypeParameterAnnotationA.class)
             .addJavaInputSource(myClass)
             .compile()
             .readClassNode("MyClass")
@@ -300,10 +293,10 @@ class FieldNodeAssertTest {
     first1FieldNode.invisibleTypeAnnotations = List.of(firstTypeAnnotation);
 
     FieldNode first2FieldNode = new FieldNode(0, "first", "Ljava.lang.String;", null, null);
-    first1FieldNode.invisibleTypeAnnotations = List.of(firstTypeAnnotation, secondTypeAnnotation);
+    first2FieldNode.invisibleTypeAnnotations = List.of(firstTypeAnnotation, secondTypeAnnotation);
 
     assertThat(first1FieldNode)
-            .isEqualTo(first1FieldNode);
+            .isEqualTo(FieldNodeUtils.copy(first1FieldNode));
 
     assertThat(first1FieldNode)
             .addOption(StandardAssertOption.IGNORE_INVISIBLE_TYPE_ANNOTATIONS)
@@ -314,13 +307,12 @@ class FieldNodeAssertTest {
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Field: first > Has equal field invisible type annotations] \n" +
                           "Expecting actual:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotation // reference: field; path: [,\n" +
-                          "    @dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotation // reference: field; path: null]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA // reference: field; path: []\n" +
                           "to contain exactly in any order:\n" +
-                          "  []\n" +
-                          "but the following elements were unexpected:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotation // reference: field; path: [,\n" +
-                          "    @dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotation // reference: field; path: null]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA // reference: field; path: [,\n" +
+                          "    @dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA // reference: field; path: null]\n" +
+                          "but could not find the following elements:\n" +
+                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA // reference: field; path: null]\n" +
                           "when comparing values using TypeAnnotationNodeComparator");
   }
 
@@ -332,7 +324,7 @@ class FieldNodeAssertTest {
     first2FieldNode.attrs = List.of(new DummyAttribute("Foo"), new DummyAttribute("Bar"));
 
     assertThat(first1FieldNode)
-            .isEqualTo(first1FieldNode);
+            .isEqualTo(FieldNodeUtils.copy(first1FieldNode));
 
     assertThat(first1FieldNode)
             .addOption(StandardAssertOption.IGNORE_ATTRIBUTES)

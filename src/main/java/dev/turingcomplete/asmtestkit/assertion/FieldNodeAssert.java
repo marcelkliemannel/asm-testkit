@@ -1,10 +1,9 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import dev.turingcomplete.asmtestkit.assertion.comparator.FieldNodeComparator;
-import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.option.StandardAssertOption;
 import dev.turingcomplete.asmtestkit.assertion.representation.FieldNodeRepresentation;
+import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.description.TextDescription;
 import org.assertj.core.presentation.Representation;
@@ -28,20 +27,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  * <p>An instance can be created via {@link AsmAssertions#assertThat(FieldNode)}.
  * Use {@link AsmAssertions#assertThatFields(Iterable)} for multiple
  * {@code FieldNode}s.
- *
- * <p>The supported {@link AssertOption}s are:
- * <ul>
- *  <li>{@link StandardAssertOption#IGNORE_NAME}
- *  <li>{@link StandardAssertOption#IGNORE_DESCRIPTOR}
- *  <li>{@link StandardAssertOption#IGNORE_ACCESS}
- *  <li>{@link StandardAssertOption#IGNORE_SIGNATURE}
- *  <li>{@link StandardAssertOption#IGNORE_VALUE}
- *  <li>{@link StandardAssertOption#IGNORE_VISIBLE_ANNOTATIONS}
- *  <li>{@link StandardAssertOption#IGNORE_INVISIBLE_ANNOTATIONS}
- *  <li>{@link StandardAssertOption#IGNORE_VISIBLE_TYPE_ANNOTATIONS}
- *  <li>{@link StandardAssertOption#IGNORE_INVISIBLE_TYPE_ANNOTATIONS}
- *  <li>{@link StandardAssertOption#IGNORE_ATTRIBUTES}
- * </ul>
  *
  * <p>To override the used {@link FieldNodeRepresentation} or
  * {@link FieldNodeComparator} call {@link #withRepresentation(Representation)}

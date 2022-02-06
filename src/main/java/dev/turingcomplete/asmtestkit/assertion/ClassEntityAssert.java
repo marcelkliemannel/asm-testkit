@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import dev.turingcomplete.asmtestkit.assertion.option.StandardAssertOption;
+import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Attribute;
@@ -17,7 +17,7 @@ import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAn
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAttributes;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatTypeAnnotations;
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getFromObjectElseNull;
-import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getListFromObjectElse;
+import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getListFromObjectElseNull;
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getStringFromObjectElseNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -153,9 +153,9 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
       return;
     }
 
-    assertThatAnnotations(getListFromObjectElse(actual, this::getVisibleAnnotations, List.of()))
+    assertThatAnnotations(getListFromObjectElseNull(actual, this::getVisibleAnnotations))
             .as(createCrumbDescription("Has equal " + name.toLowerCase(Locale.ROOT) + " visible annotations"))
-            .containsExactlyInAnyOrderElementsOf(getListFromObjectElse(expected, objectType, this::getVisibleAnnotations, List.of()));
+            .containsExactlyInAnyOrderElementsOf(getListFromObjectElseNull(expected, objectType, this::getVisibleAnnotations));
   }
 
   /**
@@ -177,9 +177,9 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
       return;
     }
 
-    assertThatAnnotations(getListFromObjectElse(actual, this::getInvisibleAnnotations, List.of()))
+    assertThatAnnotations(getListFromObjectElseNull(actual, this::getInvisibleAnnotations))
             .as(createCrumbDescription("Has equal " + name.toLowerCase(Locale.ROOT) + " invisible annotations"))
-            .containsExactlyInAnyOrderElementsOf(getListFromObjectElse(expected, objectType, this::getInvisibleAnnotations, List.of()));
+            .containsExactlyInAnyOrderElementsOf(getListFromObjectElseNull(expected, objectType, this::getInvisibleAnnotations));
   }
 
   /**
@@ -201,9 +201,9 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
       return;
     }
 
-    assertThatTypeAnnotations(getListFromObjectElse(actual, this::getVisibleTypeAnnotations, List.of()))
+    assertThatTypeAnnotations(getListFromObjectElseNull(actual, this::getVisibleTypeAnnotations))
             .as(createCrumbDescription("Has equal " + name.toLowerCase(Locale.ROOT) + " visible type annotations"))
-            .containsExactlyInAnyOrderElementsOf(getListFromObjectElse(expected, objectType, this::getVisibleTypeAnnotations, List.of()));
+            .containsExactlyInAnyOrderElementsOf(getListFromObjectElseNull(expected, objectType, this::getVisibleTypeAnnotations));
   }
 
   /**
@@ -225,9 +225,9 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
       return;
     }
 
-    assertThatTypeAnnotations(getListFromObjectElse(actual, this::getInvisibleTypeAnnotations, List.of()))
+    assertThatTypeAnnotations(getListFromObjectElseNull(actual, this::getInvisibleTypeAnnotations))
             .as(createCrumbDescription("Has equal " + name.toLowerCase(Locale.ROOT) + " invisible type annotations"))
-            .containsExactlyInAnyOrderElementsOf(getListFromObjectElse(expected, objectType, this::getInvisibleTypeAnnotations, List.of()));
+            .containsExactlyInAnyOrderElementsOf(getListFromObjectElseNull(expected, objectType, this::getInvisibleTypeAnnotations));
   }
 
   /**
@@ -249,9 +249,9 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
       return;
     }
 
-    assertThatAttributes(getListFromObjectElse(actual, this::getAttributes, List.of()))
+    assertThatAttributes(getListFromObjectElseNull(actual, this::getAttributes))
             .as(createCrumbDescription("Has equal " + name.toLowerCase(Locale.ROOT) + " attributes"))
-            .containsExactlyInAnyOrderElementsOf(getListFromObjectElse(expected, objectType, this::getAttributes, List.of()));
+            .containsExactlyInAnyOrderElementsOf(getListFromObjectElseNull(expected, objectType, this::getAttributes));
   }
 
   /**

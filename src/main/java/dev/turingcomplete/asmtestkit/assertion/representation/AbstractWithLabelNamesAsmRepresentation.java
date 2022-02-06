@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
-import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
+import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
 import org.objectweb.asm.Label;
 
 import java.util.Objects;
@@ -26,11 +26,11 @@ public abstract class AbstractWithLabelNamesAsmRepresentation<T>
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   @Override
-  public final String toSimplifiedStringOf(Object object, LabelNameLookup labelNameLookup) {
-    Objects.requireNonNull(labelNameLookup);
+  public final String toSimplifiedStringOf(Object object, LabelIndexLookup labelIndexLookup) {
+    Objects.requireNonNull(labelIndexLookup);
 
     return getObjectClass().isInstance(object)
-            ? doToSimplifiedStringOf(getObjectClass().cast(object), labelNameLookup)
+            ? doToSimplifiedStringOf(getObjectClass().cast(object), labelIndexLookup)
             : null;
   }
 
@@ -39,7 +39,7 @@ public abstract class AbstractWithLabelNamesAsmRepresentation<T>
    * {@code object} respecting the names of {@link Label}s.
    *
    * <p>The default implementation will return the same values as
-   * {@link #toStringOf(Object, LabelNameLookup)}.
+   * {@link #toStringOf(Object, LabelIndexLookup)}.
    *
    * <p>A simplified representation should have a limited length and should
    * not contain line breaks. It should reflect the essence of an object,
@@ -50,20 +50,20 @@ public abstract class AbstractWithLabelNamesAsmRepresentation<T>
    *
    * @param object          the object of type {@link T} to create a
    *                        representation of; may be null.
-   * @param labelNameLookup a {@link LabelNameLookup} to look up names of
+   * @param labelIndexLookup a {@link LabelIndexLookup} to look up names of
    *                        {@link Label}s; never null.
    * @return the {@link String} representation; may be null.
    */
-  protected String doToSimplifiedStringOf(T object, LabelNameLookup labelNameLookup) {
+  protected String doToSimplifiedStringOf(T object, LabelIndexLookup labelIndexLookup) {
     return doToSimplifiedStringOf(object);
   }
 
   @Override
-  public final String toStringOf(Object object, LabelNameLookup labelNameLookup) {
-    Objects.requireNonNull(labelNameLookup);
+  public final String toStringOf(Object object, LabelIndexLookup labelIndexLookup) {
+    Objects.requireNonNull(labelIndexLookup);
 
     if (getObjectClass().isInstance(object)) {
-      return doToStringOf(getObjectClass().cast(object), labelNameLookup);
+      return doToStringOf(getObjectClass().cast(object), labelIndexLookup);
     }
 
     return null;
@@ -78,11 +78,11 @@ public abstract class AbstractWithLabelNamesAsmRepresentation<T>
    *
    * @param object          the object of type {@link T} to create a
    *                        representation of; may be null.
-   * @param labelNameLookup a {@link LabelNameLookup} to look up names of
+   * @param labelIndexLookup a {@link LabelIndexLookup} to look up names of
    *                        {@link Label}s; never null.
    * @return the {@link String} representation; may be null.
    */
-  protected abstract String doToStringOf(T object, LabelNameLookup labelNameLookup);
+  protected abstract String doToStringOf(T object, LabelIndexLookup labelIndexLookup);
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //

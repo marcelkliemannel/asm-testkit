@@ -1,19 +1,19 @@
 package dev.turingcomplete.asmtestkit.assertion.comparator;
 
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.ComparatorUtils;
 import dev.turingcomplete.asmtestkit.assertion.comparator._internal.IterableComparator;
+import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import org.objectweb.asm.tree.ParameterNode;
-import org.objectweb.asm.tree.TryCatchBlockNode;
 
 import java.util.Comparator;
 
 /**
  * A comparison function to order {@link ParameterNode}s.
  *
- * <p>Two {@code ParameterNode}s will be considered as equal if their
- * names and access flags are equal.
+ * <p>Two {@code ParameterNode}s will be considered as equal if all the
+ * {@code public} {@link ParameterNode} fields are equal. Otherwise, they will
+ * be ordered by the comparison of the first non-matching field.
  */
 public class ParameterNodeComparator extends AsmComparator<ParameterNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //

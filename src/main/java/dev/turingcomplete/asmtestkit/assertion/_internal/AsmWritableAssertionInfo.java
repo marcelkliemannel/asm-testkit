@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion._internal;
 
-import dev.turingcomplete.asmtestkit.asmutils._internal.CombinedLabelNamesLookup;
-import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
+import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
+import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
 import dev.turingcomplete.asmtestkit.assertion.representation.AbstractWithLabelNamesAsmRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation._internal.WithLabelNamesRepresentationAdapter;
 import org.assertj.core.api.WritableAssertionInfo;
@@ -11,7 +11,7 @@ public final class AsmWritableAssertionInfo extends WritableAssertionInfo {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
-  private final LabelNameLookup labelNameLookup = new CombinedLabelNamesLookup();
+  private final LabelIndexLookup labelIndexLookup = DefaultLabelIndexLookup.create();
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
@@ -23,19 +23,19 @@ public final class AsmWritableAssertionInfo extends WritableAssertionInfo {
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
-  public void useLabelNameLookup(LabelNameLookup labelNameLookup) {
-    this.labelNameLookup.merge(labelNameLookup);
+  public void useLabelIndexLookup(LabelIndexLookup labelIndexLookup) {
+    this.labelIndexLookup.add(labelIndexLookup);
   }
 
-  public LabelNameLookup labelNameLookup() {
-    return labelNameLookup;
+  public LabelIndexLookup labelNameLookup() {
+    return labelIndexLookup;
   }
 
   @Override
   public void useRepresentation(Representation newRepresentation) {
     if (newRepresentation instanceof AbstractWithLabelNamesAsmRepresentation) {
       var withLabelNamesRepresentation = (AbstractWithLabelNamesAsmRepresentation<?>) newRepresentation;
-      newRepresentation = new WithLabelNamesRepresentationAdapter<>(withLabelNamesRepresentation, labelNameLookup);
+      newRepresentation = new WithLabelNamesRepresentationAdapter<>(withLabelNamesRepresentation, labelIndexLookup);
     }
 
     super.useRepresentation(newRepresentation);

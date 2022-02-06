@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion.representation;
 
-import dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils;
-import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
+import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
+import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
 import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationA;
 import org.assertj.core.api.Assertions;
 import org.intellij.lang.annotations.Language;
@@ -11,6 +11,7 @@ import org.objectweb.asm.tree.MethodNode;
 
 import java.io.IOException;
 
+import static dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils.extractLabelIndices;
 import static dev.turingcomplete.asmtestkit.compile.CompilationEnvironment.create;
 
 class LocalVariableNodeRepresentationTest {
@@ -40,15 +41,15 @@ class LocalVariableNodeRepresentationTest {
     LocalVariableNode secondLocalVariableNode = methodNode.localVariables.get(1);
     LocalVariableNode thirdLocalVariableNode = methodNode.localVariables.get(2);
 
-    LabelNameLookup labelNameLookup = LabelNameLookup.create(MethodNodeUtils.extractLabelNames(methodNode));
+    LabelIndexLookup labelIndexLookup = DefaultLabelIndexLookup.create(extractLabelIndices(methodNode));
 
-    Assertions.assertThat(LocalVariableNodeRepresentation.INSTANCE.toStringOf(thisLocalVariableNode, labelNameLookup))
+    Assertions.assertThat(LocalVariableNodeRepresentation.INSTANCE.toStringOf(thisLocalVariableNode, labelIndexLookup))
               .isEqualTo("#0 MyClass this // range: L0-L3 // signature: LMyClass<TT;>;");
 
-    Assertions.assertThat(LocalVariableNodeRepresentation.INSTANCE.toStringOf(secondLocalVariableNode, labelNameLookup))
+    Assertions.assertThat(LocalVariableNodeRepresentation.INSTANCE.toStringOf(secondLocalVariableNode, labelIndexLookup))
               .isEqualTo("#1 java.lang.String a // range: L1-L3");
 
-    Assertions.assertThat(LocalVariableNodeRepresentation.INSTANCE.toStringOf(thirdLocalVariableNode, labelNameLookup))
+    Assertions.assertThat(LocalVariableNodeRepresentation.INSTANCE.toStringOf(thirdLocalVariableNode, labelIndexLookup))
               .isEqualTo("#2 java.lang.Number b // range: L2-L3 // signature: TT;");
   }
 
@@ -68,10 +69,10 @@ class LocalVariableNodeRepresentationTest {
             .readClassNode("MyClass")
             .methods.get(1);
 
-    LabelNameLookup labelNameLookup = LabelNameLookup.create(MethodNodeUtils.extractLabelNames(methodNode));
+    LabelIndexLookup labelIndexLookup = DefaultLabelIndexLookup.create(extractLabelIndices(methodNode));
     LocalVariableNode localVariableNode = methodNode.localVariables.get(0);
 
-    Assertions.assertThat(LocalVariableNodeRepresentation.INSTANCE.toStringOf(localVariableNode, labelNameLookup))
+    Assertions.assertThat(LocalVariableNodeRepresentation.INSTANCE.toStringOf(localVariableNode, labelIndexLookup))
               .isEqualTo("#0 MyClass this // range: L0-L2");
   }
 

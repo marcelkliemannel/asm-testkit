@@ -2,8 +2,8 @@ package dev.turingcomplete.asmtestkit.assertion.representation;
 
 import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
-import dev.turingcomplete.asmtestkit.assertion.LabelNameLookup;
-import dev.turingcomplete.asmtestkit.node.AnnotationDefaultValue;
+import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
+import dev.turingcomplete.asmtestkit.node.AnnotationDefault;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;
 import org.assertj.core.presentation.StandardRepresentation;
@@ -71,7 +71,7 @@ public final class DefaultAsmRepresentations extends StandardRepresentation impl
     registerAsmRepresentation(ParameterNode.class, () -> ParameterNodeRepresentation.INSTANCE);
     registerAsmRepresentation(TryCatchBlockNode.class, () -> TryCatchBlockNodeRepresentation.INSTANCE);
     registerAsmRepresentation(AccessFlags.class, () -> AccessFlagsRepresentation.INSTANCE);
-    registerAsmRepresentation(AnnotationDefaultValue.class, () -> AnnotationDefaultValueRepresentation.INSTANCE);
+    registerAsmRepresentation(AnnotationDefault.class, () -> AnnotationDefaultValueRepresentation.INSTANCE);
 
     // An 'InsnList' is an 'Iterable' and would be handled in the 'toStringOf'
     registerFormatterForType(InsnList.class, insnList -> ASM_REPRESENTATIONS.get(InsnList.class).get().toStringOf(insnList));
@@ -130,8 +130,8 @@ public final class DefaultAsmRepresentations extends StandardRepresentation impl
   }
 
   @Override
-  public String toStringOf(Object object, LabelNameLookup labelNameLookup) {
-    Objects.requireNonNull(labelNameLookup);
+  public String toStringOf(Object object, LabelIndexLookup labelIndexLookup) {
+    Objects.requireNonNull(labelIndexLookup);
 
     if (object == null) {
       return null;
@@ -140,7 +140,7 @@ public final class DefaultAsmRepresentations extends StandardRepresentation impl
     return findSingleAsmRepresentation(object)
             .map(singleAsmRepresentation -> {
               if (singleAsmRepresentation instanceof WithLabelNamesAsmRepresentation) {
-                return ((WithLabelNamesAsmRepresentation) singleAsmRepresentation).toStringOf(object, labelNameLookup);
+                return ((WithLabelNamesAsmRepresentation) singleAsmRepresentation).toStringOf(object, labelIndexLookup);
               }
               else {
                 return singleAsmRepresentation.toStringOf(object);
@@ -163,8 +163,8 @@ public final class DefaultAsmRepresentations extends StandardRepresentation impl
   }
 
   @Override
-  public String toSimplifiedStringOf(Object object, LabelNameLookup labelNameLookup) {
-    Objects.requireNonNull(labelNameLookup);
+  public String toSimplifiedStringOf(Object object, LabelIndexLookup labelIndexLookup) {
+    Objects.requireNonNull(labelIndexLookup);
 
     if (object == null) {
       return null;
@@ -173,7 +173,7 @@ public final class DefaultAsmRepresentations extends StandardRepresentation impl
     return findSingleAsmRepresentation(object)
             .map(singleAsmRepresentation -> {
               if (singleAsmRepresentation instanceof WithLabelNamesAsmRepresentation) {
-                return ((WithLabelNamesAsmRepresentation) singleAsmRepresentation).toSimplifiedStringOf(object, labelNameLookup);
+                return ((WithLabelNamesAsmRepresentation) singleAsmRepresentation).toSimplifiedStringOf(object, labelIndexLookup);
               }
               else {
                 return singleAsmRepresentation.toSimplifiedStringOf(object);

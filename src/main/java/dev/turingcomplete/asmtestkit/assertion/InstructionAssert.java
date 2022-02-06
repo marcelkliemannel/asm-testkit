@@ -2,7 +2,6 @@ package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.assertion.comparator.AttributeComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.InstructionComparator;
-import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.representation.InstructionRepresentation;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;
@@ -23,8 +22,6 @@ import java.util.Comparator;
  *   <li>or {@link AsmAssertions#assertThatInstructionsIgnoreLineNumbers(Iterable)}
  * </ul>
  * for multiple {@code AbstractInsnNode}s.
- *
- * <p>There are no direct supported {@link AssertOption}s yet.
  *
  * <p>To override the used {@link InstructionRepresentation} or
  * {@link AttributeComparator} call {@link #withRepresentation(Representation)}

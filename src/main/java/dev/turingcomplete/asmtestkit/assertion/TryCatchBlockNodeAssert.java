@@ -1,6 +1,5 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.asmutils.TypeUtils;
 import dev.turingcomplete.asmtestkit.assertion.comparator.TryCatchBlockNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.representation.TryCatchBlockNodeRepresentation;
 import org.assertj.core.api.AbstractAssert;
@@ -10,11 +9,11 @@ import org.objectweb.asm.tree.TryCatchBlockNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.function.Function;
 
+import static dev.turingcomplete.asmtestkit.asmutils.TypeUtils.toTypeElseNull;
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getFromObjectElseNull;
-import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getListFromObjectElse;
+import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getListFromObjectElseNull;
 
 /**
  * An AssertJ {@link AbstractAssert} for a {@link TryCatchBlockNode}.
@@ -69,7 +68,7 @@ public class TryCatchBlockNodeAssert extends AsmAssert<TryCatchBlockNodeAssert, 
   protected void hasEqualStart(Object expected) {
     AsmAssertions.assertThat(getFromObjectElseNull(actual, (TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.start))
                  .as(createCrumbDescription("Has equal start"))
-                 .useLabelNameLookup(labelNameLookup())
+                 .useLabelIndexLookup(labelNameLookup())
                  .isEqualTo(getFromObjectElseNull(expected, TryCatchBlockNode.class, tryCatchBlockNode -> tryCatchBlockNode.start));
   }
 
@@ -83,7 +82,7 @@ public class TryCatchBlockNodeAssert extends AsmAssert<TryCatchBlockNodeAssert, 
   protected void hasEqualEnd(Object expected) {
     AsmAssertions.assertThat(getFromObjectElseNull(actual, (TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.end))
                  .as(createCrumbDescription("Has equal end"))
-                 .useLabelNameLookup(labelNameLookup())
+                 .useLabelIndexLookup(labelNameLookup())
                  .isEqualTo(getFromObjectElseNull(expected, TryCatchBlockNode.class, tryCatchBlockNode -> tryCatchBlockNode.end));
   }
 
@@ -97,7 +96,7 @@ public class TryCatchBlockNodeAssert extends AsmAssert<TryCatchBlockNodeAssert, 
   protected void hasEqualHandler(Object expected) {
     AsmAssertions.assertThat(getFromObjectElseNull(actual, (TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.handler))
                  .as(createCrumbDescription("Has equal handler"))
-                 .useLabelNameLookup(labelNameLookup())
+                 .useLabelIndexLookup(labelNameLookup())
                  .isEqualTo(getFromObjectElseNull(expected, TryCatchBlockNode.class, tryCatchBlockNode -> tryCatchBlockNode.handler));
   }
 
@@ -111,11 +110,11 @@ public class TryCatchBlockNodeAssert extends AsmAssert<TryCatchBlockNodeAssert, 
   protected void hasEqualType(Object expected) {
     Function<TryCatchBlockNode, Type> transformTypeName = (TryCatchBlockNode tryCatchBlockNode) -> {
       //noinspection CodeBlock2Expr
-      return tryCatchBlockNode.type != null ? TypeUtils.toTypeElseNull(tryCatchBlockNode.type) : null;
+      return tryCatchBlockNode.type != null ? toTypeElseNull(tryCatchBlockNode.type) : null;
     };
     AsmAssertions.assertThat(getFromObjectElseNull(actual, transformTypeName))
                  .as(createCrumbDescription("Has equal type"))
-                 .useLabelNameLookup(labelNameLookup())
+                 .useLabelIndexLookup(labelNameLookup())
                  .isEqualTo(getFromObjectElseNull(expected, TryCatchBlockNode.class, transformTypeName));
   }
 
@@ -127,10 +126,10 @@ public class TryCatchBlockNodeAssert extends AsmAssert<TryCatchBlockNodeAssert, 
    *                 may be null.
    */
   protected void hasEqualVisibleTypeAnnotations(Object expected) {
-    AsmAssertions.assertThatTypeAnnotations(getListFromObjectElse(actual, (TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.visibleTypeAnnotations, List.of()))
+    AsmAssertions.assertThatTypeAnnotations(getListFromObjectElseNull(actual, (TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.visibleTypeAnnotations))
                  .as(createCrumbDescription("Has equal visible type annotations"))
                  .useLabelNameLookup(labelNameLookup())
-                 .containsExactlyInAnyOrderElementsOf(getListFromObjectElse(expected, TryCatchBlockNode.class, (TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.visibleTypeAnnotations, List.of()));
+                 .containsExactlyInAnyOrderElementsOf(getListFromObjectElseNull(expected, TryCatchBlockNode.class, (TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.visibleTypeAnnotations));
   }
 
   /**
@@ -141,10 +140,10 @@ public class TryCatchBlockNodeAssert extends AsmAssert<TryCatchBlockNodeAssert, 
    *                 may be null.
    */
   protected void hasEqualInvisibleTypeAnnotation(Object expected) {
-    AsmAssertions.assertThatTypeAnnotations(getListFromObjectElse(actual, (TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.invisibleTypeAnnotations, List.of()))
+    AsmAssertions.assertThatTypeAnnotations(getListFromObjectElseNull(actual, (TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.invisibleTypeAnnotations))
                  .as(createCrumbDescription("Has equal visible type annotations"))
                  .useLabelNameLookup(labelNameLookup())
-                 .containsExactlyInAnyOrderElementsOf(getListFromObjectElse(expected, TryCatchBlockNode.class, (TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.invisibleTypeAnnotations, List.of()));
+                 .containsExactlyInAnyOrderElementsOf(getListFromObjectElseNull(expected, TryCatchBlockNode.class, (TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.invisibleTypeAnnotations));
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

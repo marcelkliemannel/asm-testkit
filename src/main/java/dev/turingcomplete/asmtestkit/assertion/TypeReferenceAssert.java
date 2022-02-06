@@ -2,7 +2,6 @@ package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.assertion.comparator.TypePathComparator;
 import dev.turingcomplete.asmtestkit.assertion.comparator.TypeReferenceComparator;
-import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypePathRepresentation;
 import dev.turingcomplete.asmtestkit.assertion.representation.TypeReferenceRepresentation;
 import org.assertj.core.api.AbstractAssert;
@@ -18,8 +17,6 @@ import java.util.Comparator;
  * <p>An instance can be created via {@link AsmAssertions#assertThat(TypeReference)}.
  * Use {@link AsmAssertions#assertThatTypeReferences(Iterable)} for multiple
  * {@code TypeReference}s.
- *
- * <p>There are no direct supported {@link AssertOption}s yet.
  *
  * <p>To override the used {@link TypePathRepresentation} or
  * {@link TypePathComparator} call {@link #withRepresentation(Representation)}
