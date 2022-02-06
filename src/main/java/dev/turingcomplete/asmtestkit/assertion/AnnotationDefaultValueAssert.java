@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.assertion.comparator.AnnotationDefaultValueComparator;
-import dev.turingcomplete.asmtestkit.assertion.representation.AnnotationDefaultValueRepresentation;
+import dev.turingcomplete.asmtestkit.comparator.AnnotationDefaultValueComparator;
+import dev.turingcomplete.asmtestkit.representation.AnnotationDefaultValueRepresentation;
 import dev.turingcomplete.asmtestkit.node.AnnotationDefault;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;

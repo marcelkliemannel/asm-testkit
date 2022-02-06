@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.assertion.comparator.TryCatchBlockNodeComparator;
-import dev.turingcomplete.asmtestkit.assertion.representation.TryCatchBlockNodeRepresentation;
+import dev.turingcomplete.asmtestkit.comparator.TryCatchBlockNodeComparator;
+import dev.turingcomplete.asmtestkit.representation.TryCatchBlockNodeRepresentation;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Type;

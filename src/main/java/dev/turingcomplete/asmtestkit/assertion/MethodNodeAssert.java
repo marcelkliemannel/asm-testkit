@@ -1,9 +1,9 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils;
-import dev.turingcomplete.asmtestkit.assertion.comparator.MethodNodeComparator;
+import dev.turingcomplete.asmtestkit.comparator.MethodNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.option.StandardAssertOption;
-import dev.turingcomplete.asmtestkit.assertion.representation.MethodNodeRepresentation;
+import dev.turingcomplete.asmtestkit.representation.MethodNodeRepresentation;
 import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import dev.turingcomplete.asmtestkit.node.AnnotationDefault;
 import org.assertj.core.api.AbstractAssert;

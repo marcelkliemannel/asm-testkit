@@ -1,9 +1,9 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.assertion.comparator.AttributeComparator;
-import dev.turingcomplete.asmtestkit.assertion.comparator.LabelNodeComparator;
-import dev.turingcomplete.asmtestkit.assertion.representation.InstructionRepresentation;
-import dev.turingcomplete.asmtestkit.assertion.representation.LabelNodeRepresentation;
+import dev.turingcomplete.asmtestkit.comparator.AttributeComparator;
+import dev.turingcomplete.asmtestkit.comparator.LabelNodeComparator;
+import dev.turingcomplete.asmtestkit.representation.InstructionRepresentation;
+import dev.turingcomplete.asmtestkit.representation.LabelNodeRepresentation;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.tree.LabelNode;

@@ -2,10 +2,10 @@ package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils;
 import dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils;
-import dev.turingcomplete.asmtestkit.assertion.__helper.DummyAttribute;
-import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationA;
-import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;
-import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationB;
+import dev.turingcomplete.asmtestkit.__helper.DummyAttribute;
+import dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationA;
+import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;
+import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationB;
 import dev.turingcomplete.asmtestkit.compile.CompilationResult;
 import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import dev.turingcomplete.asmtestkit.node.AnnotationDefault;
@@ -99,7 +99,7 @@ class AsmAssertionsTest {
   @Test
   void testAssertThatTypeAnnotationNodes() throws IOException {
     @Language("Java")
-    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;" +
+    String myClass = "import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;" +
                      "class MyClass<@VisibleTypeParameterAnnotationA S, @VisibleTypeParameterAnnotationA T, @VisibleTypeParameterAnnotationA U> { }";
 
     List<TypeAnnotationNode> visibleTypeAnnotations = create()
@@ -124,15 +124,15 @@ class AsmAssertionsTest {
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Type Annotations] \n" +
                           "Expecting actual:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: null,\n" +
-                          "    @dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=1; path: null]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: null,\n" +
+                          "    @dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=1; path: null]\n" +
                           "to contain exactly in any order:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=1; path: null,\n" +
-                          "    @dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=2; path: null]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=1; path: null,\n" +
+                          "    @dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=2; path: null]\n" +
                           "elements not found:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=2; path: null]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=2; path: null]\n" +
                           "and elements not expected:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: null]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: null]\n" +
                           "when comparing values using TypeAnnotationNodeComparator");
   }
 
@@ -183,8 +183,8 @@ class AsmAssertionsTest {
   @Test
   void testAssertThatTypeReferences() throws IOException {
     @Language("Java")
-    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;" +
-                     "import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationB;" +
+    String myClass = "import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;" +
+                     "import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationB;" +
                      "class MyClass<@VisibleTypeParameterAnnotationA @VisibleTypeParameterAnnotationB S, @VisibleTypeParameterAnnotationA T> { }";
 
     List<TypeAnnotationNode> visibleTypeAnnotations = create()
@@ -395,8 +395,8 @@ class AsmAssertionsTest {
   @Test
   void testAssertThatLocalVariableAnnotations() throws IOException {
     @Language("Java")
-    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.*;" +
-                     "import java.util.Locale;class MyClass {" +
+    String myClass = "import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationB;import dev.turingcomplete.asmtestkit.__helper.*;" +
+                     "class MyClass {" +
                      "   String myMethod(String param) {" +
                      "     String @VisibleTypeParameterAnnotationA [] a = { param + 1 };" +
                      "     @VisibleTypeParameterAnnotationA String b = param + 2;" +
@@ -428,15 +428,15 @@ class AsmAssertionsTest {
             .isInstanceOf(AssertionError.class)
             .hasMessage("[Local Variable Annotations] \n" +
                         "Expecting actual:\n" +
-                        "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: #2 L1-L4,\n" +
-                        "    @dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: #3 L2-L4]\n" +
+                        "  [@dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: #2 L1-L4,\n" +
+                        "    @dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: #3 L2-L4]\n" +
                         "to contain exactly in any order:\n" +
-                        "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: #3 L2-L4,\n" +
-                        "    @dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationB // reference: local_variable; path: null // range: #4 L3-L4]\n" +
+                        "  [@dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: #3 L2-L4,\n" +
+                        "    @dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationB // reference: local_variable; path: null // range: #4 L3-L4]\n" +
                         "elements not found:\n" +
-                        "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationB // reference: local_variable; path: null // range: #4 L3-L4]\n" +
+                        "  [@dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationB // reference: local_variable; path: null // range: #4 L3-L4]\n" +
                         "and elements not expected:\n" +
-                        "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: #2 L1-L4]\n" +
+                        "  [@dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: #2 L1-L4]\n" +
                         "when comparing values using LocalVariableAnnotationNodeComparator");
   }
 

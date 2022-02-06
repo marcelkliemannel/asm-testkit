@@ -3,13 +3,13 @@ package dev.turingcomplete.asmtestkit.assertion;
 import dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils;
 import dev.turingcomplete.asmtestkit.asmutils.ClassNameUtils;
 import dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils;
-import dev.turingcomplete.asmtestkit.assertion.__helper.DummyAttribute;
-import dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleAnnotationA;
-import dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleAnnotationB;
-import dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA;
-import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationA;
-import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationB;
-import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;
+import dev.turingcomplete.asmtestkit.__helper.DummyAttribute;
+import dev.turingcomplete.asmtestkit.__helper.InvisibleAnnotationA;
+import dev.turingcomplete.asmtestkit.__helper.InvisibleAnnotationB;
+import dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA;
+import dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationA;
+import dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationB;
+import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;
 import dev.turingcomplete.asmtestkit.assertion.option.StandardAssertOption;
 import org.assertj.core.api.Assertions;
 import org.intellij.lang.annotations.Language;
@@ -34,7 +34,7 @@ class MethodNodeAssertTest {
   @Test
   void testIsEqualTo() throws IOException {
     @Language("Java")
-    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.*;" +
+    String myClass = "import dev.turingcomplete.asmtestkit.__helper.InvisibleAnnotationB;import dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA;import dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationA;import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;import dev.turingcomplete.asmtestkit.__helper.*;" +
 
                      "class MyClass<S> {" +
                      "  @InvisibleAnnotationB" +
@@ -199,12 +199,12 @@ class MethodNodeAssertTest {
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Method: first()Ljava.lang.String; > Has equal method visible annotations] \n" +
                           "Expecting actual:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationA]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationA]\n" +
                           "to contain exactly in any order:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationA,\n" +
-                          "    @dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationB]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationA,\n" +
+                          "    @dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationB]\n" +
                           "but could not find the following elements:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationB]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationB]\n" +
                           "when comparing values using AnnotationNodeComparator");
   }
 
@@ -229,19 +229,19 @@ class MethodNodeAssertTest {
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Method: first()Ljava.lang.String; > Has equal method invisible annotations] \n" +
                           "Expecting actual:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleAnnotationA]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.InvisibleAnnotationA]\n" +
                           "to contain exactly in any order:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleAnnotationA,\n" +
-                          "    @dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleAnnotationB]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.InvisibleAnnotationA,\n" +
+                          "    @dev.turingcomplete.asmtestkit.__helper.InvisibleAnnotationB]\n" +
                           "but could not find the following elements:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleAnnotationB]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.InvisibleAnnotationB]\n" +
                           "when comparing values using AnnotationNodeComparator");
   }
 
   @Test
   void testIsEqualToVisibleTypeAnnotations() throws IOException {
     @Language("Java")
-    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;" +
+    String myClass = "import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;" +
                      "class MyClass<T> {" +
                      "  T[]@VisibleTypeParameterAnnotationA[] myMethod1() { return null; }" +
                      "  T@VisibleTypeParameterAnnotationA[][] myMethod2() { return null; }" +
@@ -275,19 +275,19 @@ class MethodNodeAssertTest {
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Method: first()Ljava.lang.String; > Has equal method visible type annotations] \n" +
                           "Expecting actual:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: method_return; path: []\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: method_return; path: []\n" +
                           "to contain exactly in any order:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: method_return; path: [,\n" +
-                          "    @dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: method_return; path: null]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: method_return; path: [,\n" +
+                          "    @dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: method_return; path: null]\n" +
                           "but could not find the following elements:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: method_return; path: null]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: method_return; path: null]\n" +
                           "when comparing values using TypeAnnotationNodeComparator");
   }
 
   @Test
   void testIsEqualToInvisibleTypeAnnotations() throws IOException {
     @Language("Java")
-    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA;" +
+    String myClass = "import dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA;" +
                      "class MyClass<T> {" +
                      "  T[]@InvisibleTypeParameterAnnotationA[] myMethod1() { return null; }" +
                      "  T@InvisibleTypeParameterAnnotationA[][] myMethod2() { return null; }" +
@@ -321,12 +321,12 @@ class MethodNodeAssertTest {
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Method: first()Ljava.lang.String; > Has equal method invisible type annotations] \n" +
                           "Expecting actual:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA // reference: method_return; path: []\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA // reference: method_return; path: []\n" +
                           "to contain exactly in any order:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA // reference: method_return; path: [,\n" +
-                          "    @dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA // reference: method_return; path: null]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA // reference: method_return; path: [,\n" +
+                          "    @dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA // reference: method_return; path: null]\n" +
                           "but could not find the following elements:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA // reference: method_return; path: null]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA // reference: method_return; path: null]\n" +
                           "when comparing values using TypeAnnotationNodeComparator");
   }
 
@@ -517,7 +517,7 @@ class MethodNodeAssertTest {
   @Test
   void testIsEqualVisibleLocalVariableAnnotations() throws IOException {
     @Language("Java")
-    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.*;" +
+    String myClass = "import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationB;import dev.turingcomplete.asmtestkit.__helper.*;" +
                      "class MyClass {" +
                      "  void myMethod1(String foo) { " +
                      "    @VisibleTypeParameterAnnotationA String bar = foo + \"a\";" +
@@ -559,20 +559,20 @@ class MethodNodeAssertTest {
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Method: first()Ljava.lang.String; > Has equal visible local variable annotations] \n" +
                           "Expecting actual:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: #2 L1-L2]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: #2 L1-L2]\n" +
                           "to contain exactly in any order:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationB // reference: local_variable; path: null // range: #2 L1-L2]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationB // reference: local_variable; path: null // range: #2 L1-L2]\n" +
                           "elements not found:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationB // reference: local_variable; path: null // range: #2 L1-L2]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationB // reference: local_variable; path: null // range: #2 L1-L2]\n" +
                           "and elements not expected:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: #2 L1-L2]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: #2 L1-L2]\n" +
                           "when comparing values using LocalVariableAnnotationNodeComparator");
   }
 
   @Test
   void testIsEqualInvisibleLocalVariableAnnotations() throws IOException {
     @Language("Java")
-    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.*;" +
+    String myClass = "import dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA;import dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationB;import dev.turingcomplete.asmtestkit.__helper.*;" +
                      "class MyClass {" +
                      "  void myMethod1(String foo) { " +
                      "    @InvisibleTypeParameterAnnotationA String bar = foo + \"a\";" +
@@ -614,13 +614,13 @@ class MethodNodeAssertTest {
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Method: first()Ljava.lang.String; > Has equal invisible local variable annotations] \n" +
                           "Expecting actual:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: #2 L1-L2]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: #2 L1-L2]\n" +
                           "to contain exactly in any order:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationB // reference: local_variable; path: null // range: #2 L1-L2]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationB // reference: local_variable; path: null // range: #2 L1-L2]\n" +
                           "elements not found:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationB // reference: local_variable; path: null // range: #2 L1-L2]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationB // reference: local_variable; path: null // range: #2 L1-L2]\n" +
                           "and elements not expected:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: #2 L1-L2]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA // reference: local_variable; path: null // range: #2 L1-L2]\n" +
                           "when comparing values using LocalVariableAnnotationNodeComparator");
   }
 

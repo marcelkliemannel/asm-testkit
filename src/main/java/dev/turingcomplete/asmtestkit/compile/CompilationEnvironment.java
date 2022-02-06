@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.compile;
 
-import dev.turingcomplete.asmtestkit.assertion.representation.DiagnosticRepresentation;
+import dev.turingcomplete.asmtestkit.representation.DiagnosticRepresentation;
 import dev.turingcomplete.asmtestkit.compile._internal.JavaFileStringSource;
 import org.assertj.core.api.Assertions;
 

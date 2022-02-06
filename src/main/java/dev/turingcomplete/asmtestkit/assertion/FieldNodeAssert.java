@@ -1,8 +1,8 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.assertion.comparator.FieldNodeComparator;
+import dev.turingcomplete.asmtestkit.comparator.FieldNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.option.StandardAssertOption;
-import dev.turingcomplete.asmtestkit.assertion.representation.FieldNodeRepresentation;
+import dev.turingcomplete.asmtestkit.representation.FieldNodeRepresentation;
 import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.description.TextDescription;

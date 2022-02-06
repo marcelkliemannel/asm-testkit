@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.assertion.comparator.AccessFlagsComparator;
-import dev.turingcomplete.asmtestkit.assertion.representation.AccessFlagsRepresentation;
+import dev.turingcomplete.asmtestkit.comparator.AccessFlagsComparator;
+import dev.turingcomplete.asmtestkit.representation.AccessFlagsRepresentation;
 import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;

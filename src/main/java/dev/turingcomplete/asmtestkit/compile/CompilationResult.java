@@ -2,7 +2,7 @@ package dev.turingcomplete.asmtestkit.compile;
 
 import dev.turingcomplete.asmtestkit.asmutils.ClassNameUtils;
 import dev.turingcomplete.asmtestkit.asmutils.ClassNodeUtils;
-import dev.turingcomplete.asmtestkit.assertion.representation.DiagnosticRepresentation;
+import dev.turingcomplete.asmtestkit.representation.DiagnosticRepresentation;
 import org.assertj.core.api.ThrowingConsumer;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;

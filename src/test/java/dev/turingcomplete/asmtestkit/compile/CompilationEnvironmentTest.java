@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.compile;
 
-import dev.turingcomplete.asmtestkit.assertion.representation.DiagnosticRepresentation;
+import dev.turingcomplete.asmtestkit.representation.DiagnosticRepresentation;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
 

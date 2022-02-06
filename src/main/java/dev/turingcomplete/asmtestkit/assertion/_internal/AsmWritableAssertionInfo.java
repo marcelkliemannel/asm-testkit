@@ -2,8 +2,8 @@ package dev.turingcomplete.asmtestkit.assertion._internal;
 
 import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
 import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
-import dev.turingcomplete.asmtestkit.assertion.representation.AbstractWithLabelNamesAsmRepresentation;
-import dev.turingcomplete.asmtestkit.assertion.representation._internal.WithLabelNamesRepresentationAdapter;
+import dev.turingcomplete.asmtestkit.representation.AbstractWithLabelNamesAsmRepresentation;
+import dev.turingcomplete.asmtestkit.representation._internal.WithLabelNamesRepresentationAdapter;
 import org.assertj.core.api.WritableAssertionInfo;
 import org.assertj.core.presentation.Representation;
 

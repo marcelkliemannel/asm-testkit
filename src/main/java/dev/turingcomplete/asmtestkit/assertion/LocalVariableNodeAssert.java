@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.assertion.comparator.LocalVariableNodeComparator;
-import dev.turingcomplete.asmtestkit.assertion.representation.LocalVariableNodeRepresentation;
+import dev.turingcomplete.asmtestkit.comparator.LocalVariableNodeComparator;
+import dev.turingcomplete.asmtestkit.representation.LocalVariableNodeRepresentation;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.presentation.Representation;

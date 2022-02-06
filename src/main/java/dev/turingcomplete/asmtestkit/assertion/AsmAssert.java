@@ -1,13 +1,13 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.assertion._internal.AsmWritableAssertionInfo;
-import dev.turingcomplete.asmtestkit.assertion.comparator.WithLabelNamesAsmComparator;
-import dev.turingcomplete.asmtestkit.assertion.comparator._internal.WithLabelNamesAsmComparatorAdapter;
+import dev.turingcomplete.asmtestkit.comparator.WithLabelNamesAsmComparator;
+import dev.turingcomplete.asmtestkit.comparator._internal.WithLabelNamesAsmComparatorAdapter;
 import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
-import dev.turingcomplete.asmtestkit.assertion.representation.AsmRepresentations;
-import dev.turingcomplete.asmtestkit.assertion.representation.DefaultAsmRepresentations;
-import dev.turingcomplete.asmtestkit.assertion.representation._internal.CrumbDescription;
-import dev.turingcomplete.asmtestkit.assertion.representation._internal.SelfDescription;
+import dev.turingcomplete.asmtestkit.representation.AsmRepresentations;
+import dev.turingcomplete.asmtestkit.representation.DefaultAsmRepresentations;
+import dev.turingcomplete.asmtestkit.representation._internal.CrumbDescription;
+import dev.turingcomplete.asmtestkit.representation._internal.SelfDescription;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.description.Description;
 import org.assertj.core.presentation.Representation;

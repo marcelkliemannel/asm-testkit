@@ -1,10 +1,10 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.asmutils.InsnListUtils;
-import dev.turingcomplete.asmtestkit.assertion.comparator.*;
-import dev.turingcomplete.asmtestkit.assertion.representation.*;
+import dev.turingcomplete.asmtestkit.comparator.*;
 import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import dev.turingcomplete.asmtestkit.node.AnnotationDefault;
+import dev.turingcomplete.asmtestkit.representation.*;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Type;

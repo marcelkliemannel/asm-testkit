@@ -1,8 +1,8 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.assertion.comparator.AttributeComparator;
-import dev.turingcomplete.asmtestkit.assertion.comparator.InstructionComparator;
-import dev.turingcomplete.asmtestkit.assertion.representation.InstructionRepresentation;
+import dev.turingcomplete.asmtestkit.comparator.AttributeComparator;
+import dev.turingcomplete.asmtestkit.comparator.InstructionComparator;
+import dev.turingcomplete.asmtestkit.representation.InstructionRepresentation;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.tree.AbstractInsnNode;

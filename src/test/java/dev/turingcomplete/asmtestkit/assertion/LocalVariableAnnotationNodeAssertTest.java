@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationA;
+import dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationA;
 import org.assertj.core.api.Assertions;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
@@ -22,8 +22,8 @@ class LocalVariableAnnotationNodeAssertTest {
   @Test
   void testIsEqualTo() throws IOException {
     @Language("Java")
-    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.*;" +
-                     "import java.util.Locale;class MyClass {" +
+    String myClass = "import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;import dev.turingcomplete.asmtestkit.__helper.*;" +
+                     "class MyClass {" +
                      "   String myMethod(String param) {" +
                      "     String @VisibleTypeParameterAnnotationA [] a = { param + 1 };" +
                      "     @VisibleTypeParameterAnnotationA String b = param + 2;" +
@@ -50,7 +50,7 @@ class LocalVariableAnnotationNodeAssertTest {
                       .useLabelIndexLookup(labelIndexLookup)
                       .isEqualTo(secondLocalVariableAnnotationNode))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Local Variable Annotation: @dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA > Has equal ranges] \n" +
+              .hasMessage("[Local Variable Annotation: @dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA > Has equal ranges] \n" +
                           "Expecting actual:\n" +
                           "  [\"#2 L1-L3\"]\n" +
                           "to contain exactly (and in same order):\n" +

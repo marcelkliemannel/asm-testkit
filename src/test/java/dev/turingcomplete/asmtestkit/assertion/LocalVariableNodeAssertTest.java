@@ -25,7 +25,7 @@ class LocalVariableNodeAssertTest {
   @BeforeEach
   void setUp() throws IOException {
     @Language("Java")
-    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.*;" +
+    String myClass = "import dev.turingcomplete.asmtestkit.__helper.*;" +
                      "import java.util.Locale;class MyClass {" +
                      "   void myMethod() {" +
                      "     String a = \"foo\";" +

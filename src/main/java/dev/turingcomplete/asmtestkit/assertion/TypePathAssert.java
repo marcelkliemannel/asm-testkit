@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.assertion.comparator.TypePathComparator;
-import dev.turingcomplete.asmtestkit.assertion.representation.TypePathRepresentation;
+import dev.turingcomplete.asmtestkit.comparator.TypePathComparator;
+import dev.turingcomplete.asmtestkit.representation.TypePathRepresentation;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.TypePath;

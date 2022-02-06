@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA;
-import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;
+import dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA;
+import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Type;
@@ -99,13 +99,13 @@ class TryCatchBlockNodeAssertTest {
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Try Catch Block: finally // range: null-null; handled in: null > Has equal visible type annotations] \n" +
                           "Expecting actual:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: *]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: *]\n" +
                           "to contain exactly in any order:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: [2;]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: [2;]\n" +
                           "elements not found:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: [2;]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: [2;]\n" +
                           "and elements not expected:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: *]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: *]\n" +
                           "when comparing values using TypeAnnotationNodeComparator");
   }
 
@@ -121,13 +121,13 @@ class TryCatchBlockNodeAssertTest {
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Try Catch Block: finally // range: null-null; handled in: null > Has equal visible type annotations] \n" +
                           "Expecting actual:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: *]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: *]\n" +
                           "to contain exactly in any order:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: [2;]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: [2;]\n" +
                           "elements not found:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: [2;]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: [2;]\n" +
                           "and elements not expected:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: *]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA // reference: class_type_parameter=0; path: *]\n" +
                           "when comparing values using TypeAnnotationNodeComparator");
   }
 

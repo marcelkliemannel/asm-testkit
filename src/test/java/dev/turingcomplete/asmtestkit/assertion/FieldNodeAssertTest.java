@@ -2,13 +2,13 @@ package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils;
 import dev.turingcomplete.asmtestkit.asmutils.FieldNodeUtils;
-import dev.turingcomplete.asmtestkit.assertion.__helper.DummyAttribute;
-import dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleAnnotationA;
-import dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleAnnotationB;
-import dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA;
-import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationA;
-import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationB;
-import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;
+import dev.turingcomplete.asmtestkit.__helper.DummyAttribute;
+import dev.turingcomplete.asmtestkit.__helper.InvisibleAnnotationA;
+import dev.turingcomplete.asmtestkit.__helper.InvisibleAnnotationB;
+import dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA;
+import dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationA;
+import dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationB;
+import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;
 import dev.turingcomplete.asmtestkit.assertion.option.StandardAssertOption;
 import org.assertj.core.api.Assertions;
 import org.intellij.lang.annotations.Language;
@@ -32,7 +32,7 @@ class FieldNodeAssertTest {
   @Test
   void testIsEqualTo() throws IOException {
     @Language("Java")
-    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;" +
+    String myClass = "import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;" +
                      "class MyClass<T extends Number> {" +
                      "  public final T[]@VisibleTypeParameterAnnotationA[] myField1 = null;" +
                      "}";
@@ -185,12 +185,12 @@ class FieldNodeAssertTest {
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Field: first > Has equal field visible annotations] \n" +
                           "Expecting actual:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationA]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationA]\n" +
                           "to contain exactly in any order:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationA,\n" +
-                          "    @dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationB]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationA,\n" +
+                          "    @dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationB]\n" +
                           "but could not find the following elements:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleAnnotationB]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationB]\n" +
                           "when comparing values using AnnotationNodeComparator");
   }
 
@@ -215,19 +215,19 @@ class FieldNodeAssertTest {
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Field: first > Has equal field invisible annotations] \n" +
                           "Expecting actual:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleAnnotationA]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.InvisibleAnnotationA]\n" +
                           "to contain exactly in any order:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleAnnotationA,\n" +
-                          "    @dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleAnnotationB]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.InvisibleAnnotationA,\n" +
+                          "    @dev.turingcomplete.asmtestkit.__helper.InvisibleAnnotationB]\n" +
                           "but could not find the following elements:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleAnnotationB]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.InvisibleAnnotationB]\n" +
                           "when comparing values using AnnotationNodeComparator");
   }
 
   @Test
   void testIsEqualToVisibleTypeAnnotations() throws IOException {
     @Language("Java")
-    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;" +
+    String myClass = "import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;" +
                      "abstract class MyClass<T> extends @VisibleTypeParameterAnnotationA Thread {" +
                      "  T[]@VisibleTypeParameterAnnotationA[] myField1;" +
                      "  T@VisibleTypeParameterAnnotationA[][] myField2;" +
@@ -261,19 +261,19 @@ class FieldNodeAssertTest {
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Field: first > Has equal field visible type annotations] \n" +
                           "Expecting actual:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: field; path: []\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: field; path: []\n" +
                           "to contain exactly in any order:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: field; path: [,\n" +
-                          "    @dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: field; path: null]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: field; path: [,\n" +
+                          "    @dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: field; path: null]\n" +
                           "but could not find the following elements:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA // reference: field; path: null]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: field; path: null]\n" +
                           "when comparing values using TypeAnnotationNodeComparator");
   }
 
   @Test
   void testIsEqualToInvisibleTypeAnnotations() throws IOException {
     @Language("Java")
-    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA;" +
+    String myClass = "import dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA;" +
                      "class MyClass<T> {" +
                      "  T[]@InvisibleTypeParameterAnnotationA[] myField1;" +
                      "  T@InvisibleTypeParameterAnnotationA[][] myField2;" +
@@ -307,12 +307,12 @@ class FieldNodeAssertTest {
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Field: first > Has equal field invisible type annotations] \n" +
                           "Expecting actual:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA // reference: field; path: []\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA // reference: field; path: []\n" +
                           "to contain exactly in any order:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA // reference: field; path: [,\n" +
-                          "    @dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA // reference: field; path: null]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA // reference: field; path: [,\n" +
+                          "    @dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA // reference: field; path: null]\n" +
                           "but could not find the following elements:\n" +
-                          "  [@dev.turingcomplete.asmtestkit.assertion.__helper.InvisibleTypeParameterAnnotationA // reference: field; path: null]\n" +
+                          "  [@dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA // reference: field; path: null]\n" +
                           "when comparing values using TypeAnnotationNodeComparator");
   }
 

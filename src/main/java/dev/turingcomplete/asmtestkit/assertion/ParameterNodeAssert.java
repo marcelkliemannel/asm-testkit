@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.assertion.comparator.ParameterNodeComparator;
-import dev.turingcomplete.asmtestkit.assertion.representation.ParameterNodeRepresentation;
+import dev.turingcomplete.asmtestkit.comparator.ParameterNodeComparator;
+import dev.turingcomplete.asmtestkit.representation.ParameterNodeRepresentation;
 import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;

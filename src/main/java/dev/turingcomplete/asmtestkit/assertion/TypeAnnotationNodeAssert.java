@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.assertion.comparator.TypeAnnotationNodeComparator;
-import dev.turingcomplete.asmtestkit.assertion.representation.TypeAnnotationNodeRepresentation;
+import dev.turingcomplete.asmtestkit.comparator.TypeAnnotationNodeComparator;
+import dev.turingcomplete.asmtestkit.representation.TypeAnnotationNodeRepresentation;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.tree.TypeAnnotationNode;

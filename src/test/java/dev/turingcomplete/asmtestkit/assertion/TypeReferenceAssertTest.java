@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;
+import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;
 import org.assertj.core.api.Assertions;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ class TypeReferenceAssertTest {
   @Test
   void testIsEqualTo() throws IOException {
     @Language("Java")
-    String myClass = "import dev.turingcomplete.asmtestkit.assertion.__helper.VisibleTypeParameterAnnotationA;" +
+    String myClass = "import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;" +
                      "class MyClass<@VisibleTypeParameterAnnotationA S> {" +
                      "  @VisibleTypeParameterAnnotationA String myField;" +
                      "}";
