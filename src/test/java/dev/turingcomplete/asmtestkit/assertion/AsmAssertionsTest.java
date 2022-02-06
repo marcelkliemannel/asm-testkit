@@ -379,16 +379,16 @@ class AsmAssertionsTest {
             .isInstanceOf(AssertionError.class)
             .hasMessage("[Labels] \n" +
                         "Expecting actual:\n" +
-                        "  [(0) int first, @java.lang.Deprecated\n" +
-                        "(0) java.lang.String second = foo]\n" +
+                        "  [[0] int first, @java.lang.Deprecated\n" +
+                        "[0] java.lang.String second = foo]\n" +
                         "to contain exactly in any order:\n" +
                         "  [@java.lang.Deprecated\n" +
-                        "(0) java.lang.String second = foo,\n" +
-                        "    (1) public java.lang.Integer third]\n" +
+                        "[0] java.lang.String second = foo,\n" +
+                        "    [1: public] java.lang.Integer third]\n" +
                         "elements not found:\n" +
-                        "  [(1) public java.lang.Integer third]\n" +
+                        "  [[1: public] java.lang.Integer third]\n" +
                         "and elements not expected:\n" +
-                        "  [(0) int first]\n" +
+                        "  [[0] int first]\n" +
                         "when comparing values using FieldNodeComparator");
   }
 
@@ -563,13 +563,13 @@ class AsmAssertionsTest {
             .isInstanceOf(AssertionError.class)
             .hasMessage("[Parameters] \n" +
                         "Expecting actual:\n" +
-                        "  [(16) final a, (16) final b]\n" +
+                        "  [[16: final] a, [16: final] b]\n" +
                         "to contain exactly in any order:\n" +
-                        "  [(16) final b, (4112) final synthetic b]\n" +
+                        "  [[16: final] b, [4112: final, synthetic] b]\n" +
                         "elements not found:\n" +
-                        "  [(4112) final synthetic b]\n" +
+                        "  [[4112: final, synthetic] b]\n" +
                         "and elements not expected:\n" +
-                        "  [(16) final a]\n" +
+                        "  [[16: final] a]\n" +
                         "when comparing values using ParameterNodeComparator");
   }
 
@@ -614,13 +614,13 @@ class AsmAssertionsTest {
             .isInstanceOf(AssertionError.class)
             .hasMessage("[Access Flags] \n" +
                         "Expecting actual:\n" +
-                        "  [(1) public, (1024) abstract]\n" +
+                        "  [[1: public], [1024: abstract]]\n" +
                         "to contain exactly in any order:\n" +
-                        "  [(1024) abstract, (512) interface]\n" +
+                        "  [[1024: abstract], [512: interface]]\n" +
                         "elements not found:\n" +
-                        "  [(512) interface]\n" +
+                        "  [[512: interface]]\n" +
                         "and elements not expected:\n" +
-                        "  [(1) public]\n" +
+                        "  [[1: public]]\n" +
                         "when comparing values using AccessFlagsComparator");
   }
 
@@ -662,7 +662,7 @@ class AsmAssertionsTest {
             .isInstanceOf(AssertionError.class)
             .hasMessage("[Methods] \n" +
                         "Expecting actual:\n" +
-                        "  [(0) <init>()\n" +
+                        "  [[0] <init>()\n" +
                         "    L0\n" +
                         "      LINENUMBER 1 L0\n" +
                         "      ALOAD 0 // opcode: 25\n" +
@@ -672,7 +672,7 @@ class AsmAssertionsTest {
                         "  // Local variable: #0 MyClass this // range: L0-L1\n" +
                         "  // Max locals: 1\n" +
                         "  // Max stack: 1,\n" +
-                        "    (0) void myMethod1()\n" +
+                        "    [0] void myMethod1()\n" +
                         "    L0\n" +
                         "      LINENUMBER 1 L0\n" +
                         "      GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
@@ -684,7 +684,7 @@ class AsmAssertionsTest {
                         "  // Max locals: 1\n" +
                         "  // Max stack: 2]\n" +
                         "to contain exactly in any order:\n" +
-                        "  [(0) void myMethod1()\n" +
+                        "  [[0] void myMethod1()\n" +
                         "    L0\n" +
                         "      LINENUMBER 1 L0\n" +
                         "      GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
@@ -695,7 +695,7 @@ class AsmAssertionsTest {
                         "  // Local variable: #0 MyClass this // range: L0-L1\n" +
                         "  // Max locals: 1\n" +
                         "  // Max stack: 2,\n" +
-                        "    (0) int myMethod2()\n" +
+                        "    [0] int myMethod2()\n" +
                         "    L0\n" +
                         "      LINENUMBER 1 L0\n" +
                         "      GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
@@ -708,7 +708,7 @@ class AsmAssertionsTest {
                         "  // Max locals: 1\n" +
                         "  // Max stack: 2]\n" +
                         "elements not found:\n" +
-                        "  [(0) int myMethod2()\n" +
+                        "  [[0] int myMethod2()\n" +
                         "    L0\n" +
                         "      LINENUMBER 1 L0\n" +
                         "      GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
@@ -721,7 +721,7 @@ class AsmAssertionsTest {
                         "  // Max locals: 1\n" +
                         "  // Max stack: 2]\n" +
                         "and elements not expected:\n" +
-                        "  [(0) <init>()\n" +
+                        "  [[0] <init>()\n" +
                         "    L0\n" +
                         "      LINENUMBER 1 L0\n" +
                         "      ALOAD 0 // opcode: 25\n" +

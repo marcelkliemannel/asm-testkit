@@ -11,7 +11,7 @@ import org.objectweb.asm.tree.TypeAnnotationNode;
 import java.util.Comparator;
 import java.util.function.Function;
 
-import static dev.turingcomplete.asmtestkit.asmutils.TypeUtils.toTypeElseNull;
+import static dev.turingcomplete.asmtestkit.asmutils.TypeUtils.nameToTypeElseNull;
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getFromObjectElseNull;
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getListFromObjectElseNull;
 
@@ -110,7 +110,7 @@ public class TryCatchBlockNodeAssert extends AsmAssert<TryCatchBlockNodeAssert, 
   protected void hasEqualType(Object expected) {
     Function<TryCatchBlockNode, Type> transformTypeName = (TryCatchBlockNode tryCatchBlockNode) -> {
       //noinspection CodeBlock2Expr
-      return tryCatchBlockNode.type != null ? toTypeElseNull(tryCatchBlockNode.type) : null;
+      return tryCatchBlockNode.type != null ? nameToTypeElseNull(tryCatchBlockNode.type) : null;
     };
     AsmAssertions.assertThat(getFromObjectElseNull(actual, transformTypeName))
                  .as(createCrumbDescription("Has equal type"))

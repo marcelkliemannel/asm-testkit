@@ -3,15 +3,16 @@ package dev.turingcomplete.asmtestkit.representation;
 import dev.turingcomplete.asmtestkit.__helper.InvisibleAnnotationA;
 import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;
 import org.assertj.core.api.Assertions;
-import org.intellij.lang.annotations.Language;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.objectweb.asm.tree.FieldNode;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.stream.Stream;
 
-import static dev.turingcomplete.asmtestkit.representation.FieldNodeRepresentation.INSTANCE;
 import static dev.turingcomplete.asmtestkit.compile.CompilationEnvironment.create;
+import static dev.turingcomplete.asmtestkit.representation.FieldNodeRepresentation.INSTANCE;
 
 class FieldNodeRepresentationTest {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -19,49 +20,62 @@ class FieldNodeRepresentationTest {
   // -- Initialization ---------------------------------------------------------------------------------------------- //
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
-  @Test
-  void testToStringOf() throws IOException {
-    @Language("Java")
-    String myClass = "" +
-                     "import dev.turingcomplete.asmtestkit.__helper.InvisibleAnnotationA;" +
-                     "import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;" +
-                     "class MyClass<T> {" +
-                     "  @InvisibleAnnotationA\n" +
-                     "  private T[]@VisibleTypeParameterAnnotationA [] myField;" +
-                     "  @Deprecated(forRemoval = true)\n" +
-                     "  public static final int myField2 = 5;" +
-                     "  String myField3;" +
-                     "}";
-
-    List<FieldNode> fields = create()
+  @ParameterizedTest
+  @MethodSource("testToStringOfArguments")
+  void testToStringOf(String methodSource, String expected) throws IOException {
+    FieldNode fieldNode = create()
             .addToClasspath(VisibleTypeParameterAnnotationA.class)
             .addToClasspath(InvisibleAnnotationA.class)
-            .addJavaInputSource(myClass)
+            .addJavaInputSource( "import dev.turingcomplete.asmtestkit.__helper.InvisibleAnnotationA;" +
+                                 "import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;" +
+                                 "class MyClass<T> {" + methodSource  + "}")
             .compile()
             .readClassNode("MyClass")
-            .fields;
+            .fields.get(0);
 
-    FieldNode field1 = fields.get(0);
-    FieldNode field2 = fields.get(1);
-    FieldNode field3 = fields.get(2);
+    Assertions.assertThat(INSTANCE.toStringOf(fieldNode))
+              .isEqualTo(expected);
+  }
 
-    Assertions.assertThat(INSTANCE.toStringOf(field1))
-              .isEqualTo("@dev.turingcomplete.asmtestkit.__helper.InvisibleAnnotationA // invisible\n" +
-                         "@dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: field; path: [\n" +
-                         "(2) private java.lang.Object[][] myField // signature: [[TT;");
-    Assertions.assertThat(INSTANCE.doToSimplifiedStringOf(field1))
-              .isEqualTo("(2) private java.lang.Object[][] myField");
+  private static Stream<Arguments> testToStringOfArguments() {
+    return Stream.of(Arguments.of("@InvisibleAnnotationA\nprivate T[]@VisibleTypeParameterAnnotationA [] myField;",
+                                  "@dev.turingcomplete.asmtestkit.__helper.InvisibleAnnotationA // invisible\n" +
+                                  "@dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA // reference: field; path: [\n" +
+                                  "[2: private] java.lang.Object[][] myField // signature: [[TT;",
+                                  "[2: private] java.lang.Object[][] myField"),
+                     Arguments.of("@Deprecated(forRemoval = true)\npublic static final int myField2 = 5;",
+                                  "@java.lang.Deprecated(forRemoval=true)\n" +
+                                  "[131097: public, static, final, deprecated] int myField2 = 5",
+                                  "[131097: public. static, final, deprecated] int myField2"),
+                     Arguments.of("String myField3;",
+                                  "[0] java.lang.String myField3",
+                                  "[0] java.lang.String myField3"));
+  }
 
-    Assertions.assertThat(INSTANCE.toStringOf(field2))
-              .isEqualTo("@java.lang.Deprecated(forRemoval=true)\n" +
-                         "(131097) public static final deprecated int myField2 = 5");
-    Assertions.assertThat(INSTANCE.doToSimplifiedStringOf(field2))
-              .isEqualTo("(131097) public static final deprecated int myField2");
+  @ParameterizedTest
+  @MethodSource("testToSimplifiedStringOfArguments")
+  void testToSimplifiedStringOf(String methodSource, String expected) throws IOException {
+    FieldNode fieldNode = create()
+            .addToClasspath(VisibleTypeParameterAnnotationA.class)
+            .addToClasspath(InvisibleAnnotationA.class)
+            .addJavaInputSource( "import dev.turingcomplete.asmtestkit.__helper.InvisibleAnnotationA;" +
+                                 "import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;" +
+                                 "class MyClass<T> {" + methodSource  + "}")
+            .compile()
+            .readClassNode("MyClass")
+            .fields.get(0);
 
-    Assertions.assertThat(INSTANCE.toStringOf(field3))
-              .isEqualTo("(0) java.lang.String myField3");
-    Assertions.assertThat(INSTANCE.doToSimplifiedStringOf(field3))
-              .isEqualTo("(0) java.lang.String myField3");
+    Assertions.assertThat(INSTANCE.toSimplifiedStringOf(fieldNode))
+              .isEqualTo(expected);
+  }
+
+  private static Stream<Arguments> testToSimplifiedStringOfArguments() {
+    return Stream.of(Arguments.of("@InvisibleAnnotationA\nprivate T[]@VisibleTypeParameterAnnotationA [] myField;",
+                                  "[2: private] java.lang.Object[][] myField"),
+                     Arguments.of("@Deprecated(forRemoval = true)\npublic static final int myField2 = 5;",
+                                  "[131097: public, static, final, deprecated] int myField2"),
+                     Arguments.of("String myField3;",
+                                  "[0] java.lang.String myField3"));
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

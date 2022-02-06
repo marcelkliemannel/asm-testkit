@@ -1,10 +1,12 @@
 package dev.turingcomplete.asmtestkit.representation;
 
 import dev.turingcomplete.asmtestkit.asmutils.Access;
+import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
 import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import org.assertj.core.presentation.Representation;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 /**
  * An AssertJ {@link Representation} for {@link AccessFlags}s.
@@ -45,13 +47,12 @@ public class AccessFlagsRepresentation extends AbstractAsmRepresentation<AccessF
   @Override
   protected String doToSimplifiedStringOf(AccessFlags accessFlags) {
     int access = accessFlags.access();
-    String textifiedAccess = "(" + access + ")";
-    if (access > 0) {
-      String javaSourceCodeRepresentation = toJavaSourceCodeRepresentation(accessFlags);
-      if (!javaSourceCodeRepresentation.isBlank()) {
-        textifiedAccess += " " + javaSourceCodeRepresentation;
-      }
+    String textifiedAccess = "[" + access;
+    String[] elements = toJavaSourceCodeRepresentations(accessFlags);
+    if (elements.length > 0) {
+      textifiedAccess += ": " + String.join(", ", elements);
     }
+    textifiedAccess += "]";
     return textifiedAccess;
   }
 
@@ -91,6 +92,45 @@ public class AccessFlagsRepresentation extends AbstractAsmRepresentation<AccessF
     }
 
     return String.join(" ", toJavaSourceCodeRepresentations(accessFlags));
+  }
+
+
+  /**
+   * Gets a representation of the class kind like in the Java source code {e.g.,
+   * {@code class} or {@code interface}}.
+   *
+   * @param accessFlags the {@link AccessFlags}; never null.
+   * @return a {@link String} representing a Java source code like representation
+   * of the class kind.
+   * @throws IllegalArgumentException if {@code accessFlags} is not of kind
+   *                                  {@link AccessKind#CLASS}.
+   */
+  public String toJavaSourceCodeClassKindRepresentation(AccessFlags accessFlags) {
+    Objects.requireNonNull(accessFlags);
+
+    if (!accessFlags.accessKind().equals(AccessKind.CLASS)) {
+      throw new IllegalArgumentException("Expected flags to be of kind: " + accessFlags.accessKind());
+    }
+
+    int access = accessFlags.access();
+    if (Access.ENUM.check(access)) {
+      return "enum";
+    }
+    else if (Access.INTERFACE.check(access)) {
+      return "interface";
+    }
+    else if (Access.ANNOTATION.check(access)) {
+      return "@interface";
+    }
+    else if (Access.RECORD.check(access)) {
+      return "record";
+    }
+    else if (Access.MODULE.check(access)) {
+      return "module";
+    }
+    else {
+      return "class";
+    }
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

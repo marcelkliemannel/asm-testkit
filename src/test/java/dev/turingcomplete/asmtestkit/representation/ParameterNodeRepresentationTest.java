@@ -16,7 +16,7 @@ class ParameterNodeRepresentationTest {
   void testToStringOf() {
     ParameterNode first = new ParameterNode("a", 16);
 
-    assertThat(INSTANCE.toStringOf(first)).isEqualTo("(16) final a");
+    assertThat(INSTANCE.toStringOf(first)).isEqualTo("[16: final] a");
   }
 
   @Test

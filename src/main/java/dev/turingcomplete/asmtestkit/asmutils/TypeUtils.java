@@ -21,7 +21,7 @@ public final class TypeUtils {
    * @return a {@link Type} representing the internal name; or null if the
    * {@code name} is null.
    */
-  public static Type toTypeElseNull(String name) {
+  public static Type nameToTypeElseNull(String name) {
     if (name == null) {
       return null;
     }

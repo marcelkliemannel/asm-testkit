@@ -6,7 +6,7 @@ import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.tree.TryCatchBlockNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
-import static dev.turingcomplete.asmtestkit.asmutils.TypeUtils.toTypeElseNull;
+import static dev.turingcomplete.asmtestkit.asmutils.TypeUtils.nameToTypeElseNull;
 
 /**
  * An AssertJ {@link Representation} for a {@link TryCatchBlockNode}.
@@ -55,7 +55,7 @@ public class TryCatchBlockNodeRepresentation extends AbstractWithLabelNamesAsmRe
 
     // Type
     if (tryCatchBlockNode.type != null) {
-      representation.append(asmRepresentations.toStringOf(toTypeElseNull(tryCatchBlockNode.type)));
+      representation.append(asmRepresentations.toStringOf(nameToTypeElseNull(tryCatchBlockNode.type)));
     }
     else {
       representation.append("finally");

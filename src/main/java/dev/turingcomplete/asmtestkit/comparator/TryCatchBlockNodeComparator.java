@@ -9,7 +9,7 @@ import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.util.Comparator;
 
-import static dev.turingcomplete.asmtestkit.asmutils.TypeUtils.toTypeElseNull;
+import static dev.turingcomplete.asmtestkit.asmutils.TypeUtils.nameToTypeElseNull;
 
 /**
  * A comparison function to order {@link TryCatchBlockNode}s.
@@ -55,7 +55,7 @@ public class TryCatchBlockNodeComparator extends AbstractWithLabelNamesAsmCompar
     return WithLabelNamesAsmComparator.comparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.start, asmComparators.elementComparator(LabelNode.class), labelIndexLookup)
                                       .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.end, asmComparators.elementComparator(LabelNode.class))
                                       .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.handler, asmComparators.elementComparator(LabelNode.class))
-                                      .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> toTypeElseNull(tryCatchBlockNode.type), asmComparators.elementComparator(Type.class))
+                                      .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> nameToTypeElseNull(tryCatchBlockNode.type), asmComparators.elementComparator(Type.class))
                                       .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.visibleTypeAnnotations, asmComparators.iterableComparator(TypeAnnotationNode.class))
                                       .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.invisibleTypeAnnotations, asmComparators.iterableComparator(TypeAnnotationNode.class))
                                       .compare(first, second);

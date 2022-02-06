@@ -5,6 +5,9 @@ import dev.turingcomplete.asmtestkit.__helper.DummyAttribute;
 import dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationA;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -15,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static dev.turingcomplete.asmtestkit.representation.MethodNodeRepresentation.INSTANCE;
 import static dev.turingcomplete.asmtestkit.compile.CompilationEnvironment.create;
@@ -26,42 +30,56 @@ class MethodNodeRepresentationTest {
   // -- Initialization ---------------------------------------------------------------------------------------------- //
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
+  @ParameterizedTest
+  @MethodSource("testCreateMethodDeclarationArguments")
+  void testCreateMethodDeclaration(String methodSource, String expected) throws IOException {
+    MethodNode methodNode = create()
+            .addJavaInputSource("class MyClass<S> { " + methodSource + " }")
+            .compile()
+            .readClassNode("MyClass")
+            .methods.get(1);
+
+    assertThat(INSTANCE.createMethodDeclaration(methodNode)).isEqualTo(expected);
+  }
+
+  private static Stream<Arguments> testCreateMethodDeclarationArguments() {
+    return Stream.of(Arguments.of("public Integer fullMethod(final int foo, String bar) throws java.io.IOException, ClassNotFoundException { return 1; }", "[1: public] java.lang.Integer fullMethod(int foo, java.lang.String bar) throws java.io.IOException java.lang.ClassNotFoundException"),
+                     Arguments.of("void singleException() throws java.io.IOException {}", "[0] void singleException() throws java.io.IOException"),
+                     Arguments.of("<T> T withSignature(S foo, S bar) { return null; }", "[0] java.lang.Object withSignature(java.lang.Object foo, java.lang.Object bar) // signature: <T:Ljava/lang/Object;>(TS;TS;)TT;"),
+                     Arguments.of("void singleParameters(int foo) {}", "[0] void singleParameters(int foo)"),
+                     Arguments.of("void arrayParameter(int[] foo) {}", "[0] void arrayParameter(int[] foo)"),
+                     Arguments.of("public void varargsParameter(int ...foo) {}", "[129: public, varargs] void varargsParameter(int[] foo)"),
+                     Arguments.of("void withoutAnything() {}", "[0] void withoutAnything()"));
+  }
+
   @Test
-  void testCreateMethodDeclaration() throws IOException {
+  void testCreateMethodDeclarationStaticInitializer() throws IOException {
     @Language("Java")
     String myClass = "class MyClass<S> {" +
                      "  static { System.out.println(2); } " +
-                     "  MyClass() {} " +
-                     "  /** @noinspection RedundantThrows*/" +
-                     "  public Integer fullMethod(final int foo, String bar) throws java.io.IOException, ClassNotFoundException { return 1; }" +
-                     "  /** @noinspection RedundantThrows*/ " +
-                     "  void singleException() throws java.io.IOException {}" +
-                     "  <T> T withSignature(S foo, S bar) { return null; }" +
-                     "  void singleParameters(int foo) {}" +
-                     "  void arrayParameter(int[] foo) {}" +
-                     "  void varargsParameter(int ...foo) {}" +
-                     "  void withoutAnything() {}" +
                      "}";
-    List<MethodNode> methods = create()
+    MethodNode methodNode = create()
             .addJavaInputSource(myClass)
             .compile()
             .readClassNode("MyClass")
-            .methods;
+            .methods.get(1);
 
-    Map<String, String> actual = methods.stream().collect(Collectors.toMap(methodNode -> methodNode.name, INSTANCE::createMethodDeclaration));
+    assertThat(INSTANCE.createMethodDeclaration(methodNode)).isEqualTo("[8: static] <clinit>()");
+  }
 
-    Map<String, String> expected = Map.of(
-            "<clinit>", "(8) static <clinit>()",
-            "<init>", "(0) <init>()",
-            "fullMethod", "(1) public java.lang.Integer fullMethod(int foo, java.lang.String bar) throws java.io.IOException java.lang.ClassNotFoundException",
-            "singleException", "(0) void singleException() throws java.io.IOException",
-            "withSignature", "(0) java.lang.Object withSignature(java.lang.Object foo, java.lang.Object bar) // signature: <T:Ljava/lang/Object;>(TS;TS;)TT;",
-            "singleParameters", "(0) void singleParameters(int foo)",
-            "arrayParameter", "(0) void arrayParameter(int[] foo)",
-            "varargsParameter", "(128) varargs void varargsParameter(int[] foo)",
-            "withoutAnything", "(0) void withoutAnything()");
+  @Test
+  void testCreateMethodDeclarationConstructor() throws IOException {
+    @Language("Java")
+    String myClass = "class MyClass<S> {" +
+                     "  MyClass(String foo) {} " +
+                     "}";
+    MethodNode methodNode = create()
+            .addJavaInputSource(myClass)
+            .compile()
+            .readClassNode("MyClass")
+            .methods.get(0);
 
-    assertThat(actual).containsExactlyInAnyOrderEntriesOf(expected);
+    assertThat(INSTANCE.createMethodDeclaration(methodNode)).isEqualTo("[0] <init>(java.lang.String foo)");
   }
 
   @Test
@@ -140,7 +158,7 @@ class MethodNodeRepresentationTest {
                        "// Attribute: Name2Content\n" +
                        "@dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationA\n" +
                        "@dev.turingcomplete.asmtestkit.__helper.InvisibleAnnotationB // invisible\n" +
-                       "(0) java.lang.Object myMethod((16) final java.lang.String param, java.lang.Integer e) // signature: <T:Ljava/lang/Object;>(Ljava/lang/String;Ljava/lang/Integer;)TT;\n" +
+                       "[0] java.lang.Object myMethod([16: final] java.lang.String param, java.lang.Integer e) // signature: <T:Ljava/lang/Object;>(Ljava/lang/String;Ljava/lang/Integer;)TT;\n" +
                        "    L0\n" +
                        "      LINENUMBER 2 L0\n" +
                        "      BIPUSH 6 // opcode: 16\n" +
@@ -174,7 +192,7 @@ class MethodNodeRepresentationTest {
                        "      ATHROW // opcode: 191\n" +
                        "    L6\n" +
                        "  // Parameter: @java.lang.SuppressWarnings\n" +
-                       "  //            (16) final param\n" +
+                       "  //            [16: final] param\n" +
                        "  // Local variable: #3 java.lang.Integer first // range: L3-L2\n" +
                        "  // Local variable: #4 java.lang.Integer second // range: L4-L2\n" +
                        "  // Local variable: #3 java.lang.IllegalArgumentException e // range: L5-L6\n" +
@@ -202,7 +220,7 @@ class MethodNodeRepresentationTest {
             .methods.get(0);
 
     assertThat(INSTANCE.toStringOf(annotationMethod))
-            .isEqualTo("(1025) public abstract java.lang.String value()\n" +
+            .isEqualTo("[1025: public, abstract] java.lang.String value()\n" +
                        "  // Annotation default: \"foo\"\n" +
                        "  // Max locals: 0\n" +
                        "  // Max stack: 0");
@@ -223,7 +241,7 @@ class MethodNodeRepresentationTest {
             .methods.get(0);
 
     assertThat(INSTANCE.toStringOf(annotationMethod))
-            .isEqualTo("(1025) public abstract dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationA value()\n" +
+            .isEqualTo("[1025: public, abstract] dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationA value()\n" +
                        "  // Annotation default: @dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationA\n" +
                        "  // Max locals: 0\n" +
                        "  // Max stack: 0");

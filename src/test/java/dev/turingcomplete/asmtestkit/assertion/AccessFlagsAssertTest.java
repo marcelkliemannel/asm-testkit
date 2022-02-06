@@ -23,7 +23,7 @@ class AccessFlagsAssertTest {
     Assertions.assertThatThrownBy(() -> assertThat(AccessFlags.forClass(ACC_PUBLIC + ACC_ABSTRACT))
                       .isEqualTo(AccessFlags.forClass(ACC_ABSTRACT + ACC_FINAL)))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Access: (1025) public abstract > Has equal access values] \n" +
+              .hasMessage("[Access: [1025: public, abstract] > Has equal access values] \n" +
                           "Expecting actual:\n" +
                           "  [\"public\", \"abstract\"]\n" +
                           "to contain exactly in any order:\n" +

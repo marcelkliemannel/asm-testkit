@@ -20,7 +20,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 import static dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils.extractLabelIndices;
-import static dev.turingcomplete.asmtestkit.asmutils.TypeUtils.toTypeElseNull;
+import static dev.turingcomplete.asmtestkit.asmutils.TypeUtils.nameToTypeElseNull;
 import static dev.turingcomplete.asmtestkit.representation._internal.RepresentationUtils.createAnnotationNodesRepresentations;
 import static dev.turingcomplete.asmtestkit.representation._internal.RepresentationUtils.createAttributesRepresentations;
 import static dev.turingcomplete.asmtestkit.representation._internal.RepresentationUtils.createTypeAnnotationNodesRepresentations;
@@ -185,7 +185,7 @@ public class MethodNodeRepresentation extends AbstractWithLabelNamesAsmRepresent
    * @return a {@link String} representation of {@code methodNode}'s
    * declaration; never null.
    */
-  protected String createMethodDeclaration(MethodNode methodNode) {
+  public String createMethodDeclaration(MethodNode methodNode) {
     var representation = new StringBuilder();
 
     Type methodType = methodNode.desc != null ? Type.getMethodType(methodNode.desc) : null;
@@ -193,17 +193,16 @@ public class MethodNodeRepresentation extends AbstractWithLabelNamesAsmRepresent
     // Access
     boolean isStatic = Access.STATIC.check(methodNode.access);
     if (methodNode.access >= 0) {
-      representation.append(asmRepresentations.toStringOf(AccessFlags.create(methodNode.access, AccessKind.METHOD)));
+      representation.append(asmRepresentations.toStringOf(AccessFlags.forMethod(methodNode.access))).append(" ");
     }
 
     // Return Type
     if (methodType != null && !Objects.equals("<clinit>", methodNode.name) && !Objects.equals("<init>", methodNode.name)) {
-      representation.append(" ");
-      representation.append(asmRepresentations.toStringOf(methodType.getReturnType()));
+      representation.append(asmRepresentations.toStringOf(methodType.getReturnType())).append(" ");
     }
 
     // Name
-    representation.append(" ").append(methodNode.name);
+    representation.append(methodNode.name);
 
     // Parameters
     representation.append("(");
@@ -244,12 +243,12 @@ public class MethodNodeRepresentation extends AbstractWithLabelNamesAsmRepresent
     if (methodNode.exceptions != null && !methodNode.exceptions.isEmpty()) {
       representation.append(" throws");
       methodNode.exceptions.forEach(exception -> {
-        Type exceptionType = toTypeElseNull(exception);
+        Type exceptionType = nameToTypeElseNull(exception);
         representation.append(" ").append(asmRepresentations.toStringOf(exceptionType));
       });
     }
 
-    // signature
+    // Signature
     if (methodNode.signature != null) {
       representation.append(" // signature: ").append(methodNode.signature);
     }
