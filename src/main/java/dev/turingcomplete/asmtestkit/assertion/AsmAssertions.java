@@ -13,6 +13,7 @@ import org.objectweb.asm.TypeReference;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.InnerClassNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LineNumberNode;
@@ -217,6 +218,16 @@ public final class AsmAssertions {
    */
   public static MethodNodeAssert assertThat(MethodNode actual) {
     return new MethodNodeAssert(actual);
+  }
+
+  /**
+   * Creates an {@link InnerClassNodeAssert}.
+   *
+   * @param actual an {@link InnerClassNode}; may be null.
+   * @return a new {@link InnerClassNodeAssert}; never null.
+   */
+  public static InnerClassNodeAssert assertThat(InnerClassNode actual) {
+    return new InnerClassNodeAssert(actual);
   }
 
   // ---- Iterable ---------------------------------------------------------- //
@@ -636,6 +647,30 @@ public final class AsmAssertions {
             .withRepresentation(MethodNodeRepresentation.INSTANCE)
             .usingElementComparator(MethodNodeComparator.INSTANCE)
             .usingComparator(MethodNodeComparator.ITERABLE_INSTANCE);
+  }
+
+  /**
+   * Creates an {@link AsmIterableAssert} for {@link InnerClassNode}s which
+   * uses {@link InnerClassNodeRepresentation#INSTANCE} for the representation
+   * and for equality {@link InnerClassNodeComparator#INSTANCE} and
+   * {@link InnerClassNodeComparator#ITERABLE_INSTANCE}.
+   *
+   * <p>The returned {@code AsmIterableAssert} should be used in conjunction with
+   * {@link AsmIterableAssert#containsExactlyInAnyOrderElementsOf}.
+   *
+   * <p>To override the representation or comparator call
+   * {@link AsmIterableAssert#usingComparator(Comparator)} or
+   * {@link AsmIterableAssert#withRepresentation(Representation)}.
+   *
+   * @param actual an {@link Iterable} of {@link InnerClassNode}s; may be null.
+   * @return a new {@link AsmIterableAssert}; never null.
+   */
+  public static AsmIterableAssert<?, InnerClassNode, InnerClassNodeAssert> assertThatInnerClasses(Iterable<InnerClassNode> actual) {
+    return new AsmIterableAssert<>(actual, AsmAssertions::assertThat)
+            .as("Inner classes")
+            .withRepresentation(InnerClassNodeRepresentation.INSTANCE)
+            .usingElementComparator(InnerClassNodeComparator.INSTANCE)
+            .usingComparator(InnerClassNodeComparator.ITERABLE_INSTANCE);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

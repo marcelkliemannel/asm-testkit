@@ -52,6 +52,8 @@ import static dev.turingcomplete.asmtestkit.representation._internal.Representat
  *  // Max locals: 5
  *  // Max stack: 3
  * }</pre>
+ *
+ * <p>The simplified output concatenates the method name and descriptor.
  */
 public class MethodNodeRepresentation extends AbstractWithLabelNamesAsmRepresentation<MethodNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -104,11 +106,13 @@ public class MethodNodeRepresentation extends AbstractWithLabelNamesAsmRepresent
 
     // Annotations
     createAnnotationNodesRepresentations(asmRepresentations, methodNode.visibleAnnotations, methodNode.invisibleAnnotations)
-            .forEach(annotationNodeRepresentation -> representation.append(annotationNodeRepresentation).append(System.lineSeparator()));
+            .forEach(annotationNodeRepresentation -> representation.append(annotationNodeRepresentation)
+                                                                   .append(System.lineSeparator()));
 
     // Type annotations
     createTypeAnnotationNodesRepresentations(asmRepresentations, methodNode.visibleTypeAnnotations, methodNode.invisibleTypeAnnotations)
-            .forEach(typeAnnotationNodeRepresentation -> representation.append(typeAnnotationNodeRepresentation).append(System.lineSeparator()));
+            .forEach(typeAnnotationNodeRepresentation -> representation.append(typeAnnotationNodeRepresentation)
+                                                                       .append(System.lineSeparator()));
 
     // Declaration
     representation.append(createMethodDeclaration(methodNode)).append(System.lineSeparator());
@@ -171,8 +175,11 @@ public class MethodNodeRepresentation extends AbstractWithLabelNamesAsmRepresent
     }
 
     // Max Locals and Stack
-    representation.append(META_INFORMATION_INDENT).append("Max locals: ").append(methodNode.maxLocals).append(System.lineSeparator());
-    representation.append(META_INFORMATION_INDENT).append("Max stack: ").append(methodNode.maxStack);
+    representation.append(META_INFORMATION_INDENT).append("Max locals: ")
+                  .append(methodNode.maxLocals)
+                  .append(System.lineSeparator());
+    representation.append(META_INFORMATION_INDENT).append("Max stack: ")
+                  .append(methodNode.maxStack);
 
     return representation.toString();
   }

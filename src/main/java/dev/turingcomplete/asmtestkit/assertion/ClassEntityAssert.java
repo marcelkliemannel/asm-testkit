@@ -94,8 +94,8 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
   protected abstract String getName(A entity);
 
   /**
-   * Checks whether the access flags of the given expected {@link A} is equal to
-   * the actual one.
+   * Checks whether the access flags of the given expected {@link A} are equal
+   * to the actual one.
    *
    * @param expected an {@link Object} expected to be a {@link A}; may be null.
    */

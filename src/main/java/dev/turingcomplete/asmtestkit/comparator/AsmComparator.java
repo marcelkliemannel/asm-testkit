@@ -9,6 +9,13 @@ import org.assertj.core.internal.DescribableComparator;
 import java.util.Comparator;
 import java.util.Objects;
 
+/**
+ * Base class for an ASM nodes {@link Comparator}.
+ *
+ * <p>Implementations should implement {@link #doCompare(Object, Object)}.
+ *
+ * @param <T> the type of the ASM node.
+ */
 public abstract class AsmComparator<T> extends DescribableComparator<T> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //

@@ -1,11 +1,11 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils;
-import dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils;
 import dev.turingcomplete.asmtestkit.__helper.DummyAttribute;
 import dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationA;
 import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;
 import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationB;
+import dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils;
+import dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils;
 import dev.turingcomplete.asmtestkit.compile.CompilationResult;
 import dev.turingcomplete.asmtestkit.node.AccessFlags;
 import dev.turingcomplete.asmtestkit.node.AnnotationDefault;
@@ -20,6 +20,7 @@ import org.objectweb.asm.TypePath;
 import org.objectweb.asm.TypeReference;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.InnerClassNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LocalVariableAnnotationNode;
@@ -37,6 +38,7 @@ import static dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils.extractLabe
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAccessFlags;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAnnotationDefaulls;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatFields;
+import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatInnerClasses;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLabels;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLocalVariableAnnotations;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLocalVariables;
@@ -732,6 +734,31 @@ class AsmAssertionsTest {
                         "  // Max locals: 1\n" +
                         "  // Max stack: 1]\n" +
                         "when comparing values using MethodNodeComparator");
+  }
+
+  @Test
+  void testAssertThatInnerClasses() {
+    var first = new InnerClassNode("Outer$Inner1", "Outer", "Inner1", Opcodes.ACC_STATIC);
+    var second = new InnerClassNode("Outer$Inner2", "Outer", "Inner2", Opcodes.ACC_PUBLIC);
+    var third = new InnerClassNode("Outer$Inner3", "Outer", "Inner3", Opcodes.ACC_ABSTRACT);
+
+    assertThatInnerClasses(List.of(first, second, third))
+            .containsExactlyInAnyOrderElementsOf(List.of(first, second, third));
+
+    assertThatThrownBy(() -> assertThatInnerClasses(List.of(first, second)).containsExactlyInAnyOrderElementsOf(List.of(second, third)))
+            .isInstanceOf(AssertionError.class)
+            .hasMessage("[Inner classes] \n" +
+                        "Expecting actual:\n" +
+                        "  [[8] Outer$Inner1 // outer name: Outer // inner name: Inner1,\n" +
+                        "    [1: public] Outer$Inner2 // outer name: Outer // inner name: Inner2]\n" +
+                        "to contain exactly in any order:\n" +
+                        "  [[1: public] Outer$Inner2 // outer name: Outer // inner name: Inner2,\n" +
+                        "    [1024: abstract] Outer$Inner3 // outer name: Outer // inner name: Inner3]\n" +
+                        "elements not found:\n" +
+                        "  [[1024: abstract] Outer$Inner3 // outer name: Outer // inner name: Inner3]\n" +
+                        "and elements not expected:\n" +
+                        "  [[8] Outer$Inner1 // outer name: Outer // inner name: Inner1]\n" +
+                        "when comparing values using InnerClassNodeComparator");
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
