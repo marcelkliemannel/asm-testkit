@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.comparator;
 
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
-import dev.turingcomplete.asmtestkit.node.AnnotationDefault;
+import dev.turingcomplete.asmtestkit.node.AccessNode;
+import dev.turingcomplete.asmtestkit.node.AnnotationDefaultNode;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.TypePath;
@@ -52,8 +52,8 @@ public final class DefaultAsmComparators implements AsmComparators {
     registerAsmComparator(LocalVariableNode.class, () -> LocalVariableNodeComparator.INSTANCE, () -> LocalVariableNodeComparator.ITERABLE_INSTANCE);
     registerAsmComparator(ParameterNode.class, () -> ParameterNodeComparator.INSTANCE, () -> ParameterNodeComparator.ITERABLE_INSTANCE);
     registerAsmComparator(TryCatchBlockNode.class, () -> TryCatchBlockNodeComparator.INSTANCE, () -> TryCatchBlockNodeComparator.ITERABLE_INSTANCE);
-    registerAsmComparator(AccessFlags.class, () -> AccessFlagsComparator.INSTANCE, () -> AccessFlagsComparator.ITERABLE_INSTANCE);
-    registerAsmComparator(AnnotationDefault.class, () -> AnnotationDefaultValueComparator.INSTANCE, () -> AnnotationDefaultValueComparator.ITERABLE_INSTANCE);
+    registerAsmComparator(AccessNode.class, () -> AccessNodeComparator.INSTANCE, () -> AccessNodeComparator.ITERABLE_INSTANCE);
+    registerAsmComparator(AnnotationDefaultNode.class, () -> AnnotationDefaultValueComparator.INSTANCE, () -> AnnotationDefaultValueComparator.ITERABLE_INSTANCE);
     registerAsmComparator(MethodNode.class, () -> MethodNodeComparator.INSTANCE, () -> MethodNodeComparator.ITERABLE_INSTANCE);
     registerAsmComparator(InnerClassNode.class, () -> InnerClassNodeComparator.INSTANCE, () -> InnerClassNodeComparator.ITERABLE_INSTANCE);
   }

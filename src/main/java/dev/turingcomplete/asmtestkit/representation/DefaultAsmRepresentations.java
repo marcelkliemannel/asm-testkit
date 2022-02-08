@@ -1,9 +1,9 @@
 package dev.turingcomplete.asmtestkit.representation;
 
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
+import dev.turingcomplete.asmtestkit.node.AccessNode;
 import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
 import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
-import dev.turingcomplete.asmtestkit.node.AnnotationDefault;
+import dev.turingcomplete.asmtestkit.node.AnnotationDefaultNode;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;
 import org.assertj.core.presentation.StandardRepresentation;
@@ -14,6 +14,7 @@ import org.objectweb.asm.TypeReference;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.InnerClassNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LocalVariableAnnotationNode;
@@ -38,7 +39,7 @@ import static java.lang.Integer.toHexString;
  * {@link AbstractAssert#setCustomRepresentation(Representation)} to all AssertJ
  * assertions in order to get a proper representation of ASM objects.
  *
- * <p>Note that {@link AccessFlagsRepresentation} is not part of this representation
+ * <p>Note that {@link AccessNodeRepresentation} is not part of this representation
  * because it is not clear which {@link AccessKind} to use.
  */
 public final class DefaultAsmRepresentations extends StandardRepresentation implements AsmRepresentations {
@@ -70,8 +71,9 @@ public final class DefaultAsmRepresentations extends StandardRepresentation impl
     registerAsmRepresentation(LocalVariableNode.class, () -> LocalVariableNodeRepresentation.INSTANCE);
     registerAsmRepresentation(ParameterNode.class, () -> ParameterNodeRepresentation.INSTANCE);
     registerAsmRepresentation(TryCatchBlockNode.class, () -> TryCatchBlockNodeRepresentation.INSTANCE);
-    registerAsmRepresentation(AccessFlags.class, () -> AccessFlagsRepresentation.INSTANCE);
-    registerAsmRepresentation(AnnotationDefault.class, () -> AnnotationDefaultValueRepresentation.INSTANCE);
+    registerAsmRepresentation(AccessNode.class, () -> AccessNodeRepresentation.INSTANCE);
+    registerAsmRepresentation(AnnotationDefaultNode.class, () -> AnnotationDefaultValueRepresentation.INSTANCE);
+    registerAsmRepresentation(InnerClassNode.class, () -> InnerClassNodeRepresentation.INSTANCE);
 
     // An 'InsnList' is an 'Iterable' and would be handled in the 'toStringOf'
     registerFormatterForType(InsnList.class, insnList -> ASM_REPRESENTATIONS.get(InsnList.class).get().toStringOf(insnList));

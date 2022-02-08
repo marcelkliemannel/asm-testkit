@@ -2,13 +2,13 @@ package dev.turingcomplete.asmtestkit.comparator;
 
 import dev.turingcomplete.asmtestkit.comparator._internal.ComparatorUtils;
 import dev.turingcomplete.asmtestkit.comparator._internal.IterableComparator;
-import dev.turingcomplete.asmtestkit.node.AnnotationDefault;
+import dev.turingcomplete.asmtestkit.node.AnnotationDefaultNode;
 import org.objectweb.asm.tree.AnnotationNode;
 
 import java.util.Comparator;
 
 /**
- * A comparison function to order {@link AnnotationDefault}s.
+ * A comparison function to order {@link AnnotationDefaultNode}s.
  *
  * <p>Two {@code AnnotationDefaultValue}s will be considered as equal if:
  * <ul>
@@ -17,7 +17,7 @@ import java.util.Comparator;
  *   <li>Otherwise: If they have the same {@link Object#hashCode()} value.
  * </ul>
  */
-public class AnnotationDefaultValueComparator extends AsmComparator<AnnotationDefault> {
+public class AnnotationDefaultValueComparator extends AsmComparator<AnnotationDefaultNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
@@ -29,13 +29,13 @@ public class AnnotationDefaultValueComparator extends AsmComparator<AnnotationDe
    * A reusable {@link Comparator} instance for an {@link Iterable} of
    * {@link Object}s.
    */
-  public static final Comparator<Iterable<? extends AnnotationDefault>> ITERABLE_INSTANCE = new IterableComparator<>(INSTANCE);
+  public static final Comparator<Iterable<? extends AnnotationDefaultNode>> ITERABLE_INSTANCE = new IterableComparator<>(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
   protected AnnotationDefaultValueComparator() {
-    super(AnnotationDefaultValueComparator.class, AnnotationDefault.class);
+    super(AnnotationDefaultValueComparator.class, AnnotationDefaultNode.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
@@ -50,9 +50,9 @@ public class AnnotationDefaultValueComparator extends AsmComparator<AnnotationDe
   }
 
   @Override
-  protected int doCompare(AnnotationDefault first, AnnotationDefault second) {
-    Object firstValue = first.defaultValue();
-    Object secondValue = second.defaultValue();
+  protected int doCompare(AnnotationDefaultNode first, AnnotationDefaultNode second) {
+    Object firstValue = first.value();
+    Object secondValue = second.value();
 
     if (firstValue instanceof AnnotationNode && secondValue instanceof AnnotationNode) {
       return asmComparators.elementComparator(AnnotationNode.class)

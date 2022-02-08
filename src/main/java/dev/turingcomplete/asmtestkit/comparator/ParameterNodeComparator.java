@@ -3,7 +3,7 @@ package dev.turingcomplete.asmtestkit.comparator;
 import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
 import dev.turingcomplete.asmtestkit.comparator._internal.ComparatorUtils;
 import dev.turingcomplete.asmtestkit.comparator._internal.IterableComparator;
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
+import dev.turingcomplete.asmtestkit.node.AccessNode;
 import org.objectweb.asm.tree.ParameterNode;
 
 import java.util.Comparator;
@@ -49,8 +49,8 @@ public class ParameterNodeComparator extends AsmComparator<ParameterNode> {
 
   @Override
   protected int doCompare(ParameterNode first, ParameterNode second) {
-    return Comparator.comparing((ParameterNode parameterNode) -> AccessFlags.create(parameterNode.access, AccessKind.PARAMETER),
-                                asmComparators.elementComparator(AccessFlags.class))
+    return Comparator.comparing((ParameterNode parameterNode) -> AccessNode.create(parameterNode.access, AccessKind.PARAMETER),
+                                asmComparators.elementComparator(AccessNode.class))
                      .thenComparing((ParameterNode parameterNode) -> parameterNode.name, ComparatorUtils.STRING_COMPARATOR)
                      .compare(first, second);
   }

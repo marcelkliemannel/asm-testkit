@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.assertion.option.StandardAssertOption;
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
+import dev.turingcomplete.asmtestkit.node.AccessNode;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Attribute;
@@ -104,19 +104,19 @@ abstract class ClassEntityAssert<S extends AbstractAssert<S, A>, A> extends AsmA
       return;
     }
 
-    AsmAssertions.assertThat(getFromObjectElseNull(actual, this::getAccessFlags))
+    AsmAssertions.assertThat(getFromObjectElseNull(actual, this::getAccessNode))
                  .addOptions(options)
                  .as(createCrumbDescription("Has equal " + name.toLowerCase(Locale.ROOT) + " access"))
-                 .isEqualTo(getFromObjectElseNull(expected, objectType, this::getAccessFlags));
+                 .isEqualTo(getFromObjectElseNull(expected, objectType, this::getAccessNode));
   }
 
   /**
-   * Gets the {@link AccessFlags} of the given {@code entity}.
+   * Gets the {@link AccessNode} of the given {@code entity}.
    *
    * @param entity the {@link A} entity; never null.
    * @return the access as {@link Integer}; may be null.
    */
-  protected abstract AccessFlags getAccessFlags(A entity);
+  protected abstract AccessNode getAccessNode(A entity);
 
   /**
    * Checks whether the signature of the given expected {@link A} is

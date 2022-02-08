@@ -2,17 +2,17 @@ package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.comparator.AnnotationDefaultValueComparator;
 import dev.turingcomplete.asmtestkit.representation.AnnotationDefaultValueRepresentation;
-import dev.turingcomplete.asmtestkit.node.AnnotationDefault;
+import dev.turingcomplete.asmtestkit.node.AnnotationDefaultNode;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;
 
 import java.util.Comparator;
 
 /**
- * An AssertJ {@link AbstractAssert} for an {@link AnnotationDefault}.
+ * An AssertJ {@link AbstractAssert} for an {@link AnnotationDefaultNode}.
  *
  * <p>An instance can be created via
- * {@link AsmAssertions#assertThat(AnnotationDefault)}.
+ * {@link AsmAssertions#assertThat(AnnotationDefaultNode)}.
  * Use {@link AsmAssertions#assertThatAnnotationDefaulls(Iterable)} for
  * multiple {@code AnnotationDefault}s.
  *
@@ -20,7 +20,7 @@ import java.util.Comparator;
  * {@link AnnotationDefaultValueComparator} call {@link #withRepresentation(Representation)}
  * or {@link #usingComparator(Comparator)}.
  */
-public class AnnotationDefaultValueAssert extends AsmAssert<AnnotationDefaultValueAssert, AnnotationDefault> {
+public class AnnotationDefaultValueAssert extends AsmAssert<AnnotationDefaultValueAssert, AnnotationDefaultNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
@@ -30,7 +30,7 @@ public class AnnotationDefaultValueAssert extends AsmAssert<AnnotationDefaultVal
    *
    * @param actual the actual annotation default {@link Object} value; may be null.
    */
-  public AnnotationDefaultValueAssert(AnnotationDefault actual) {
+  public AnnotationDefaultValueAssert(AnnotationDefaultNode actual) {
     super("Annotation default",
           actual,
           AnnotationDefaultValueAssert.class,

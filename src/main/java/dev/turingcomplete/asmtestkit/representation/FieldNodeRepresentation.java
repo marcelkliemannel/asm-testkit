@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.representation;
 
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
+import dev.turingcomplete.asmtestkit.node.AccessNode;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.FieldNode;
@@ -53,7 +53,7 @@ public class FieldNodeRepresentation extends AbstractAsmRepresentation<FieldNode
     var representation = new StringJoiner(" ");
 
     // Access
-    representation.add(asmRepresentations.toStringOf(AccessFlags.forField(fieldNode.access)));
+    representation.add(asmRepresentations.toStringOf(AccessNode.forField(fieldNode.access)));
 
     // Type
     if (fieldNode.desc != null) {

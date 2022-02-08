@@ -2,8 +2,8 @@ package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.asmutils.InsnListUtils;
 import dev.turingcomplete.asmtestkit.comparator.*;
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
-import dev.turingcomplete.asmtestkit.node.AnnotationDefault;
+import dev.turingcomplete.asmtestkit.node.AccessNode;
+import dev.turingcomplete.asmtestkit.node.AnnotationDefaultNode;
 import dev.turingcomplete.asmtestkit.representation.*;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Attribute;
@@ -40,13 +40,13 @@ public final class AsmAssertions {
   // ---- ASM Objects ------------------------------------------------------- //
 
   /**
-   * Creates an {@link AccessFlagsAssert}.
+   * Creates an {@link AccessNodeAssert}.
    *
-   * @param actual an {@link AccessFlags}; may be null.
-   * @return a new {@link AccessFlagsAssert}; never null.
+   * @param actual an {@link AccessNode}; may be null.
+   * @return a new {@link AccessNodeAssert}; never null.
    */
-  public static AccessFlagsAssert assertThat(AccessFlags actual) {
-    return new AccessFlagsAssert(actual);
+  public static AccessNodeAssert assertThat(AccessNode actual) {
+    return new AccessNodeAssert(actual);
   }
 
   /**
@@ -203,10 +203,10 @@ public final class AsmAssertions {
   /**
    * Creates an {@link AnnotationDefaultValueAssert}.
    *
-   * @param actual an {@link AnnotationDefault}; may be null.
+   * @param actual an {@link AnnotationDefaultNode}; may be null.
    * @return a new {@link AnnotationDefaultValueAssert}; never null.
    */
-  public static AnnotationDefaultValueAssert assertThat(AnnotationDefault actual) {
+  public static AnnotationDefaultValueAssert assertThat(AnnotationDefaultNode actual) {
     return new AnnotationDefaultValueAssert(actual);
   }
 
@@ -577,7 +577,7 @@ public final class AsmAssertions {
   }
 
   /**
-   * Creates an {@link AsmIterableAssert} for {@link AnnotationDefault}s
+   * Creates an {@link AsmIterableAssert} for {@link AnnotationDefaultNode}s
    * which uses {@link AnnotationDefaultValueRepresentation#INSTANCE} for the
    * representation and for equality {@link AnnotationDefaultValueComparator#INSTANCE}
    * and {@link AnnotationDefaultValueComparator#ITERABLE_INSTANCE}.
@@ -589,11 +589,11 @@ public final class AsmAssertions {
    * {@link AsmIterableAssert#usingComparator(Comparator)} or
    * {@link AsmIterableAssert#withRepresentation(Representation)}.
    *
-   * @param actual an {@link Iterable} of {@link AnnotationDefault}s;
+   * @param actual an {@link Iterable} of {@link AnnotationDefaultNode}s;
    *               may be null.
    * @return a new {@link AsmIterableAssert}; never null.
    */
-  public static AsmIterableAssert<?, AnnotationDefault, AnnotationDefaultValueAssert> assertThatAnnotationDefaulls(Iterable<AnnotationDefault> actual) {
+  public static AsmIterableAssert<?, AnnotationDefaultNode, AnnotationDefaultValueAssert> assertThatAnnotationDefaulls(Iterable<AnnotationDefaultNode> actual) {
     return new AsmIterableAssert<>(actual, AsmAssertions::assertThat)
             .as("Annotation Defaults")
             .withRepresentation(AnnotationDefaultValueRepresentation.INSTANCE)
@@ -602,10 +602,10 @@ public final class AsmAssertions {
   }
 
   /**
-   * Creates an {@link AsmIterableAssert} for {@link AccessFlags}s which
-   * uses {@link AccessFlagsRepresentation#INSTANCE} for the representation
-   * and for equality {@link AccessFlagsComparator#INSTANCE} and
-   * {@link AccessFlagsComparator#ITERABLE_INSTANCE}.
+   * Creates an {@link AsmIterableAssert} for {@link AccessNode}s which
+   * uses {@link AccessNodeRepresentation#INSTANCE} for the representation
+   * and for equality {@link AccessNodeComparator#INSTANCE} and
+   * {@link AccessNodeComparator#ITERABLE_INSTANCE}.
    *
    * <p>The returned {@code AsmIterableAssert} should be used in conjunction with
    * {@link AsmIterableAssert#containsExactlyInAnyOrderElementsOf}.
@@ -614,15 +614,15 @@ public final class AsmAssertions {
    * {@link AsmIterableAssert#usingComparator(Comparator)} or
    * {@link AsmIterableAssert#withRepresentation(Representation)}.
    *
-   * @param actual an {@link Iterable} of {@link AccessFlags}s; may be null.
+   * @param actual an {@link Iterable} of {@link AccessNode}s; may be null.
    * @return a new {@link AsmIterableAssert}; never null.
    */
-  public static AsmIterableAssert<?, AccessFlags, AccessFlagsAssert> assertThatAccessFlags(Iterable<AccessFlags> actual) {
+  public static AsmIterableAssert<?, AccessNode, AccessNodeAssert> assertThatAccesses(Iterable<AccessNode> actual) {
     return new AsmIterableAssert<>(actual, AsmAssertions::assertThat)
-            .as("Access Flags")
-            .withRepresentation(AccessFlagsRepresentation.INSTANCE)
-            .usingElementComparator(AccessFlagsComparator.INSTANCE)
-            .usingComparator(AccessFlagsComparator.ITERABLE_INSTANCE);
+            .as("Accesses")
+            .withRepresentation(AccessNodeRepresentation.INSTANCE)
+            .usingElementComparator(AccessNodeComparator.INSTANCE)
+            .usingComparator(AccessNodeComparator.ITERABLE_INSTANCE);
   }
 
   /**

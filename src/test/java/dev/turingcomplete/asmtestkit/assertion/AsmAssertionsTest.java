@@ -7,8 +7,8 @@ import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationB;
 import dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils;
 import dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils;
 import dev.turingcomplete.asmtestkit.compile.CompilationResult;
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
-import dev.turingcomplete.asmtestkit.node.AnnotationDefault;
+import dev.turingcomplete.asmtestkit.node.AccessNode;
+import dev.turingcomplete.asmtestkit.node.AnnotationDefaultNode;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert;
 import org.intellij.lang.annotations.Language;
@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 import static dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils.extractLabelIndices;
-import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAccessFlags;
+import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAccesses;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAnnotationDefaulls;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatFields;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatInnerClasses;
@@ -577,9 +577,9 @@ class AsmAssertionsTest {
 
   @Test
   void testAssertThatAnnotationDefaultValues() {
-    AnnotationDefault first = AnnotationDefault.create(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "1"));
-    AnnotationDefault second = AnnotationDefault.create(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "2"));
-    AnnotationDefault third = AnnotationDefault.create(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "3"));
+    AnnotationDefaultNode first = AnnotationDefaultNode.create(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "1"));
+    AnnotationDefaultNode second = AnnotationDefaultNode.create(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "2"));
+    AnnotationDefaultNode third = AnnotationDefaultNode.create(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "since", "3"));
 
 
     // Positive
@@ -602,19 +602,19 @@ class AsmAssertionsTest {
   }
 
   @Test
-  void testAssertAccessFlags() {
-    var first = AccessFlags.forClass(Opcodes.ACC_PUBLIC);
-    var second = AccessFlags.forClass(Opcodes.ACC_ABSTRACT);
-    var third = AccessFlags.forClass(Opcodes.ACC_INTERFACE);
+  void testAssertAccesses() {
+    var first = AccessNode.forClass(Opcodes.ACC_PUBLIC);
+    var second = AccessNode.forClass(Opcodes.ACC_ABSTRACT);
+    var third = AccessNode.forClass(Opcodes.ACC_INTERFACE);
 
     // Positive
-    assertThatAccessFlags(List.of(first, second, third))
+    assertThatAccesses(List.of(first, second, third))
             .containsExactlyInAnyOrderElementsOf(List.of(first, second, third));
 
     // Negative
-    assertThatThrownBy(() -> assertThatAccessFlags(List.of(first, second)).containsExactlyInAnyOrderElementsOf(List.of(second, third)))
+    assertThatThrownBy(() -> assertThatAccesses(List.of(first, second)).containsExactlyInAnyOrderElementsOf(List.of(second, third)))
             .isInstanceOf(AssertionError.class)
-            .hasMessage("[Access Flags] \n" +
+            .hasMessage("[Accesses] \n" +
                         "Expecting actual:\n" +
                         "  [[1: public], [1024: abstract]]\n" +
                         "to contain exactly in any order:\n" +
@@ -623,7 +623,7 @@ class AsmAssertionsTest {
                         "  [[512: interface]]\n" +
                         "and elements not expected:\n" +
                         "  [[1: public]]\n" +
-                        "when comparing values using AccessFlagsComparator");
+                        "when comparing values using AccessNodeComparator");
   }
 
   @Test

@@ -4,8 +4,8 @@ import dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils;
 import dev.turingcomplete.asmtestkit.comparator.MethodNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.option.StandardAssertOption;
 import dev.turingcomplete.asmtestkit.representation.MethodNodeRepresentation;
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
-import dev.turingcomplete.asmtestkit.node.AnnotationDefault;
+import dev.turingcomplete.asmtestkit.node.AccessNode;
+import dev.turingcomplete.asmtestkit.node.AnnotationDefaultNode;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.presentation.Representation;
@@ -396,11 +396,11 @@ public class MethodNodeAssert extends ClassEntityAssert<MethodNodeAssert, Method
       return;
     }
 
-    AsmAssertions.assertThat(getFromObjectElseNull(actual, (MethodNode methodNode) -> AnnotationDefault.createOrNull(methodNode.annotationDefault)))
+    AsmAssertions.assertThat(getFromObjectElseNull(actual, (MethodNode methodNode) -> AnnotationDefaultNode.createOrNull(methodNode.annotationDefault)))
                  .addOptions(options)
                  .useLabelIndexLookup(labelIndexLookup)
                  .as(createCrumbDescription("Has equal annotation default"))
-                 .isEqualTo(getFromObjectElseNull(expected, MethodNode.class, (MethodNode methodNode) -> AnnotationDefault.createOrNull(methodNode.annotationDefault)));
+                 .isEqualTo(getFromObjectElseNull(expected, MethodNode.class, (MethodNode methodNode) -> AnnotationDefaultNode.createOrNull(methodNode.annotationDefault)));
   }
 
   @Override
@@ -409,8 +409,8 @@ public class MethodNodeAssert extends ClassEntityAssert<MethodNodeAssert, Method
   }
 
   @Override
-  protected AccessFlags getAccessFlags(MethodNode methodNode) {
-    return AccessFlags.forMethod(methodNode.access);
+  protected AccessNode getAccessNode(MethodNode methodNode) {
+    return AccessNode.forMethod(methodNode.access);
   }
 
   @Override

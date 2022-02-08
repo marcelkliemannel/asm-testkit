@@ -4,7 +4,7 @@ import dev.turingcomplete.asmtestkit.asmutils.TypeUtils;
 import dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils;
 import dev.turingcomplete.asmtestkit.assertion.option.StandardAssertOption;
 import dev.turingcomplete.asmtestkit.comparator.InnerClassNodeComparator;
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
+import dev.turingcomplete.asmtestkit.node.AccessNode;
 import dev.turingcomplete.asmtestkit.representation.InnerClassNodeRepresentation;
 import org.assertj.core.api.Assertions;
 import org.objectweb.asm.tree.InnerClassNode;
@@ -92,10 +92,10 @@ public class InnerClassNodeAssert extends AsmAssert<InnerClassNodeAssert, InnerC
       return;
     }
 
-    assertThat(getFromObjectElseNull(actual, (InnerClassNode innerClassNode) -> AccessFlags.forClass(innerClassNode.access)))
+    assertThat(getFromObjectElseNull(actual, (InnerClassNode innerClassNode) -> AccessNode.forClass(innerClassNode.access)))
             .addOptions(options)
             .as(createCrumbDescription("Has equal access"))
-            .isEqualTo(getFromObjectElseNull(expected, InnerClassNode.class, (InnerClassNode innerClassNode) -> AccessFlags.forClass(innerClassNode.access)));
+            .isEqualTo(getFromObjectElseNull(expected, InnerClassNode.class, (InnerClassNode innerClassNode) -> AccessNode.forClass(innerClassNode.access)));
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

@@ -1,13 +1,13 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils;
-import dev.turingcomplete.asmtestkit.node.AnnotationDefault;
+import dev.turingcomplete.asmtestkit.node.AnnotationDefaultNode;
 import org.junit.jupiter.api.Test;
 
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class AnnotationDefaultAssertTest {
+class AnnotationDefaultNodeAssertTest {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
@@ -15,10 +15,10 @@ class AnnotationDefaultAssertTest {
 
   @Test
   void testIsEqualTo() {
-    assertThat(AnnotationDefault.create("foo"))
-            .isEqualTo(AnnotationDefault.create("foo"));
+    assertThat(AnnotationDefaultNode.create("foo"))
+            .isEqualTo(AnnotationDefaultNode.create("foo"));
 
-    assertThatThrownBy(() -> assertThat(AnnotationDefault.create("foo")).isEqualTo(AnnotationDefault.create("bar")))
+    assertThatThrownBy(() -> assertThat(AnnotationDefaultNode.create("foo")).isEqualTo(AnnotationDefaultNode.create("bar")))
             .isInstanceOf(AssertionError.class)
             .hasMessage("[Annotation default: \"foo\"] \n" +
                         "expected: \"bar\"\n" +
@@ -28,8 +28,8 @@ class AnnotationDefaultAssertTest {
 
   @Test
   void testIsEqualToAnnotation() {
-    AnnotationDefault first = AnnotationDefault.create(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "forRemoval", true));
-    AnnotationDefault second = AnnotationDefault.create(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "forRemoval", false));
+    AnnotationDefaultNode first = AnnotationDefaultNode.create(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "forRemoval", true));
+    AnnotationDefaultNode second = AnnotationDefaultNode.create(AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "forRemoval", false));
 
     assertThat(first)
             .isEqualTo(first);

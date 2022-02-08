@@ -5,8 +5,8 @@ import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
 import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
 import dev.turingcomplete.asmtestkit.comparator._internal.IterableComparator;
 import dev.turingcomplete.asmtestkit.comparator._internal.WithLabelNamesIterableAsmComparator;
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
-import dev.turingcomplete.asmtestkit.node.AnnotationDefault;
+import dev.turingcomplete.asmtestkit.node.AccessNode;
+import dev.turingcomplete.asmtestkit.node.AnnotationDefaultNode;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
@@ -95,7 +95,7 @@ public class MethodNodeComparator extends AbstractWithLabelNamesAsmComparator<Me
 
     return WithLabelNamesAsmComparator.comparing((MethodNode methodNode) -> methodNode.name, STRING_COMPARATOR, labelIndexLookup)
                                       .thenComparing((MethodNode methodNode) -> getFromObjectElseNull(methodNode.desc, Type::getMethodType), asmComparators.elementComparator(Type.class))
-                                      .thenComparing((MethodNode methodNode) -> AccessFlags.forField(methodNode.access), asmComparators.elementComparator(AccessFlags.class))
+                                      .thenComparing((MethodNode methodNode) -> AccessNode.forField(methodNode.access), asmComparators.elementComparator(AccessNode.class))
                                       .thenComparing((MethodNode methodNode) -> methodNode.signature, STRING_COMPARATOR)
                                       .thenComparing((MethodNode methodNode) -> methodNode.exceptions, new IterableComparator<>(STRING_COMPARATOR))
                                       .thenComparing((MethodNode methodNode) -> methodNode.parameters, asmComparators.iterableComparator(ParameterNode.class))
@@ -115,7 +115,7 @@ public class MethodNodeComparator extends AbstractWithLabelNamesAsmComparator<Me
                                       .thenComparing((MethodNode methodNode) -> methodNode.localVariables, asmComparators.iterableComparator(LocalVariableNode.class))
                                       .thenComparing((MethodNode methodNode) -> methodNode.visibleLocalVariableAnnotations, asmComparators.iterableComparator(LocalVariableAnnotationNode.class))
                                       .thenComparing((MethodNode methodNode) -> methodNode.invisibleLocalVariableAnnotations, asmComparators.iterableComparator(LocalVariableAnnotationNode.class))
-                                      .thenComparing((MethodNode methodNode) -> AnnotationDefault.createOrNull(methodNode.annotationDefault), asmComparators.elementComparator(AnnotationDefault.class))
+                                      .thenComparing((MethodNode methodNode) -> AnnotationDefaultNode.createOrNull(methodNode.annotationDefault), asmComparators.elementComparator(AnnotationDefaultNode.class))
                                       .compare(first, second);
   }
 

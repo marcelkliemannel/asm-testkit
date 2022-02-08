@@ -1,15 +1,14 @@
 package dev.turingcomplete.asmtestkit.comparator;
 
 import dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils;
-import dev.turingcomplete.asmtestkit.comparator.AnnotationNodeComparator;
-import dev.turingcomplete.asmtestkit.node.AnnotationDefault;
+import dev.turingcomplete.asmtestkit.node.AnnotationDefaultNode;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.tree.AnnotationNode;
 
 import static dev.turingcomplete.asmtestkit.comparator.AnnotationDefaultValueComparator.INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class AnnotationDefaultComparatorTest {
+class AnnotationDefaultNodeComparatorTest {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
@@ -17,13 +16,13 @@ class AnnotationDefaultComparatorTest {
 
   @Test
   void testCompare() {
-    assertThat(INSTANCE.compare(AnnotationDefault.create(5), AnnotationDefault.create(5)))
+    assertThat(INSTANCE.compare(AnnotationDefaultNode.create(5), AnnotationDefaultNode.create(5)))
             .isEqualTo(0);
 
-    assertThat(INSTANCE.compare(AnnotationDefault.create(5), AnnotationDefault.create(6)))
+    assertThat(INSTANCE.compare(AnnotationDefaultNode.create(5), AnnotationDefaultNode.create(6)))
             .isLessThan(0);
 
-    assertThat(INSTANCE.compare(AnnotationDefault.create(6), AnnotationDefault.create(5)))
+    assertThat(INSTANCE.compare(AnnotationDefaultNode.create(6), AnnotationDefaultNode.create(5)))
             .isGreaterThan(0);
   }
 
@@ -33,13 +32,13 @@ class AnnotationDefaultComparatorTest {
     AnnotationNode second = AnnotationNodeUtils.createAnnotationNode(Deprecated.class, "forRemoval", false);
 
     //noinspection EqualsWithItself
-    assertThat(INSTANCE.compare(AnnotationDefault.create(first), AnnotationDefault.create(first)))
+    assertThat(INSTANCE.compare(AnnotationDefaultNode.create(first), AnnotationDefaultNode.create(first)))
             .isEqualTo(AnnotationNodeComparator.INSTANCE.compare(first, first));
 
-    assertThat(INSTANCE.compare(AnnotationDefault.create(first), AnnotationDefault.create(second)))
+    assertThat(INSTANCE.compare(AnnotationDefaultNode.create(first), AnnotationDefaultNode.create(second)))
             .isEqualTo(AnnotationNodeComparator.INSTANCE.compare(first, second));
 
-    assertThat(INSTANCE.compare(AnnotationDefault.create(second), AnnotationDefault.create(first)))
+    assertThat(INSTANCE.compare(AnnotationDefaultNode.create(second), AnnotationDefaultNode.create(first)))
             .isEqualTo(AnnotationNodeComparator.INSTANCE.compare(second, first));
   }
 

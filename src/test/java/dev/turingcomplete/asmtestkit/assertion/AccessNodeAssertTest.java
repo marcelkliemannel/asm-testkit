@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
+import dev.turingcomplete.asmtestkit.node.AccessNode;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +9,7 @@ import static org.objectweb.asm.Opcodes.ACC_ABSTRACT;
 import static org.objectweb.asm.Opcodes.ACC_FINAL;
 import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 
-class AccessFlagsAssertTest {
+class AccessNodeAssertTest {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
@@ -17,11 +17,11 @@ class AccessFlagsAssertTest {
 
   @Test
   void testisEqualTo() {
-    assertThat(AccessFlags.forClass(ACC_PUBLIC + ACC_ABSTRACT))
-            .isEqualTo(AccessFlags.forClass(ACC_PUBLIC + ACC_ABSTRACT));
+    assertThat(AccessNode.forClass(ACC_PUBLIC + ACC_ABSTRACT))
+            .isEqualTo(AccessNode.forClass(ACC_PUBLIC + ACC_ABSTRACT));
 
-    Assertions.assertThatThrownBy(() -> assertThat(AccessFlags.forClass(ACC_PUBLIC + ACC_ABSTRACT))
-                      .isEqualTo(AccessFlags.forClass(ACC_ABSTRACT + ACC_FINAL)))
+    Assertions.assertThatThrownBy(() -> assertThat(AccessNode.forClass(ACC_PUBLIC + ACC_ABSTRACT))
+                      .isEqualTo(AccessNode.forClass(ACC_ABSTRACT + ACC_FINAL)))
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Access: [1025: public, abstract] > Has equal access values] \n" +
                           "Expecting actual:\n" +

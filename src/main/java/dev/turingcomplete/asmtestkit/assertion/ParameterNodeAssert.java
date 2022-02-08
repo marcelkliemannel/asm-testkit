@@ -2,7 +2,7 @@ package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.comparator.ParameterNodeComparator;
 import dev.turingcomplete.asmtestkit.representation.ParameterNodeRepresentation;
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
+import dev.turingcomplete.asmtestkit.node.AccessNode;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.presentation.Representation;
@@ -66,7 +66,7 @@ public class ParameterNodeAssert extends AsmAssert<ParameterNodeAssert, Paramete
    *                 {@link ParameterNode}; may be null.
    */
   protected void hasEqualAccess(Object expected) {
-    Function<ParameterNode, AccessFlags> getParameterAccess = parameterNode -> AccessFlags.forParameter(parameterNode.access);
+    Function<ParameterNode, AccessNode> getParameterAccess = parameterNode -> AccessNode.forParameter(parameterNode.access);
     AsmAssertions.assertThat(getFromObjectElseNull(actual, getParameterAccess))
                  .as(createCrumbDescription("Has equal access"))
                  .isEqualTo(getFromObjectElseNull(expected, ParameterNode.class, getParameterAccess));

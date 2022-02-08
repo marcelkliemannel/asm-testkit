@@ -5,43 +5,43 @@ import java.util.Objects;
 /**
  * A container object to hold an annotation default value.
  */
-public final class AnnotationDefault {
+public final class AnnotationDefaultNode {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
-  private final Object defaultValue;
+  private final Object value;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  private AnnotationDefault(Object defaultValue) {
-    this.defaultValue = defaultValue;
+  private AnnotationDefaultNode(Object value) {
+    this.value = value;
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   /**
-   * Creates a new {@link AnnotationDefault}.
+   * Creates a new {@link AnnotationDefaultNode}.
    *
-   * @param defaultValue an {@link Object}; never null.
-   * @return a new {@link AnnotationDefault}; never null.
+   * @param value an {@link Object}; never null.
+   * @return a new {@link AnnotationDefaultNode}; never null.
    */
-  public static AnnotationDefault create(Object defaultValue) {
-    return new AnnotationDefault(Objects.requireNonNull(defaultValue));
+  public static AnnotationDefaultNode create(Object value) {
+    return new AnnotationDefaultNode(Objects.requireNonNull(value));
   }
 
   /**
-   * Creates a new {@link AnnotationDefault} if the given {@code defaultValue}
+   * Creates a new {@link AnnotationDefaultNode} if the given {@code defaultValue}
    * is not null.
    *
-   * @param defaultValue an {@link Object}; may be null.
-   * @return a new {@link AnnotationDefault}; may be null.
+   * @param value an {@link Object}; may be null.
+   * @return a new {@link AnnotationDefaultNode}; may be null.
    */
-  public static AnnotationDefault createOrNull(Object defaultValue) {
-    if (defaultValue == null) {
+  public static AnnotationDefaultNode createOrNull(Object value) {
+    if (value == null) {
       return null;
     }
 
-    return new AnnotationDefault(defaultValue);
+    return new AnnotationDefaultNode(value);
   }
 
   /**
@@ -49,8 +49,8 @@ public final class AnnotationDefault {
    *
    * @return the default value {@link Object}; never null.
    */
-  public Object defaultValue() {
-    return defaultValue;
+  public Object value() {
+    return value;
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

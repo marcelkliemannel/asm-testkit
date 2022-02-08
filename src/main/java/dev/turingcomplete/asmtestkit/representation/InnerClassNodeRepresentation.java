@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.representation;
 
 import dev.turingcomplete.asmtestkit.asmutils.TypeUtils;
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
+import dev.turingcomplete.asmtestkit.node.AccessNode;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.InnerClassNode;
@@ -47,7 +47,7 @@ public class InnerClassNodeRepresentation extends AbstractAsmRepresentation<Inne
   @Override
   protected String doToStringOf(InnerClassNode innerClassNode) {
     AsmRepresentation<Type> typeRepresentation = asmRepresentations.getAsmRepresentation(Type.class);
-    return asmRepresentations.getAsmRepresentation(AccessFlags.class).toStringOf(AccessFlags.forClass(innerClassNode.access)) +
+    return asmRepresentations.getAsmRepresentation(AccessNode.class).toStringOf(AccessNode.forClass(innerClassNode.access)) +
            " " +
            typeRepresentation.toSimplifiedStringOf(TypeUtils.nameToTypeElseNull(innerClassNode.name)) +
            " // outer name: " +

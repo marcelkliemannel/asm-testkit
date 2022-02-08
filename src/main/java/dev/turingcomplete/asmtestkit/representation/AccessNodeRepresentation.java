@@ -2,30 +2,30 @@ package dev.turingcomplete.asmtestkit.representation;
 
 import dev.turingcomplete.asmtestkit.asmutils.Access;
 import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
+import dev.turingcomplete.asmtestkit.node.AccessNode;
 import org.assertj.core.presentation.Representation;
 
 import java.util.Comparator;
 import java.util.Objects;
 
 /**
- * An AssertJ {@link Representation} for {@link AccessFlags}s.
+ * An AssertJ {@link Representation} for {@link AccessNode}s.
  *
  * <p>Example output: {@code (513) public interface}.
  */
-public class AccessFlagsRepresentation extends AbstractAsmRepresentation<AccessFlags> {
+public class AccessNodeRepresentation extends AbstractAsmRepresentation<AccessNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
-   * A reusable {@link AccessFlagsRepresentation} instance.
+   * A reusable {@link AccessNodeRepresentation} instance.
    */
-  public static final AccessFlagsRepresentation INSTANCE = new AccessFlagsRepresentation();
+  public static final AccessNodeRepresentation INSTANCE = new AccessNodeRepresentation();
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  protected AccessFlagsRepresentation() {
-    super(AccessFlags.class);
+  protected AccessNodeRepresentation() {
+    super(AccessNode.class);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
@@ -35,20 +35,20 @@ public class AccessFlagsRepresentation extends AbstractAsmRepresentation<AccessF
    *
    * @return a new {@link AnnotationNodeRepresentation}; never null;
    */
-  public static AccessFlagsRepresentation create() {
-    return new AccessFlagsRepresentation();
+  public static AccessNodeRepresentation create() {
+    return new AccessNodeRepresentation();
   }
 
   @Override
-  protected String doToStringOf(AccessFlags accessFlags) {
-    return doToSimplifiedStringOf(accessFlags);
+  protected String doToStringOf(AccessNode accessNode) {
+    return doToSimplifiedStringOf(accessNode);
   }
 
   @Override
-  protected String doToSimplifiedStringOf(AccessFlags accessFlags) {
-    int access = accessFlags.access();
+  protected String doToSimplifiedStringOf(AccessNode accessNode) {
+    int access = accessNode.access();
     String textifiedAccess = "[" + access;
-    String[] elements = toJavaSourceCodeRepresentations(accessFlags);
+    String[] elements = toJavaSourceCodeRepresentations(accessNode);
     if (elements.length > 0) {
       textifiedAccess += ": " + String.join(", ", elements);
     }
@@ -60,38 +60,38 @@ public class AccessFlagsRepresentation extends AbstractAsmRepresentation<AccessF
    * Creates an array of readable access representations, like in the Java
    * source code, from the given {@code access} flags;
    *
-   * @param accessFlags the {@link AccessFlags}; may be null.
+   * @param accessNode the {@link AccessNode}; may be null.
    * @return an array of {@link String}s with Java source code like
    * representation of the access flags; never null. An empty array if
    * {@code access} is null.
    */
-  public String[] toJavaSourceCodeRepresentations(AccessFlags accessFlags) {
-    if (accessFlags == null) {
+  public String[] toJavaSourceCodeRepresentations(AccessNode accessNode) {
+    if (accessNode == null) {
       return new String[0];
     }
 
-    int access = accessFlags.access();
-    return accessFlags.accessKind().getAccesses().stream()
-                      .filter(_access -> _access.check(access))
-                      .sorted(Comparator.comparingInt(Access::getOpcode))
-                      .map(Access::toJavaSourceCodeRepresentation)
-                      .toArray(String[]::new);
+    int access = accessNode.access();
+    return accessNode.accessKind().getAccesses().stream()
+                     .filter(_access -> _access.check(access))
+                     .sorted(Comparator.comparingInt(Access::getOpcode))
+                     .map(Access::toJavaSourceCodeRepresentation)
+                     .toArray(String[]::new);
   }
 
   /**
    * Creates a combined readable access representation, like in the Java
    * source code, from the given {@code access} flags;
    *
-   * @param accessFlags the {@link AccessFlags}; may be null.
+   * @param accessNode the {@link AccessNode}; may be null.
    * @return a {@link String} representing a Java source code like representation
    * of the access flags; may be null if {@code access} is null.
    */
-  public String toJavaSourceCodeRepresentation(AccessFlags accessFlags) {
-    if (accessFlags == null) {
+  public String toJavaSourceCodeRepresentation(AccessNode accessNode) {
+    if (accessNode == null) {
       return null;
     }
 
-    return String.join(" ", toJavaSourceCodeRepresentations(accessFlags));
+    return String.join(" ", toJavaSourceCodeRepresentations(accessNode));
   }
 
 
@@ -99,28 +99,29 @@ public class AccessFlagsRepresentation extends AbstractAsmRepresentation<AccessF
    * Gets a representation of the class kind like in the Java source code {e.g.,
    * {@code class} or {@code interface}}.
    *
-   * @param accessFlags the {@link AccessFlags}; never null.
+   * @param accessNode the {@link AccessNode}; never null.
    * @return a {@link String} representing a Java source code like representation
    * of the class kind.
-   * @throws IllegalArgumentException if {@code accessFlags} is not of kind
+   * @throws IllegalArgumentException if {@code AccessNode} is not of kind
    *                                  {@link AccessKind#CLASS}.
    */
-  public String toJavaSourceCodeClassKindRepresentation(AccessFlags accessFlags) {
-    Objects.requireNonNull(accessFlags);
+  public String toJavaSourceCodeClassKindRepresentation(AccessNode accessNode) {
+    Objects.requireNonNull(accessNode);
 
-    if (!accessFlags.accessKind().equals(AccessKind.CLASS)) {
-      throw new IllegalArgumentException("Expected flags to be of kind: " + accessFlags.accessKind());
+    if (!accessNode.accessKind().equals(AccessKind.CLASS)) {
+      throw new IllegalArgumentException("Expected flags to be of kind: " + accessNode.accessKind());
     }
 
-    int access = accessFlags.access();
+    int access = accessNode.access();
     if (Access.ENUM.check(access)) {
       return "enum";
     }
-    else if (Access.INTERFACE.check(access)) {
-      return "interface";
-    }
+    // Order is important: an annotation is also an interface
     else if (Access.ANNOTATION.check(access)) {
       return "@interface";
+    }
+    else if (Access.INTERFACE.check(access)) {
+      return "interface";
     }
     else if (Access.RECORD.check(access)) {
       return "record";

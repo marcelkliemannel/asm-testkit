@@ -4,8 +4,8 @@ import dev.turingcomplete.asmtestkit.asmutils.Access;
 import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
 import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
 import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
-import dev.turingcomplete.asmtestkit.node.AnnotationDefault;
+import dev.turingcomplete.asmtestkit.node.AccessNode;
+import dev.turingcomplete.asmtestkit.node.AnnotationDefaultNode;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AnnotationNode;
@@ -126,7 +126,7 @@ public class MethodNodeRepresentation extends AbstractWithLabelNamesAsmRepresent
     // Annotation default
     if (methodNode.annotationDefault != null) {
       representation.append(META_INFORMATION_INDENT).append("Annotation default: ")
-                    .append(asmRepresentations.toStringOf(AnnotationDefault.create(methodNode.annotationDefault)))
+                    .append(asmRepresentations.toStringOf(AnnotationDefaultNode.create(methodNode.annotationDefault)))
                     .append(System.lineSeparator());
     }
     // Parameters
@@ -200,7 +200,7 @@ public class MethodNodeRepresentation extends AbstractWithLabelNamesAsmRepresent
     // Access
     boolean isStatic = Access.STATIC.check(methodNode.access);
     if (methodNode.access >= 0) {
-      representation.append(asmRepresentations.toStringOf(AccessFlags.forMethod(methodNode.access))).append(" ");
+      representation.append(asmRepresentations.toStringOf(AccessNode.forMethod(methodNode.access))).append(" ");
     }
 
     // Return Type
@@ -229,13 +229,16 @@ public class MethodNodeRepresentation extends AbstractWithLabelNamesAsmRepresent
           // Use name and access from ParameterNode
           ParameterNode parameterNode = methodNode.parameters.get(i);
           if (parameterNode.access != 0) {
-            access = asmRepresentations.toStringOf(AccessFlags.create(parameterNode.access, AccessKind.PARAMETER));
+            access = asmRepresentations.toStringOf(AccessNode.create(parameterNode.access, AccessKind.PARAMETER));
           }
           name = parameterNode.name;
         }
         else if (methodNode.localVariables != null) {
           // Use name from LocalVariableNodes
-          name = methodNode.localVariables.get(i + (isStatic ? 0 : 1)).name;
+          int localVariableIndex = i + (isStatic ? 0 : 1);
+          if (localVariableIndex < methodNode.localVariables.size()) {
+            name = methodNode.localVariables.get(localVariableIndex).name;
+          }
         }
 
         if (access != null) {

@@ -2,7 +2,7 @@ package dev.turingcomplete.asmtestkit.comparator;
 
 import dev.turingcomplete.asmtestkit.asmutils.TypeUtils;
 import dev.turingcomplete.asmtestkit.comparator._internal.IterableComparator;
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
+import dev.turingcomplete.asmtestkit.node.AccessNode;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.InnerClassNode;
 
@@ -55,7 +55,7 @@ public class InnerClassNodeComparator extends AsmComparator<InnerClassNode> {
     return comparing((InnerClassNode innerClassNode) -> TypeUtils.nameToTypeElseNull(innerClassNode.name), asmComparators.elementComparator(Type.class))
             .thenComparing((InnerClassNode innerClassNode) -> TypeUtils.nameToTypeElseNull(innerClassNode.outerName), asmComparators.elementComparator(Type.class))
             .thenComparing((InnerClassNode innerClassNode) -> innerClassNode.innerName, STRING_COMPARATOR)
-            .thenComparing((InnerClassNode innerClassNode) -> AccessFlags.forClass(innerClassNode.access), asmComparators.elementComparator(AccessFlags.class))
+            .thenComparing((InnerClassNode innerClassNode) -> AccessNode.forClass(innerClassNode.access), asmComparators.elementComparator(AccessNode.class))
             .compare(first, second);
   }
 

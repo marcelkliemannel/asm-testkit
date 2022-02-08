@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.representation;
 
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
+import dev.turingcomplete.asmtestkit.node.AccessNode;
 import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.tree.ParameterNode;
@@ -40,7 +40,7 @@ public class ParameterNodeRepresentation extends AbstractAsmRepresentation<Param
 
   @Override
   protected String doToStringOf(ParameterNode parameterNode) {
-    return asmRepresentations.toStringOf(AccessFlags.create(parameterNode.access, AccessKind.PARAMETER)) + " " + parameterNode.name;
+    return asmRepresentations.toStringOf(AccessNode.create(parameterNode.access, AccessKind.PARAMETER)) + " " + parameterNode.name;
   }
 
   @Override

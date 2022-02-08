@@ -3,7 +3,7 @@ package dev.turingcomplete.asmtestkit.assertion;
 import dev.turingcomplete.asmtestkit.comparator.FieldNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.option.StandardAssertOption;
 import dev.turingcomplete.asmtestkit.representation.FieldNodeRepresentation;
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
+import dev.turingcomplete.asmtestkit.node.AccessNode;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.description.TextDescription;
 import org.assertj.core.presentation.Representation;
@@ -101,8 +101,8 @@ public class FieldNodeAssert extends ClassEntityAssert<FieldNodeAssert, FieldNod
   }
 
   @Override
-  protected AccessFlags getAccessFlags(FieldNode fieldNode) {
-    return AccessFlags.forField(fieldNode.access);
+  protected AccessNode getAccessNode(FieldNode fieldNode) {
+    return AccessNode.forField(fieldNode.access);
   }
 
   @Override

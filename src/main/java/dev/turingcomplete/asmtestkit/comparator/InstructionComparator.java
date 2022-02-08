@@ -21,7 +21,7 @@ public class InstructionComparator extends AbstractWithLabelNamesAsmComparator<A
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
-   * A reusable {@link AccessFlagsComparator} instance.
+   * A reusable {@link AccessNodeComparator} instance.
    */
   public static final InstructionComparator INSTANCE = create();
 

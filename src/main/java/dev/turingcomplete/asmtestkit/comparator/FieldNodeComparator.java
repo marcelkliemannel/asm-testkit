@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.comparator;
 
 import dev.turingcomplete.asmtestkit.comparator._internal.IterableComparator;
-import dev.turingcomplete.asmtestkit.node.AccessFlags;
+import dev.turingcomplete.asmtestkit.node.AccessNode;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.FieldNode;
@@ -56,7 +56,7 @@ public class FieldNodeComparator extends AsmComparator<FieldNode> {
   public int doCompare(FieldNode first, FieldNode second) {
     return comparing((FieldNode fieldNode) -> fieldNode.name, STRING_COMPARATOR)
             .thenComparing((FieldNode fieldNode) -> fieldNode.desc, STRING_COMPARATOR)
-            .thenComparing((FieldNode fieldNode) -> AccessFlags.forField(fieldNode.access), asmComparators.elementComparator(AccessFlags.class))
+            .thenComparing((FieldNode fieldNode) -> AccessNode.forField(fieldNode.access), asmComparators.elementComparator(AccessNode.class))
             .thenComparing((FieldNode fieldNode) -> fieldNode.signature, STRING_COMPARATOR)
             .thenComparing((FieldNode fieldNode) -> fieldNode.value, OBJECT_COMPARATOR)
             .thenComparing((FieldNode fieldNode) -> fieldNode.visibleAnnotations, asmComparators.iterableComparator(AnnotationNode.class))

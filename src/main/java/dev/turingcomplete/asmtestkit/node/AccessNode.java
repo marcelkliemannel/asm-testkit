@@ -11,7 +11,7 @@ import java.util.Objects;
  * flags by their own type, we simplify the handling at the points where a class
  * gets mapped to asn ASM object type.
  */
-public final class AccessFlags {
+public final class AccessNode {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
@@ -20,7 +20,7 @@ public final class AccessFlags {
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  private AccessFlags(int access, AccessKind accessKind) {
+  private AccessNode(int access, AccessKind accessKind) {
     this.access = access;
     this.accessKind = accessKind;
   }
@@ -28,94 +28,94 @@ public final class AccessFlags {
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   /**
-   * Creates a new {@link AccessFlags}.
+   * Creates a new {@link AccessNode}.
    *
    * @param access     the access flags as a combined {@code int}.
    * @param accessKind the {@link AccessKind} the given {@code access} belongs;
    *                   never null.
-   * @return a new {@link AccessFlags}; never null.
+   * @return a new {@link AccessNode}; never null.
    */
-  public static AccessFlags create(int access, AccessKind accessKind) {
-    return new AccessFlags(access, Objects.requireNonNull(accessKind));
+  public static AccessNode create(int access, AccessKind accessKind) {
+    return new AccessNode(access, Objects.requireNonNull(accessKind));
   }
 
   /**
-   * Creates a new {@link AccessFlags} for {@link AccessKind#FIELD}.
+   * Creates a new {@link AccessNode} for {@link AccessKind#FIELD}.
    *
    * @param access the access flags as a combined {@code int}.
-   * @return a new {@link AccessFlags}; never null.
+   * @return a new {@link AccessNode}; never null.
    */
-  public static AccessFlags forField(int access) {
+  public static AccessNode forField(int access) {
     return create(access, AccessKind.FIELD);
   }
 
   /**
-   * Creates a new {@link AccessFlags} for {@link AccessKind#CLASS}.
+   * Creates a new {@link AccessNode} for {@link AccessKind#CLASS}.
    *
    * @param access the access flags as a combined {@code int}.
-   * @return a new {@link AccessFlags}; never null.
+   * @return a new {@link AccessNode}; never null.
    */
-  public static AccessFlags forClass(int access) {
+  public static AccessNode forClass(int access) {
     return create(access, AccessKind.CLASS);
   }
 
   /**
-   * Creates a new {@link AccessFlags} for {@link AccessKind#METHOD}.
+   * Creates a new {@link AccessNode} for {@link AccessKind#METHOD}.
    *
    * @param access the access flags as a combined {@code int}.
-   * @return a new {@link AccessFlags}; never null.
+   * @return a new {@link AccessNode}; never null.
    */
-  public static AccessFlags forMethod(int access) {
+  public static AccessNode forMethod(int access) {
     return create(access, AccessKind.METHOD);
   }
 
   /**
-   * Creates a new {@link AccessFlags} for {@link AccessKind#PARAMETER}.
+   * Creates a new {@link AccessNode} for {@link AccessKind#PARAMETER}.
    *
    * @param access the access flags as a combined {@code int}.
-   * @return a new {@link AccessFlags}; never null.
+   * @return a new {@link AccessNode}; never null.
    */
-  public static AccessFlags forParameter(int access) {
+  public static AccessNode forParameter(int access) {
     return create(access, AccessKind.PARAMETER);
   }
 
   /**
-   * Creates a new {@link AccessFlags} for {@link AccessKind#MODULE}.
+   * Creates a new {@link AccessNode} for {@link AccessKind#MODULE}.
    *
    * @param access the access flags as a combined {@code int}.
-   * @return a new {@link AccessFlags}; never null.
+   * @return a new {@link AccessNode}; never null.
    */
-  public static AccessFlags forModule(int access) {
+  public static AccessNode forModule(int access) {
     return create(access, AccessKind.MODULE);
   }
 
   /**
-   * Creates a new {@link AccessFlags} for {@link AccessKind#MODULE_REQUIRES}.
+   * Creates a new {@link AccessNode} for {@link AccessKind#MODULE_REQUIRES}.
    *
    * @param access the access flags as a combined {@code int}.
-   * @return a new {@link AccessFlags}; never null.
+   * @return a new {@link AccessNode}; never null.
    */
-  public static AccessFlags forModuleRequires(int access) {
+  public static AccessNode forModuleRequires(int access) {
     return create(access, AccessKind.MODULE_REQUIRES);
   }
 
   /**
-   * Creates a new {@link AccessFlags} for {@link AccessKind#MODULE_EXPORTS}.
+   * Creates a new {@link AccessNode} for {@link AccessKind#MODULE_EXPORTS}.
    *
    * @param access the access flags as a combined {@code int}.
-   * @return a new {@link AccessFlags}; never null.
+   * @return a new {@link AccessNode}; never null.
    */
-  public static AccessFlags forModuleExports(int access) {
+  public static AccessNode forModuleExports(int access) {
     return create(access, AccessKind.MODULE_EXPORTS);
   }
 
   /**
-   * Creates a new {@link AccessFlags} for {@link AccessKind#MODULE_OPENS}.
+   * Creates a new {@link AccessNode} for {@link AccessKind#MODULE_OPENS}.
    *
    * @param access the access flags as a combined {@code int}.
-   * @return a new {@link AccessFlags}; never null.
+   * @return a new {@link AccessNode}; never null.
    */
-  public static AccessFlags forModuleOpens(int access) {
+  public static AccessNode forModuleOpens(int access) {
     return create(access, AccessKind.MODULE_OPENS);
   }
 
