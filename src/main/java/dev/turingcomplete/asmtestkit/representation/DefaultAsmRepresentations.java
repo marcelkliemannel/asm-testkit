@@ -13,6 +13,7 @@ import org.objectweb.asm.TypePath;
 import org.objectweb.asm.TypeReference;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
+import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.InnerClassNode;
 import org.objectweb.asm.tree.InsnList;
@@ -74,6 +75,7 @@ public final class DefaultAsmRepresentations extends StandardRepresentation impl
     registerAsmRepresentation(AccessNode.class, () -> AccessNodeRepresentation.INSTANCE);
     registerAsmRepresentation(AnnotationDefaultNode.class, () -> AnnotationDefaultValueRepresentation.INSTANCE);
     registerAsmRepresentation(InnerClassNode.class, () -> InnerClassNodeRepresentation.INSTANCE);
+    registerAsmRepresentation(ClassNode.class, () -> ClassNodeRepresentation.INSTANCE);
 
     // An 'InsnList' is an 'Iterable' and would be handled in the 'toStringOf'
     registerFormatterForType(InsnList.class, insnList -> ASM_REPRESENTATIONS.get(InsnList.class).get().toStringOf(insnList));

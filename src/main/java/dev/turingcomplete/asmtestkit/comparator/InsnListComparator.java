@@ -33,7 +33,7 @@ public class InsnListComparator extends AbstractWithLabelNamesAsmComparator<Iter
    * A reusable {@link InsnListComparator} instance, which excludes line numbers
    * from the comparison.
    */
-  public static final InsnListComparator INSTANCE_IGNORE_LINE_NUMBERS = new InsnListComparator().ignoreLineNumbers();
+  public static final InsnListComparator INSTANCE_IGNORE_LINE_NUMBERS = create().ignoreLineNumbers();
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 

@@ -56,28 +56,7 @@ public final class InsnListUtils {
    * @return a new filtered {@link InsnList}; never null.
    */
   public static InsnList filterLineNumbers(Iterable<? extends AbstractInsnNode> instructions) {
-    Objects.requireNonNull(instructions);
-    return filterLineNumbers(instructions, Set.of());
-  }
-
-  /**
-   * Creates a new {@link MethodNode} by filtering all {@link LineNumberNode}s
-   * (and their related {@link LineNumberNode}s) from the given {@link MethodNode}.
-   *
-   * @param methodNode a {@link MethodNode}; never null.
-   * @return a new {@link MethodNode} with filtered line numbers; never null.
-   */
-  public static MethodNode filterLineNumbers(MethodNode methodNode) {
-    Objects.requireNonNull(methodNode);
-
-    var cleanedMethodNode = new MethodNode();
-
-    // Using a copy here to not modify the input method
-    MethodNode methodNodeCopy = MethodNodeUtils.copy(methodNode);
-    methodNodeCopy.instructions = filterLineNumbers(methodNodeCopy.instructions, collectRequiredLabels(methodNode));
-    methodNodeCopy.accept(cleanedMethodNode);
-
-    return cleanedMethodNode;
+    return filterLineNumbers(Objects.requireNonNull(instructions), Set.of());
   }
 
   /**
@@ -87,9 +66,8 @@ public final class InsnListUtils {
    * @param methodNode a {@link MethodNode}; never null.
    * @return a new {@link InsnList} with filtered line numbers; never null.
    */
-  public static InsnList filterLineNumbers2(MethodNode methodNode) {
-    Objects.requireNonNull(methodNode);
-    return filterLineNumbers(methodNode.instructions, collectRequiredLabels(methodNode));
+  public static InsnList filterLineNumbers(MethodNode methodNode) {
+    return filterLineNumbers(Objects.requireNonNull(methodNode).instructions, collectRequiredLabels(methodNode));
   }
 
   /**
@@ -110,7 +88,7 @@ public final class InsnListUtils {
     int i = 0;
     for (AbstractInsnNode instruction : instructions) {
       if (instruction instanceof LabelNode) {
-        result.put(((LabelNode) instruction).getLabel(), i);
+        result.put(((LabelNode) instruction).getLabel(), i++);
       }
     }
 
@@ -136,10 +114,13 @@ public final class InsnListUtils {
         _requiredLabels.add(((JumpInsnNode) instruction).label.getLabel());
       }
       else if (instruction instanceof LookupSwitchInsnNode) {
-        ((LookupSwitchInsnNode) instruction).labels.forEach(labelNode -> _requiredLabels.add(labelNode.getLabel()));
+        LookupSwitchInsnNode lookupSwitchInsnNode = (LookupSwitchInsnNode) instruction;
+        _requiredLabels.add(lookupSwitchInsnNode.dflt.getLabel());
+        lookupSwitchInsnNode.labels.forEach(labelNode -> _requiredLabels.add(labelNode.getLabel()));
       }
       else if (instruction instanceof LabelNode) {
-        clonedLabelNodes.put(((LabelNode) instruction), new LabelNode(((LabelNode) instruction).getLabel()));
+        LabelNode labelNode = (LabelNode) instruction;
+        clonedLabelNodes.put(labelNode, new LabelNode(labelNode.getLabel()));
       }
     }
 

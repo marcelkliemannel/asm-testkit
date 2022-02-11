@@ -77,7 +77,7 @@ class AsmIterableAssertTest {
                       .setCompareOneByOneKeyExtractor(element -> element.key)
                       .containsExactlyInAnyOrderCompareOneByOneElementsOf(List.of(A, B, C, d2)))
               .isInstanceOf(AssertionError.class)
-              .hasMessage("[Invalid element test] \n" +
+              .hasMessage("[Invalid element test > Dummy: DD] \n" +
                           "expected: DDDD\n" +
                           " but was: DD\n" +
                           "when comparing values using DummyComparator");

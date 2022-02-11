@@ -6,7 +6,6 @@ import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;
 import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationB;
 import dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils;
 import dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils;
-import dev.turingcomplete.asmtestkit.compile.CompilationResult;
 import dev.turingcomplete.asmtestkit.node.AccessNode;
 import dev.turingcomplete.asmtestkit.node.AnnotationDefaultNode;
 import org.assertj.core.api.Assertions;
@@ -21,7 +20,6 @@ import org.objectweb.asm.TypeReference;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.InnerClassNode;
-import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LocalVariableAnnotationNode;
 import org.objectweb.asm.tree.LocalVariableNode;
@@ -42,7 +40,6 @@ import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatIn
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLabels;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLocalVariableAnnotations;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLocalVariables;
-import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatMethods;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatParameters;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatTryCatchBlocks;
 import static dev.turingcomplete.asmtestkit.compile.CompilationEnvironment.create;
@@ -219,114 +216,6 @@ class AsmAssertionsTest {
                           "and elements not expected:\n" +
                           "  [class_type_parameter=0]\n" +
                           "when comparing values using TypeReferenceComparator");
-  }
-
-  @Test
-  void testAssertThatInstructions() throws IOException {
-    @Language("Java")
-    String firstMyClass = "class FirstMyClass {" +
-                          "  void myMethod() {" +
-                          "    System.out.println(1);" +
-                          "  }" +
-                          "}";
-    @Language("Java")
-    String secondMyClass = "class SecondMyClass {" +
-                           "  void myMethod() {" +
-                           "    System.out.println(1);" +
-                           "  }" +
-                           "}";
-    @Language("Java")
-    String thirdMyClass = "class ThirdMyClass {" +
-                          "  void myMethod() {" +
-                          "    throw new IllegalArgumentException();" +
-                          "  }" +
-                          "}";
-    CompilationResult result = create()
-            .addJavaInputSource(firstMyClass)
-            .addJavaInputSource(secondMyClass)
-            .addJavaInputSource(thirdMyClass)
-            .compile();
-
-    InsnList firstInstructions = result.readClassNode("FirstMyClass").methods.get(1).instructions;
-    InsnList secondInstructions = result.readClassNode("SecondMyClass").methods.get(1).instructions;
-    InsnList thirdInstructions = result.readClassNode("ThirdMyClass").methods.get(1).instructions;
-
-    AsmAssertions.assertThatInstructions(firstInstructions)
-                 .isEqualTo(secondInstructions);
-
-    assertThatThrownBy(() -> AsmAssertions.assertThatInstructions(firstInstructions)
-                                          .isEqualTo(thirdInstructions))
-            .isInstanceOf(AssertionError.class)
-            .hasMessage("[Instructions] \n" +
-                        "expected: L0\n" +
-                        "  LINENUMBER 1 L0\n" +
-                        "  NEW java/lang/IllegalArgumentException // opcode: 187\n" +
-                        "  DUP // opcode: 89\n" +
-                        "  INVOKESPECIAL java/lang/IllegalArgumentException.<init> ()V // opcode: 183\n" +
-                        "  ATHROW // opcode: 191\n" +
-                        "L1\n" +
-                        " but was: L0\n" +
-                        "  LINENUMBER 1 L0\n" +
-                        "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
-                        "  ICONST_1 // opcode: 4\n" +
-                        "  INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
-                        "  RETURN // opcode: 177\n" +
-                        "L1\n" +
-                        "when comparing values using InsnListComparator");
-  }
-
-  @Test
-  void testAssertThatInstructionsIgnoreLineNumbers() throws IOException {
-    @Language("Java")
-    String firstMyClass = "class FirstMyClass {" +
-                          "  void myMethod() {" +
-                          "    System.out.println(1);\n" +
-                          "  }" +
-                          "}";
-    @Language("Java")
-    String secondMyClass = "class SecondMyClass {" +
-                           "  void myMethod() {" +
-                           "    System.out.println(1);" +
-                           "  }" +
-                           "}";
-    @Language("Java")
-    String thirdMyClass = "class ThirdMyClass {" +
-                          "  void myMethod() {" +
-                          "    System.out.println(2);" +
-                          "  }" +
-                          "}";
-    CompilationResult result = create()
-            .addJavaInputSource(firstMyClass)
-            .addJavaInputSource(secondMyClass)
-            .addJavaInputSource(thirdMyClass)
-            .compile();
-
-    InsnList firstInstructions = result.readClassNode("FirstMyClass").methods.get(1).instructions;
-    InsnList secondInstructions = result.readClassNode("SecondMyClass").methods.get(1).instructions;
-    InsnList thirdInstructions = result.readClassNode("ThirdMyClass").methods.get(1).instructions;
-
-    AsmAssertions.assertThatInstructionsIgnoreLineNumbers(firstInstructions)
-                 .isEqualTo(secondInstructions);
-
-    assertThatThrownBy(() -> AsmAssertions.assertThatInstructionsIgnoreLineNumbers(secondInstructions)
-                                          .isEqualTo(thirdInstructions))
-            .isInstanceOf(AssertionError.class)
-            .hasMessage("[Instructions - ignore line numbers] \n" +
-                        "expected: L0\n" +
-                        "  LINENUMBER 1 L0\n" +
-                        "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
-                        "  ICONST_2 // opcode: 5\n" +
-                        "  INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
-                        "  RETURN // opcode: 177\n" +
-                        "L1\n" +
-                        " but was: L0\n" +
-                        "  LINENUMBER 1 L0\n" +
-                        "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
-                        "  ICONST_1 // opcode: 4\n" +
-                        "  INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
-                        "  RETURN // opcode: 177\n" +
-                        "L1\n" +
-                        "when comparing values using InsnListComparator");
   }
 
   @Test
@@ -624,116 +513,6 @@ class AsmAssertionsTest {
                         "and elements not expected:\n" +
                         "  [[1: public]]\n" +
                         "when comparing values using AccessNodeComparator");
-  }
-
-  @Test
-  void testAssertThatMethods() throws IOException {
-    @Language("Java")
-    String myClass = "class MyClass {" +
-                     "   void myMethod1() {" +
-                     "     System.out.println(1);" +
-                     "   }" +
-                     "   int myMethod2() {" +
-                     "     System.out.println(2);" +
-                     "     return 1;" +
-                     "   }" +
-                     "   String myMethod3() {" +
-                     "     System.out.println(3);" +
-                     "     return null;" +
-                     "   }" +
-                     " }";
-
-    List<MethodNode> methods = create()
-            .addJavaInputSource(myClass)
-            .compile()
-            .readClassNode("MyClass")
-            .methods;
-
-    MethodNode firstMethodNode = methods.get(0);
-    MethodNode secondMethodNode = methods.get(1);
-    MethodNode thirdMethodNode = methods.get(2);
-
-    // Positive
-    assertThatMethods(List.of(firstMethodNode, secondMethodNode, thirdMethodNode))
-            .containsExactlyInAnyOrderElementsOf(List.of(firstMethodNode, secondMethodNode, thirdMethodNode));
-
-    // Negative
-    ThrowableAssert.ThrowingCallable throwingCallable = () -> assertThatMethods(List.of(firstMethodNode, secondMethodNode))
-            .containsExactlyInAnyOrderElementsOf(List.of(secondMethodNode, thirdMethodNode));
-    assertThatThrownBy(throwingCallable)
-            .isInstanceOf(AssertionError.class)
-            .hasMessage("[Methods] \n" +
-                        "Expecting actual:\n" +
-                        "  [[0] <init>()\n" +
-                        "    L0\n" +
-                        "      LINENUMBER 1 L0\n" +
-                        "      ALOAD 0 // opcode: 25\n" +
-                        "      INVOKESPECIAL java/lang/Object.<init> ()V // opcode: 183\n" +
-                        "      RETURN // opcode: 177\n" +
-                        "    L1\n" +
-                        "  // Local variable: #0 MyClass this // range: L0-L1\n" +
-                        "  // Max locals: 1\n" +
-                        "  // Max stack: 1,\n" +
-                        "    [0] void myMethod1()\n" +
-                        "    L0\n" +
-                        "      LINENUMBER 1 L0\n" +
-                        "      GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
-                        "      ICONST_1 // opcode: 4\n" +
-                        "      INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
-                        "      RETURN // opcode: 177\n" +
-                        "    L1\n" +
-                        "  // Local variable: #0 MyClass this // range: L0-L1\n" +
-                        "  // Max locals: 1\n" +
-                        "  // Max stack: 2]\n" +
-                        "to contain exactly in any order:\n" +
-                        "  [[0] void myMethod1()\n" +
-                        "    L0\n" +
-                        "      LINENUMBER 1 L0\n" +
-                        "      GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
-                        "      ICONST_1 // opcode: 4\n" +
-                        "      INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
-                        "      RETURN // opcode: 177\n" +
-                        "    L1\n" +
-                        "  // Local variable: #0 MyClass this // range: L0-L1\n" +
-                        "  // Max locals: 1\n" +
-                        "  // Max stack: 2,\n" +
-                        "    [0] int myMethod2()\n" +
-                        "    L0\n" +
-                        "      LINENUMBER 1 L0\n" +
-                        "      GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
-                        "      ICONST_2 // opcode: 5\n" +
-                        "      INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
-                        "      ICONST_1 // opcode: 4\n" +
-                        "      IRETURN // opcode: 172\n" +
-                        "    L1\n" +
-                        "  // Local variable: #0 MyClass this // range: L0-L1\n" +
-                        "  // Max locals: 1\n" +
-                        "  // Max stack: 2]\n" +
-                        "elements not found:\n" +
-                        "  [[0] int myMethod2()\n" +
-                        "    L0\n" +
-                        "      LINENUMBER 1 L0\n" +
-                        "      GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
-                        "      ICONST_2 // opcode: 5\n" +
-                        "      INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
-                        "      ICONST_1 // opcode: 4\n" +
-                        "      IRETURN // opcode: 172\n" +
-                        "    L1\n" +
-                        "  // Local variable: #0 MyClass this // range: L0-L1\n" +
-                        "  // Max locals: 1\n" +
-                        "  // Max stack: 2]\n" +
-                        "and elements not expected:\n" +
-                        "  [[0] <init>()\n" +
-                        "    L0\n" +
-                        "      LINENUMBER 1 L0\n" +
-                        "      ALOAD 0 // opcode: 25\n" +
-                        "      INVOKESPECIAL java/lang/Object.<init> ()V // opcode: 183\n" +
-                        "      RETURN // opcode: 177\n" +
-                        "    L1\n" +
-                        "  // Local variable: #0 MyClass this // range: L0-L1\n" +
-                        "  // Max locals: 1\n" +
-                        "  // Max stack: 1]\n" +
-                        "when comparing values using MethodNodeComparator");
   }
 
   @Test

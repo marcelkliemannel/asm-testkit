@@ -648,6 +648,103 @@ class MethodNodeAssertTest {
                           "when comparing values using AnnotationDefaultValueComparator");
   }
 
+  @Test
+  void testIsEqualInstructions_withLineNumbers() throws IOException {
+    @Language("Java")
+    String myClass = "class MyClass {\n" +
+                     "  void myMethodWithLineNumbers() {\n" +
+                     "    System.out.println(1);\n" +
+                     "    System.out.println(4);\n" +
+                     "  }\n" +
+                     "  void myMethodWithoutLineNumbers() {" +
+                     "    System.out.println(1);" +
+                     "    System.out.println(4);" +
+                     "  }" +
+                     "}\n";
+
+    List<MethodNode> methods = create()
+            .addToClasspath(VisibleTypeParameterAnnotationA.class)
+            .addJavaInputSource(myClass)
+            .compile()
+            .readClassNode("MyClass")
+            .methods;
+
+    var myMethodWithLineNumbers = new MethodNode(0, "first", "()V", null, null);
+    myMethodWithLineNumbers.instructions = Objects.requireNonNull(methods.get(1).instructions);
+
+    var myMethodWithoutLineNumbers = new MethodNode(0, "first", "()V", null, null);
+    myMethodWithoutLineNumbers.instructions = Objects.requireNonNull(methods.get(2).instructions);
+
+    assertThat(myMethodWithLineNumbers)
+            .isEqualTo(MethodNodeUtils.copy(myMethodWithLineNumbers));
+
+    assertThat(myMethodWithLineNumbers)
+            .addOption(StandardAssertOption.IGNORE_INSTRUCTIONS)
+            .isEqualTo(myMethodWithoutLineNumbers);
+
+    Assertions.assertThatThrownBy(() -> assertThat(myMethodWithLineNumbers)
+                      .isEqualTo(myMethodWithoutLineNumbers))
+              .isInstanceOf(AssertionError.class)
+              .hasMessage("[Method: first()V > Has equal instructions] \n" +
+                          "expected: L0\n" +
+                          "  LINENUMBER 6 L0\n" +
+                          "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
+                          "  ICONST_1 // opcode: 4\n" +
+                          "  INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
+                          "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
+                          "  ICONST_4 // opcode: 7\n" +
+                          "  INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
+                          "  RETURN // opcode: 177\n" +
+                          "L1\n" +
+                          " but was: L0\n" +
+                          "  LINENUMBER 3 L0\n" +
+                          "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
+                          "  ICONST_1 // opcode: 4\n" +
+                          "  INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
+                          "L1\n" +
+                          "  LINENUMBER 4 L1\n" +
+                          "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
+                          "  ICONST_4 // opcode: 7\n" +
+                          "  INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
+                          "L2\n" +
+                          "  LINENUMBER 5 L2\n" +
+                          "  RETURN // opcode: 177\n" +
+                          "L3\n" +
+                          "when comparing values using InsnListComparator");
+  }
+
+  @Test
+  void testIsEqualInstructions_ignoreLineNumbers() throws IOException {
+    @Language("Java")
+    String myClass = "class MyClass {\n" +
+                     "  void myMethodWithLineNumbers() {\n" +
+                     "    System.out.println(1);\n" +
+                     "    System.out.println(4);\n" +
+                     "  }\n" +
+                     "  void myMethodWithoutLineNumbers() {" +
+                     "    System.out.println(1);" +
+                     "    System.out.println(4);" +
+                     "  }" +
+                     "}\n";
+
+    List<MethodNode> methods = create()
+            .addToClasspath(VisibleTypeParameterAnnotationA.class)
+            .addJavaInputSource(myClass)
+            .compile()
+            .readClassNode("MyClass")
+            .methods;
+
+    var myMethodWithLineNumbers = new MethodNode(0, "first", "()V", null, null);
+    myMethodWithLineNumbers.instructions = Objects.requireNonNull(methods.get(1).instructions);
+
+    var myMethodWithoutLineNumbers = new MethodNode(0, "first", "()V", null, null);
+    myMethodWithoutLineNumbers.instructions = Objects.requireNonNull(methods.get(2).instructions);
+
+    assertThat(myMethodWithLineNumbers)
+            .ignoreLineNumbers()
+            .isEqualTo(myMethodWithoutLineNumbers);
+  }
+
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 }

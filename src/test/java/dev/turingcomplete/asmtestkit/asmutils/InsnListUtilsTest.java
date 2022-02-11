@@ -90,7 +90,7 @@ class InsnListUtilsTest {
 
     // Ensure presents of JumpInsnNode
 
-    InsnList methodNode = InsnListUtils.filterLineNumbers2(actual);
+    InsnList methodNode = InsnListUtils.filterLineNumbers(actual);
     System.out.println("sdfaf");
   }
 

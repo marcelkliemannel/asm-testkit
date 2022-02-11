@@ -1,6 +1,5 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.asmutils.InsnListUtils;
 import dev.turingcomplete.asmtestkit.comparator.*;
 import dev.turingcomplete.asmtestkit.node.AccessNode;
 import dev.turingcomplete.asmtestkit.node.AnnotationDefaultNode;
@@ -12,6 +11,7 @@ import org.objectweb.asm.TypePath;
 import org.objectweb.asm.TypeReference;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
+import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.InnerClassNode;
 import org.objectweb.asm.tree.InsnList;
@@ -140,23 +140,23 @@ public final class AsmAssertions {
   }
 
   /**
-   * Creates an {@link AsmIterableAssert} for {@link AbstractInsnNode}s which uses
-   * {@link InsnListRepresentation#INSTANCE} for the representation and for
-   * equality {@link InsnListComparator#INSTANCE}.
+   * Creates an {@link InsnListAssert} for {@link AbstractInsnNode}s.
+   *
+   * <p>The returned {@code InsnListAssert} should be used in conjunction with
+   * {@link InsnListAssert#isEqualTo(Object)}.
    *
    * <p>To exclude {@link LineNumberNode}s from the comparison use
-   * {@link #assertThatInstructionsIgnoreLineNumbers(Iterable)}.
+   * {@link MethodNodesAssert#ignoreLineNumbers()}.
    *
    * <p>To override the representation or comparator call
    * {@link AsmIterableAssert#usingComparator(Comparator)} or
    * {@link AsmIterableAssert#withRepresentation(Representation)}.
    *
    * @param actual an {@link InsnList}; may be null.
-   * @return a new {@link AsmIterableAssert}; never null.
+   * @return a new {@link InsnListAssert}; never null.
    * @see #assertThatInstructions(Iterable)
-   * @see #assertThatInstructionsIgnoreLineNumbers(Iterable)
    */
-  public static AsmIterableAssert<?, AbstractInsnNode, InstructionAssert> assertThat(InsnList actual) {
+  public static InsnListAssert assertThat(InsnList actual) {
     return assertThatInstructions(actual);
   }
 
@@ -228,6 +228,16 @@ public final class AsmAssertions {
    */
   public static InnerClassNodeAssert assertThat(InnerClassNode actual) {
     return new InnerClassNodeAssert(actual);
+  }
+
+  /**
+   * Creates a {@link ClassNodeAssert}.
+   *
+   * @param actual a {@link ClassNode}; may be null.
+   * @return a new {@link ClassNodeAssert}; never null.
+   */
+  public static ClassNodeAssert assertThat(ClassNode actual) {
+    return new ClassNodeAssert(actual);
   }
 
   // ---- Iterable ---------------------------------------------------------- //
@@ -410,7 +420,7 @@ public final class AsmAssertions {
    * equality {@link InsnListComparator#INSTANCE}.
    *
    * <p>To exclude {@link LineNumberNode}s from the comparison use
-   * {@link #assertThatInstructionsIgnoreLineNumbers(Iterable)}.
+   * {@link InsnListAssert#ignoreLineNumbers()}.
    *
    * <p>The returned {@code AsmIterableAssert} should be used in conjunction with
    * {@link AsmIterableAssert#isEqualTo(Object)}.
@@ -423,37 +433,9 @@ public final class AsmAssertions {
    *               may be null.
    * @return a new {@link AsmIterableAssert}; never null.
    * @see #assertThat(InsnList)
-   * @see #assertThatInstructionsIgnoreLineNumbers(Iterable)
    */
-  public static AsmIterableAssert<?, AbstractInsnNode, InstructionAssert> assertThatInstructions(Iterable<AbstractInsnNode> actual) {
-    return new AsmIterableAssert<>(InsnListUtils.toInsnList(actual), AsmAssertions::assertThat)
-            .as("Instructions")
-            .withRepresentation(InsnListRepresentation.INSTANCE)
-            .usingComparator(InsnListComparator.INSTANCE);
-  }
-
-  /**
-   * Creates an {@link AsmIterableAssert} for {@link AbstractInsnNode}s which uses
-   * {@link InsnListRepresentation#INSTANCE} for the representation and for
-   * equality {@link InsnListComparator#INSTANCE_IGNORE_LINE_NUMBERS}. Any
-   * {@link LineNumberNode}s will be excluded form the comparison.
-   *
-   * <p>The returned {@code AsmIterableAssert} should be used in conjunction with
-   * {@link AsmIterableAssert#isEqualTo(Object)}.
-   *
-   * <p>To override the representation or comparator call
-   * {@link AsmIterableAssert#usingComparator(Comparator)} or
-   * {@link AsmIterableAssert#withRepresentation(Representation)}.
-   *
-   * @param actual an {@link Iterable} of {@link AbstractInsnNode}s;
-   *               may be null.
-   * @return a new {@link AsmIterableAssert}; never null.
-   */
-  public static AsmIterableAssert<?, AbstractInsnNode, InstructionAssert> assertThatInstructionsIgnoreLineNumbers(Iterable<AbstractInsnNode> actual) {
-    return new AsmIterableAssert<>(InsnListUtils.toInsnList(actual), AsmAssertions::assertThat)
-            .as("Instructions - ignore line numbers")
-            .withRepresentation(InsnListRepresentation.INSTANCE)
-            .usingComparator(InsnListComparator.INSTANCE_IGNORE_LINE_NUMBERS);
+  public static InsnListAssert assertThatInstructions(Iterable<AbstractInsnNode> actual) {
+    return new InsnListAssert(actual);
   }
 
   /**
@@ -626,27 +608,23 @@ public final class AsmAssertions {
   }
 
   /**
-   * Creates an {@link AsmIterableAssert} for {@link MethodNode}s which
-   * uses {@link MethodNodeRepresentation#INSTANCE} for the representation
-   * and for equality {@link MethodNodeComparator#INSTANCE} and
-   * {@link MethodNodeComparator#ITERABLE_INSTANCE}.
+   * Creates a {@link MethodNodesAssert} for {@link MethodNode}s.
    *
    * <p>The returned {@code AsmIterableAssert} should be used in conjunction with
    * {@link AsmIterableAssert#containsExactlyInAnyOrderElementsOf}.
+   *
+   * <p>To exclude {@link LineNumberNode}s from the comparison use
+   * {@link MethodNodesAssert#ignoreLineNumbers()}.
    *
    * <p>To override the representation or comparator call
    * {@link AsmIterableAssert#usingComparator(Comparator)} or
    * {@link AsmIterableAssert#withRepresentation(Representation)}.
    *
    * @param actual an {@link Iterable} of {@link MethodNode}s; may be null.
-   * @return a new {@link AsmIterableAssert}; never null.
+   * @return a new {@link MethodNodesAssert}; never null.
    */
-  public static AsmIterableAssert<?, MethodNode, MethodNodeAssert> assertThatMethods(Iterable<MethodNode> actual) {
-    return new AsmIterableAssert<>(actual, AsmAssertions::assertThat)
-            .as("Methods")
-            .withRepresentation(MethodNodeRepresentation.INSTANCE)
-            .usingElementComparator(MethodNodeComparator.INSTANCE)
-            .usingComparator(MethodNodeComparator.ITERABLE_INSTANCE);
+  public static MethodNodesAssert assertThatMethods(Iterable<MethodNode> actual) {
+    return new MethodNodesAssert(actual);
   }
 
   /**
@@ -671,6 +649,30 @@ public final class AsmAssertions {
             .withRepresentation(InnerClassNodeRepresentation.INSTANCE)
             .usingElementComparator(InnerClassNodeComparator.INSTANCE)
             .usingComparator(InnerClassNodeComparator.ITERABLE_INSTANCE);
+  }
+
+  /**
+   * Creates an {@link AsmIterableAssert} for {@link ClassNode}s which
+   * uses {@link ClassNodeRepresentation#INSTANCE} for the representation
+   * and for equality {@link ClassNodeComparator#INSTANCE} and
+   * {@link ClassNodeComparator#ITERABLE_INSTANCE}.
+   *
+   * <p>The returned {@code AsmIterableAssert} should be used in conjunction with
+   * {@link AsmIterableAssert#containsExactlyInAnyOrderElementsOf}.
+   *
+   * <p>To override the representation or comparator call
+   * {@link AsmIterableAssert#usingComparator(Comparator)} or
+   * {@link AsmIterableAssert#withRepresentation(Representation)}.
+   *
+   * @param actual an {@link Iterable} of {@link InnerClassNode}s; may be null.
+   * @return a new {@link AsmIterableAssert}; never null.
+   */
+  public static AsmIterableAssert<?, ClassNode, ClassNodeAssert> assertThatClasses(Iterable<ClassNode> actual) {
+    return new AsmIterableAssert<>(actual, AsmAssertions::assertThat)
+            .as("Inner classes")
+            .withRepresentation(ClassNodeRepresentation.INSTANCE)
+            .usingElementComparator(ClassNodeComparator.INSTANCE)
+            .usingComparator(ClassNodeComparator.ITERABLE_INSTANCE);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

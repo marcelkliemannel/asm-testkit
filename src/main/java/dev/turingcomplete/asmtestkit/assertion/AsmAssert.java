@@ -1,9 +1,10 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.assertion._internal.AsmWritableAssertionInfo;
+import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
+import dev.turingcomplete.asmtestkit.assertion.option.AssertOptionCapable;
 import dev.turingcomplete.asmtestkit.comparator.WithLabelNamesAsmComparator;
 import dev.turingcomplete.asmtestkit.comparator._internal.WithLabelNamesAsmComparatorAdapter;
-import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.representation.AsmRepresentations;
 import dev.turingcomplete.asmtestkit.representation.DefaultAsmRepresentations;
 import dev.turingcomplete.asmtestkit.representation._internal.CrumbDescription;
@@ -30,7 +31,7 @@ import java.util.Set;
  * @param <A> the type of the actual object.
  */
 public abstract class AsmAssert<S extends AbstractAssert<S, A>, A>
-        extends AbstractAssert<S, A> {
+        extends AbstractAssert<S, A> implements AssertOptionCapable<S> {
 
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
@@ -120,37 +121,23 @@ public abstract class AsmAssert<S extends AbstractAssert<S, A>, A>
     return getWritableAssertionInfo().labelNameLookup();
   }
 
-  /**
-   * Adds the given {@link AssertOption}.
-   *
-   * @param option an {@link AssertOption} to add; never null.
-   * @return {@code this} {@link AsmAssert}; never null.
-   */
-  public AsmAssert<S, A> addOption(AssertOption option) {
+  @Override
+  public S addOption(AssertOption option) {
     this.options.add(Objects.requireNonNull(option));
 
-    return this;
+    //noinspection unchecked
+    return (S) this;
   }
 
-  /**
-   * Adds the given {@link AssertOption}s.
-   *
-   * @param options a {@link Collection} of {@link AssertOption}s to add;
-   *                never null.
-   * @return {@code this} {@link AsmAssert}; never null.
-   */
-  public AsmAssert<S, A> addOptions(Collection<AssertOption> options) {
+  @Override
+  public S addOptions(Collection<AssertOption> options) {
     this.options.addAll(Objects.requireNonNull(options));
 
-    return this;
+    //noinspection unchecked
+    return (S) this;
   }
 
-  /**
-   * Check whether the given {@link AssertOption} was set.
-   *
-   * @param option the {@link AssertOption} to check; never null.
-   * @return if the {@link AssertOption} was set.
-   */
+  @Override
   public boolean hasOption(AssertOption option) {
     return options.contains(Objects.requireNonNull(option));
   }

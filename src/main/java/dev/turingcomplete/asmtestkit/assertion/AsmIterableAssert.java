@@ -1,15 +1,22 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.assertion._internal.AsmWritableAssertionInfo;
+import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
+import dev.turingcomplete.asmtestkit.assertion.option.AssertOptionCapable;
 import dev.turingcomplete.asmtestkit.comparator._internal.WithLabelNamesAsmComparatorAdapter;
 import dev.turingcomplete.asmtestkit.representation.AsmRepresentation;
+import dev.turingcomplete.asmtestkit.representation._internal.CrumbDescription;
 import org.assertj.core.api.AbstractIterableAssert;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.description.Description;
 import org.assertj.core.presentation.Representation;
 import org.assertj.core.util.IterableUtil;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
@@ -23,27 +30,27 @@ import java.util.stream.Collectors;
  * @param <A> the {@link AsmAssert} for {@link E}.
  */
 public class AsmIterableAssert<S extends AsmIterableAssert<S, E, A>, E, A extends AsmAssert<A, E>>
-        extends AbstractIterableAssert<S, Iterable<? extends E>, E, A> {
+        extends AbstractIterableAssert<S, Iterable<? extends E>, E, A> implements AssertOptionCapable<S> {
 
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
-  private final Function<E, A> createElementAssert;
+  private Function<E, A> elementAssertCreator;
 
-  private Function<E, String> compareOneByOneKeyExtractor = __ -> {
-    throw new UnsupportedOperationException("No key extractor for one by one comparison set.");
-  };
+  private final List<AssertOption> options = new ArrayList<>();
+
+  private Function<E, String> compareOneByOneKeyExtractor = null;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  public AsmIterableAssert(Iterable<? extends E> actual, Function<E, A> createElementAssert) {
-    this(actual, AsmIterableAssert.class, createElementAssert);
+  public AsmIterableAssert(Iterable<? extends E> actual, Function<E, A> elementAssertCreator) {
+    this(actual, AsmIterableAssert.class, elementAssertCreator);
   }
 
-  protected AsmIterableAssert(Iterable<? extends E> actual, Class<?> selfType, Function<E, A> createElementAssert) {
+  protected AsmIterableAssert(Iterable<? extends E> actual, Class<?> selfType, Function<E, A> elementAssertCreator) {
     super(actual, selfType);
 
-    this.createElementAssert = createElementAssert;
+    this.elementAssertCreator = elementAssertCreator;
     info = new AsmWritableAssertionInfo(info.representation());
   }
 
@@ -85,13 +92,17 @@ public class AsmIterableAssert<S extends AsmIterableAssert<S, E, A>, E, A extend
 
   @Override
   protected A toAssert(E value, String description) {
-    return createElementAssert.apply(value).as(description);
+    return toAssert(value).as(createCrumbDescription(description));
+  }
+
+  protected A toAssert(E value) {
+    return elementAssertCreator.apply(value).addOptions(options);
   }
 
   @Override
   protected S newAbstractIterableAssert(Iterable<? extends E> iterable) {
     //noinspection unchecked
-    return (S) new AsmIterableAssert<S, E, A>(iterable, createElementAssert);
+    return (S) new AsmIterableAssert<S, E, A>(iterable, elementAssertCreator);
   }
 
   @Override
@@ -173,6 +184,10 @@ public class AsmIterableAssert<S extends AsmIterableAssert<S, E, A>, E, A extend
   }
 
   protected S containsExactlyInAnyOrderCompareOneByOneProxy(E[] expected) {
+    if (compareOneByOneKeyExtractor == null) {
+      throw new UnsupportedOperationException("No key extractor for one by one comparison set.");
+    }
+
     if (actual == null && expected == null) {
       //noinspection unchecked
       return (S) this;
@@ -187,20 +202,25 @@ public class AsmIterableAssert<S extends AsmIterableAssert<S, E, A>, E, A extend
     for (E actualElement : actual) {
       String actualElementKey = compareOneByOneKeyExtractor.apply(actualElement);
       Assertions.assertThat(expectedKeyToElement.keySet())
-                .as(descriptionText())
+                .as(createCrumbDescription(null))
                 .contains(actualElementKey);
 
-      toAssert(actualElement, descriptionText())
-              .isEqualTo(expectedKeyToElement.get(actualElementKey));
+      A elementAssert = toAssert(actualElement);
+      elementAssert.as(createCrumbDescription(elementAssert.descriptionText()))
+             .isEqualTo(expectedKeyToElement.get(actualElementKey));
     }
 
     //noinspection unchecked
     return (S) this;
   }
 
+  protected final Description createCrumbDescription(String description, Object... args) {
+    return new CrumbDescription(info, description, args);
+  }
+
   @Override
   public S withRepresentation(Representation representation) {
-    if (representation instanceof AsmRepresentation) {
+    if (compareOneByOneKeyExtractor == null && representation instanceof AsmRepresentation) {
       compareOneByOneKeyExtractor = element -> ((AsmRepresentation<?>) representation).toSimplifiedStringOf(element);
     }
 
@@ -227,6 +247,31 @@ public class AsmIterableAssert<S extends AsmIterableAssert<S, E, A>, E, A extend
 
     //noinspection unchecked
     return (S) this;
+  }
+
+  @Override
+  public S addOption(AssertOption option) {
+    this.options.add(Objects.requireNonNull(option));
+
+    //noinspection unchecked
+    return (S) this;
+  }
+
+  @Override
+  public S addOptions(Collection<AssertOption> options) {
+    this.options.addAll(Objects.requireNonNull(options));
+
+    //noinspection unchecked
+    return (S) this;
+  }
+
+  @Override
+  public boolean hasOption(AssertOption option) {
+    return options.contains(Objects.requireNonNull(option));
+  }
+
+  protected void setElementAssertCreator(Function<E, A> elementAssertCreator) {
+    this.elementAssertCreator = elementAssertCreator;
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

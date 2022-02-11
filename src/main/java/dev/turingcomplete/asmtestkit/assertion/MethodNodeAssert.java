@@ -1,11 +1,12 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
+import dev.turingcomplete.asmtestkit.asmutils.InsnListUtils;
 import dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils;
-import dev.turingcomplete.asmtestkit.comparator.MethodNodeComparator;
 import dev.turingcomplete.asmtestkit.assertion.option.StandardAssertOption;
-import dev.turingcomplete.asmtestkit.representation.MethodNodeRepresentation;
+import dev.turingcomplete.asmtestkit.comparator.MethodNodeComparator;
 import dev.turingcomplete.asmtestkit.node.AccessNode;
 import dev.turingcomplete.asmtestkit.node.AnnotationDefaultNode;
+import dev.turingcomplete.asmtestkit.representation.MethodNodeRepresentation;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.presentation.Representation;
@@ -21,10 +22,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
+import static dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils.extractLabelIndices;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThat;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatAnnotations;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatInstructions;
-import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatInstructionsIgnoreLineNumbers;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLocalVariableAnnotations;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLocalVariables;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatParameters;
@@ -65,8 +66,8 @@ public class MethodNodeAssert extends ClassEntityAssert<MethodNodeAssert, Method
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
-  public MethodNodeAssert ignoreLineNumbers(boolean ignoreLineNumbers) {
-    this.ignoreLineNumbers = ignoreLineNumbers;
+  public MethodNodeAssert ignoreLineNumbers() {
+    this.ignoreLineNumbers = true;
 
     return this;
   }
@@ -225,7 +226,6 @@ public class MethodNodeAssert extends ClassEntityAssert<MethodNodeAssert, Method
   protected void hasEqualInvisibleParameterAnnotations(Object expected, LabelIndexLookup labelIndexLookup) {
     Objects.requireNonNull(labelIndexLookup);
 
-
     if (hasOption(StandardAssertOption.IGNORE_INVISIBLE_PARAMETER_ANNOTATIONS)) {
       return;
     }
@@ -256,18 +256,15 @@ public class MethodNodeAssert extends ClassEntityAssert<MethodNodeAssert, Method
       return;
     }
 
+    InsnListAssert insnListAssert = assertThatInstructions(getFromObjectElseNull(actual, MethodNode.class, (MethodNode methodNode) -> methodNode.instructions))
+            .useLabelNameLookup(labelIndexLookup)
+            .as(createCrumbDescription("Has equal instructions"));
+
     if (ignoreLineNumbers) {
-      assertThatInstructionsIgnoreLineNumbers(getFromObjectElseNull(actual, (MethodNode methodNode) -> methodNode.instructions))
-              .useLabelNameLookup(labelIndexLookup)
-              .as(createCrumbDescription("Has equal instructions ignoring line numbers"))
-              .isEqualTo(getFromObjectElseNull(expected, MethodNode.class, (MethodNode methodNode) -> methodNode.instructions));
+      insnListAssert.ignoreLineNumbers();
     }
-    else {
-      assertThatInstructions(getFromObjectElseNull(actual, MethodNode.class, (MethodNode methodNode) -> methodNode.instructions))
-              .useLabelNameLookup(labelIndexLookup)
-              .as(createCrumbDescription("Has equal instructions"))
-              .isEqualTo(getFromObjectElseNull(expected, MethodNode.class, (MethodNode methodNode) -> methodNode.instructions));
-    }
+
+    insnListAssert.isEqualTo(getFromObjectElseNull(expected, MethodNode.class, (MethodNode methodNode) -> methodNode.instructions));
   }
 
   /**
@@ -455,14 +452,25 @@ public class MethodNodeAssert extends ClassEntityAssert<MethodNodeAssert, Method
 
     labelIndexLookup.add(labelNameLookup());
 
-    ifNotNull(actual, nonNullActual -> labelIndexLookup.putAll(MethodNodeUtils.extractLabelIndices(nonNullActual)));
+    ifNotNull(actual, nonNullActual -> labelIndexLookup.putAll(extractLabelIndices(filterLineNumbers(nonNullActual))));
     ifNotNull(expected, nonNullExpected -> {
       if (nonNullExpected instanceof MethodNode) {
-        labelIndexLookup.putAll(MethodNodeUtils.extractLabelIndices((MethodNode) nonNullExpected));
+        labelIndexLookup.putAll(extractLabelIndices(filterLineNumbers((MethodNode) nonNullExpected)));
       }
     });
 
     return labelIndexLookup;
+  }
+
+  private MethodNode filterLineNumbers(MethodNode nonNullActual) {
+    if (ignoreLineNumbers) {
+      MethodNode copyOfMethodNode = MethodNodeUtils.copy(nonNullActual);
+      copyOfMethodNode.instructions = InsnListUtils.filterLineNumbers(nonNullActual);
+      return copyOfMethodNode;
+    }
+    else {
+      return nonNullActual;
+    }
   }
 
   // -- Inner Type -------------------------------------------------------------------------------------------------- //

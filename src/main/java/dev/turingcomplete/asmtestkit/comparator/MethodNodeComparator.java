@@ -33,7 +33,7 @@ import static org.assertj.core.util.Lists.newArrayList;
 /**
  * A comparison function to order {@link MethodNode}s.
  *
- * <p>Two {@code ParameterNode}s will be considered as equal if all the
+ * <p>Two {@code MethodNode}s will be considered as equal if all the
  * {@code public} {@link MethodNode} fields are equal. Otherwise, they will
  * be ordered by the comparison of the first non-matching field.
  */
@@ -46,10 +46,22 @@ public class MethodNodeComparator extends AbstractWithLabelNamesAsmComparator<Me
   public static final MethodNodeComparator INSTANCE = create();
 
   /**
+   * A reusable {@link MethodNodeComparator} instance, which excludes line numbers
+   * from the comparison.
+   */
+  public static final MethodNodeComparator INSTANCE_IGNORE_LINE_NUMBERS = create().ignoreLineNumbers();
+
+  /**
    * A reusable {@link Comparator} instance for an {@link Iterable} of
    * {@link MethodNode}s.
    */
   public static final Comparator<Iterable<? extends MethodNode>> ITERABLE_INSTANCE = WithLabelNamesIterableAsmComparator.create(INSTANCE);
+
+  /**
+   * A reusable {@link Comparator} instance for an {@link Iterable} of
+   * {@link MethodNode}s, which excludes line numbers from the comparison.
+   */
+  public static final Comparator<Iterable<? extends MethodNode>> ITERABLE_INSTANCE_IGNORE_LINE_NUMBERS = WithLabelNamesIterableAsmComparator.create(INSTANCE_IGNORE_LINE_NUMBERS);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
@@ -122,7 +134,7 @@ public class MethodNodeComparator extends AbstractWithLabelNamesAsmComparator<Me
   private Function<MethodNode, InsnList> gerInstructions() {
     return methodNode -> {
       if (ignoreLineNumbers) {
-        return InsnListUtils.filterLineNumbers2(methodNode);
+        return InsnListUtils.filterLineNumbers(methodNode);
       }
       else {
         return methodNode.instructions;

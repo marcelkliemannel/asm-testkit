@@ -23,7 +23,13 @@ public final class CrumbDescription extends Description {
 
   @Override
   public String value() {
-    return assertionInfo.description().value() + " > " + String.format(crumbDescription, crumbArgs);
+    String value = assertionInfo.description().value();
+
+    if (crumbDescription != null) {
+      value += " > " + String.format(crumbDescription, crumbArgs);
+    }
+
+    return value;
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

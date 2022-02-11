@@ -8,6 +8,7 @@ import org.objectweb.asm.TypePath;
 import org.objectweb.asm.TypeReference;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
+import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.InnerClassNode;
 import org.objectweb.asm.tree.LabelNode;
@@ -56,6 +57,7 @@ public final class DefaultAsmComparators implements AsmComparators {
     registerAsmComparator(AnnotationDefaultNode.class, () -> AnnotationDefaultValueComparator.INSTANCE, () -> AnnotationDefaultValueComparator.ITERABLE_INSTANCE);
     registerAsmComparator(MethodNode.class, () -> MethodNodeComparator.INSTANCE, () -> MethodNodeComparator.ITERABLE_INSTANCE);
     registerAsmComparator(InnerClassNode.class, () -> InnerClassNodeComparator.INSTANCE, () -> InnerClassNodeComparator.ITERABLE_INSTANCE);
+    registerAsmComparator(ClassNode.class, () -> ClassNodeComparator.INSTANCE, () -> ClassNodeComparator.ITERABLE_INSTANCE);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
