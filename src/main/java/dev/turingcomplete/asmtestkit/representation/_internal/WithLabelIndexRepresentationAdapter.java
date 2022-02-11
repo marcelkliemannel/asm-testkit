@@ -1,20 +1,20 @@
 package dev.turingcomplete.asmtestkit.representation._internal;
 
 import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
-import dev.turingcomplete.asmtestkit.representation.AbstractWithLabelNamesAsmRepresentation;
+import dev.turingcomplete.asmtestkit.representation.AbstractWithLabelIndexAsmRepresentation;
 
 import java.util.Objects;
 
-public class WithLabelNamesRepresentationAdapter<T> extends AbstractWithLabelNamesAsmRepresentation<T> {
+public class WithLabelIndexRepresentationAdapter<T> extends AbstractWithLabelIndexAsmRepresentation<T> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
-  private final AbstractWithLabelNamesAsmRepresentation<T> delegate;
+  private final AbstractWithLabelIndexAsmRepresentation<T> delegate;
   private final LabelIndexLookup                           labelIndexLookup;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  public WithLabelNamesRepresentationAdapter(AbstractWithLabelNamesAsmRepresentation<T> delegate, LabelIndexLookup labelIndexLookup) {
+  public WithLabelIndexRepresentationAdapter(AbstractWithLabelIndexAsmRepresentation<T> delegate, LabelIndexLookup labelIndexLookup) {
     super(Objects.requireNonNull(delegate).getObjectClass());
 
     this.delegate = delegate;

@@ -2,6 +2,7 @@ package dev.turingcomplete.asmtestkit.comparator;
 
 import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
 import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
+import dev.turingcomplete.asmtestkit.common.IgnoreLineNumbersCapable;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.LabelNode;
@@ -21,7 +22,10 @@ import static org.assertj.core.util.IterableUtil.sizeOf;
  * size and equal {@link AbstractInsnNode}s (using {@link InstructionComparator}
  * for comparison).
  */
-public class InsnListComparator extends AbstractWithLabelNamesAsmComparator<Iterable<? extends AbstractInsnNode>> {
+public class InsnListComparator
+        extends AbstractWithLabelIndexAsmComparator<Iterable<? extends AbstractInsnNode>>
+        implements IgnoreLineNumbersCapable<InsnListComparator> {
+
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
@@ -62,6 +66,7 @@ public class InsnListComparator extends AbstractWithLabelNamesAsmComparator<Iter
    *
    * @return {@code this} {@link InsnListComparator}; never null.
    */
+  @Override
   public InsnListComparator ignoreLineNumbers() {
     this.ignoreLineNumbers = true;
 
@@ -115,8 +120,8 @@ public class InsnListComparator extends AbstractWithLabelNamesAsmComparator<Iter
                                   AbstractInsnNode secondInstruction,
                                   LabelIndexLookup _labelIndexLookup) {
 
-    if (instructionComparator instanceof WithLabelNamesAsmComparator) {
-      return ((WithLabelNamesAsmComparator<AbstractInsnNode>) instructionComparator)
+    if (instructionComparator instanceof WithLabelIndexAsmComparator) {
+      return ((WithLabelIndexAsmComparator<AbstractInsnNode>) instructionComparator)
               .compare(firstInstruction, secondInstruction, _labelIndexLookup);
     }
     else {

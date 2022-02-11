@@ -26,7 +26,7 @@ public interface AsmComparators {
    * @return a {@link Comparator} to order {@link Iterable} of {@code T}; never
    * null.
    */
-  <T> Comparator<? extends Iterable<? extends T>> iterableComparator(Class<T> elementClass);
+  <T> Comparator<? super Iterable<? extends T>> iterableComparator(Class<T> elementClass);
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //

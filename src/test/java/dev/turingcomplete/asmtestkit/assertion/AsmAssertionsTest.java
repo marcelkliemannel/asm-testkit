@@ -236,7 +236,7 @@ class AsmAssertionsTest {
 
     // Negative
     ThrowableAssert.ThrowingCallable throwingCallable = () -> assertThatLabels(List.of(firstLabelNode, secondLabelNode))
-            .useLabelNameLookup(DefaultLabelIndexLookup.create(Map.of(firstLabel, 1, secondLabel, 2, thirdLabel, 3)))
+            .useLabelIndexLookup(DefaultLabelIndexLookup.create(Map.of(firstLabel, 1, secondLabel, 2, thirdLabel, 3)))
             .containsExactlyInAnyOrderElementsOf(List.of(thirdLabelNode, fourthLabelNode));
     assertThatThrownBy(throwingCallable)
             .isInstanceOf(AssertionError.class)
@@ -313,7 +313,7 @@ class AsmAssertionsTest {
 
     // Negative
     ThrowableAssert.ThrowingCallable throwingCallable = () -> assertThatLocalVariableAnnotations(List.of(firstLocalVariableAnnotationNode, secondLocalVariableAnnotationNode))
-            .useLabelNameLookup(DefaultLabelIndexLookup.create(extractLabelIndices(methodNode)))
+            .useLabelIndexLookup(DefaultLabelIndexLookup.create(extractLabelIndices(methodNode)))
             .containsExactlyInAnyOrderElementsOf(List.of(secondLocalVariableAnnotationNode, thirdLocalVariableAnnotationNode));
     assertThatThrownBy(throwingCallable)
             .isInstanceOf(AssertionError.class)
@@ -358,7 +358,7 @@ class AsmAssertionsTest {
 
     // Negative
     ThrowableAssert.ThrowingCallable throwingCallable = () -> assertThatLocalVariables(List.of(firstVariable, secondVariable))
-            .useLabelNameLookup(DefaultLabelIndexLookup.create(extractLabelIndices(methodNode)))
+            .useLabelIndexLookup(DefaultLabelIndexLookup.create(extractLabelIndices(methodNode)))
             .containsExactlyInAnyOrderElementsOf(List.of(secondVariable, thirdVariable));
     assertThatThrownBy(throwingCallable)
             .isInstanceOf(AssertionError.class)
@@ -416,12 +416,12 @@ class AsmAssertionsTest {
 
     // Positive
     assertThatTryCatchBlocks(List.of(firstATryCatchBlock, secondATryCatchBlock, thirdATryCatchBlock))
-            .useLabelNameLookup(labelIndexLookup)
+            .useLabelIndexLookup(labelIndexLookup)
             .containsExactlyInAnyOrderElementsOf(List.of(firstBTryCatchBlock, secondBTryCatchBlock, thirdBTryCatchBlock));
 
     // Negative
     ThrowableAssert.ThrowingCallable throwingCallable = () -> assertThatTryCatchBlocks(List.of(firstATryCatchBlock, secondATryCatchBlock))
-            .useLabelNameLookup(labelIndexLookup)
+            .useLabelIndexLookup(labelIndexLookup)
             .containsExactlyInAnyOrderElementsOf(List.of(secondBTryCatchBlock, thirdBTryCatchBlock));
     assertThatThrownBy(throwingCallable)
             .isInstanceOf(AssertionError.class)

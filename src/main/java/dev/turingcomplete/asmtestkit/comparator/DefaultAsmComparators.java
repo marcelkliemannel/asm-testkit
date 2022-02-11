@@ -60,6 +60,9 @@ public final class DefaultAsmComparators implements AsmComparators {
     registerAsmComparator(ClassNode.class, () -> ClassNodeComparator.INSTANCE, () -> ClassNodeComparator.ITERABLE_INSTANCE);
   }
 
+  private DefaultAsmComparators() {
+  }
+
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   /**
@@ -83,7 +86,7 @@ public final class DefaultAsmComparators implements AsmComparators {
   }
 
   @Override
-  public <T> Comparator<? extends Iterable<T>> iterableComparator(Class<T> elementClass) {
+  public <T> Comparator<? super Iterable<? extends T>> iterableComparator(Class<T> elementClass) {
     Objects.requireNonNull(elementClass);
 
     if (!ASM_COMPARATORS.containsKey(elementClass)) {
@@ -91,7 +94,7 @@ public final class DefaultAsmComparators implements AsmComparators {
     }
 
     //noinspection unchecked
-    return (Comparator<? extends Iterable<T>>) ASM_COMPARATORS.get(elementClass).iterableComparator();
+    return (Comparator<? super Iterable<? extends T>>) ASM_COMPARATORS.get(elementClass).iterableComparator();
   }
 
   public static <T> void registerAsmComparator(Class<? extends T> elementClass,

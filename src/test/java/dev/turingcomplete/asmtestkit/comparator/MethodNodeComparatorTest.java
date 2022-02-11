@@ -1,7 +1,6 @@
 package dev.turingcomplete.asmtestkit.comparator;
 
 import dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationA;
-import dev.turingcomplete.asmtestkit.comparator.MethodNodeComparator;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.tree.LineNumberNode;
@@ -11,6 +10,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import static dev.turingcomplete.asmtestkit.comparator.MethodNodeComparator.INSTANCE;
+import static dev.turingcomplete.asmtestkit.comparator.MethodNodeComparator.INSTANCE_IGNORE_LINE_NUMBERS;
 import static dev.turingcomplete.asmtestkit.compile.CompilationEnvironment.create;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -55,28 +55,23 @@ class MethodNodeComparatorTest {
             .methods.get(1);
 
     assertThat(INSTANCE.compare(firstMethod, secondMethod))
-              .isEqualTo(0);
+            .isEqualTo(0);
   }
 
   @Test
-  void testCompareEqualToIgnoreLineNumbers() throws IOException {
+  void testCompareEqualTo_ignoreLineNumbers() throws IOException {
     @Language("Java")
-    String myClass = "import dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA;import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;import dev.turingcomplete.asmtestkit.__helper.*;" +
+    String myClassWithoutLineNumbers = "import dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA;import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;import dev.turingcomplete.asmtestkit.__helper.*;" +
 
-                     "class MyClass {" +
-                     "  Integer myMethod() {" +
-                     "    try {" +
-                     "      @VisibleTypeParameterAnnotationA Integer first = 6;" +
-                     "      return first;" +
-                     "    }" +
-                     "    catch (@InvisibleTypeParameterAnnotationA IllegalArgumentException e) {" +
-                     "      throw new IllegalStateException(e);" +
-                     "    }" +
-                     "  }" +
-                     "}";
+                                       "class MyClass {" +
+                                       "  void myMethod() {" +
+                                       "    System.out.println(1);" +
+                                       "    System.out.println(2);" +
+                                       "  }" +
+                                       "}";
 
     MethodNode withoutLineNumbers = create()
-            .addJavaInputSource(myClass)
+            .addJavaInputSource(myClassWithoutLineNumbers)
             .compile()
             .readClassNode("MyClass").methods.get(1);
 
@@ -84,29 +79,25 @@ class MethodNodeComparatorTest {
             .isEqualTo(1);
 
     @Language("Java")
-    String myClassCopy = "import dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA;import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;import dev.turingcomplete.asmtestkit.__helper.*;" +
+    String myClassWithLineNumbers = "import dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA;import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;import dev.turingcomplete.asmtestkit.__helper.*;" +
 
-                         "class MyClass {\n" +
-                         "  Integer myMethod() {\n" +
-                         "    try {\n" +
-                         "      @VisibleTypeParameterAnnotationA Integer first = 6;\n" +
-                         "      return first;\n" +
-                         "    }\n" +
-                         "    catch (@InvisibleTypeParameterAnnotationA IllegalArgumentException e) {\n" +
-                         "      throw new IllegalStateException(e);\n" +
-                         "    }\n" +
-                         "  }\n" +
-                         "}\n";
+                                    "class MyClass {\n" +
+                                    "  void myMethod() {\n" +
+                                    "    System\n.out\n.println(1)\n;\n" +
+                                    "    System\n.out\n.println(2)\n;\n" +
+                                    "  }\n" +
+                                    "}\n";
 
     MethodNode withLineNumbers = create()
-            .addJavaInputSource(myClassCopy)
+            .addJavaInputSource(myClassWithLineNumbers)
             .compile()
             .readClassNode("MyClass").methods.get(1);
-    assertThat(Arrays.stream(withLineNumbers.instructions.toArray()).filter(LineNumberNode.class::isInstance).count())
-              .isEqualTo(4);
 
-    assertThat(MethodNodeComparator.create().ignoreLineNumbers().compare(withoutLineNumbers, withLineNumbers))
-              .isEqualTo(0);
+    assertThat(Arrays.stream(withLineNumbers.instructions.toArray()).filter(LineNumberNode.class::isInstance).count())
+            .isEqualTo(5);
+
+    assertThat(INSTANCE_IGNORE_LINE_NUMBERS.compare(withoutLineNumbers, withLineNumbers))
+            .isEqualTo(0);
   }
 
   @Test
@@ -160,7 +151,7 @@ class MethodNodeComparatorTest {
             .methods.get(1);
 
     assertThat(INSTANCE.compare(firstMethod, secondMethod))
-              .isNotEqualTo(0);
+            .isNotEqualTo(0);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

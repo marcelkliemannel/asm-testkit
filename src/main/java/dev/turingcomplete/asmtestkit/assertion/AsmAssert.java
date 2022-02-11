@@ -3,8 +3,8 @@ package dev.turingcomplete.asmtestkit.assertion;
 import dev.turingcomplete.asmtestkit.assertion._internal.AsmWritableAssertionInfo;
 import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.option.AssertOptionCapable;
-import dev.turingcomplete.asmtestkit.comparator.WithLabelNamesAsmComparator;
-import dev.turingcomplete.asmtestkit.comparator._internal.WithLabelNamesAsmComparatorAdapter;
+import dev.turingcomplete.asmtestkit.comparator.WithLabelIndexAsmComparator;
+import dev.turingcomplete.asmtestkit.comparator._internal.WithLabelIndexAsmComparatorAdapter;
 import dev.turingcomplete.asmtestkit.representation.AsmRepresentations;
 import dev.turingcomplete.asmtestkit.representation.DefaultAsmRepresentations;
 import dev.turingcomplete.asmtestkit.representation._internal.CrumbDescription;
@@ -102,7 +102,7 @@ public abstract class AsmAssert<S extends AbstractAssert<S, A>, A>
    *
    * @param labelIndexLookup a {@link LabelIndexLookup} to set; never null.
    * @return {@code this} {@link S}; never null.
-   * @see #labelNameLookup()
+   * @see #labelIndexLookup()
    */
   public S useLabelIndexLookup(LabelIndexLookup labelIndexLookup) {
     getWritableAssertionInfo().useLabelIndexLookup(Objects.requireNonNull(labelIndexLookup));
@@ -112,13 +112,13 @@ public abstract class AsmAssert<S extends AbstractAssert<S, A>, A>
   }
 
   /**
-   * Gets the current {@link LabelIndexLookup} to look up known label names.
+   * Gets the current {@link LabelIndexLookup} to look up known label indices.
    *
    * @return the current {@link LabelIndexLookup}; never null.
-   * @see #labelNameLookup()
+   * @see #labelIndexLookup()
    */
-  public LabelIndexLookup labelNameLookup() {
-    return getWritableAssertionInfo().labelNameLookup();
+  public LabelIndexLookup labelIndexLookup() {
+    return getWritableAssertionInfo().labelIndexLookup();
   }
 
   @Override
@@ -154,8 +154,8 @@ public abstract class AsmAssert<S extends AbstractAssert<S, A>, A>
   @Override
   public S usingComparator(Comparator<? super A> customComparator, String customComparatorDescription) {
     Comparator<? super A> _customComparator = customComparator;
-    if (customComparator instanceof WithLabelNamesAsmComparator) {
-      _customComparator = WithLabelNamesAsmComparatorAdapter.wrapIfNeeded(customComparator, getWritableAssertionInfo().labelNameLookup());
+    if (customComparator instanceof WithLabelIndexAsmComparator) {
+      _customComparator = WithLabelIndexAsmComparatorAdapter.wrapIfNeeded(customComparator, getWritableAssertionInfo().labelIndexLookup());
     }
 
     return super.usingComparator(_customComparator, customComparatorDescription);

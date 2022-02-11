@@ -21,7 +21,7 @@ import static dev.turingcomplete.asmtestkit.asmutils.TypeUtils.nameToTypeElseNul
  *
  * <p>The simplified representation omits the type parameter annotations.
  */
-public class TryCatchBlockNodeRepresentation extends AbstractWithLabelNamesAsmRepresentation<TryCatchBlockNode> {
+public class TryCatchBlockNodeRepresentation extends AbstractWithLabelIndexAsmRepresentation<TryCatchBlockNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**

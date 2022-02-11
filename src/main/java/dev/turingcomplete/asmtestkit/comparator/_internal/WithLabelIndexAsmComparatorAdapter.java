@@ -1,15 +1,15 @@
 package dev.turingcomplete.asmtestkit.comparator._internal;
 
 import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
-import dev.turingcomplete.asmtestkit.comparator.AbstractWithLabelNamesAsmComparator;
+import dev.turingcomplete.asmtestkit.comparator.AbstractWithLabelIndexAsmComparator;
 import dev.turingcomplete.asmtestkit.comparator.AsmComparator;
-import dev.turingcomplete.asmtestkit.comparator.WithLabelNamesAsmComparator;
+import dev.turingcomplete.asmtestkit.comparator.WithLabelIndexAsmComparator;
 
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.function.Function;
 
-public class WithLabelNamesAsmComparatorAdapter<T> extends AbstractWithLabelNamesAsmComparator<T> {
+public class WithLabelIndexAsmComparatorAdapter<T> extends AbstractWithLabelIndexAsmComparator<T> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
@@ -18,7 +18,7 @@ public class WithLabelNamesAsmComparatorAdapter<T> extends AbstractWithLabelName
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  protected WithLabelNamesAsmComparatorAdapter(Comparator<? super T> delegate, LabelIndexLookup labelIndexLookup) {
+  protected WithLabelIndexAsmComparatorAdapter(Comparator<? super T> delegate, LabelIndexLookup labelIndexLookup) {
     super(delegate.getClass(), getComparatorElementClass(delegate));
 
     this.delegate = Objects.requireNonNull(delegate);
@@ -28,15 +28,15 @@ public class WithLabelNamesAsmComparatorAdapter<T> extends AbstractWithLabelName
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   public static <U> Comparator<U> wrapIfNeeded(Comparator<U> customComparator, LabelIndexLookup labelIndexLookup) {
-    if (customComparator instanceof WithLabelNamesAsmComparator) {
-      return new WithLabelNamesAsmComparatorAdapter<>(customComparator, labelIndexLookup);
+    if (customComparator instanceof WithLabelIndexAsmComparator) {
+      return new WithLabelIndexAsmComparatorAdapter<>(customComparator, labelIndexLookup);
     }
 
     return customComparator;
   }
 
-  public static <U> WithLabelNamesAsmComparator<U> wrap(Comparator<U> customComparator, LabelIndexLookup labelIndexLookup) {
-    return new WithLabelNamesAsmComparatorAdapter<>(customComparator, labelIndexLookup);
+  public static <U> WithLabelIndexAsmComparator<U> wrap(Comparator<U> customComparator, LabelIndexLookup labelIndexLookup) {
+    return new WithLabelIndexAsmComparatorAdapter<>(customComparator, labelIndexLookup);
   }
 
   @Override
@@ -44,14 +44,14 @@ public class WithLabelNamesAsmComparatorAdapter<T> extends AbstractWithLabelName
     Objects.requireNonNull(keyExtractor);
     Objects.requireNonNull(keyComparator);
 
-    return thenComparing(WithLabelNamesAsmComparator.comparing(keyExtractor, keyComparator, labelIndexLookup));
+    return thenComparing(WithLabelIndexAsmComparator.comparing(keyExtractor, keyComparator, labelIndexLookup));
   }
 
   @Override
   public Comparator<T> thenComparing(Comparator<? super T> other) {
     Objects.requireNonNull(other);
 
-    return new ThenComparingWithLabelNamesAsmComparator<>(this, other, labelIndexLookup);
+    return new ThenComparingWithLabelIndexAsmComparator<>(this, other, labelIndexLookup);
   }
 
   @Override
@@ -61,9 +61,9 @@ public class WithLabelNamesAsmComparatorAdapter<T> extends AbstractWithLabelName
 
   @Override
   protected int doCompare(T first, T second, LabelIndexLookup labelIndexLookup) {
-    if (delegate instanceof WithLabelNamesAsmComparator) {
+    if (delegate instanceof WithLabelIndexAsmComparator) {
       //noinspection unchecked
-      return ((WithLabelNamesAsmComparator<T>) delegate).compare(first, second, labelIndexLookup);
+      return ((WithLabelIndexAsmComparator<T>) delegate).compare(first, second, labelIndexLookup);
     }
 
     return delegate.compare(first, second);
@@ -86,13 +86,13 @@ public class WithLabelNamesAsmComparatorAdapter<T> extends AbstractWithLabelName
 
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 
-  private static class ThenComparingWithLabelNamesAsmComparator<T> extends WithLabelNamesAsmComparatorAdapter<T> {
+  private static class ThenComparingWithLabelIndexAsmComparator<T> extends WithLabelIndexAsmComparatorAdapter<T> {
 
-    private final WithLabelNamesAsmComparator<T> parent;
-    private final Comparator<? super T> other;
-    private final LabelIndexLookup      labelIndexLookup;
+    private final WithLabelIndexAsmComparator<T> parent;
+    private final Comparator<? super T>          other;
+    private final LabelIndexLookup               labelIndexLookup;
 
-    ThenComparingWithLabelNamesAsmComparator(WithLabelNamesAsmComparator<T> parent,
+    ThenComparingWithLabelIndexAsmComparator(WithLabelIndexAsmComparator<T> parent,
                                              Comparator<? super T> other,
                                              LabelIndexLookup labelIndexLookup) {
       super(other, labelIndexLookup);
@@ -110,7 +110,17 @@ public class WithLabelNamesAsmComparatorAdapter<T> extends AbstractWithLabelName
     @Override
     public int doCompare(T first, T second, LabelIndexLookup labelIndexLookup) {
       int result = parent.compare(first, second, labelIndexLookup);
-      return result != 0 ? result : other.compare(first, second);
+      if (result != 0) {
+        return result;
+      }
+
+      if (other instanceof WithLabelIndexAsmComparator) {
+        //noinspection unchecked
+        return ((WithLabelIndexAsmComparator<? super T>) other).compare(first, second, labelIndexLookup);
+      }
+      else  {
+        return other.compare(first, second);
+      }
     }
 
     @Override

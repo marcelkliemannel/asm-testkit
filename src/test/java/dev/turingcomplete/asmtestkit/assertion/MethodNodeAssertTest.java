@@ -174,8 +174,13 @@ class MethodNodeAssertTest {
                       .isEqualTo(first2MethodNode))
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Method: first()Ljava.lang.String; > Has equal exceptions] \n" +
-                          "expected: []\n" +
-                          " but was: [\"java/io/IOException\"]");
+                          "Expecting actual:\n" +
+                          "  [java.io.IOException]\n" +
+                          "to contain exactly in any order:\n" +
+                          "  []\n" +
+                          "but the following elements were unexpected:\n" +
+                          "  [java.io.IOException]\n" +
+                          "when comparing values using TypeComparator");
   }
 
   @Test

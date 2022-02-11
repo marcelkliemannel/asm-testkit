@@ -12,7 +12,7 @@ import org.objectweb.asm.tree.LocalVariableNode;
  * <p>Example output:
  * {@code @TypeParameterAnnotation // reference: local_variable=; path: null // range: L0-L1-1}.
  */
-public class LocalVariableNodeRepresentation extends AbstractWithLabelNamesAsmRepresentation<LocalVariableNode> {
+public class LocalVariableNodeRepresentation extends AbstractWithLabelIndexAsmRepresentation<LocalVariableNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**

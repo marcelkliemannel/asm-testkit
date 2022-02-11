@@ -3,7 +3,7 @@ package dev.turingcomplete.asmtestkit.assertion;
 import dev.turingcomplete.asmtestkit.assertion._internal.AsmWritableAssertionInfo;
 import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.option.AssertOptionCapable;
-import dev.turingcomplete.asmtestkit.comparator._internal.WithLabelNamesAsmComparatorAdapter;
+import dev.turingcomplete.asmtestkit.comparator._internal.WithLabelIndexAsmComparatorAdapter;
 import dev.turingcomplete.asmtestkit.representation.AsmRepresentation;
 import dev.turingcomplete.asmtestkit.representation._internal.CrumbDescription;
 import org.assertj.core.api.AbstractIterableAssert;
@@ -66,13 +66,13 @@ public class AsmIterableAssert<S extends AsmIterableAssert<S, E, A>, E, A extend
   }
 
   /**
-   * Sets the given {@link LabelIndexLookup} to look up known label names.
+   * Sets the given {@link LabelIndexLookup} to look up known label indices.
    *
    * @param labelIndexLookup a {@link LabelIndexLookup} to set; never null.
    * @return {@code this} {@link S}; never null.
-   * @see #labelNameLookup()
+   * @see #labelIndexLookup()
    */
-  public S useLabelNameLookup(LabelIndexLookup labelIndexLookup) {
+  public S useLabelIndexLookup(LabelIndexLookup labelIndexLookup) {
     Objects.requireNonNull(labelIndexLookup);
     getWritableAssertionInfo().useLabelIndexLookup(labelIndexLookup);
 
@@ -81,13 +81,13 @@ public class AsmIterableAssert<S extends AsmIterableAssert<S, E, A>, E, A extend
   }
 
   /**
-   * Gets the current {@link LabelIndexLookup} to look up known label names.
+   * Gets the current {@link LabelIndexLookup} to look up known label indices.
    *
    * @return the current {@link LabelIndexLookup}; never null.
-   * @see #labelNameLookup()
+   * @see #useLabelIndexLookup(LabelIndexLookup)
    */
-  public LabelIndexLookup labelNameLookup() {
-    return getWritableAssertionInfo().labelNameLookup();
+  public LabelIndexLookup labelIndexLookup() {
+    return getWritableAssertionInfo().labelIndexLookup();
   }
 
   @Override
@@ -96,7 +96,7 @@ public class AsmIterableAssert<S extends AsmIterableAssert<S, E, A>, E, A extend
   }
 
   protected A toAssert(E value) {
-    return elementAssertCreator.apply(value).addOptions(options);
+    return elementAssertCreator.apply(value).addOptions(options).useLabelIndexLookup(labelIndexLookup());
   }
 
   @Override
@@ -112,12 +112,12 @@ public class AsmIterableAssert<S extends AsmIterableAssert<S, E, A>, E, A extend
 
   @Override
   public S usingComparator(Comparator<? super Iterable<? extends E>> customComparator, String customComparatorDescription) {
-    return super.usingComparator(WithLabelNamesAsmComparatorAdapter.wrapIfNeeded(customComparator, getWritableAssertionInfo().labelNameLookup()), customComparatorDescription);
+    return super.usingComparator(WithLabelIndexAsmComparatorAdapter.wrapIfNeeded(customComparator, getWritableAssertionInfo().labelIndexLookup()), customComparatorDescription);
   }
 
   @Override
   public S usingElementComparator(Comparator<? super E> customElementComparator) {
-    return super.usingElementComparator(WithLabelNamesAsmComparatorAdapter.wrapIfNeeded(customElementComparator, getWritableAssertionInfo().labelNameLookup()));
+    return super.usingElementComparator(WithLabelIndexAsmComparatorAdapter.wrapIfNeeded(customElementComparator, getWritableAssertionInfo().labelIndexLookup()));
   }
 
   /**

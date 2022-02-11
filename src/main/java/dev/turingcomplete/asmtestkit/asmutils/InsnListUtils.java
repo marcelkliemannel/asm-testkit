@@ -95,6 +95,27 @@ public final class InsnListUtils {
     return result;
   }
 
+  /**
+   * Creates a copy of the given {@link MethodNode} and filters all
+   * {@link LineNumberNode}s (and their related {@link LineNumberNode}s).
+   *
+   * @param methodNode a {@link MethodNode}; never null.
+   * @return a new {@link MethodNode} with filtered line numbers; never null.
+   * @see InsnListUtils#filterLineNumbers(MethodNode)
+   */
+  public static MethodNode copyWithFilteredLineNumbers(MethodNode methodNode) {
+    Objects.requireNonNull(methodNode);
+
+    var cleanedMethodNode = new MethodNode();
+
+    // Using a copy here to not modify the input method
+    MethodNode methodNodeCopy = MethodNodeUtils.copy(methodNode);
+    methodNodeCopy.instructions = filterLineNumbers(methodNodeCopy.instructions, collectRequiredLabels(methodNode));
+    methodNodeCopy.accept(cleanedMethodNode);
+
+    return cleanedMethodNode;
+  }
+
   // -- Private Methods --------------------------------------------------------------------------------------------- //
 
   private static InsnList filterLineNumbers(Iterable<? extends AbstractInsnNode> instructions, Set<Label> requiredLabels) {

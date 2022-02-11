@@ -16,7 +16,7 @@ import org.objectweb.asm.util.TraceAnnotationVisitor;
  * @param <A> an {@link AnnotationNode} or a subtype of the actual object.
  */
 public abstract class AbstractAnnotationNodeRepresentation<S, A extends AnnotationNode>
-        extends AbstractWithLabelNamesAsmRepresentation<A> {
+        extends AbstractWithLabelIndexAsmRepresentation<A> {
 
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 

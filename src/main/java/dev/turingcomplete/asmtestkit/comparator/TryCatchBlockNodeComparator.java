@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.comparator;
 
 import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
-import dev.turingcomplete.asmtestkit.comparator._internal.WithLabelNamesIterableAsmComparator;
+import dev.turingcomplete.asmtestkit.comparator._internal.WithLabelIndexIterableAsmComparator;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.TryCatchBlockNode;
@@ -18,7 +18,7 @@ import static dev.turingcomplete.asmtestkit.asmutils.TypeUtils.nameToTypeElseNul
  * {@code public} {@link TryCatchBlockNode} fields are equal. Otherwise, they
  * will be ordered by the comparison of the first non-matching field.
  */
-public class TryCatchBlockNodeComparator extends AbstractWithLabelNamesAsmComparator<TryCatchBlockNode> {
+public class TryCatchBlockNodeComparator extends AbstractWithLabelIndexAsmComparator<TryCatchBlockNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
@@ -30,7 +30,7 @@ public class TryCatchBlockNodeComparator extends AbstractWithLabelNamesAsmCompar
    * A reusable {@link Comparator} instance for an {@link Iterable} of
    * {@link TryCatchBlockNode}s.
    */
-  public static final Comparator<Iterable<? extends TryCatchBlockNode>> ITERABLE_INSTANCE = WithLabelNamesIterableAsmComparator.create(INSTANCE);
+  public static final Comparator<Iterable<? extends TryCatchBlockNode>> ITERABLE_INSTANCE = WithLabelIndexIterableAsmComparator.create(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
@@ -52,7 +52,7 @@ public class TryCatchBlockNodeComparator extends AbstractWithLabelNamesAsmCompar
 
   @Override
   protected int doCompare(TryCatchBlockNode first, TryCatchBlockNode second, LabelIndexLookup labelIndexLookup) {
-    return WithLabelNamesAsmComparator.comparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.start, asmComparators.elementComparator(LabelNode.class), labelIndexLookup)
+    return WithLabelIndexAsmComparator.comparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.start, asmComparators.elementComparator(LabelNode.class), labelIndexLookup)
                                       .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.end, asmComparators.elementComparator(LabelNode.class))
                                       .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> tryCatchBlockNode.handler, asmComparators.elementComparator(LabelNode.class))
                                       .thenComparing((TryCatchBlockNode tryCatchBlockNode) -> nameToTypeElseNull(tryCatchBlockNode.type), asmComparators.elementComparator(Type.class))

@@ -6,20 +6,20 @@ import org.objectweb.asm.Label;
 import java.util.Objects;
 
 /**
- * A skeletal implementation of {@link WithLabelNamesAsmRepresentation}, which
+ * A skeletal implementation of {@link WithLabelIndexAsmRepresentation}, which
  * can be used as a base class to create a representation of a specific ASM
  * {@link T} object, respecting the names of {@link Label}s.
  *
  * @param <T> the type of the ASM object that gets represented.
  */
-public abstract class AbstractWithLabelNamesAsmRepresentation<T>
-        extends AbstractAsmRepresentation<T> implements WithLabelNamesAsmRepresentation {
+public abstract class AbstractWithLabelIndexAsmRepresentation<T>
+        extends AbstractAsmRepresentation<T> implements WithLabelIndexAsmRepresentation {
 
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  protected AbstractWithLabelNamesAsmRepresentation(Class<T> objectClass) {
+  protected AbstractWithLabelIndexAsmRepresentation(Class<T> objectClass) {
     super(objectClass);
   }
 

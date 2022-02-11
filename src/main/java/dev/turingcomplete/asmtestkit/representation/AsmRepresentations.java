@@ -6,7 +6,7 @@ import org.assertj.core.presentation.Representation;
  * An AssertJ {@link Representation} which can handle the representations of
  * various ASM objects.
  */
-public interface AsmRepresentations extends Representation, WithLabelNamesAsmRepresentation {
+public interface AsmRepresentations extends Representation, WithLabelIndexAsmRepresentation {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //

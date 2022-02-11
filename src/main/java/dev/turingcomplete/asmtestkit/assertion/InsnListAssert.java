@@ -1,5 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
+import dev.turingcomplete.asmtestkit.common.IgnoreLineNumbersCapable;
 import dev.turingcomplete.asmtestkit.comparator.InsnListComparator;
 import dev.turingcomplete.asmtestkit.comparator.MethodNodeComparator;
 import dev.turingcomplete.asmtestkit.representation.InsnListRepresentation;
@@ -25,7 +26,10 @@ import java.util.Comparator;
  * {@link InsnListComparator} call {@link #withRepresentation(Representation)}
  * or {@link #usingComparator(Comparator)}.
  */
-public class InsnListAssert extends AsmIterableAssert<InsnListAssert, AbstractInsnNode, InstructionAssert> {
+public class InsnListAssert
+        extends AsmIterableAssert<InsnListAssert, AbstractInsnNode, InstructionAssert>
+        implements IgnoreLineNumbersCapable<InsnListAssert> {
+
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
@@ -54,6 +58,7 @@ public class InsnListAssert extends AsmIterableAssert<InsnListAssert, AbstractIn
    *
    * @return {@code this} {@link InsnListAssert}; never null.
    */
+  @Override
   public InsnListAssert ignoreLineNumbers() {
     setComparators(true);
 

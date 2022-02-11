@@ -17,7 +17,7 @@ import java.util.Comparator;
  * <p>Use {@link InsnListComparator} for a {@link Comparator} of an
  * {@link Iterable} of {@link AbstractInsnNode}s.
  */
-public class InstructionComparator extends AbstractWithLabelNamesAsmComparator<AbstractInsnNode> {
+public class InstructionComparator extends AbstractWithLabelIndexAsmComparator<AbstractInsnNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**

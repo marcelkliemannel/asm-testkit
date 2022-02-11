@@ -1,8 +1,9 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.asmutils.InsnListUtils;
-import dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils;
+import dev.turingcomplete.asmtestkit.asmutils.TypeUtils;
 import dev.turingcomplete.asmtestkit.assertion.option.StandardAssertOption;
+import dev.turingcomplete.asmtestkit.common.IgnoreLineNumbersCapable;
 import dev.turingcomplete.asmtestkit.comparator.MethodNodeComparator;
 import dev.turingcomplete.asmtestkit.node.AccessNode;
 import dev.turingcomplete.asmtestkit.node.AnnotationDefaultNode;
@@ -19,7 +20,6 @@ import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
 
 import static dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils.extractLabelIndices;
@@ -30,6 +30,7 @@ import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLo
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatLocalVariables;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatParameters;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatTryCatchBlocks;
+import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThatTypes;
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getFromObjectElseNull;
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getIfIndexExists;
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getListFromObjectElseNull;
@@ -48,7 +49,10 @@ import static org.assertj.core.util.Lists.newArrayList;
  * {@link MethodNodeComparator} call {@link #withRepresentation(Representation)}
  * or {@link #usingComparator(Comparator)}.
  */
-public class MethodNodeAssert extends ClassEntityAssert<MethodNodeAssert, MethodNode> {
+public class MethodNodeAssert
+        extends ClassEntityAssert<MethodNodeAssert, MethodNode>
+        implements IgnoreLineNumbersCapable<MethodNodeAssert> {
+
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
@@ -67,6 +71,7 @@ public class MethodNodeAssert extends ClassEntityAssert<MethodNodeAssert, Method
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
+  @Override
   public MethodNodeAssert ignoreLineNumbers() {
     this.ignoreLineNumbers = true;
 
@@ -77,23 +82,31 @@ public class MethodNodeAssert extends ClassEntityAssert<MethodNodeAssert, Method
   public MethodNodeAssert isEqualTo(Object expected) {
     super.isEqualTo(expected);
 
-    LabelIndexLookup labelIndexLookup = buildLabelIndexLookup(expected);
+    // Filter line numbers if needed
+    MethodNode actualPrepared = actual != null ? filterLineNumbers(actual) : null;
+    MethodNode expectedPrepared = expected instanceof MethodNode ? filterLineNumbers((MethodNode) expected) : null;
 
-    hasEqualDescriptor(expected, labelIndexLookup);
-    hasEqualExceptions(expected);
-    hasEqualParameters(expected, labelIndexLookup);
-    hasEqualVisibleAnnotableParameterCount(expected);
-    hasEqualVisibleParameterAnnotations(expected, labelIndexLookup);
-    hasEqualInvisibleAnnotableParameterCount(expected);
-    hasEqualInvisibleParameterAnnotations(expected, labelIndexLookup);
-    hasEqualInstructions(expected, labelIndexLookup);
-    hasEqualTryCatchBlocks(expected, labelIndexLookup);
-    hasEqualMaxLocals(expected);
-    hasEqualMaxStack(expected);
-    hasEqualLocalVariables(expected, labelIndexLookup);
-    hasEqualVisibleLocalVariableAnnotations(expected, labelIndexLookup);
-    hasEqualInvisibleLocalVariableAnnotations(expected, labelIndexLookup);
-    hasEqualAnnotationDefault(expected, labelIndexLookup);
+    // Collect label indices
+    // Because of the line number filtering, we may have to overwrite existing 
+    // indices here as they may have changed.
+    ifNotNull(actualPrepared, nonNullActual -> labelIndexLookup().putAll(extractLabelIndices(nonNullActual)));
+    ifNotNull(expectedPrepared, nonNullExpected -> labelIndexLookup().putAll(extractLabelIndices(nonNullExpected)));
+
+    hasEqualDescriptor(actualPrepared, expectedPrepared);
+    hasEqualExceptions(actualPrepared, expectedPrepared);
+    hasEqualParameters(actualPrepared, expectedPrepared);
+    hasEqualVisibleAnnotableParameterCount(actualPrepared, expectedPrepared);
+    hasEqualVisibleParameterAnnotations(actualPrepared, expectedPrepared);
+    hasEqualInvisibleAnnotableParameterCount(actualPrepared, expectedPrepared);
+    hasEqualInvisibleParameterAnnotations(actualPrepared, expectedPrepared);
+    hasEqualInstructions(actualPrepared, expectedPrepared);
+    hasEqualTryCatchBlocks(actualPrepared, expectedPrepared);
+    hasEqualMaxLocals(actualPrepared, expectedPrepared);
+    hasEqualMaxStack(actualPrepared, expectedPrepared);
+    hasEqualLocalVariables(actualPrepared, expectedPrepared);
+    hasEqualVisibleLocalVariableAnnotations(actualPrepared, expectedPrepared);
+    hasEqualInvisibleLocalVariableAnnotations(actualPrepared, expectedPrepared);
+    hasEqualAnnotationDefault(actualPrepared, expectedPrepared);
 
     return this;
   }
@@ -101,98 +114,99 @@ public class MethodNodeAssert extends ClassEntityAssert<MethodNodeAssert, Method
   /**
    * Checks whether the {@link MethodNode#desc}s are equal.
    *
-   * @param expected an {@link Object} expected to be a {@link MethodNode}; may
-   *                 be null.
-   * @param labelIndexLookup a {@link LabelIndexLookup}; never null.
+   * @param actualPrepared   the actual {@link MethodNode} potentially filtered
+   *                         line numbers; may be null.
+   * @param expectedPrepared the expected {@link MethodNode} potentially filtered
+   *                         line numbers; may be null.
    */
-  protected void hasEqualDescriptor(Object expected, LabelIndexLookup labelIndexLookup) {
-    Objects.requireNonNull(labelIndexLookup);
+  protected void hasEqualDescriptor(MethodNode actualPrepared, MethodNode expectedPrepared) {
 
     if (hasOption(StandardAssertOption.IGNORE_DESCRIPTOR)) {
       return;
     }
 
-    assertThat(getFromObjectElseNull(actual, (MethodNode methodNode) -> Type.getType(methodNode.desc)))
+    Function<MethodNode, Type> getDescriptorType = (MethodNode methodNode) -> methodNode.desc != null ? Type.getType(methodNode.desc) : null;
+    assertThat(getFromObjectElseNull(actualPrepared, getDescriptorType))
             .addOptions(options)
-            .useLabelIndexLookup(labelIndexLookup)
+            .useLabelIndexLookup(labelIndexLookup())
             .as(createCrumbDescription("Has equal method descriptor"))
-            .isEqualTo(getFromObjectElseNull(expected, MethodNode.class, methodNode -> Type.getType(methodNode.desc)));
+            .isEqualTo(getFromObjectElseNull(expectedPrepared, MethodNode.class, getDescriptorType));
   }
 
   /**
    * Checks whether the {@link MethodNode#exceptions}s are equal.
    *
-   * @param expected an {@link Object} expected to be a {@link MethodNode}; may
-   *                 be null.
+   * @param actualPrepared   an {@link MethodNode}; may be null. an {@link MethodNode}; may be null.
+   * @param expectedPrepared the expected {@link MethodNode} potentially filtered
+   *                         line numbers; may be null.
    */
-  protected void hasEqualExceptions(Object expected) {
+  protected void hasEqualExceptions(MethodNode actualPrepared, MethodNode expectedPrepared) {
     if (hasOption(StandardAssertOption.IGNORE_EXCEPTIONS)) {
       return;
     }
 
-    Assertions.assertThat(getListFromObjectElseNull(actual, (MethodNode methodNode) -> methodNode.exceptions))
-              .as(createCrumbDescription("Has equal exceptions"))
-              .isEqualTo(getFromObjectElseNull(expected, MethodNode.class, methodNode -> methodNode.exceptions));
+    assertThatTypes(getListFromObjectElseNull(actualPrepared, (MethodNode methodNode) -> TypeUtils.namesToTypes(methodNode.exceptions)))
+            .as(createCrumbDescription("Has equal exceptions"))
+            .useLabelIndexLookup(labelIndexLookup())
+            .containsExactlyInAnyOrderElementsOf(getListFromObjectElseNull(expectedPrepared, MethodNode.class, methodNode -> TypeUtils.namesToTypes(methodNode.exceptions)));
   }
 
   /**
    * Checks whether the {@link MethodNode#parameters}s are equal.
    *
-   * @param expected an {@link Object} expected to be a {@link MethodNode}; may
-   *                 be null.
-   * @param labelIndexLookup a {@link LabelIndexLookup}; never null.
+   * @param actualPrepared   an {@link MethodNode}; may be null.
+   * @param expectedPrepared the expected {@link MethodNode} potentially filtered
+   *                         line numbers; may be null.
    */
-  protected void hasEqualParameters(Object expected, LabelIndexLookup labelIndexLookup) {
-    Objects.requireNonNull(labelIndexLookup);
+  protected void hasEqualParameters(MethodNode actualPrepared, MethodNode expectedPrepared) {
 
     if (hasOption(StandardAssertOption.IGNORE_PARAMETERS)) {
       return;
     }
 
-    assertThatParameters(getListFromObjectElseNull(actual, (MethodNode methodNode) -> methodNode.parameters))
-            .useLabelNameLookup(labelIndexLookup)
+    assertThatParameters(getListFromObjectElseNull(actualPrepared, (MethodNode methodNode) -> methodNode.parameters))
+            .useLabelIndexLookup(labelIndexLookup())
             .as(createCrumbDescription("Has equal parameters"))
-            .containsExactlyInAnyOrderElementsOf(getListFromObjectElseNull(expected, MethodNode.class, methodNode -> methodNode.parameters));
+            .containsExactlyInAnyOrderElementsOf(getListFromObjectElseNull(expectedPrepared, MethodNode.class, methodNode -> methodNode.parameters));
   }
 
   /**
    * Checks whether the {@link MethodNode#visibleAnnotableParameterCount}s are
    * equal.
    *
-   * @param expected an {@link Object} expected to be a {@link MethodNode}; may
-   *                 be null.
+   * @param actualPrepared   an {@link MethodNode}; may be null.
+   * @param expectedPrepared an {@link Object} expected to be a {@link MethodNode}; may
    */
-  protected void hasEqualVisibleAnnotableParameterCount(Object expected) {
+  protected void hasEqualVisibleAnnotableParameterCount(MethodNode actualPrepared, MethodNode expectedPrepared) {
     if (hasOption(StandardAssertOption.IGNORE_VISIBLE_ANNOTABLE_PARAMETER_COUNT)) {
       return;
     }
 
-    Assertions.assertThat(getFromObjectElseNull(actual, (MethodNode methodNode) -> methodNode.visibleAnnotableParameterCount))
+    Assertions.assertThat(getFromObjectElseNull(actualPrepared, (MethodNode methodNode) -> methodNode.visibleAnnotableParameterCount))
               .as(createCrumbDescription("Has equal visible annotate parameter count"))
-              .isEqualTo(getFromObjectElseNull(expected, MethodNode.class, methodNode -> methodNode.visibleAnnotableParameterCount));
+              .isEqualTo(getFromObjectElseNull(expectedPrepared, MethodNode.class, methodNode -> methodNode.visibleAnnotableParameterCount));
   }
 
   /**
    * Checks whether the {@link MethodNode#visibleParameterAnnotations}s are equal.
    *
-   * @param expected an {@link Object} expected to be a {@link MethodNode}; may
-   *                 be null.
-   * @param labelIndexLookup a {@link LabelIndexLookup}; never null.
+   * @param actualPrepared   an {@link MethodNode}; may be null.
+   * @param expectedPrepared the expected {@link MethodNode} potentially filtered
+   *                         line numbers; may be null.
    */
-  protected void hasEqualVisibleParameterAnnotations(Object expected, LabelIndexLookup labelIndexLookup) {
-    Objects.requireNonNull(labelIndexLookup);
+  protected void hasEqualVisibleParameterAnnotations(MethodNode actualPrepared, MethodNode expectedPrepared) {
 
 
     if (hasOption(StandardAssertOption.IGNORE_VISISBLE_PARAMETER_ANNOTATIONS)) {
       return;
     }
 
-    List<List<AnnotationNode>> actualAllVisibleParameterAnnotations = getParameterAnnotations(actual, methodNode -> methodNode.visibleParameterAnnotations);
-    List<List<AnnotationNode>> expectedAllVisibleParameterAnnotations = getParameterAnnotations(expected, methodNode -> methodNode.visibleParameterAnnotations);
+    List<List<AnnotationNode>> actualAllVisibleParameterAnnotations = getParameterAnnotations(actualPrepared, methodNode -> methodNode.visibleParameterAnnotations);
+    List<List<AnnotationNode>> expectedAllVisibleParameterAnnotations = getParameterAnnotations(expectedPrepared, methodNode -> methodNode.visibleParameterAnnotations);
 
     for (int i = 0; i < Math.max(actualAllVisibleParameterAnnotations.size(), expectedAllVisibleParameterAnnotations.size()); i++) {
       assertThatAnnotations(getIfIndexExists(actualAllVisibleParameterAnnotations, i))
-              .useLabelNameLookup(labelIndexLookup)
+              .useLabelIndexLookup(labelIndexLookup())
               .as(createCrumbDescription("Has equal visible parameter annotations at index " + i))
               .containsExactlyInAnyOrderElementsOf(getIfIndexExists(expectedAllVisibleParameterAnnotations, i));
 
@@ -203,40 +217,39 @@ public class MethodNodeAssert extends ClassEntityAssert<MethodNodeAssert, Method
    * Checks whether the {@link MethodNode#invisibleAnnotableParameterCount}s are
    * equal.
    *
-   * @param expected an {@link Object} expected to be a {@link MethodNode}; may
-   *                 be null.
+   * @param actualPrepared   an {@link MethodNode}; may be null.
+   * @param expectedPrepared an {@link Object} expected to be a {@link MethodNode}; may
    */
-  protected void hasEqualInvisibleAnnotableParameterCount(Object expected) {
+  protected void hasEqualInvisibleAnnotableParameterCount(MethodNode actualPrepared, MethodNode expectedPrepared) {
     if (hasOption(StandardAssertOption.IGNORE_INVISISBLE_ANNOTABLE_PARAMETER_COUNT)) {
       return;
     }
 
-    Assertions.assertThat(getFromObjectElseNull(actual, (MethodNode methodNode) -> methodNode.invisibleAnnotableParameterCount))
+    Assertions.assertThat(getFromObjectElseNull(actualPrepared, (MethodNode methodNode) -> methodNode.invisibleAnnotableParameterCount))
               .as(createCrumbDescription("Has equal invisible annotate parameter count"))
-              .isEqualTo(getFromObjectElseNull(expected, MethodNode.class, methodNode -> methodNode.invisibleAnnotableParameterCount));
+              .isEqualTo(getFromObjectElseNull(expectedPrepared, MethodNode.class, methodNode -> methodNode.invisibleAnnotableParameterCount));
   }
 
   /**
    * Checks whether the {@link MethodNode#invisibleParameterAnnotations}s are
    * equal.
    *
-   * @param expected an {@link Object} expected to be a {@link MethodNode}; may
-   *                 be null.
-   * @param labelIndexLookup a {@link LabelIndexLookup}; never null.
+   * @param actualPrepared   an {@link MethodNode}; may be null.
+   * @param expectedPrepared the expected {@link MethodNode} potentially filtered
+   *                         line numbers; may be null.
    */
-  protected void hasEqualInvisibleParameterAnnotations(Object expected, LabelIndexLookup labelIndexLookup) {
-    Objects.requireNonNull(labelIndexLookup);
+  protected void hasEqualInvisibleParameterAnnotations(MethodNode actualPrepared, MethodNode expectedPrepared) {
 
     if (hasOption(StandardAssertOption.IGNORE_INVISIBLE_PARAMETER_ANNOTATIONS)) {
       return;
     }
 
-    List<List<AnnotationNode>> actualAllInvisibleParameterAnnotations = getParameterAnnotations(actual, methodNode -> methodNode.invisibleParameterAnnotations);
-    List<List<AnnotationNode>> expectedAllInvisibleParameterAnnotations = getParameterAnnotations(expected, methodNode -> methodNode.invisibleParameterAnnotations);
+    List<List<AnnotationNode>> actualAllInvisibleParameterAnnotations = getParameterAnnotations(actualPrepared, methodNode -> methodNode.invisibleParameterAnnotations);
+    List<List<AnnotationNode>> expectedAllInvisibleParameterAnnotations = getParameterAnnotations(expectedPrepared, methodNode -> methodNode.invisibleParameterAnnotations);
 
     for (int i = 0; i < Math.max(actualAllInvisibleParameterAnnotations.size(), expectedAllInvisibleParameterAnnotations.size()); i++) {
       assertThatAnnotations(getIfIndexExists(actualAllInvisibleParameterAnnotations, i))
-              .useLabelNameLookup(labelIndexLookup)
+              .useLabelIndexLookup(labelIndexLookup())
               .as(createCrumbDescription("Has equal invisible parameter annotations at index " + i))
               .containsExactlyInAnyOrderElementsOf(getIfIndexExists(expectedAllInvisibleParameterAnnotations, i));
 
@@ -246,159 +259,153 @@ public class MethodNodeAssert extends ClassEntityAssert<MethodNodeAssert, Method
   /**
    * Checks whether the {@link MethodNode#instructions}s are equal.
    *
-   * @param expected an {@link Object} expected to be a {@link MethodNode}; may
-   *                 be null.
-   * @param labelIndexLookup a {@link LabelIndexLookup}; never null.
+   * @param actualPrepared   an {@link MethodNode}; may be null.
+   * @param expectedPrepared the expected {@link MethodNode} potentially filtered
+   *                         line numbers; may be null.
    */
-  protected void hasEqualInstructions(Object expected, LabelIndexLookup labelIndexLookup) {
-    Objects.requireNonNull(labelIndexLookup);
+  protected void hasEqualInstructions(MethodNode actualPrepared, MethodNode expectedPrepared) {
 
     if (hasOption(StandardAssertOption.IGNORE_INSTRUCTIONS)) {
       return;
     }
 
-    InsnListAssert insnListAssert = assertThatInstructions(getFromObjectElseNull(actual, MethodNode.class, (MethodNode methodNode) -> methodNode.instructions))
-            .useLabelNameLookup(labelIndexLookup)
+    InsnListAssert insnListAssert = assertThatInstructions(getFromObjectElseNull(actualPrepared, MethodNode.class, (MethodNode methodNode) -> methodNode.instructions))
+            .useLabelIndexLookup(labelIndexLookup())
             .as(createCrumbDescription("Has equal instructions"));
 
     if (ignoreLineNumbers) {
       insnListAssert.ignoreLineNumbers();
     }
 
-    insnListAssert.isEqualTo(getFromObjectElseNull(expected, MethodNode.class, (MethodNode methodNode) -> methodNode.instructions));
+    insnListAssert.isEqualTo(getFromObjectElseNull(expectedPrepared, MethodNode.class, (MethodNode methodNode) -> methodNode.instructions));
   }
 
   /**
    * Checks whether the {@link MethodNode#tryCatchBlocks}s are equal.
    *
-   * @param expected an {@link Object} expected to be a {@link MethodNode}; may
-   *                 be null.
-   * @param labelIndexLookup a {@link LabelIndexLookup}; never null.
+   * @param actualPrepared   an {@link MethodNode}; may be null.
+   * @param expectedPrepared the expected {@link MethodNode} potentially filtered
+   *                         line numbers; may be null.
    */
-  protected void hasEqualTryCatchBlocks(Object expected, LabelIndexLookup labelIndexLookup) {
-    Objects.requireNonNull(labelIndexLookup);
+  protected void hasEqualTryCatchBlocks(MethodNode actualPrepared, MethodNode expectedPrepared) {
 
     if (hasOption(StandardAssertOption.IGNORE_TRY_CATCH_BLOCKS)) {
       return;
     }
 
-    assertThatTryCatchBlocks(getListFromObjectElseNull(actual, (MethodNode methodNode) -> methodNode.tryCatchBlocks))
-            .useLabelNameLookup(labelIndexLookup)
+    assertThatTryCatchBlocks(getListFromObjectElseNull(actualPrepared, (MethodNode methodNode) -> methodNode.tryCatchBlocks))
+            .useLabelIndexLookup(labelIndexLookup())
             .as(createCrumbDescription("Has equal try-catch blocks"))
-            .containsExactlyInAnyOrderElementsOf(getListFromObjectElseNull(expected, MethodNode.class, (MethodNode methodNode) -> methodNode.tryCatchBlocks));
+            .containsExactlyInAnyOrderElementsOf(getListFromObjectElseNull(expectedPrepared, MethodNode.class, (MethodNode methodNode) -> methodNode.tryCatchBlocks));
   }
 
   /**
    * Checks whether the {@link MethodNode#maxStack}s are equal.
    *
-   * @param expected an {@link Object} expected to be a {@link MethodNode}; may
-   *                 be null.
+   * @param actualPrepared   an {@link MethodNode}; may be null.
+   * @param expectedPrepared an {@link Object} expected to be a {@link MethodNode}; may
    */
-  protected void hasEqualMaxStack(Object expected) {
+  protected void hasEqualMaxStack(MethodNode actualPrepared, MethodNode expectedPrepared) {
     if (hasOption(StandardAssertOption.IGNORE_MAX_STACK)) {
       return;
     }
 
-    Assertions.assertThat(getFromObjectElseNull(actual, (MethodNode methodNode) -> methodNode.maxStack))
+    Assertions.assertThat(getFromObjectElseNull(actualPrepared, (MethodNode methodNode) -> methodNode.maxStack))
               .as(createCrumbDescription("Has equal max stack"))
-              .isEqualTo(getFromObjectElseNull(expected, MethodNode.class, (MethodNode methodNode) -> methodNode.maxStack));
+              .isEqualTo(getFromObjectElseNull(expectedPrepared, MethodNode.class, (MethodNode methodNode) -> methodNode.maxStack));
   }
 
   /**
    * Checks whether the {@link MethodNode#maxLocals}s are equal.
    *
-   * @param expected an {@link Object} expected to be a {@link MethodNode}; may
-   *                 be null.
+   * @param actualPrepared   an {@link MethodNode}; may be null.
+   * @param expectedPrepared an {@link Object} expected to be a {@link MethodNode}; may
    */
-  protected void hasEqualMaxLocals(Object expected) {
+  protected void hasEqualMaxLocals(MethodNode actualPrepared, MethodNode expectedPrepared) {
     if (hasOption(StandardAssertOption.IGNORE_MAX_LOCALS)) {
       return;
     }
 
-    Assertions.assertThat(getFromObjectElseNull(actual, (MethodNode methodNode) -> methodNode.maxLocals))
+    Assertions.assertThat(getFromObjectElseNull(actualPrepared, (MethodNode methodNode) -> methodNode.maxLocals))
               .as(createCrumbDescription("Has equal max locals"))
-              .isEqualTo(getFromObjectElseNull(expected, MethodNode.class, (MethodNode methodNode) -> methodNode.maxLocals));
+              .isEqualTo(getFromObjectElseNull(expectedPrepared, MethodNode.class, (MethodNode methodNode) -> methodNode.maxLocals));
   }
 
   /**
    * Checks whether the {@link MethodNode#localVariables}s are equal.
    *
-   * @param expected an {@link Object} expected to be a {@link MethodNode}; may
-   *                 be null.
-   * @param labelIndexLookup a {@link LabelIndexLookup}; never null.
+   * @param actualPrepared   an {@link MethodNode}; may be null.
+   * @param expectedPrepared the expected {@link MethodNode} potentially filtered
+   *                         line numbers; may be null.
    */
-  protected void hasEqualLocalVariables(Object expected, LabelIndexLookup labelIndexLookup) {
-    Objects.requireNonNull(labelIndexLookup);
+  protected void hasEqualLocalVariables(MethodNode actualPrepared, MethodNode expectedPrepared) {
 
     if (hasOption(StandardAssertOption.IGNORE_LOCAL_VARIABLES)) {
       return;
     }
 
-    assertThatLocalVariables(getListFromObjectElseNull(actual, (MethodNode methodNode) -> methodNode.localVariables))
-            .useLabelNameLookup(labelIndexLookup)
+    assertThatLocalVariables(getListFromObjectElseNull(actualPrepared, (MethodNode methodNode) -> methodNode.localVariables))
+            .useLabelIndexLookup(labelIndexLookup())
             .as(createCrumbDescription("Has equal local variables"))
-            .containsExactlyInAnyOrderElementsOf(getListFromObjectElseNull(expected, MethodNode.class, (MethodNode methodNode) -> methodNode.localVariables));
+            .containsExactlyInAnyOrderElementsOf(getListFromObjectElseNull(expectedPrepared, MethodNode.class, (MethodNode methodNode) -> methodNode.localVariables));
   }
 
   /**
    * Checks whether the {@link MethodNode#visibleLocalVariableAnnotations}s are equal.
    *
-   * @param expected an {@link Object} expected to be a {@link MethodNode}; may
-   *                 be null.
-   * @param labelIndexLookup a {@link LabelIndexLookup}; never null.
+   * @param actualPrepared   an {@link MethodNode}; may be null.
+   * @param expectedPrepared the expected {@link MethodNode} potentially filtered
+   *                         line numbers; may be null.
    */
-  protected void hasEqualVisibleLocalVariableAnnotations(Object expected, LabelIndexLookup labelIndexLookup) {
-    Objects.requireNonNull(labelIndexLookup);
+  protected void hasEqualVisibleLocalVariableAnnotations(MethodNode actualPrepared, MethodNode expectedPrepared) {
 
     if (hasOption(StandardAssertOption.IGNORE_VISISBLE_LOCAL_VARIABLE_ANNOTATIONS)) {
       return;
     }
 
-    assertThatLocalVariableAnnotations(getListFromObjectElseNull(actual, (MethodNode methodNode) -> methodNode.visibleLocalVariableAnnotations))
-            .useLabelNameLookup(labelIndexLookup)
+    assertThatLocalVariableAnnotations(getListFromObjectElseNull(actualPrepared, (MethodNode methodNode) -> methodNode.visibleLocalVariableAnnotations))
+            .useLabelIndexLookup(labelIndexLookup())
             .as(createCrumbDescription("Has equal visible local variable annotations"))
-            .containsExactlyInAnyOrderElementsOf(getListFromObjectElseNull(expected, MethodNode.class, (MethodNode methodNode) -> methodNode.visibleLocalVariableAnnotations));
+            .containsExactlyInAnyOrderElementsOf(getListFromObjectElseNull(expectedPrepared, MethodNode.class, (MethodNode methodNode) -> methodNode.visibleLocalVariableAnnotations));
   }
 
   /**
    * Checks whether the {@link MethodNode#invisibleLocalVariableAnnotations}s are equal.
    *
-   * @param expected an {@link Object} expected to be a {@link MethodNode}; may
-   *                 be null.
-   * @param labelIndexLookup a {@link LabelIndexLookup}; never null.
+   * @param actualPrepared   an {@link MethodNode}; may be null.
+   * @param expectedPrepared the expected {@link MethodNode} potentially filtered
+   *                         line numbers; may be null.
    */
-  protected void hasEqualInvisibleLocalVariableAnnotations(Object expected, LabelIndexLookup labelIndexLookup) {
-    Objects.requireNonNull(labelIndexLookup);
+  protected void hasEqualInvisibleLocalVariableAnnotations(MethodNode actualPrepared, MethodNode expectedPrepared) {
 
     if (hasOption(StandardAssertOption.IGNORE_INVISISBLE_LOCAL_VARIABLE_ANNOTATIONS)) {
       return;
     }
 
-    assertThatLocalVariableAnnotations(getListFromObjectElseNull(actual, (MethodNode methodNode) -> methodNode.invisibleLocalVariableAnnotations))
-            .useLabelNameLookup(labelIndexLookup)
+    assertThatLocalVariableAnnotations(getListFromObjectElseNull(actualPrepared, (MethodNode methodNode) -> methodNode.invisibleLocalVariableAnnotations))
+            .useLabelIndexLookup(labelIndexLookup())
             .as(createCrumbDescription("Has equal invisible local variable annotations"))
-            .containsExactlyInAnyOrderElementsOf(getListFromObjectElseNull(expected, MethodNode.class, (MethodNode methodNode) -> methodNode.invisibleLocalVariableAnnotations));
+            .containsExactlyInAnyOrderElementsOf(getListFromObjectElseNull(expectedPrepared, MethodNode.class, (MethodNode methodNode) -> methodNode.invisibleLocalVariableAnnotations));
   }
 
   /**
    * Checks whether the {@link MethodNode#annotationDefault}s are equal.
    *
-   * @param expected an {@link Object} expected to be a {@link MethodNode}; may
-   *                 be null.
-   * @param labelIndexLookup a {@link LabelIndexLookup}; never null.
+   * @param actualPrepared   an {@link MethodNode}; may be null.
+   * @param expectedPrepared the expected {@link MethodNode} potentially filtered
+   *                         line numbers; may be null.
    */
-  protected void hasEqualAnnotationDefault(Object expected, LabelIndexLookup labelIndexLookup) {
-    Objects.requireNonNull(labelIndexLookup);
+  protected void hasEqualAnnotationDefault(MethodNode actualPrepared, MethodNode expectedPrepared) {
 
     if (hasOption(StandardAssertOption.IGNORE_ANNOTATION_DEFAULT)) {
       return;
     }
 
-    AsmAssertions.assertThat(getFromObjectElseNull(actual, (MethodNode methodNode) -> AnnotationDefaultNode.createOrNull(methodNode.annotationDefault)))
+    AsmAssertions.assertThat(getFromObjectElseNull(actualPrepared, (MethodNode methodNode) -> AnnotationDefaultNode.createOrNull(methodNode.annotationDefault)))
                  .addOptions(options)
-                 .useLabelIndexLookup(labelIndexLookup)
+                 .useLabelIndexLookup(labelIndexLookup())
                  .as(createCrumbDescription("Has equal annotation default"))
-                 .isEqualTo(getFromObjectElseNull(expected, MethodNode.class, (MethodNode methodNode) -> AnnotationDefaultNode.createOrNull(methodNode.annotationDefault)));
+                 .isEqualTo(getFromObjectElseNull(expectedPrepared, MethodNode.class, (MethodNode methodNode) -> AnnotationDefaultNode.createOrNull(methodNode.annotationDefault)));
   }
 
   @Override
@@ -448,29 +455,12 @@ public class MethodNodeAssert extends ClassEntityAssert<MethodNodeAssert, Method
     return actualVisibleParameterAnnotations != null ? actualVisibleParameterAnnotations : List.of();
   }
 
-  private LabelIndexLookup buildLabelIndexLookup(Object expected) {
-    LabelIndexLookup labelIndexLookup = DefaultLabelIndexLookup.create();
-
-    labelIndexLookup.add(labelNameLookup());
-
-    ifNotNull(actual, nonNullActual -> labelIndexLookup.putAll(extractLabelIndices(filterLineNumbers(nonNullActual))));
-    ifNotNull(expected, nonNullExpected -> {
-      if (nonNullExpected instanceof MethodNode) {
-        labelIndexLookup.putAll(extractLabelIndices(filterLineNumbers((MethodNode) nonNullExpected)));
-      }
-    });
-
-    return labelIndexLookup;
-  }
-
-  private MethodNode filterLineNumbers(MethodNode nonNullActual) {
+  private MethodNode filterLineNumbers(MethodNode methodNode) {
     if (ignoreLineNumbers) {
-      MethodNode copyOfMethodNode = MethodNodeUtils.copy(nonNullActual);
-      copyOfMethodNode.instructions = InsnListUtils.filterLineNumbers(nonNullActual);
-      return copyOfMethodNode;
+      return InsnListUtils.copyWithFilteredLineNumbers(methodNode);
     }
     else {
-      return nonNullActual;
+      return methodNode;
     }
   }
 

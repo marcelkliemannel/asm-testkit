@@ -6,12 +6,12 @@ import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
 import java.util.Comparator;
 import java.util.Objects;
 
-public abstract class AbstractWithLabelNamesAsmComparator<T> extends AsmComparator<T> implements WithLabelNamesAsmComparator<T> {
+public abstract class AbstractWithLabelIndexAsmComparator<T> extends AsmComparator<T> implements WithLabelIndexAsmComparator<T> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  protected AbstractWithLabelNamesAsmComparator(Class<?> selfType, Class<?> elementType) {
+  protected AbstractWithLabelIndexAsmComparator(Class<?> selfType, Class<?> elementType) {
     super(selfType, elementType);
   }
 

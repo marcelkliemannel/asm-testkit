@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.comparator;
 
 import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
-import dev.turingcomplete.asmtestkit.comparator._internal.WithLabelNamesAsmComparatorAdapter;
+import dev.turingcomplete.asmtestkit.comparator._internal.WithLabelIndexAsmComparatorAdapter;
 
 import java.util.Comparator;
 import java.util.Objects;
@@ -9,11 +9,11 @@ import java.util.function.Function;
 
 /**
  * A comparison function, that offers additional ordering functionally to take
- * label names into account.
+ * label indices into account.
  *
  * @param <T> the type of objects that may be compared by this comparator.
  */
-public interface WithLabelNamesAsmComparator<T> extends Comparator<T> {
+public interface WithLabelIndexAsmComparator<T> extends Comparator<T> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
@@ -34,17 +34,18 @@ public interface WithLabelNamesAsmComparator<T> extends Comparator<T> {
    * @return a comparator that compares by an extracted key using the
    * specified {@link Comparator}; never null.
    */
-  static <T, U> WithLabelNamesAsmComparator<T> comparing(Function<? super T, ? extends U> keyExtractor,
+  static <T, U> WithLabelIndexAsmComparator<T> comparing(Function<? super T, ? extends U> keyExtractor,
                                                          Comparator<U> keyComparator,
                                                          LabelIndexLookup labelIndexLookup) {
     Objects.requireNonNull(keyExtractor);
     Objects.requireNonNull(keyComparator);
 
     // The keyComparator must always be wrapped regardless if it is a
-    // WithLabelNamesAsmComparator or not. Otherwise, a subsequent call to
-    // thenComparing would lose the labelNameLookup capability.
-    var keyExtractingComparator = new WithLabelNamesAsmComparator<T>() {
-      final Comparator<U> _keyComparator = WithLabelNamesAsmComparatorAdapter.wrap(keyComparator, labelIndexLookup);
+    // WithLabelIndexAsmComparator or not. Otherwise, a subsequent call to
+    // thenComparing would lose the labelIndexLookup capability.
+    var keyExtractingComparator = new WithLabelIndexAsmComparator<T>() {
+
+      final Comparator<U> _keyComparator = WithLabelIndexAsmComparatorAdapter.wrap(keyComparator, labelIndexLookup);
 
       @Override
       public int compare(T first, T second) {
@@ -52,16 +53,16 @@ public interface WithLabelNamesAsmComparator<T> extends Comparator<T> {
       }
 
       @Override
-      public int compare(T first, T second, LabelIndexLookup labelNameLookup) {
-        if (_keyComparator instanceof WithLabelNamesAsmComparator) {
-          return ((WithLabelNamesAsmComparator<U>) _keyComparator).compare(keyExtractor.apply(first), keyExtractor.apply(second), labelNameLookup);
+      public int compare(T first, T second, LabelIndexLookup labelIndexLookup) {
+        if (_keyComparator instanceof WithLabelIndexAsmComparator) {
+          return ((WithLabelIndexAsmComparator<U>) _keyComparator).compare(keyExtractor.apply(first), keyExtractor.apply(second), labelIndexLookup);
         }
         else {
           return _keyComparator.compare(keyExtractor.apply(first), keyExtractor.apply(second));
         }
       }
     };
-    return WithLabelNamesAsmComparatorAdapter.wrap(keyExtractingComparator, labelIndexLookup);
+    return WithLabelIndexAsmComparatorAdapter.wrap(keyExtractingComparator, labelIndexLookup);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

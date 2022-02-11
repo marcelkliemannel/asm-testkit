@@ -14,7 +14,7 @@ import org.objectweb.asm.tree.LabelNode;
  * {@link Label} to a consistent name use
  * {@link #doToStringOf(LabelNode, LabelIndexLookup)}.
  */
-public class LabelNodeRepresentation extends AbstractWithLabelNamesAsmRepresentation<LabelNode> {
+public class LabelNodeRepresentation extends AbstractWithLabelIndexAsmRepresentation<LabelNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 

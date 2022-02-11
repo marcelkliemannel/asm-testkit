@@ -55,7 +55,7 @@ import static dev.turingcomplete.asmtestkit.representation._internal.Representat
  *
  * <p>The simplified output concatenates the method name and descriptor.
  */
-public class MethodNodeRepresentation extends AbstractWithLabelNamesAsmRepresentation<MethodNode> {
+public class MethodNodeRepresentation extends AbstractWithLabelIndexAsmRepresentation<MethodNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   public static final String INSTRUCTIONS_INDENT     = " ".repeat(4);

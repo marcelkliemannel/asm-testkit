@@ -86,9 +86,5 @@ public final class TextifierUtils {
     public Map<Label, Integer> labelIndices() {
       return Collections.unmodifiableMap(labelIndices);
     }
-
-    public Map<Label, String> labelNames() {
-      return labelNames != null ? Collections.unmodifiableMap(labelNames) : Map.of();
-    }
   }
 }

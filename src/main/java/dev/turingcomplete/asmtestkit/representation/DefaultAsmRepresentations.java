@@ -143,8 +143,8 @@ public final class DefaultAsmRepresentations extends StandardRepresentation impl
 
     return findSingleAsmRepresentation(object)
             .map(singleAsmRepresentation -> {
-              if (singleAsmRepresentation instanceof WithLabelNamesAsmRepresentation) {
-                return ((WithLabelNamesAsmRepresentation) singleAsmRepresentation).toStringOf(object, labelIndexLookup);
+              if (singleAsmRepresentation instanceof WithLabelIndexAsmRepresentation) {
+                return ((WithLabelIndexAsmRepresentation) singleAsmRepresentation).toStringOf(object, labelIndexLookup);
               }
               else {
                 return singleAsmRepresentation.toStringOf(object);
@@ -176,8 +176,8 @@ public final class DefaultAsmRepresentations extends StandardRepresentation impl
 
     return findSingleAsmRepresentation(object)
             .map(singleAsmRepresentation -> {
-              if (singleAsmRepresentation instanceof WithLabelNamesAsmRepresentation) {
-                return ((WithLabelNamesAsmRepresentation) singleAsmRepresentation).toSimplifiedStringOf(object, labelIndexLookup);
+              if (singleAsmRepresentation instanceof WithLabelIndexAsmRepresentation) {
+                return ((WithLabelIndexAsmRepresentation) singleAsmRepresentation).toSimplifiedStringOf(object, labelIndexLookup);
               }
               else {
                 return singleAsmRepresentation.toSimplifiedStringOf(object);

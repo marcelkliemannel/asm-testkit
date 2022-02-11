@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.comparator;
 
-import dev.turingcomplete.asmtestkit.comparator._internal.WithLabelNamesIterableAsmComparator;
+import dev.turingcomplete.asmtestkit.comparator._internal.WithLabelIndexIterableAsmComparator;
 import dev.turingcomplete.asmtestkit.representation.AbstractTypeAnnotationNodeRepresentation;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
@@ -28,7 +28,7 @@ public class TypeAnnotationNodeComparator
    * A reusable {@link Comparator} instance for an {@link Iterable} of
    * {@link TypeAnnotationNode}s.
    */
-  public static final Comparator<Iterable<? extends TypeAnnotationNode>> ITERABLE_INSTANCE = WithLabelNamesIterableAsmComparator.create(INSTANCE);
+  public static final Comparator<Iterable<? extends TypeAnnotationNode>> ITERABLE_INSTANCE = WithLabelIndexIterableAsmComparator.create(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //

@@ -3,7 +3,6 @@ package dev.turingcomplete.asmtestkit.representation;
 import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
 import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
 import dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationA;
-import dev.turingcomplete.asmtestkit.representation.LocalVariableNodeRepresentation;
 import org.assertj.core.api.Assertions;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
@@ -55,7 +54,7 @@ class LocalVariableNodeRepresentationTest {
   }
 
   @Test
-  void testToStringOfWithLabelNames() throws IOException {
+  void testToStringOfWithLabelIndex() throws IOException {
     @Language("Java")
     String myClass = "class MyClass {" +
                      "   void myMethod() {" +

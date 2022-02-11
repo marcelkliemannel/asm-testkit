@@ -4,7 +4,7 @@ import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
 import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
 import dev.turingcomplete.asmtestkit.comparator._internal.ComparatorUtils;
 import dev.turingcomplete.asmtestkit.comparator._internal.IterableComparator;
-import dev.turingcomplete.asmtestkit.comparator._internal.WithLabelNamesIterableAsmComparator;
+import dev.turingcomplete.asmtestkit.comparator._internal.WithLabelIndexIterableAsmComparator;
 import dev.turingcomplete.asmtestkit.representation.AbstractTypeAnnotationNodeRepresentation;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LocalVariableAnnotationNode;
@@ -22,7 +22,7 @@ import java.util.Comparator;
  */
 public class LocalVariableAnnotationNodeComparator
         extends AbstractTypeAnnotationNodeComparator<LocalVariableAnnotationNodeComparator, LocalVariableAnnotationNode>
-        implements WithLabelNamesAsmComparator<LocalVariableAnnotationNode> {
+        implements WithLabelIndexAsmComparator<LocalVariableAnnotationNode> {
 
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
@@ -35,7 +35,7 @@ public class LocalVariableAnnotationNodeComparator
    * A reusable {@link Comparator} instance for an {@link Iterable} of
    * {@link LocalVariableAnnotationNode}s.
    */
-  public static final Comparator<Iterable<? extends LocalVariableAnnotationNode>> ITERABLE_INSTANCE = WithLabelNamesIterableAsmComparator.create(INSTANCE);
+  public static final Comparator<Iterable<? extends LocalVariableAnnotationNode>> ITERABLE_INSTANCE = WithLabelIndexIterableAsmComparator.create(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
@@ -67,7 +67,7 @@ public class LocalVariableAnnotationNodeComparator
       return typeAnnotationNodeCompare;
     }
 
-    return WithLabelNamesAsmComparator.comparing((LocalVariableAnnotationNode localVariableAnnotationNode) -> localVariableAnnotationNode.start, asmComparators.iterableComparator(LabelNode.class), labelIndexLookup)
+    return WithLabelIndexAsmComparator.comparing((LocalVariableAnnotationNode localVariableAnnotationNode) -> localVariableAnnotationNode.start, asmComparators.iterableComparator(LabelNode.class), labelIndexLookup)
                                       .thenComparing((LocalVariableAnnotationNode localVariableAnnotationNode) -> localVariableAnnotationNode.end, asmComparators.iterableComparator(LabelNode.class))
                                       .thenComparing((LocalVariableAnnotationNode localVariableAnnotationNode) -> localVariableAnnotationNode.index, new IterableComparator<>(ComparatorUtils.INTEGER_COMPARATOR))
                                       .compare(first, second);

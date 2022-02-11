@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.comparator._internal;
 
 import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
-import dev.turingcomplete.asmtestkit.comparator.WithLabelNamesAsmComparator;
+import dev.turingcomplete.asmtestkit.comparator.WithLabelIndexAsmComparator;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -12,24 +12,24 @@ import java.util.stream.StreamSupport;
 
 import static dev.turingcomplete.asmtestkit.comparator._internal.ComparatorUtils.compareNullCheck;
 
-public class WithLabelNamesIterableAsmComparator<T> extends IterableComparator<T> implements WithLabelNamesAsmComparator<Iterable<? extends T>> {
+public class WithLabelIndexIterableAsmComparator<T> extends IterableComparator<T> implements WithLabelIndexAsmComparator<Iterable<? extends T>> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  protected WithLabelNamesIterableAsmComparator(Comparator<T> elementsComparator) {
+  protected WithLabelIndexIterableAsmComparator(Comparator<T> elementsComparator) {
     super(elementsComparator);
   }
 
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   /**
-   * Creates a new {@link WithLabelNamesIterableAsmComparator} instance.
+   * Creates a new {@link WithLabelIndexIterableAsmComparator} instance.
    *
-   * @return a new {@link WithLabelNamesIterableAsmComparator}; never null;
+   * @return a new {@link WithLabelIndexIterableAsmComparator}; never null;
    */
-  public static <T> WithLabelNamesIterableAsmComparator<T> create(Comparator<T> elementsComparator) {
-    return new WithLabelNamesIterableAsmComparator<>(elementsComparator);
+  public static <T> WithLabelIndexIterableAsmComparator<T> create(Comparator<T> elementsComparator) {
+    return new WithLabelIndexIterableAsmComparator<>(elementsComparator);
   }
   
   @Override
@@ -51,8 +51,8 @@ public class WithLabelNamesIterableAsmComparator<T> extends IterableComparator<T
     Iterator<T> secondSortedIterator = secondSorted.iterator();
     for (T firstElement : firstSorted) {
       T selectElement = secondSortedIterator.next();
-      int result = elementsComparator instanceof WithLabelNamesAsmComparator
-              ? ((WithLabelNamesAsmComparator<T>) elementsComparator).compare(firstElement, selectElement, labelIndexLookup)
+      int result = elementsComparator instanceof WithLabelIndexAsmComparator
+              ? ((WithLabelIndexAsmComparator<T>) elementsComparator).compare(firstElement, selectElement, labelIndexLookup)
               : elementsComparator.compare(firstElement, selectElement);
       if (result != 0) {
         return result;

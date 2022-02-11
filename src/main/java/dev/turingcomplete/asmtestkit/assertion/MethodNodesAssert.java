@@ -1,5 +1,6 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
+import dev.turingcomplete.asmtestkit.common.IgnoreLineNumbersCapable;
 import dev.turingcomplete.asmtestkit.comparator.MethodNodeComparator;
 import dev.turingcomplete.asmtestkit.representation.MethodNodeRepresentation;
 import org.assertj.core.api.AbstractIterableAssert;
@@ -21,7 +22,10 @@ import java.util.Comparator;
  * {@link MethodNodeComparator} call {@link #withRepresentation(Representation)}
  * or {@link #usingComparator(Comparator)}.
  */
-public class MethodNodesAssert extends AsmIterableAssert<MethodNodesAssert, MethodNode, MethodNodeAssert> {
+public class MethodNodesAssert
+        extends AsmIterableAssert<MethodNodesAssert, MethodNode, MethodNodeAssert>
+        implements IgnoreLineNumbersCapable<MethodNodesAssert> {
+
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
@@ -51,6 +55,7 @@ public class MethodNodesAssert extends AsmIterableAssert<MethodNodesAssert, Meth
    *
    * @return {@code this} {@link MethodNodesAssert}; never null.
    */
+  @Override
   public MethodNodesAssert ignoreLineNumbers() {
     setComparators(true);
     setElementAssertCreator(methodNode -> AsmAssertions.assertThat(methodNode).ignoreLineNumbers());

@@ -2,7 +2,7 @@ package dev.turingcomplete.asmtestkit.comparator;
 
 import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
 import dev.turingcomplete.asmtestkit.comparator._internal.ComparatorUtils;
-import dev.turingcomplete.asmtestkit.comparator._internal.WithLabelNamesIterableAsmComparator;
+import dev.turingcomplete.asmtestkit.comparator._internal.WithLabelIndexIterableAsmComparator;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LocalVariableNode;
 
@@ -15,7 +15,7 @@ import java.util.Comparator;
  * {@code public} {@link LocalVariableNode} fields are equal. Otherwise, they will
  * be ordered by the comparison of the first non-matching field.
  */
-public class LocalVariableNodeComparator extends AbstractWithLabelNamesAsmComparator<LocalVariableNode> {
+public class LocalVariableNodeComparator extends AbstractWithLabelIndexAsmComparator<LocalVariableNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
@@ -27,7 +27,7 @@ public class LocalVariableNodeComparator extends AbstractWithLabelNamesAsmCompar
    * A reusable {@link Comparator} instance for an {@link Iterable} of
    * {@link LocalVariableNode}s.
    */
-  public static final Comparator<Iterable<? extends LocalVariableNode>> ITERABLE_INSTANCE = WithLabelNamesIterableAsmComparator.create(INSTANCE);
+  public static final Comparator<Iterable<? extends LocalVariableNode>> ITERABLE_INSTANCE = WithLabelIndexIterableAsmComparator.create(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
@@ -49,7 +49,7 @@ public class LocalVariableNodeComparator extends AbstractWithLabelNamesAsmCompar
 
   @Override
   protected int doCompare(LocalVariableNode first, LocalVariableNode second, LabelIndexLookup labelIndexLookup) {
-    return WithLabelNamesAsmComparator.comparing((LocalVariableNode localVariableNode) -> localVariableNode.index, ComparatorUtils.INTEGER_COMPARATOR, labelIndexLookup)
+    return WithLabelIndexAsmComparator.comparing((LocalVariableNode localVariableNode) -> localVariableNode.index, ComparatorUtils.INTEGER_COMPARATOR, labelIndexLookup)
                                       .thenComparing((LocalVariableNode localVariableNode) -> localVariableNode.name, ComparatorUtils.STRING_COMPARATOR)
                                       .thenComparing((LocalVariableNode localVariableNode) -> localVariableNode.desc, ComparatorUtils.STRING_COMPARATOR)
                                       .thenComparing((LocalVariableNode localVariableNode) -> localVariableNode.signature, ComparatorUtils.STRING_COMPARATOR)

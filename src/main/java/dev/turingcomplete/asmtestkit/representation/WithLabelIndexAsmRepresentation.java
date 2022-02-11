@@ -8,7 +8,7 @@ import org.objectweb.asm.Label;
  * An AssertJ {@link Representation} which handles representations of ASM
  * objects that are supporting {@link LabelIndexLookup}.
  */
-public interface WithLabelNamesAsmRepresentation extends Representation {
+public interface WithLabelIndexAsmRepresentation extends Representation {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //

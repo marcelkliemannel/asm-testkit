@@ -68,7 +68,7 @@ public class LocalVariableAnnotationNodeAssert
 
     Function<LocalVariableAnnotationNode, List<String>> getRanges = localVariableAnnotationNode -> {
       //noinspection CodeBlock2Expr
-      return localVariableAnnotationNodeRepresentation.toRangeStringOf(localVariableAnnotationNode, labelNameLookup());
+      return localVariableAnnotationNodeRepresentation.toRangeStringOf(localVariableAnnotationNode, labelIndexLookup());
     };
     List<String> actualRanges = getListFromObjectElseNull(actual, getRanges);
     List<String> expectedRanges = getListFromObjectElseNull(expected, LocalVariableAnnotationNode.class, getRanges);

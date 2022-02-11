@@ -2,8 +2,8 @@ package dev.turingcomplete.asmtestkit.assertion._internal;
 
 import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
 import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
-import dev.turingcomplete.asmtestkit.representation.AbstractWithLabelNamesAsmRepresentation;
-import dev.turingcomplete.asmtestkit.representation._internal.WithLabelNamesRepresentationAdapter;
+import dev.turingcomplete.asmtestkit.representation.AbstractWithLabelIndexAsmRepresentation;
+import dev.turingcomplete.asmtestkit.representation._internal.WithLabelIndexRepresentationAdapter;
 import org.assertj.core.api.WritableAssertionInfo;
 import org.assertj.core.presentation.Representation;
 
@@ -27,15 +27,15 @@ public final class AsmWritableAssertionInfo extends WritableAssertionInfo {
     this.labelIndexLookup.add(labelIndexLookup);
   }
 
-  public LabelIndexLookup labelNameLookup() {
+  public LabelIndexLookup labelIndexLookup() {
     return labelIndexLookup;
   }
 
   @Override
   public void useRepresentation(Representation newRepresentation) {
-    if (newRepresentation instanceof AbstractWithLabelNamesAsmRepresentation) {
-      var withLabelNamesRepresentation = (AbstractWithLabelNamesAsmRepresentation<?>) newRepresentation;
-      newRepresentation = new WithLabelNamesRepresentationAdapter<>(withLabelNamesRepresentation, labelIndexLookup);
+    if (newRepresentation instanceof AbstractWithLabelIndexAsmRepresentation) {
+      var withLabelIndexRepresentation = (AbstractWithLabelIndexAsmRepresentation<?>) newRepresentation;
+      newRepresentation = new WithLabelIndexRepresentationAdapter<>(withLabelIndexRepresentation, labelIndexLookup);
     }
 
     super.useRepresentation(newRepresentation);

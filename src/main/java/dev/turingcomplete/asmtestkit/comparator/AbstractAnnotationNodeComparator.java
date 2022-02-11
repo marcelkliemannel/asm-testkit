@@ -14,7 +14,7 @@ import static dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils.convert
  * its subtypes.
  */
 public abstract class AbstractAnnotationNodeComparator<S extends AbstractAnnotationNodeComparator<S, T>, T extends AnnotationNode>
-        extends AbstractWithLabelNamesAsmComparator<T> {
+        extends AbstractWithLabelIndexAsmComparator<T> {
 
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //

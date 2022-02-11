@@ -2,7 +2,7 @@ package dev.turingcomplete.asmtestkit.comparator;
 
 import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
 import dev.turingcomplete.asmtestkit.comparator._internal.ComparatorUtils;
-import dev.turingcomplete.asmtestkit.comparator._internal.WithLabelNamesIterableAsmComparator;
+import dev.turingcomplete.asmtestkit.comparator._internal.WithLabelIndexIterableAsmComparator;
 import org.objectweb.asm.tree.LabelNode;
 
 import java.util.Comparator;
@@ -15,7 +15,7 @@ import java.util.Objects;
  * {@link LabelNode#getLabel()}s are equal. Otherwise, they will be ordered by
  * the index of the label.
  */
-public class LabelNodeComparator extends AbstractWithLabelNamesAsmComparator<LabelNode> {
+public class LabelNodeComparator extends AbstractWithLabelIndexAsmComparator<LabelNode> {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
@@ -27,7 +27,7 @@ public class LabelNodeComparator extends AbstractWithLabelNamesAsmComparator<Lab
    * A reusable {@link Comparator} instance for an {@link Iterable} of
    * {@link LabelNode}s.
    */
-  public static final Comparator<Iterable<? extends LabelNode>> ITERABLE_INSTANCE = WithLabelNamesIterableAsmComparator.create(INSTANCE);
+  public static final Comparator<Iterable<? extends LabelNode>> ITERABLE_INSTANCE = WithLabelIndexIterableAsmComparator.create(INSTANCE);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //

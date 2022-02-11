@@ -3,15 +3,15 @@ package dev.turingcomplete.asmtestkit.comparator;
 import dev.turingcomplete.asmtestkit.asmutils.InsnListUtils;
 import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
 import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
+import dev.turingcomplete.asmtestkit.common.IgnoreLineNumbersCapable;
 import dev.turingcomplete.asmtestkit.comparator._internal.IterableComparator;
-import dev.turingcomplete.asmtestkit.comparator._internal.WithLabelNamesIterableAsmComparator;
+import dev.turingcomplete.asmtestkit.comparator._internal.WithLabelIndexIterableAsmComparator;
 import dev.turingcomplete.asmtestkit.node.AccessNode;
 import dev.turingcomplete.asmtestkit.node.AnnotationDefaultNode;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
-import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.LocalVariableAnnotationNode;
@@ -22,7 +22,6 @@ import org.objectweb.asm.tree.TryCatchBlockNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.util.Comparator;
-import java.util.function.Function;
 
 import static dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils.extractLabelIndices;
 import static dev.turingcomplete.asmtestkit.assertion._internal.AssertUtils.getFromObjectElseNull;
@@ -37,7 +36,10 @@ import static org.assertj.core.util.Lists.newArrayList;
  * {@code public} {@link MethodNode} fields are equal. Otherwise, they will
  * be ordered by the comparison of the first non-matching field.
  */
-public class MethodNodeComparator extends AbstractWithLabelNamesAsmComparator<MethodNode> {
+public class MethodNodeComparator
+        extends AbstractWithLabelIndexAsmComparator<MethodNode>
+        implements IgnoreLineNumbersCapable<MethodNodeComparator> {
+
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
 
   /**
@@ -55,13 +57,13 @@ public class MethodNodeComparator extends AbstractWithLabelNamesAsmComparator<Me
    * A reusable {@link Comparator} instance for an {@link Iterable} of
    * {@link MethodNode}s.
    */
-  public static final Comparator<Iterable<? extends MethodNode>> ITERABLE_INSTANCE = WithLabelNamesIterableAsmComparator.create(INSTANCE);
+  public static final Comparator<Iterable<? extends MethodNode>> ITERABLE_INSTANCE = WithLabelIndexIterableAsmComparator.create(INSTANCE);
 
   /**
    * A reusable {@link Comparator} instance for an {@link Iterable} of
    * {@link MethodNode}s, which excludes line numbers from the comparison.
    */
-  public static final Comparator<Iterable<? extends MethodNode>> ITERABLE_INSTANCE_IGNORE_LINE_NUMBERS = WithLabelNamesIterableAsmComparator.create(INSTANCE_IGNORE_LINE_NUMBERS);
+  public static final Comparator<Iterable<? extends MethodNode>> ITERABLE_INSTANCE_IGNORE_LINE_NUMBERS = WithLabelIndexIterableAsmComparator.create(INSTANCE_IGNORE_LINE_NUMBERS);
 
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
@@ -90,6 +92,7 @@ public class MethodNodeComparator extends AbstractWithLabelNamesAsmComparator<Me
    *
    * @return {@code this} {@link MethodNodeComparator}; never null.
    */
+  @Override
   public MethodNodeComparator ignoreLineNumbers() {
     this.ignoreLineNumbers = true;
 
@@ -103,9 +106,16 @@ public class MethodNodeComparator extends AbstractWithLabelNamesAsmComparator<Me
 
   @Override
   protected int doCompare(MethodNode first, MethodNode second, LabelIndexLookup labelIndexLookup) {
-    extractLabelIndices(first, second).forEach(labelIndexLookup::putIfUnknown);
+    // Filter line numbers if needed
+    first = filterLineNumbers(first);
+    second = filterLineNumbers(second);
 
-    return WithLabelNamesAsmComparator.comparing((MethodNode methodNode) -> methodNode.name, STRING_COMPARATOR, labelIndexLookup)
+    // Collect label indices
+    // Because of the line number filtering, we may have to overwrite existing
+    // indices here as they may have changed.
+    labelIndexLookup.putAll(extractLabelIndices(first, second));
+
+    return WithLabelIndexAsmComparator.comparing((MethodNode methodNode) -> methodNode.name, STRING_COMPARATOR, labelIndexLookup)
                                       .thenComparing((MethodNode methodNode) -> getFromObjectElseNull(methodNode.desc, Type::getMethodType), asmComparators.elementComparator(Type.class))
                                       .thenComparing((MethodNode methodNode) -> AccessNode.forField(methodNode.access), asmComparators.elementComparator(AccessNode.class))
                                       .thenComparing((MethodNode methodNode) -> methodNode.signature, STRING_COMPARATOR)
@@ -120,7 +130,7 @@ public class MethodNodeComparator extends AbstractWithLabelNamesAsmComparator<Me
                                       .thenComparing((MethodNode methodNode) -> newArrayList(methodNode.visibleParameterAnnotations), new IterableComparator<>(asmComparators.iterableComparator(AnnotationNode.class)))
                                       .thenComparing((MethodNode methodNode) -> methodNode.invisibleAnnotableParameterCount, INTEGER_COMPARATOR)
                                       .thenComparing((MethodNode methodNode) -> newArrayList(methodNode.invisibleParameterAnnotations), new IterableComparator<>(asmComparators.iterableComparator(AnnotationNode.class)))
-                                      .thenComparing(gerInstructions(), asmComparators.iterableComparator(AbstractInsnNode.class))
+                                      .thenComparing((MethodNode methodNode) -> methodNode.instructions, asmComparators.iterableComparator(AbstractInsnNode.class))
                                       .thenComparing((MethodNode methodNode) -> methodNode.tryCatchBlocks, asmComparators.iterableComparator(TryCatchBlockNode.class))
                                       .thenComparing((MethodNode methodNode) -> methodNode.maxLocals, INTEGER_COMPARATOR)
                                       .thenComparing((MethodNode methodNode) -> methodNode.maxStack, INTEGER_COMPARATOR)
@@ -131,17 +141,16 @@ public class MethodNodeComparator extends AbstractWithLabelNamesAsmComparator<Me
                                       .compare(first, second);
   }
 
-  private Function<MethodNode, InsnList> gerInstructions() {
-    return methodNode -> {
-      if (ignoreLineNumbers) {
-        return InsnListUtils.filterLineNumbers(methodNode);
-      }
-      else {
-        return methodNode.instructions;
-      }
-    };
+  // -- Private Methods --------------------------------------------------------------------------------------------- //
+
+  private MethodNode filterLineNumbers(MethodNode methodNode) {
+    if (ignoreLineNumbers) {
+      return InsnListUtils.copyWithFilteredLineNumbers(methodNode);
+    }
+    else {
+      return methodNode;
+    }
   }
 
-  // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 }
