@@ -198,16 +198,19 @@ public class AsmIterableAssert<S extends AsmIterableAssert<S, E, A>, E, A extend
     }
     assert actual != null && expected != null;
 
-    Map<String, E> expectedKeyToElement = Arrays.stream(expected).collect(Collectors.toMap(compareOneByOneKeyExtractor, element -> element));
+    // It is possible to have multiple elements with the same key
+    Map<String, List<E>> expectedKeyToElement = Arrays.stream(expected).collect(Collectors.groupingBy(compareOneByOneKeyExtractor));
     for (E actualElement : actual) {
       String actualElementKey = compareOneByOneKeyExtractor.apply(actualElement);
       Assertions.assertThat(expectedKeyToElement.keySet())
                 .as(createCrumbDescription(null))
                 .contains(actualElementKey);
 
-      A elementAssert = toAssert(actualElement);
-      elementAssert.as(createCrumbDescription(elementAssert.descriptionText()))
-             .isEqualTo(expectedKeyToElement.get(actualElementKey));
+      for (E expectedElement : expectedKeyToElement.get(actualElementKey)) {
+        A elementAssert = toAssert(actualElement);
+        elementAssert.as(createCrumbDescription(elementAssert.descriptionText()))
+                     .isEqualTo(expectedElement);
+      }
     }
 
     //noinspection unchecked

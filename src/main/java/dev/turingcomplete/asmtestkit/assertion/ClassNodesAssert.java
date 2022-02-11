@@ -1,14 +1,11 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.common.IgnoreLineNumbersCapable;
-import dev.turingcomplete.asmtestkit.comparator.InsnListComparator;
-import dev.turingcomplete.asmtestkit.comparator.MethodNodeComparator;
-import dev.turingcomplete.asmtestkit.representation.InsnListRepresentation;
+import dev.turingcomplete.asmtestkit.comparator.ClassNodeComparator;
+import dev.turingcomplete.asmtestkit.representation.ClassNodeRepresentation;
 import org.assertj.core.api.AbstractIterableAssert;
 import org.assertj.core.presentation.Representation;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LineNumberNode;
 
@@ -16,35 +13,35 @@ import java.util.Comparator;
 
 /**
  * An AssertJ {@link AbstractIterableAssert} for an {@link Iterable} of
- * {@link AbstractInsnNode}s (e.g., {@link InsnList}) which will use the
- * {@link MethodNodeComparator} to determine the equality.
+ * {@link ClassNode}s which will use the {@link ClassNodeComparator} to
+ * determine the equality.
  *
- * <p>An instance can be created via {@link AsmAssertions#assertThat(FieldNode)}
- * or {@link AsmAssertions#assertThatInstructions(Iterable)}.
+ * <p>An instance can be created via {@link AsmAssertions#assertThatClasses(Iterable)}.
  *
- * <p>To override the used {@link InsnListRepresentation} or
- * {@link InsnListComparator} call {@link #withRepresentation(Representation)}
+ * <p>To override the used {@link ClassNodeRepresentation} or
+ * {@link ClassNodeComparator} call {@link #withRepresentation(Representation)}
  * or {@link #usingComparator(Comparator)}.
  */
-public class InsnListAssert
-        extends AsmIterableAssert<InsnListAssert, AbstractInsnNode, InstructionAssert>
-        implements IgnoreLineNumbersCapable<InsnListAssert> {
-
+public class ClassNodesAssert
+        extends AsmIterableAssert<ClassNodesAssert, ClassNode, ClassNodeAssert>
+        implements IgnoreLineNumbersCapable<ClassNodesAssert> {
+  
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
-
+  
   /**
-   * Initializes an {@link InsnListAssert}.
+   * Initializes an {@link ClassNodesAssert}.
    *
-   * @param actual the actual {@link Iterable} of {@link AbstractInsnNode}s; may
-   *               be null.
+   * @param actual the actual {@link Iterable} of {@link ClassNode}s; may be
+   *               null.
    */
-  protected InsnListAssert(Iterable<? extends AbstractInsnNode> actual) {
-    super(actual, InsnListAssert.class, AsmAssertions::assertThat);
-
-    //noinspection ResultOfMethodCallIgnored
-    as("Instructions");
+  @SuppressWarnings("ResultOfMethodCallIgnored")
+  public ClassNodesAssert(Iterable<? extends ClassNode> actual) {
+    super(actual, ClassNodesAssert.class, AsmAssertions::assertThat);
+    
+    as("Classes");
+    withRepresentation(ClassNodeRepresentation.INSTANCE);
     setComparators(false);
   }
 
@@ -56,11 +53,12 @@ public class InsnListAssert
    *
    * <p>This method will overwrite the previously set {@link Comparator}s.
    *
-   * @return {@code this} {@link InsnListAssert}; never null.
+   * @return {@code this} {@link ClassNodesAssert}; never null.
    */
   @Override
-  public InsnListAssert ignoreLineNumbers() {
+  public ClassNodesAssert ignoreLineNumbers() {
     setComparators(true);
+    setElementAssertCreator(classNode -> AsmAssertions.assertThat(classNode).ignoreLineNumbers());
 
     return this;
   }
@@ -70,12 +68,14 @@ public class InsnListAssert
   @SuppressWarnings("ResultOfMethodCallIgnored")
   private void setComparators(boolean ignoreLineNumbers) {
     if (!ignoreLineNumbers) {
-      usingComparator(InsnListComparator.INSTANCE);
+      usingElementComparator(ClassNodeComparator.INSTANCE);
+      usingComparator(ClassNodeComparator.ITERABLE_INSTANCE);
     }
     else {
-      usingComparator(InsnListComparator.INSTANCE_IGNORE_LINE_NUMBERS);
+      usingElementComparator(ClassNodeComparator.INSTANCE_IGNORE_LINE_NUMBERS);
+      usingComparator(ClassNodeComparator.ITERABLE_INSTANCE_IGNORE_LINE_NUMBERS);
     }
   }
-
+  
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 }

@@ -1,8 +1,5 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
-import dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils;
-import dev.turingcomplete.asmtestkit.asmutils.ClassNameUtils;
-import dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils;
 import dev.turingcomplete.asmtestkit.__helper.DummyAttribute;
 import dev.turingcomplete.asmtestkit.__helper.InvisibleAnnotationA;
 import dev.turingcomplete.asmtestkit.__helper.InvisibleAnnotationB;
@@ -10,6 +7,9 @@ import dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA;
 import dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationA;
 import dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationB;
 import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;
+import dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils;
+import dev.turingcomplete.asmtestkit.asmutils.ClassNameUtils;
+import dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils;
 import dev.turingcomplete.asmtestkit.assertion.option.StandardAssertOption;
 import org.assertj.core.api.Assertions;
 import org.intellij.lang.annotations.Language;
@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
+import static dev.turingcomplete.asmtestkit.__helper.AsmNodeTestUtils.countLineNumbers;
 import static dev.turingcomplete.asmtestkit.assertion.AsmAssertions.assertThat;
 import static dev.turingcomplete.asmtestkit.compile.CompilationEnvironment.create;
 
@@ -744,6 +745,9 @@ class MethodNodeAssertTest {
 
     var myMethodWithoutLineNumbers = new MethodNode(0, "first", "()V", null, null);
     myMethodWithoutLineNumbers.instructions = Objects.requireNonNull(methods.get(2).instructions);
+
+    Assertions.assertThat(countLineNumbers(myMethodWithLineNumbers.instructions))
+                      .isGreaterThan(countLineNumbers(myMethodWithoutLineNumbers.instructions));
 
     assertThat(myMethodWithLineNumbers)
             .ignoreLineNumbers()

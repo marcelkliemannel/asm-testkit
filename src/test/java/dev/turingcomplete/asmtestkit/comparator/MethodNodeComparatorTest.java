@@ -3,12 +3,11 @@ package dev.turingcomplete.asmtestkit.comparator;
 import dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationA;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
-import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import java.io.IOException;
-import java.util.Arrays;
 
+import static dev.turingcomplete.asmtestkit.__helper.AsmNodeTestUtils.countLineNumbers;
 import static dev.turingcomplete.asmtestkit.comparator.MethodNodeComparator.INSTANCE;
 import static dev.turingcomplete.asmtestkit.comparator.MethodNodeComparator.INSTANCE_IGNORE_LINE_NUMBERS;
 import static dev.turingcomplete.asmtestkit.compile.CompilationEnvironment.create;
@@ -75,7 +74,7 @@ class MethodNodeComparatorTest {
             .compile()
             .readClassNode("MyClass").methods.get(1);
 
-    assertThat(Arrays.stream(withoutLineNumbers.instructions.toArray()).filter(LineNumberNode.class::isInstance).count())
+    assertThat(countLineNumbers(withoutLineNumbers.instructions))
             .isEqualTo(1);
 
     @Language("Java")
@@ -93,7 +92,7 @@ class MethodNodeComparatorTest {
             .compile()
             .readClassNode("MyClass").methods.get(1);
 
-    assertThat(Arrays.stream(withLineNumbers.instructions.toArray()).filter(LineNumberNode.class::isInstance).count())
+    assertThat(countLineNumbers(withLineNumbers.instructions))
             .isEqualTo(5);
 
     assertThat(INSTANCE_IGNORE_LINE_NUMBERS.compare(withoutLineNumbers, withLineNumbers))

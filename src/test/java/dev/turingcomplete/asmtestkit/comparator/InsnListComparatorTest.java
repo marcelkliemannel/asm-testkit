@@ -7,12 +7,11 @@ import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
-import org.objectweb.asm.tree.LineNumberNode;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
+import static dev.turingcomplete.asmtestkit.__helper.AsmNodeTestUtils.countLineNumbers;
 import static dev.turingcomplete.asmtestkit.comparator.InsnListComparator.INSTANCE;
 import static dev.turingcomplete.asmtestkit.comparator.InsnListComparator.INSTANCE_IGNORE_LINE_NUMBERS;
 import static dev.turingcomplete.asmtestkit.compile.CompilationEnvironment.create;
@@ -60,8 +59,8 @@ class InsnListComparatorTest {
     InsnList secondInstructions = result.readClassNode("SecondMyClass").methods.get(1).instructions;
 
     // Check that first contains more line numbers than second
-    Assertions.assertThat(Arrays.stream(firstInstructions.toArray()).filter(LineNumberNode.class::isInstance).count())
-              .isGreaterThan(Arrays.stream(secondInstructions.toArray()).filter(LineNumberNode.class::isInstance).count());
+    Assertions.assertThat(countLineNumbers(firstInstructions))
+              .isGreaterThan(countLineNumbers(secondInstructions));
 
     assertThat(INSTANCE_IGNORE_LINE_NUMBERS.compare(firstInstructions, secondInstructions))
             .isEqualTo(0);
@@ -95,9 +94,9 @@ class InsnListComparatorTest {
             .methods.get(1).instructions;
 
     // Check that first contains line numbers and second none
-    Assertions.assertThat(Arrays.stream(firstInstructions.toArray()).filter(LineNumberNode.class::isInstance).count())
+    Assertions.assertThat(countLineNumbers(firstInstructions))
               .isEqualTo(2);
-    Assertions.assertThat(Arrays.stream(secondInstructions.toArray()).filter(LineNumberNode.class::isInstance).count())
+    Assertions.assertThat(countLineNumbers(secondInstructions))
               .isEqualTo(0);
 
     assertThat(INSTANCE.compare(firstInstructions, secondInstructions))

@@ -652,27 +652,26 @@ public final class AsmAssertions {
   }
 
   /**
-   * Creates an {@link AsmIterableAssert} for {@link ClassNode}s which
+   * Creates a {@link ClassNodesAssert} for {@link ClassNode}s which
    * uses {@link ClassNodeRepresentation#INSTANCE} for the representation
    * and for equality {@link ClassNodeComparator#INSTANCE} and
    * {@link ClassNodeComparator#ITERABLE_INSTANCE}.
    *
-   * <p>The returned {@code AsmIterableAssert} should be used in conjunction with
+   * <p>The returned {@code ClassNodesAssert} should be used in conjunction with
    * {@link AsmIterableAssert#containsExactlyInAnyOrderElementsOf}.
+   *
+   * <p>To exclude {@link LineNumberNode}s from the comparison use
+   * {@link ClassNodesAssert#ignoreLineNumbers()}.
    *
    * <p>To override the representation or comparator call
    * {@link AsmIterableAssert#usingComparator(Comparator)} or
    * {@link AsmIterableAssert#withRepresentation(Representation)}.
    *
    * @param actual an {@link Iterable} of {@link InnerClassNode}s; may be null.
-   * @return a new {@link AsmIterableAssert}; never null.
+   * @return a new {@link ClassNodesAssert}; never null.
    */
-  public static AsmIterableAssert<?, ClassNode, ClassNodeAssert> assertThatClasses(Iterable<ClassNode> actual) {
-    return new AsmIterableAssert<>(actual, AsmAssertions::assertThat)
-            .as("Inner classes")
-            .withRepresentation(ClassNodeRepresentation.INSTANCE)
-            .usingElementComparator(ClassNodeComparator.INSTANCE)
-            .usingComparator(ClassNodeComparator.ITERABLE_INSTANCE);
+  public static ClassNodesAssert assertThatClasses(Iterable<ClassNode> actual) {
+    return new ClassNodesAssert(actual);
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //

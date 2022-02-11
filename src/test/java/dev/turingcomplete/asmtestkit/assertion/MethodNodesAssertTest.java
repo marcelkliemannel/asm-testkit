@@ -1,5 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion;
 
+import dev.turingcomplete.asmtestkit.__helper.AsmNodeTestUtils;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
@@ -147,6 +149,9 @@ class MethodNodesAssertTest {
             .readClassNode("MyClass")
             .methods;
 
+    Assertions.assertThat(AsmNodeTestUtils.countLineNumbers(methodsWithoutLineNumbers.get(1).instructions))
+              .isEqualTo(1);
+
     @Language("Java")
     String myClassWithLineNumbers = "class MyClass {\n" +
                                        "   void myMethod1() {\n" +
@@ -162,6 +167,9 @@ class MethodNodesAssertTest {
             .compile()
             .readClassNode("MyClass")
             .methods;
+
+    Assertions.assertThat(AsmNodeTestUtils.countLineNumbers(methodsWithLineNumbers.get(1).instructions))
+              .isEqualTo(2);
 
     assertThatMethods(methodsWithoutLineNumbers)
             .ignoreLineNumbers()

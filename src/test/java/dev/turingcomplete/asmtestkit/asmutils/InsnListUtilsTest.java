@@ -8,11 +8,12 @@ import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.LookupSwitchInsnNode;
-import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TableSwitchInsnNode;
 
 import java.io.IOException;
 import java.util.Arrays;
+
+import static dev.turingcomplete.asmtestkit.__helper.AsmNodeTestUtils.countLineNumbers;
 
 class InsnListUtilsTest {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
@@ -48,9 +49,9 @@ class InsnListUtilsTest {
             .readClassNode("MyClass").methods.get(1).instructions;
 
     // Check that actual contains line numbers and expected none
-    Assertions.assertThat(Arrays.stream(actual.toArray()).filter(LineNumberNode.class::isInstance).count())
+    Assertions.assertThat(countLineNumbers(actual))
               .isEqualTo(2);
-    Assertions.assertThat(Arrays.stream(expected.toArray()).filter(LineNumberNode.class::isInstance).count())
+    Assertions.assertThat(countLineNumbers(expected))
               .isEqualTo(0);
 
     // Ensure presents of JumpInsnNode
@@ -60,38 +61,6 @@ class InsnListUtilsTest {
     // Don't use 'assertThatInstructionsIgnoreLineNumbers', because it is already cleaned
     AsmAssertions.assertThatInstructions(InsnListUtils.filterLineNumbers(actual))
                  .isEqualTo(expected);
-  }
-
-  /**
-   * Check that {@link InsnListUtils#filterLineNumbers(Iterable)} does not remove
-   * labels used by a line number but also by a {@link JumpInsnNode}.
-   */
-  @Test
-  void sadfsdf() throws IOException {
-    MethodNode actual = CompilationEnvironment
-            .create()
-            .addJavaInputSource("class MyClass {\n" +
-                                "  void myMethod(int param) {\n" +
-                                "    try {\n" +
-                                "      System.out.println(1);\n" +
-                                "      System.out.println(2);\n" +
-                                "    }\n" +
-                                "    catch (IllegalArgumentException e) {\n" +
-                                "      throw new IllegalStateException(e);\n" +
-                                "    }\n" +
-                                "  }\n" +
-                                "}\n")
-            .compile()
-            .readClassNode("MyClass").methods.get(1);
-
-    // Check that actual contains line numbers and expected none
-    //Assertions.assertThat(Arrays.stream(actual.toArray()).filter(LineNumberNode.class::isInstance).count())
-    //          .isEqualTo(2);
-
-    // Ensure presents of JumpInsnNode
-
-    InsnList methodNode = InsnListUtils.filterLineNumbers(actual);
-    System.out.println("sdfaf");
   }
 
   /**
@@ -184,9 +153,9 @@ class InsnListUtilsTest {
             .readClassNode("MyClass").methods.get(1).instructions;
 
     // Check that actual contains line numbers and expected none
-    Assertions.assertThat(Arrays.stream(actual.toArray()).filter(LineNumberNode.class::isInstance).count())
+    Assertions.assertThat(countLineNumbers(actual))
               .isEqualTo(8);
-    Assertions.assertThat(Arrays.stream(expected.toArray()).filter(LineNumberNode.class::isInstance).count())
+    Assertions.assertThat(countLineNumbers(expected))
               .isEqualTo(0);
 
     // Ensure presents of TableSwitchInsnNode

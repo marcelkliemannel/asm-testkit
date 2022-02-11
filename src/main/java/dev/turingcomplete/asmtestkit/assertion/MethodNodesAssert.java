@@ -51,7 +51,7 @@ public class MethodNodesAssert
    * Exclude {@link LineNumberNode}s (and its associated {@link LabelNode}s)
    * from the comparison.
    *
-   * <p>This method will override the previously set {@link Comparator}s.
+   * <p>This method will overwrite the previously set {@link Comparator}s.
    *
    * @return {@code this} {@link MethodNodesAssert}; never null.
    */
