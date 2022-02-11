@@ -11,8 +11,9 @@ import org.objectweb.asm.tree.MethodNode;
 import java.util.Comparator;
 
 /**
- * An AssertJ {@link AbstractIterableAssert} for {@link MethodNode} which will
- * use the {@link MethodNodeComparator} to determine the equality.
+ * An AssertJ {@link AbstractIterableAssert} for an {@link Iterable} of
+ * {@link MethodNode}s which will use the {@link MethodNodeComparator} to
+ * determine the equality.
  *
  * <p>An instance can be created via {@link AsmAssertions#assertThatMethods(Iterable)}.
  *
@@ -25,6 +26,12 @@ public class MethodNodesAssert extends AsmIterableAssert<MethodNodesAssert, Meth
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
+  /**
+   * Initializes an {@link MethodNodesAssert}.
+   *
+   * @param actual the actual {@link Iterable} of {@link MethodNode}s; may be
+   *               null.
+   */
   @SuppressWarnings("ResultOfMethodCallIgnored")
   protected MethodNodesAssert(Iterable<? extends MethodNode> actual) {
     super(actual, MethodNodesAssert.class, AsmAssertions::assertThat);

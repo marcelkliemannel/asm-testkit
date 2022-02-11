@@ -55,6 +55,7 @@ public class MethodNodeAssert extends ClassEntityAssert<MethodNodeAssert, Method
   private boolean ignoreLineNumbers = false;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
+
   /**
    * Initializes an {@link LocalVariableNodeAssert}.
    *

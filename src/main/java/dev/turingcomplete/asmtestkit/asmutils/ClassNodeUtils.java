@@ -77,6 +77,21 @@ public final class ClassNodeUtils {
     return classNode;
   }
 
+  /**
+   * Creates a copy of the given {@link ClassNode}.
+   *
+   * @param classNode the {@link ClassNode} to be copied; never null.
+   * @return a new {@link ClassNode}; never null.
+   */
+  public static ClassNode copy(ClassNode classNode) {
+    Objects.requireNonNull(classNode);
+
+    var copy = new ClassNode();
+    classNode.accept(copy);
+
+    return copy;
+  }
+
   // -- Private Methods --------------------------------------------------------------------------------------------- //
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 }
