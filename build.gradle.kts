@@ -91,7 +91,7 @@ configure<PublishingExtension> {
     afterEvaluate {
       named<MavenPublication>(project.name) {
         pom {
-          name.set("Asm Testkit")
+          name.set("Asm Test Kit")
           description.set("A test kit to create fluent assertions for the ASM Java byte code modification framework, built on top of AssertJ.")
           url.set("https://github.com/marcelkliemannel/asm-testkit")
           developers {
