@@ -706,16 +706,18 @@ public class ClassNodeAssertTest {
                       .isEqualTo(secondClassNode))
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Class: class MyClass > Has equal methods > Method: myMethod2()I > Has equal instructions] \n" +
-                          "expected: L0\n" +
-                          "  LINENUMBER 1 L0\n" +
-                          "  ICONST_2 // opcode: 5\n" +
-                          "  IRETURN // opcode: 172\n" +
-                          "L1\n" +
-                          " but was: L0\n" +
-                          "  LINENUMBER 1 L0\n" +
-                          "  ICONST_1 // opcode: 4\n" +
-                          "  IRETURN // opcode: 172\n" +
-                          "L1\n" +
+                          "expected: \n" +
+                          "  L0\n" +
+                          "    LINENUMBER 1 L0\n" +
+                          "    ICONST_2 // opcode: 5\n" +
+                          "    IRETURN // opcode: 172\n" +
+                          "  L1\n" +
+                          " but was: \n" +
+                          "  L0\n" +
+                          "    LINENUMBER 1 L0\n" +
+                          "    ICONST_1 // opcode: 4\n" +
+                          "    IRETURN // opcode: 172\n" +
+                          "  L1\n" +
                           "when comparing values using InsnListComparator");
   }
 

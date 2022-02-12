@@ -53,20 +53,22 @@ class InsnListAssertTest {
                                           .isEqualTo(thirdInstructions))
             .isInstanceOf(AssertionError.class)
             .hasMessage("[Instructions] \n" +
-                        "expected: L0\n" +
-                        "  LINENUMBER 1 L0\n" +
-                        "  NEW java/lang/IllegalArgumentException // opcode: 187\n" +
-                        "  DUP // opcode: 89\n" +
-                        "  INVOKESPECIAL java/lang/IllegalArgumentException.<init> ()V // opcode: 183\n" +
-                        "  ATHROW // opcode: 191\n" +
-                        "L1\n" +
-                        " but was: L0\n" +
-                        "  LINENUMBER 1 L0\n" +
-                        "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
-                        "  ICONST_1 // opcode: 4\n" +
-                        "  INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
-                        "  RETURN // opcode: 177\n" +
-                        "L1\n" +
+                        "expected: \n" +
+                        "  L0\n" +
+                        "    LINENUMBER 1 L0\n" +
+                        "    NEW java/lang/IllegalArgumentException // opcode: 187\n" +
+                        "    DUP // opcode: 89\n" +
+                        "    INVOKESPECIAL java/lang/IllegalArgumentException.<init> ()V // opcode: 183\n" +
+                        "    ATHROW // opcode: 191\n" +
+                        "  L1\n" +
+                        " but was: \n" +
+                        "  L0\n" +
+                        "    LINENUMBER 1 L0\n" +
+                        "    GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
+                        "    ICONST_1 // opcode: 4\n" +
+                        "    INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
+                        "    RETURN // opcode: 177\n" +
+                        "  L1\n" +
                         "when comparing values using InsnListComparator");
   }
 
@@ -109,20 +111,22 @@ class InsnListAssertTest {
                                           .isEqualTo(thirdInstructions))
             .isInstanceOf(AssertionError.class)
             .hasMessage("[Instructions] \n" +
-                        "expected: L0\n" +
-                        "  LINENUMBER 1 L0\n" +
-                        "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
-                        "  ICONST_2 // opcode: 5\n" +
-                        "  INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
-                        "  RETURN // opcode: 177\n" +
-                        "L1\n" +
-                        " but was: L0\n" +
-                        "  LINENUMBER 1 L0\n" +
-                        "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
-                        "  ICONST_1 // opcode: 4\n" +
-                        "  INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
-                        "  RETURN // opcode: 177\n" +
-                        "L1\n" +
+                        "expected: \n" +
+                        "  L0\n" +
+                        "    LINENUMBER 1 L0\n" +
+                        "    GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
+                        "    ICONST_2 // opcode: 5\n" +
+                        "    INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
+                        "    RETURN // opcode: 177\n" +
+                        "  L1\n" +
+                        " but was: \n" +
+                        "  L0\n" +
+                        "    LINENUMBER 1 L0\n" +
+                        "    GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
+                        "    ICONST_1 // opcode: 4\n" +
+                        "    INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
+                        "    RETURN // opcode: 177\n" +
+                        "  L1\n" +
                         "when comparing values using InsnListComparator");
   }
 

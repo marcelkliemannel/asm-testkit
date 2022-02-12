@@ -692,30 +692,32 @@ class MethodNodeAssertTest {
                       .isEqualTo(myMethodWithoutLineNumbers))
               .isInstanceOf(AssertionError.class)
               .hasMessage("[Method: first()V > Has equal instructions] \n" +
-                          "expected: L0\n" +
-                          "  LINENUMBER 6 L0\n" +
-                          "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
-                          "  ICONST_1 // opcode: 4\n" +
-                          "  INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
-                          "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
-                          "  ICONST_4 // opcode: 7\n" +
-                          "  INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
-                          "  RETURN // opcode: 177\n" +
-                          "L1\n" +
-                          " but was: L0\n" +
-                          "  LINENUMBER 3 L0\n" +
-                          "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
-                          "  ICONST_1 // opcode: 4\n" +
-                          "  INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
-                          "L1\n" +
-                          "  LINENUMBER 4 L1\n" +
-                          "  GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
-                          "  ICONST_4 // opcode: 7\n" +
-                          "  INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
-                          "L2\n" +
-                          "  LINENUMBER 5 L2\n" +
-                          "  RETURN // opcode: 177\n" +
-                          "L3\n" +
+                          "expected: \n" +
+                          "  L0\n" +
+                          "    LINENUMBER 6 L0\n" +
+                          "    GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
+                          "    ICONST_1 // opcode: 4\n" +
+                          "    INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
+                          "    GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
+                          "    ICONST_4 // opcode: 7\n" +
+                          "    INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
+                          "    RETURN // opcode: 177\n" +
+                          "  L1\n" +
+                          " but was: \n" +
+                          "  L0\n" +
+                          "    LINENUMBER 3 L0\n" +
+                          "    GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
+                          "    ICONST_1 // opcode: 4\n" +
+                          "    INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
+                          "  L1\n" +
+                          "    LINENUMBER 4 L1\n" +
+                          "    GETSTATIC java/lang/System.out : Ljava/io/PrintStream; // opcode: 178\n" +
+                          "    ICONST_4 // opcode: 7\n" +
+                          "    INVOKEVIRTUAL java/io/PrintStream.println (I)V // opcode: 182\n" +
+                          "  L2\n" +
+                          "    LINENUMBER 5 L2\n" +
+                          "    RETURN // opcode: 177\n" +
+                          "  L3\n" +
                           "when comparing values using InsnListComparator");
   }
 
