@@ -122,7 +122,7 @@ public class AsmIterableAssert<S extends AsmIterableAssert<S, E, A>, E, A extend
   }
 
   /**
-   * The {@link super#containsExactlyInAnyOrderForProxy} fails if {@link #actual} or
+   * The {@code super#containsExactlyInAnyOrderForProxy} fails if {@link #actual} or
    * {@code expected} are null. But in most ASM assertion cases, both to be null
    * is a valid state.
    *
@@ -142,7 +142,7 @@ public class AsmIterableAssert<S extends AsmIterableAssert<S, E, A>, E, A extend
     if (actual != null) {
       assertExpectedNotNullOfActualIsNotNull(expected);
     }
-    assert actual != null && expected != null;
+    assert expected != null;
 
     return super.containsExactlyInAnyOrderForProxy(expected);
   }

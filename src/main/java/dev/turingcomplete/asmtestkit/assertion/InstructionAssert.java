@@ -18,8 +18,7 @@ import java.util.Comparator;
  * Use
  * <ul>
  *   <li>{@link AsmAssertions#assertThat(InsnList)},
- *   <li>{@link AsmAssertions#assertThatInstructions(Iterable)},
- *   <li>or {@link AsmAssertions#assertThatInstructionsIgnoreLineNumbers(Iterable)}
+ *   <li>{@link AsmAssertions#assertThatInstructions(Iterable)}
  * </ul>
  * for multiple {@code AbstractInsnNode}s.
  *

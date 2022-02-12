@@ -20,6 +20,7 @@ import org.objectweb.asm.tree.TypeAnnotationNode;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -311,10 +312,12 @@ public class ClassNodeAssert
    *
    * <p>The default mode is {@link MethodsComparisonMode#ONE_BY_ONE}.
    *
+   * @param methodsComparisonMode the {@link MethodsComparisonMode} to set;
+   *                              never null.
    * @return {@code this} {@link ClassNodeAssert}s; never null.
    */
   public ClassNodeAssert setMethodsComparisonMode(MethodsComparisonMode methodsComparisonMode) {
-    this.methodsComparisonMode = methodsComparisonMode;
+    this.methodsComparisonMode = Objects.requireNonNull(methodsComparisonMode);
 
     return this;
   }

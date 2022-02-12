@@ -26,6 +26,9 @@ import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.util.Comparator;
 
+/**
+ * A factory class for various ASM nodes assertions.
+ */
 public final class AsmAssertions {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //

@@ -87,7 +87,10 @@ public final class ClassNodeUtils {
    * Creates a new {@link ClassNode} by reading the class file from the given
    * {@link InputStream}.
    *
-   * @param classFile      the content of a class file as an {@link InputStream}.
+   * @param classFile      the content of a class file as an {@link InputStream};
+   *                       never null.
+   * @param classVisitor   the {@link ClassVisitor} that reads the class file;
+   *                       never null.
    * @param parsingOptions the options to use to parse this class. One or more
    *                       of {@link ClassReader#SKIP_CODE},
    *                       {@link ClassReader#SKIP_DEBUG},
@@ -95,7 +98,7 @@ public final class ClassNodeUtils {
    *                       {@link ClassReader#EXPAND_FRAMES}.
    * @throws IOException if an I/O error occurred.
    */
-  public static void readClassNode(InputStream classFile, ClassVisitor classVisitor, int parsingOptions) throws IOException {
+  public static void readClassFile(InputStream classFile, ClassVisitor classVisitor, int parsingOptions) throws IOException {
     Objects.requireNonNull(classFile);
     Objects.requireNonNull(classVisitor);
 

@@ -26,11 +26,12 @@ public interface WithLabelIndexAsmComparator<T> extends Comparator<T> {
    * returns a {@code Comparator<T>} that compares by that sort key using
    * the specified {@link Comparator}.
    *
-   * @param <T>           the type of element to be compared
-   * @param <U>           the type of the sort key
-   * @param keyExtractor  the function used to extract the sort key; never null.
-   * @param keyComparator the {@link Comparator} used to compare the sort key;
-   *                      never null.
+   * @param <T>              the type of element to be compared
+   * @param <U>              the type of the sort key
+   * @param keyExtractor     the function used to extract the sort key; never null.
+   * @param keyComparator    the {@link Comparator} used to compare the sort key;
+   *                         never null.
+   * @param labelIndexLookup the {@link LabelIndexLookup} to use; never null.
    * @return a comparator that compares by an extracted key using the
    * specified {@link Comparator}; never null.
    */

@@ -193,7 +193,7 @@ public class MethodNodeAssert
    *                         line numbers; may be null.
    */
   protected void hasEqualVisibleParameterAnnotations(MethodNode actualPrepared, MethodNode expectedPrepared) {
-    if (hasOption(StandardAssertOption.IGNORE_VISISBLE_PARAMETER_ANNOTATIONS)) {
+    if (hasOption(StandardAssertOption.IGNORE_VISIBLE_PARAMETER_ANNOTATIONS)) {
       return;
     }
 
@@ -217,7 +217,7 @@ public class MethodNodeAssert
    * @param expectedPrepared an {@link Object} expected to be a {@link MethodNode}; may
    */
   protected void hasEqualInvisibleAnnotableParameterCount(MethodNode actualPrepared, MethodNode expectedPrepared) {
-    if (hasOption(StandardAssertOption.IGNORE_INVISISBLE_ANNOTABLE_PARAMETER_COUNT)) {
+    if (hasOption(StandardAssertOption.IGNORE_INVISIBLE_ANNOTABLE_PARAMETER_COUNT)) {
       return;
     }
 
@@ -350,7 +350,7 @@ public class MethodNodeAssert
    *                         line numbers; may be null.
    */
   protected void hasEqualVisibleLocalVariableAnnotations(MethodNode actualPrepared, MethodNode expectedPrepared) {
-    if (hasOption(StandardAssertOption.IGNORE_VISISBLE_LOCAL_VARIABLE_ANNOTATIONS)) {
+    if (hasOption(StandardAssertOption.IGNORE_VISIBLE_LOCAL_VARIABLE_ANNOTATIONS)) {
       return;
     }
 
@@ -368,7 +368,7 @@ public class MethodNodeAssert
    *                         line numbers; may be null.
    */
   protected void hasEqualInvisibleLocalVariableAnnotations(MethodNode actualPrepared, MethodNode expectedPrepared) {
-    if (hasOption(StandardAssertOption.IGNORE_INVISISBLE_LOCAL_VARIABLE_ANNOTATIONS)) {
+    if (hasOption(StandardAssertOption.IGNORE_INVISIBLE_LOCAL_VARIABLE_ANNOTATIONS)) {
       return;
     }
 

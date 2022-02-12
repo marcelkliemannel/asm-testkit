@@ -103,6 +103,7 @@ public final class DefaultAsmRepresentations extends StandardRepresentation impl
    *                          is supposed to handle; never null.
    * @param asmRepresentation a {@link Supplier} which provides a custom
    *                          {@link AsmRepresentation}; never null.
+   * @param <T> the type of {@code objectClass}.
    */
   public static <T> void registerAsmRepresentation(Class<T> objectClass, Supplier<AsmRepresentation<T>> asmRepresentation) {
     ASM_REPRESENTATIONS.put(Objects.requireNonNull(objectClass),

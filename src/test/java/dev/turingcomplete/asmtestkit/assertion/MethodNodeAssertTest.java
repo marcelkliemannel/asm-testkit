@@ -555,7 +555,7 @@ class MethodNodeAssertTest {
             .isEqualTo(MethodNodeUtils.copy(first1MethodNode));
 
     assertThat(first1MethodNode)
-            .addOption(StandardAssertOption.IGNORE_VISISBLE_LOCAL_VARIABLE_ANNOTATIONS)
+            .addOption(StandardAssertOption.IGNORE_VISIBLE_LOCAL_VARIABLE_ANNOTATIONS)
             .addOption(StandardAssertOption.IGNORE_INSTRUCTIONS)
             .isEqualTo(first2MethodNode);
 
@@ -610,7 +610,7 @@ class MethodNodeAssertTest {
             .isEqualTo(MethodNodeUtils.copy(first1MethodNode));
 
     assertThat(first1MethodNode)
-            .addOption(StandardAssertOption.IGNORE_INVISISBLE_LOCAL_VARIABLE_ANNOTATIONS)
+            .addOption(StandardAssertOption.IGNORE_INVISIBLE_LOCAL_VARIABLE_ANNOTATIONS)
             .addOption(StandardAssertOption.IGNORE_INSTRUCTIONS)
             .isEqualTo(first2MethodNode);
 

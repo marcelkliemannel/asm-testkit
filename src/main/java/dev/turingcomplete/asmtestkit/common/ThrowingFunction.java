@@ -3,7 +3,7 @@ package dev.turingcomplete.asmtestkit.common;
 import java.util.function.Function;
 
 /**
- * A {@link extends} that deals with checked exceptions by rethrowing them as
+ * A {@link Function} that deals with checked exceptions by rethrowing them as
  * {@link RuntimeException}.
  *
  * @param <T> the type of the input parameter;
