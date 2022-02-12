@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.comparator;
 
-import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
+import dev.turingcomplete.asmtestkit.common.DefaultLabelIndexLookup;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.tree.MethodNode;

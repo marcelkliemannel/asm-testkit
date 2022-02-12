@@ -36,7 +36,7 @@ public abstract class AbstractAsmRepresentation<T> extends StandardRepresentatio
    *                                   never null.
    * @return {@code this} {@link AbstractAsmRepresentation}; never null.
    */
-  public AbstractAsmRepresentation<T> useAsmRepresentationsCombiner(AsmRepresentations asmRepresentations) {
+  public AbstractAsmRepresentation<T> useAsmRepresentations(AsmRepresentations asmRepresentations) {
     this.asmRepresentations = Objects.requireNonNull(asmRepresentations);
 
     return this;

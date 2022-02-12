@@ -2,6 +2,8 @@ package dev.turingcomplete.asmtestkit.assertion;
 
 import dev.turingcomplete.asmtestkit.__helper.InvisibleTypeParameterAnnotationA;
 import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;
+import dev.turingcomplete.asmtestkit.common.DefaultLabelIndexLookup;
+import dev.turingcomplete.asmtestkit.common.LabelIndexLookup;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Type;
@@ -25,7 +27,7 @@ class TryCatchBlockNodeAssertTest {
     var secondTryCatchBlock = new TryCatchBlockNode(new LabelNode(), null, null, null);
 
     LabelIndexLookup labelIndexLookup = DefaultLabelIndexLookup.create(Map.of(firstTryCatchBlock.start.getLabel(), 1,
-                                                                       secondTryCatchBlock.start.getLabel(), 2));
+                                                                              secondTryCatchBlock.start.getLabel(), 2));
 
     Assertions.assertThatThrownBy(() -> AsmAssertions.assertThat(firstTryCatchBlock)
                                                      .useLabelIndexLookup(labelIndexLookup)

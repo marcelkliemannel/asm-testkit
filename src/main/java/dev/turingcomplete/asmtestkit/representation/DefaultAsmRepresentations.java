@@ -2,7 +2,7 @@ package dev.turingcomplete.asmtestkit.representation;
 
 import dev.turingcomplete.asmtestkit.node.AccessNode;
 import dev.turingcomplete.asmtestkit.asmutils.AccessKind;
-import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
+import dev.turingcomplete.asmtestkit.common.LabelIndexLookup;
 import dev.turingcomplete.asmtestkit.node.AnnotationDefaultNode;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.presentation.Representation;

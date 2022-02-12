@@ -1,7 +1,6 @@
 package dev.turingcomplete.asmtestkit.representation;
 
-import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
-import dev.turingcomplete.asmtestkit.representation.LabelNodeRepresentation;
+import dev.turingcomplete.asmtestkit.common.DefaultLabelIndexLookup;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.tree.LabelNode;

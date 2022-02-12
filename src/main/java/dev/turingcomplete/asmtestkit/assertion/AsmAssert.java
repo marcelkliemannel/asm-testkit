@@ -3,6 +3,7 @@ package dev.turingcomplete.asmtestkit.assertion;
 import dev.turingcomplete.asmtestkit.assertion._internal.AsmWritableAssertionInfo;
 import dev.turingcomplete.asmtestkit.assertion.option.AssertOption;
 import dev.turingcomplete.asmtestkit.assertion.option.AssertOptionCapable;
+import dev.turingcomplete.asmtestkit.common.LabelIndexLookup;
 import dev.turingcomplete.asmtestkit.comparator.WithLabelIndexAsmComparator;
 import dev.turingcomplete.asmtestkit.comparator._internal.WithLabelIndexAsmComparatorAdapter;
 import dev.turingcomplete.asmtestkit.representation.AsmRepresentations;

@@ -39,7 +39,7 @@ public final class CompilationEnvironment {
   private final DiagnosticCollector<JavaFileObject> diagnosticsCollector              = new DiagnosticCollector<>();
   private       DiagnosticRepresentation            diagnosticRepresentation          = DiagnosticRepresentation.INSTANCE;
   private       StandardJavaFileManagerProvider     fileManagerProvider               = null;
-  private       PrintWriter                         compilerOutput                    = new PrintWriter(System.out, true);
+  private       PrintWriter                         compilerOutput                    = new PrintWriter(System.err, true);
   private       boolean                             ignoreCompilationErrors           = false;
   private final List<Path>                          classpath                         = new ArrayList<>();
   private       boolean                             ignoreNonExistingClasspathEntries = false;
@@ -334,16 +334,20 @@ public final class CompilationEnvironment {
 
   private void doCompile(StandardJavaFileManager fileManager) {
     List<String> effectiveCompilerOptions = new ArrayList<>(compilerOptions);
+
+    // Add class path
     if (!classpath.isEmpty()) {
       validateClassPath();
       effectiveCompilerOptions.add("-cp");
       effectiveCompilerOptions.add(classpath.stream().map(Path::toString).collect(Collectors.joining(File.pathSeparator)));
     }
 
+    // Compile
     PrintWriter out = compilerOutput != null ? compilerOutput : new PrintWriter(OutputStream.nullOutputStream());
     boolean noErrors = compiler.getTask(out, fileManager, diagnosticsCollector, effectiveCompilerOptions, null, inputSources)
                                .call();
 
+    // Validate error state
     if (!ignoreCompilationErrors) {
       List<String> errors = diagnosticsCollector.getDiagnostics()
                                                 .stream()

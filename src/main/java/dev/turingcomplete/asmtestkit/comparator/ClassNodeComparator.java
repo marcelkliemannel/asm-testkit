@@ -3,7 +3,7 @@ package dev.turingcomplete.asmtestkit.comparator;
 import dev.turingcomplete.asmtestkit.asmutils.InsnListUtils;
 import dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils;
 import dev.turingcomplete.asmtestkit.asmutils.TypeUtils;
-import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
+import dev.turingcomplete.asmtestkit.common.LabelIndexLookup;
 import dev.turingcomplete.asmtestkit.common.IgnoreLineNumbersCapable;
 import dev.turingcomplete.asmtestkit.comparator._internal.ComparatorUtils;
 import dev.turingcomplete.asmtestkit.comparator._internal.IterableComparator;

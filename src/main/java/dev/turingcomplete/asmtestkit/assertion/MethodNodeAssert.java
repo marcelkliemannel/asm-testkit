@@ -120,7 +120,6 @@ public class MethodNodeAssert
    *                         line numbers; may be null.
    */
   protected void hasEqualDescriptor(MethodNode actualPrepared, MethodNode expectedPrepared) {
-
     if (hasOption(StandardAssertOption.IGNORE_DESCRIPTOR)) {
       return;
     }
@@ -159,7 +158,6 @@ public class MethodNodeAssert
    *                         line numbers; may be null.
    */
   protected void hasEqualParameters(MethodNode actualPrepared, MethodNode expectedPrepared) {
-
     if (hasOption(StandardAssertOption.IGNORE_PARAMETERS)) {
       return;
     }
@@ -195,8 +193,6 @@ public class MethodNodeAssert
    *                         line numbers; may be null.
    */
   protected void hasEqualVisibleParameterAnnotations(MethodNode actualPrepared, MethodNode expectedPrepared) {
-
-
     if (hasOption(StandardAssertOption.IGNORE_VISISBLE_PARAMETER_ANNOTATIONS)) {
       return;
     }
@@ -239,7 +235,6 @@ public class MethodNodeAssert
    *                         line numbers; may be null.
    */
   protected void hasEqualInvisibleParameterAnnotations(MethodNode actualPrepared, MethodNode expectedPrepared) {
-
     if (hasOption(StandardAssertOption.IGNORE_INVISIBLE_PARAMETER_ANNOTATIONS)) {
       return;
     }
@@ -264,7 +259,6 @@ public class MethodNodeAssert
    *                         line numbers; may be null.
    */
   protected void hasEqualInstructions(MethodNode actualPrepared, MethodNode expectedPrepared) {
-
     if (hasOption(StandardAssertOption.IGNORE_INSTRUCTIONS)) {
       return;
     }
@@ -288,7 +282,6 @@ public class MethodNodeAssert
    *                         line numbers; may be null.
    */
   protected void hasEqualTryCatchBlocks(MethodNode actualPrepared, MethodNode expectedPrepared) {
-
     if (hasOption(StandardAssertOption.IGNORE_TRY_CATCH_BLOCKS)) {
       return;
     }
@@ -339,7 +332,6 @@ public class MethodNodeAssert
    *                         line numbers; may be null.
    */
   protected void hasEqualLocalVariables(MethodNode actualPrepared, MethodNode expectedPrepared) {
-
     if (hasOption(StandardAssertOption.IGNORE_LOCAL_VARIABLES)) {
       return;
     }
@@ -358,7 +350,6 @@ public class MethodNodeAssert
    *                         line numbers; may be null.
    */
   protected void hasEqualVisibleLocalVariableAnnotations(MethodNode actualPrepared, MethodNode expectedPrepared) {
-
     if (hasOption(StandardAssertOption.IGNORE_VISISBLE_LOCAL_VARIABLE_ANNOTATIONS)) {
       return;
     }
@@ -377,7 +368,6 @@ public class MethodNodeAssert
    *                         line numbers; may be null.
    */
   protected void hasEqualInvisibleLocalVariableAnnotations(MethodNode actualPrepared, MethodNode expectedPrepared) {
-
     if (hasOption(StandardAssertOption.IGNORE_INVISISBLE_LOCAL_VARIABLE_ANNOTATIONS)) {
       return;
     }
@@ -396,7 +386,6 @@ public class MethodNodeAssert
    *                         line numbers; may be null.
    */
   protected void hasEqualAnnotationDefault(MethodNode actualPrepared, MethodNode expectedPrepared) {
-
     if (hasOption(StandardAssertOption.IGNORE_ANNOTATION_DEFAULT)) {
       return;
     }

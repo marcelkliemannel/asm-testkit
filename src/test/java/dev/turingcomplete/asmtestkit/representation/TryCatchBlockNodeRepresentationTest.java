@@ -1,9 +1,8 @@
 package dev.turingcomplete.asmtestkit.representation;
 
-import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
-import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
+import dev.turingcomplete.asmtestkit.common.DefaultLabelIndexLookup;
+import dev.turingcomplete.asmtestkit.common.LabelIndexLookup;
 import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;
-import dev.turingcomplete.asmtestkit.representation.TryCatchBlockNodeRepresentation;
 import org.assertj.core.api.Assertions;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;

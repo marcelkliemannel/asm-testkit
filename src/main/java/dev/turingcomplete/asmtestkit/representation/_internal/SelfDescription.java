@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.representation._internal;
 
-import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
+import dev.turingcomplete.asmtestkit.common.LabelIndexLookup;
 import dev.turingcomplete.asmtestkit.assertion._internal.AsmWritableAssertionInfo;
 import dev.turingcomplete.asmtestkit.representation.AbstractAsmRepresentation;
 import dev.turingcomplete.asmtestkit.representation.AbstractWithLabelIndexAsmRepresentation;

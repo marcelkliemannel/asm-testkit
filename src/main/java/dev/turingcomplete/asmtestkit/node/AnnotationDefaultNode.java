@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * A container object to hold an annotation default value.
  */
-public final class AnnotationDefaultNode {
+public class AnnotationDefaultNode {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
@@ -13,7 +13,7 @@ public final class AnnotationDefaultNode {
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  private AnnotationDefaultNode(Object value) {
+  protected AnnotationDefaultNode(Object value) {
     this.value = value;
   }
 

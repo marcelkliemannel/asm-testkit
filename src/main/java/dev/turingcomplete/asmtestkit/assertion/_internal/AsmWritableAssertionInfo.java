@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.assertion._internal;
 
-import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
-import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
+import dev.turingcomplete.asmtestkit.common.DefaultLabelIndexLookup;
+import dev.turingcomplete.asmtestkit.common.LabelIndexLookup;
 import dev.turingcomplete.asmtestkit.representation.AbstractWithLabelIndexAsmRepresentation;
 import dev.turingcomplete.asmtestkit.representation._internal.WithLabelIndexRepresentationAdapter;
 import org.assertj.core.api.WritableAssertionInfo;
@@ -24,7 +24,7 @@ public final class AsmWritableAssertionInfo extends WritableAssertionInfo {
   // -- Exposed Methods --------------------------------------------------------------------------------------------- //
 
   public void useLabelIndexLookup(LabelIndexLookup labelIndexLookup) {
-    this.labelIndexLookup.add(labelIndexLookup);
+    this.labelIndexLookup.mergeWith(labelIndexLookup);
   }
 
   public LabelIndexLookup labelIndexLookup() {

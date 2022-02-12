@@ -135,6 +135,7 @@ public class ClassNodeAssert
     Function<ClassNode, List<Type>> getTypesOfInterfaces = (ClassNode classNode) -> classNode.interfaces.stream().map(TypeUtils::nameToTypeElseNull).collect(Collectors.toList());
     assertThatTypes(getListFromObjectElseNull(actual, getTypesOfInterfaces))
             .as(createCrumbDescription("Has equal interfaces"))
+            .addOptions(options)
             .containsExactlyInAnyOrderElementsOf(getFromObjectElseNull(expected, ClassNode.class, getTypesOfInterfaces));
   }
 
@@ -232,6 +233,7 @@ public class ClassNodeAssert
 
     assertThatInnerClasses(getListFromObjectElseNull(actual, (ClassNode classNode) -> classNode.innerClasses))
             .as(createCrumbDescription("Has equal outer class"))
+            .addOptions(options)
             .containsExactlyInAnyOrderElementsOf(getListFromObjectElseNull(expected, ClassNode.class, (ClassNode classNode) -> classNode.innerClasses));
   }
 
@@ -265,6 +267,7 @@ public class ClassNodeAssert
 
     assertThatTypes(getListFromObjectElseNull(actual, classNode -> TypeUtils.namesToTypes(classNode.nestMembers)))
             .as(createCrumbDescription("Has equal nest members"))
+            .addOptions(options)
             .containsExactlyInAnyOrderElementsOf(getListFromObjectElseNull(expected, ClassNode.class, classNode -> TypeUtils.namesToTypes(classNode.nestMembers)));
   }
 
@@ -281,6 +284,7 @@ public class ClassNodeAssert
 
     assertThatTypes(getListFromObjectElseNull(actual, classNode -> TypeUtils.namesToTypes(classNode.permittedSubclasses)))
             .as(createCrumbDescription("Has equal permitted subclasses"))
+            .addOptions(options)
             .containsExactlyInAnyOrderElementsOf(getListFromObjectElseNull(expected, ClassNode.class, classNode -> TypeUtils.namesToTypes(classNode.permittedSubclasses)));
   }
 
@@ -297,6 +301,7 @@ public class ClassNodeAssert
 
     assertThatFields(getListFromObjectElseNull(actual, classNode -> classNode.fields))
             .as(createCrumbDescription("Has equal fields"))
+            .addOptions(options)
             .containsExactlyInAnyOrderElementsOf(getListFromObjectElseNull(expected, ClassNode.class, classNode -> classNode.fields));
   }
 
@@ -339,6 +344,7 @@ public class ClassNodeAssert
 
     MethodNodesAssert methodNodesAssert = assertThatMethods(getListFromObjectElseNull(actual, classNode -> classNode.methods))
             .useLabelIndexLookup(labelIndexLookup())
+            .addOptions(options)
             .as(createCrumbDescription("Has equal methods"));
 
     if (ignoreLineNumbers) {

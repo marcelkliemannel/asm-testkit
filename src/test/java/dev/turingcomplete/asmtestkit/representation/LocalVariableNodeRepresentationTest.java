@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.representation;
 
-import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
-import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
+import dev.turingcomplete.asmtestkit.common.DefaultLabelIndexLookup;
+import dev.turingcomplete.asmtestkit.common.LabelIndexLookup;
 import dev.turingcomplete.asmtestkit.__helper.VisibleAnnotationA;
 import org.assertj.core.api.Assertions;
 import org.intellij.lang.annotations.Language;

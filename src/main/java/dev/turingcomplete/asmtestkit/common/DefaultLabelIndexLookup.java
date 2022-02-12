@@ -1,4 +1,4 @@
-package dev.turingcomplete.asmtestkit.assertion;
+package dev.turingcomplete.asmtestkit.common;
 
 import org.objectweb.asm.Label;
 
@@ -23,7 +23,7 @@ public final class DefaultLabelIndexLookup implements LabelIndexLookup {
    * Lazily initialized to reduce the memory footprint for empty
    * {@link DefaultLabelIndexLookup}s.
    */
-  private List<LabelIndexLookup> additionalLabelIndexLookup;
+  private List<LabelIndexLookup> children;
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
@@ -58,14 +58,16 @@ public final class DefaultLabelIndexLookup implements LabelIndexLookup {
 
   @Override
   public Optional<Integer> find(Label label) {
-    Objects.requireNonNull(label);
+    if (label == null) {
+      return Optional.empty();
+    }
 
     if (labelIndices != null && labelIndices.containsKey(label)) {
       return Optional.ofNullable(labelIndices.get(label));
     }
 
-    if (additionalLabelIndexLookup != null) {
-      for (LabelIndexLookup _additionalLabelIndexLookup : additionalLabelIndexLookup) {
+    if (children != null) {
+      for (LabelIndexLookup _additionalLabelIndexLookup : children) {
         Optional<Integer> result = _additionalLabelIndexLookup.find(label);
         if (result.isPresent()) {
           return result;
@@ -89,24 +91,73 @@ public final class DefaultLabelIndexLookup implements LabelIndexLookup {
 
   @Override
   public void putIfUnknown(Label label, Integer index) {
+    Objects.requireNonNull(label);
+
     if (find(label).isEmpty()) {
-      if (this.labelIndices == null) {
-        this.labelIndices = new HashMap<>();
-      }
+      initLabelIndices();
 
       this.labelIndices.put(label, index);
     }
   }
 
   @Override
-  public void add(LabelIndexLookup labelIndexLookup) {
-    if (additionalLabelIndexLookup == null) {
-      additionalLabelIndexLookup = new ArrayList<>();
+  public void clearLabelIndices() {
+    labelIndices = null;
+  }
+
+  @Override
+  public Map<Label, Integer> getAllLabelIndices() {
+    return labelIndices == null ? Map.of() : labelIndices;
+  }
+
+  @Override
+  public void addChild(LabelIndexLookup childLabelIndexLookup) {
+    Objects.requireNonNull(childLabelIndexLookup);
+
+    initChildren();
+    children.add(childLabelIndexLookup);
+  }
+
+  @Override
+  public List<LabelIndexLookup> getChildren() {
+    return children == null ? List.of() : children;
+  }
+
+  @Override
+  public void clearChildren() {
+    children = null;
+  }
+
+  @Override
+  public void mergeWith(LabelIndexLookup labelIndexLookup) {
+    Objects.requireNonNull(labelIndexLookup);
+
+    Map<Label, Integer> labelIndices = labelIndexLookup.getAllLabelIndices();
+    if (!labelIndices.isEmpty()) {
+      initLabelIndices();
+      this.labelIndices.putAll(labelIndices);
     }
 
-    additionalLabelIndexLookup.add(labelIndexLookup);
+    List<LabelIndexLookup> children = labelIndexLookup.getChildren();
+    if (!children.isEmpty()) {
+      initChildren();
+      this.children.addAll(children);
+    }
   }
 
   // -- Private Methods --------------------------------------------------------------------------------------------- //
+
+  private void initLabelIndices() {
+    if (this.labelIndices == null) {
+      this.labelIndices = new HashMap<>();
+    }
+  }
+
+  private void initChildren() {
+    if (this.children == null) {
+      this.children = new ArrayList<>();
+    }
+  }
+
   // -- Inner Type -------------------------------------------------------------------------------------------------- //
 }

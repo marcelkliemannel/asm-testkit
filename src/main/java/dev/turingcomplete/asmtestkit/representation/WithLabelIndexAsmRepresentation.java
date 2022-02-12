@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.representation;
 
-import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
+import dev.turingcomplete.asmtestkit.common.LabelIndexLookup;
 import org.assertj.core.presentation.Representation;
 import org.objectweb.asm.Label;
 

@@ -1,7 +1,7 @@
 package dev.turingcomplete.asmtestkit.comparator;
 
-import dev.turingcomplete.asmtestkit.assertion.DefaultLabelIndexLookup;
-import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
+import dev.turingcomplete.asmtestkit.common.DefaultLabelIndexLookup;
+import dev.turingcomplete.asmtestkit.common.LabelIndexLookup;
 
 import java.util.Comparator;
 import java.util.Objects;

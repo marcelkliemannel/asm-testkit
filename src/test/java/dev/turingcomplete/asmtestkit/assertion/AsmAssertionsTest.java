@@ -6,6 +6,8 @@ import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationA;
 import dev.turingcomplete.asmtestkit.__helper.VisibleTypeParameterAnnotationB;
 import dev.turingcomplete.asmtestkit.asmutils.AnnotationNodeUtils;
 import dev.turingcomplete.asmtestkit.asmutils.MethodNodeUtils;
+import dev.turingcomplete.asmtestkit.common.DefaultLabelIndexLookup;
+import dev.turingcomplete.asmtestkit.common.LabelIndexLookup;
 import dev.turingcomplete.asmtestkit.node.AccessNode;
 import dev.turingcomplete.asmtestkit.node.AnnotationDefaultNode;
 import org.assertj.core.api.Assertions;

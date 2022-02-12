@@ -11,7 +11,7 @@ import java.util.Objects;
  * flags by their own type, we simplify the handling at the points where a class
  * gets mapped to asn ASM object type.
  */
-public final class AccessNode {
+public class AccessNode {
   // -- Class Fields ------------------------------------------------------------------------------------------------ //
   // -- Instance Fields --------------------------------------------------------------------------------------------- //
 
@@ -20,7 +20,7 @@ public final class AccessNode {
 
   // -- Initialization ---------------------------------------------------------------------------------------------- //
 
-  private AccessNode(int access, AccessKind accessKind) {
+  protected AccessNode(int access, AccessKind accessKind) {
     this.access = access;
     this.accessKind = accessKind;
   }

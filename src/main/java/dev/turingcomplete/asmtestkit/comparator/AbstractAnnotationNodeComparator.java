@@ -1,6 +1,6 @@
 package dev.turingcomplete.asmtestkit.comparator;
 
-import dev.turingcomplete.asmtestkit.assertion.LabelIndexLookup;
+import dev.turingcomplete.asmtestkit.common.LabelIndexLookup;
 import org.objectweb.asm.tree.AnnotationNode;
 
 import java.util.Comparator;
